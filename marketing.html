@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ticket Warehouse — Marketing Plan</title>
+  <meta name="description" content="Ticket Warehouse keeps ticket listings in sync across marketplaces with real-time APIs and webhooks."/>
+  <link rel="stylesheet" href="./assets/style.css"/>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <div class="logo"><span class="logo-dot"></span> Ticket Warehouse</div>
+      <nav class="navlinks">
+        <a href="./index.html" class="{ 'active' if 'marketing'=='home' else ''}">Home</a>
+        <a href="./about.html" class="{ 'active' if 'marketing'=='about' else ''}">About</a>
+        <a href="./marketing.html" class="{ 'active' if 'marketing'=='marketing' else ''}">Marketing Plan</a>
+        <a href="./business-plan.html" class="{ 'active' if 'marketing'=='bp' else ''}">Business Plan</a>
+        <a href="./index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+    
+<main>
+
+<section class="section">
+  <div class="container">
+    <h1>Marketing & Go‑To‑Market Plan</h1>
+    <p class="muted">3–6 month plan to attract early adopters, partners, and potential investors.</p>
+    <div class="card">
+      <h2>Executive Overview</h2>
+      <p>Ticket Warehouse solves duplicate ticket sales with a vendor‑agnostic synchronization hub. This plan outlines how we’ll generate awareness, engagement, and conversions.</p>
+      <hr/>
+      <h2>Target Segments</h2>
+      <ul>
+        <li><strong>Independent Brokers</strong>: credibility + protection from oversells</li>
+        <li><strong>Venues & Promoters</strong>: unified oversight and automation</li>
+        <li><strong>Marketplaces</strong>: standardized, simple API integrations</li>
+      </ul>
+      <h2>Positioning</h2>
+      <p><em>One Ticket. One Sale. One Source of Truth.</em> — reliable, transparent, tech‑forward.</p>
+      <h2>Phases & Tactics</h2>
+      <ol>
+        <li><strong>Awareness (M1–2)</strong>: site + story post + demo video + outreach</li>
+        <li><strong>Engagement (M3–4)</strong>: beta access, feedback sessions, technical blog</li>
+        <li><strong>Conversion (M5–6)</strong>: case studies, paid tiers, investor pitches</li>
+      </ol>
+      <h2>Pricing</h2>
+      <pre>Starter $49/mo · Pro $199/mo · Enterprise Custom</pre>
+      <h2>Key Metrics</h2>
+      <ul>
+        <li>Beta sign‑ups, integrations, duplicate sales prevented</li>
+        <li>Conversion to paid, retention, site traffic</li>
+      </ul>
+      <h2>Funding</h2>
+      <p>Seed goal: $25k for infra, outreach, legal, and dev support.</p>
+    </div>
+    <div class="section">
+      <a class="btn" href="./index.html">Back to Home</a>
+      <a class="btn" href="./business-plan.html">Business Plan</a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>
+  <div class="container" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap">
+    <div class="muted">© <span id="y"></span> Ticket Warehouse</div>
+    <div class="muted">
+      <a class="muted" href="#">Terms</a> ·
+      <a class="muted" href="#">Privacy</a> ·
+      <a class="muted" href="#">Status</a>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>

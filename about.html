@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ticket Warehouse — About</title>
+  <meta name="description" content="Ticket Warehouse keeps ticket listings in sync across marketplaces with real-time APIs and webhooks."/>
+  <link rel="stylesheet" href="./assets/style.css"/>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <div class="logo"><span class="logo-dot"></span> Ticket Warehouse</div>
+      <nav class="navlinks">
+        <a href="./index.html" class="{ 'active' if 'about'=='home' else ''}">Home</a>
+        <a href="./about.html" class="{ 'active' if 'about'=='about' else ''}">About</a>
+        <a href="./marketing.html" class="{ 'active' if 'about'=='marketing' else ''}">Marketing Plan</a>
+        <a href="./business-plan.html" class="{ 'active' if 'about'=='bp' else ''}">Business Plan</a>
+        <a href="./index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+    
+<main>
+
+<section class="section">
+  <div class="container">
+    <h1>About the Project</h1>
+    <p class="lead">Ticket Warehouse is a synchronization hub that prevents duplicate ticket sales across marketplaces, built with FastAPI, async webhooks, and developer-first design.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>The Problem</h3>
+        <p class="muted">Sellers often list the same ticket on multiple platforms. When more than one buyer checks out, someone loses — causing refunds, support churn, and reputational damage.</p>
+      </div>
+      <div class="card">
+        <h3>The Solution</h3>
+        <p class="muted">A single source of truth for ticket status. Register inventory once, sync everywhere in real-time, and guarantee idempotent sales events.</p>
+      </div>
+      <div class="card">
+        <h3>Stack & Architecture</h3>
+        <ul class="muted">
+          <li>FastAPI backend (Python)</li>
+          <li>Async webhooks with <code>httpx</code></li>
+          <li>Tests with <code>pytest</code> and <code>respx</code></li>
+          <li>Deployable via Docker</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Roadmap</h3>
+        <ul class="muted">
+          <li>OAuth 2.0 and role-based access</li>
+          <li>PostgreSQL / RDS migration</li>
+          <li>Analytics dashboard</li>
+          <li>Broker portal (React/Angular)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="section">
+      <a class="btn" href="./marketing.html">See the Marketing Plan</a>
+      <a class="btn" href="./business-plan.html">See the Business Plan</a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>
+  <div class="container" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap">
+    <div class="muted">© <span id="y"></span> Ticket Warehouse</div>
+    <div class="muted">
+      <a class="muted" href="#">Terms</a> ·
+      <a class="muted" href="#">Privacy</a> ·
+      <a class="muted" href="#">Status</a>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
