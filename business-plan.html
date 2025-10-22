@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Ticket Warehouse — About</title>
+  <title>Ticket Warehouse — Business Plan</title>
   <meta name="description" content="Ticket Warehouse keeps ticket listings in sync across marketplaces with real-time APIs and webhooks."/>
   <!-- Try external CSS first -->
   <link rel="stylesheet" href="./assets/style.css?v=2"/>
@@ -82,9 +82,9 @@ hr{border:none; border-top:1px solid rgba(255,255,255,.08); margin:24px 0}
       <div class="logo"><span class="logo-dot"></span> Ticket Warehouse</div>
       <nav class="navlinks">
         <a href="./index.html" class="">Home</a>
-        <a href="./about.html" class="active">About</a>
+        <a href="./about.html" class="">About</a>
         <a href="./marketing.html" class="">Marketing Plan</a>
-        <a href="./business-plan.html" class="">Business Plan</a>
+        <a href="./business-plan.html" class="active">Business Plan</a>
         <a href="./index.html#contact">Contact</a>
       </nav>
     </div>
@@ -93,39 +93,24 @@ hr{border:none; border-top:1px solid rgba(255,255,255,.08); margin:24px 0}
     
 <section class="section">
   <div class="container">
-    <h1>About the Project</h1>
-    <p class="lead">Ticket Warehouse is a synchronization hub that prevents duplicate ticket sales across marketplaces, built with FastAPI, async webhooks, and developer-first design.</p>
-    <div class="grid-2">
-      <div class="card">
-        <h3>The Problem</h3>
-        <p class="muted">Sellers often list the same ticket on multiple platforms. When more than one buyer checks out, someone loses — causing refunds, support churn, and reputational damage.</p>
-      </div>
-      <div class="card">
-        <h3>The Solution</h3>
-        <p class="muted">A single source of truth for ticket status. Register inventory once, sync everywhere in real-time, and guarantee idempotent sales events.</p>
-      </div>
-      <div class="card">
-        <h3>Stack & Architecture</h3>
-        <ul class="muted">
-          <li>FastAPI backend (Python)</li>
-          <li>Async webhooks with <code>httpx</code></li>
-          <li>Tests with <code>pytest</code> and <code>respx</code></li>
-          <li>Deployable via Docker</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Roadmap</h3>
-        <ul class="muted">
-          <li>OAuth 2.0 and role-based access</li>
-          <li>PostgreSQL / RDS migration</li>
-          <li>Analytics dashboard</li>
-          <li>Broker portal (React/Angular)</li>
-        </ul>
-      </div>
+    <h1>Business Plan</h1>
+    <p class="muted">High‑level plan covering problem/solution, market, technology, and revenue model.</p>
+    <div class="card">
+      <h2>Summary</h2>
+      <p>Ticket Warehouse is a cloud‑based synchronization system preventing duplicate ticket sales across marketplaces using APIs, webhooks, and an authoritative status record.</p>
+      <h2>Key Sections</h2>
+      <ul>
+        <li>Problem & Solution</li>
+        <li>Target Market & Competitive Advantage</li>
+        <li>Revenue Model & Pricing</li>
+        <li>Technology Stack & Roadmap</li>
+        <li>Financials & Funding Needs</li>
+      </ul>
+      <p><strong>Download the full PDF:</strong> <a href="./Ticket_Warehouse_Business_Plan.pdf">Ticket_Warehouse_Business_Plan.pdf</a></p>
     </div>
     <div class="section">
-      <a class="btn" href="./marketing.html">See the Marketing Plan</a>
-      <a class="btn" href="./business-plan.html">See the Business Plan</a>
+      <a class="btn" href="./marketing.html">Marketing Plan</a>
+      <a class="btn" href="./about.html">About the Project</a>
     </div>
   </div>
 </section>
