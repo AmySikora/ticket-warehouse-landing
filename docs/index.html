@@ -49,11 +49,12 @@
     .proto-banner strong{font-weight:800}
 
     :root{
-  --banner-h: 32px;      /* proto banner height (already in your file) */
-  --nav-h: 96px;         /* << set the total navbar height here */
+  --banner-h: 32px;
+  --nav-h: 120px;      /* total header height */
+  --logo-w: 360px;     /* reserved width for the bay */
 }
 
-/* sticky capsule header */
+/* Sticky capsule header (keep yours if already present) */
 header{
   position: sticky; top: var(--banner-h); z-index: 50;
   background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
@@ -62,54 +63,60 @@ header{
   box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
 }
 
-/* layout: brand left, nav right */
+/* two columns: logo bay | nav */
 .nav--brand{
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: var(--logo-w) 1fr;
   align-items: center;
-  gap: 22px;
-  height: var(--nav-h);         /* navbar height */
-  padding: 0 14px;              /* no extra top/bottom padding */
+  height: var(--nav-h);
+  column-gap: 22px;
+  padding: 0 18px;                 /* no extra vertical padding */
 }
 
-/* brand block: logo fills height; wordmark to the right */
-.brand{display:flex; align-items:center; gap:14px; min-width:0;}
-.brand-mark{
-  height: 100%;                 /* fills the bar top-to-bottom */
-  width: auto; display:block;
-  filter: drop-shadow(0 0 12px rgba(34,211,238,.5));
-}
-.wordmark{
-  white-space: nowrap;
-  font-size: clamp(18px, 2.2vw, 24px);
-  letter-spacing: .03em;
-  line-height: 1;
-  font-weight: 800;
-  color: #fff;
-}
-.wordmark .wm-accent{
-  font-weight: 700;
-  letter-spacing: .22em;
-  margin-left: 8px;
-  background: linear-gradient(90deg, var(--brand), var(--brand-2));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent; color: transparent;
+/* Logo bay with internal padding + glow */
+.logo-bay {
+  height: calc(var(--nav-h) - 12px);
+  padding: 0; /* remove internal padding */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 0;
+  background: none; /* remove the glow container */
+  box-shadow: none; /* remove outer glow */
 }
 
-/* nav links on the right */
-.topnav{display:flex; align-items:center; justify-content:flex-end; gap:22px;}
+.logo-img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
+  border-radius: 0;
+  filter: none; /* remove drop shadow glow */
+}
+
+.logo-bay {
+  padding-left: 10px;
+}
+
+
+/* Right-side nav */
+.topnav{
+  display:flex; align-items:center; justify-content:flex-end;
+  gap: 28px; flex-wrap: wrap;
+}
 .topnav a{
-  color: rgba(229,231,235,.92); font-weight:600; line-height:1;
-  padding: 8px 10px; border-radius:999px; text-decoration:none;
+  color: rgba(229,231,235,.92); font-weight: 600; line-height: 1;
+  padding: 8px 10px; border-radius: 999px; text-decoration: none;
   transition: background-color .18s ease, color .18s ease, transform .18s ease;
 }
-.topnav a:hover{background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px);}
-.topnav .btn{padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow);}
+.topnav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px);}
+.topnav .btn{ padding: 10px 16px; background: linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow: var(--shadow); }
 
-/* responsive: keep it tidy on smaller screens */
+/* Responsive */
 @media (max-width: 900px){
-  :root{ --nav-h: 72px; }       /* shorter bar on mobile */
-  .wordmark{ display:none; }    /* hide wordmark on small screens; logo remains */
+  :root{ --nav-h: 96px; --logo-w: 280px; }
+  .topnav{ gap: 16px; }
 }
 
     /* Hero */
@@ -167,16 +174,14 @@ header{
     <strong>Early-stage demo:</strong> Not for production use.
   </div>
 
-  <!-- Header -->
   <header>
     <div class="container nav nav--brand">
-      <div class="brand">
-        <img class="brand-mark" src="/docs/img/logo_image.png" alt="Ticket Warehouse logo" />
-        <span class="wordmark">
-          <strong>TICKET</strong> <span class="wm-accent">WAREHOUSE</span>
-        </span>
+      <!-- Left: logo bay with an IMG, not a background -->
+      <div class="logo-bay">
+        <img src="img/logo.png" alt="Ticket Warehouse" class="logo-img"/>
       </div>
   
+      <!-- Right: nav -->
       <nav class="topnav">
         <a href="#how" class="muted">How it works</a>
         <a href="#who" class="muted">Who it's for</a>
@@ -186,7 +191,6 @@ header{
     </div>
   </header>
   
-
   <main>
     <!-- Hero -->
     <section class="hero">
