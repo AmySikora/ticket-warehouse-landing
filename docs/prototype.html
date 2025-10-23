@@ -129,6 +129,68 @@
         </div>
       </div>
     </section>
+    <section class="section">
+      <div class="container">
+        <h2>Find this ticket across the web</h2>
+        <div class="card">
+          <form id="metasearch" style="display:grid; gap:12px; max-width:720px">
+            <label>Event
+              <input type="text" name="event" placeholder="Taylor Swift, 12/14/2025" required
+                     style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)">
+            </label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+              <label>City (optional)
+                <input type="text" name="city" placeholder="Nashville"
+                       style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)">
+              </label>
+              <label>Section/Row/Seat (optional)
+                <input type="text" name="srs" placeholder="Section 110 Row F Seat 12"
+                       style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)">
+              </label>
+            </div>
+            <button class="btn primary" type="submit">Search marketplaces</button>
+          </form>
+    
+          <div id="out-links" style="margin-top:16px; display:grid; gap:10px"></div>
+        </div>
+      </div>
+    </section>
+    
+    <script>
+    (function(){
+      const f = document.getElementById('metasearch');
+      const out = document.getElementById('out-links');
+      if(!f || !out) return;
+    
+      const mk = (label, url) =>
+        `<a class="btn" href="${url}" target="_blank" rel="noopener">${label}</a>`;
+    
+      f.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const q = new FormData(f);
+        const parts = [q.get('event'), q.get('city'), q.get('srs')].filter(Boolean).join(' ');
+        const enc = encodeURIComponent(parts.trim());
+    
+        // Build marketplace/site searches (adjust or remove any you don’t want)
+        const links = [
+          mk('Google (exact phrase + site filters)', `https://www.google.com/search?q=${enc}+site%3Aviagogo.com+OR+site%3Astubhub.com+OR+site%3Avividseats.com+OR+site%3Aseatgeek.com`),
+          mk('SeatGeek', `https://seatgeek.com/search?search=${enc}`),
+          mk('Vivid Seats', `https://www.vividseats.com/concerts/${enc}`), // Vivid uses paths; still helpful as a search jump-off
+          mk('StubHub', `https://www.stubhub.com/find?q=${enc}`),
+          mk('Ticketmaster', `https://www.ticketmaster.com/search?q=${enc}`)
+        ];
+    
+        out.innerHTML = `
+          <div class="muted">Open these in new tabs to compare listings quickly:</div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:8px">
+            ${links.join('')}
+          </div>
+          <p class="muted" style="margin-top:8px">Heads up: we don’t scrape or store these results. You’ll be viewing the official sites directly.</p>
+        `;
+      });
+    })();
+    </script>
+    
 
     <section class="section">
       <div class="container">
