@@ -3,32 +3,32 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>T W</title>
+  <title>Ticket Warehouse</title>
   <meta name="description" content="Ticket Warehouse keeps ticket listings perfectly in sync across marketplaces with real-time APIs and webhooks. Prevent duplicate sales and protect your brand."/>
-  <link rel="shortcut icon" href="/img/logo.png" />
+  <!-- Favicon lives in /docs -->
+  <link rel="icon" href="favicon_logo.png" type="image/png"/>
+
   <style>
     :root{
-      --bg:#0b0f14;
-      --panel:#111826;
-      --brand:#4f46e5;
-      --brand-2:#22d3ee;
-      --text:#e5e7eb;
-      --muted:#94a3b8;
-      --ok:#10b981;
-      --warn:#f59e0b;
-      --danger:#ef4444;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:16px;
-      --ring: 0 0 0 3px rgba(79,70,229,.35);
-    }
+      /* Brand + UI tokens */
+      --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
+      --text:#e5e7eb; --muted:#94a3b8; --ok:#10b981; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:16px; --ring:0 0 0 3px rgba(79,70,229,.35);
+
+      /* Layout controls */
+      --banner-h: 32px;      /* proto banner height (already in your file) */
+        --nav-h: 96px;         /* << set the total navbar height here */
+}
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.15), transparent),
-                  radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.15), transparent),
+        radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
+        var(--bg);
       color:var(--text);
       line-height:1.6;
     }
@@ -36,74 +36,81 @@
     a:hover{text-decoration:underline}
     .container{max-width:1100px; margin:0 auto; padding:0 20px}
 
-/* === Tight capsule header that matches the logo height === */
-/* ---- banner stays the same height ---- */
-:root{
-  --banner-h: 32px;   /* keep your banner */
-  --logo-h: 64px;     /* nav height ≈ logo height; tweak to taste (56–72) */
+    /* Prototype banner */
+    .proto-banner{
+      position:sticky; top:0; z-index:60;
+      height:var(--banner-h);
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
+      color:#fff; font-size:14px;
+      border-bottom:1px solid rgba(255,255,255,.2);
+      pointer-events:none; /* never block clicks below */
+    }
+    .proto-banner strong{font-weight:800}
+
+    :root{
+  --banner-h: 32px;      /* proto banner height (already in your file) */
+  --nav-h: 96px;         /* << set the total navbar height here */
 }
 
-/* sticky, glowing, compact */
+/* sticky capsule header */
 header{
-  position: sticky;
-  top: var(--banner-h);
-  z-index: 50;
-  background: rgba(11,15,20,.65);
-  backdrop-filter: blur(10px);
+  position: sticky; top: var(--banner-h); z-index: 50;
+  background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,.06);
-  border-radius: 18px;
-  margin: 12px 16px 0 16px;
-  overflow: hidden;
+  border-radius: 18px; margin: 12px 16px 0 16px; overflow: hidden;
   box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
 }
 
+/* layout: brand left, nav right */
 .nav--brand{
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 18px;
-  height: calc(var(--logo-h) + 10px);   /* a few px above/below logo */
-  padding: 5px 14px;
+  gap: 22px;
+  height: var(--nav-h);         /* navbar height */
+  padding: 0 14px;              /* no extra top/bottom padding */
 }
 
+/* brand block: logo fills height; wordmark to the right */
+.brand{display:flex; align-items:center; gap:14px; min-width:0;}
 .brand-mark{
-  height: var(--logo-h);
-  width: auto;
-  display: block;
-  filter: drop-shadow(0 0 10px rgba(34,211,238,.45));
+  height: 100%;                 /* fills the bar top-to-bottom */
+  width: auto; display:block;
+  filter: drop-shadow(0 0 12px rgba(34,211,238,.5));
 }
-
-/* links like your example: clearer spacing, subtle pill hover, no underline */
-.topnav{
-  display:flex; align-items:center; justify-content:flex-end; gap:22px;
-}
-
-.topnav a{
-  color: rgba(229,231,235,.92);
-  font-weight: 600;
+.wordmark{
+  white-space: nowrap;
+  font-size: clamp(18px, 2.2vw, 24px);
+  letter-spacing: .03em;
   line-height: 1;
-  padding: 8px 10px;
-  border-radius: 999px;
-  text-decoration: none;
+  font-weight: 800;
+  color: #fff;
+}
+.wordmark .wm-accent{
+  font-weight: 700;
+  letter-spacing: .22em;
+  margin-left: 8px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+/* nav links on the right */
+.topnav{display:flex; align-items:center; justify-content:flex-end; gap:22px;}
+.topnav a{
+  color: rgba(229,231,235,.92); font-weight:600; line-height:1;
+  padding: 8px 10px; border-radius:999px; text-decoration:none;
   transition: background-color .18s ease, color .18s ease, transform .18s ease;
 }
+.topnav a:hover{background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px);}
+.topnav .btn{padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow);}
 
-.topnav a:hover{
-  background: rgba(255,255,255,.06);
-  color: #fff;
-  transform: translateY(-1px);
+/* responsive: keep it tidy on smaller screens */
+@media (max-width: 900px){
+  :root{ --nav-h: 72px; }       /* shorter bar on mobile */
+  .wordmark{ display:none; }    /* hide wordmark on small screens; logo remains */
 }
-
-/* “Get a demo” stays as a gradient pill */
-.topnav .btn{
-  padding: 10px 16px;
-  background: linear-gradient(45deg,var(--brand),var(--brand-2));
-  color:#fff;
-  box-shadow: var(--shadow);
-}
-
-/* keep hero clear of the capsule */
-.hero{ padding-top: 12px; }
 
     /* Hero */
     .hero{padding:72px 0 40px}
@@ -120,10 +127,7 @@ header{
     .btn:hover{transform:translateY(-1px); text-decoration:none}
     .card{
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:20px;
+      border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px;
     }
     .hero .card{display:grid; gap:12px}
     .stat{display:flex; align-items:center; justify-content:space-between; background:rgba(17,24,38,.6); padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.06)}
@@ -151,10 +155,9 @@ header{
     @media (max-width: 940px){
       .hero-grid, .grid-3, .pricing, .grid-2{grid-template-columns:1fr}
       h1{font-size:36px}
-      .logo-text{display:none} /* keep icon only on small screens */
     }
-    input, textarea{ outline:none; }
-    input:focus, textarea:focus{ box-shadow: var(--ring); border-color: transparent !important; }
+    input, textarea{outline:none}
+    input:focus, textarea:focus{box-shadow:var(--ring); border-color:transparent !important}
   </style>
 </head>
 <body>
@@ -164,9 +167,16 @@ header{
     <strong>Early-stage demo:</strong> Not for production use.
   </div>
 
+  <!-- Header -->
   <header>
     <div class="container nav nav--brand">
-      <img class="brand-mark" src="/img/logo.png" alt="Ticket Warehouse logo" width="256" height="256">
+      <div class="brand">
+        <img class="brand-mark" src="/docs/img/logo_image.png" alt="Ticket Warehouse logo" />
+        <span class="wordmark">
+          <strong>TICKET</strong> <span class="wm-accent">WAREHOUSE</span>
+        </span>
+      </div>
+  
       <nav class="topnav">
         <a href="#how" class="muted">How it works</a>
         <a href="#who" class="muted">Who it's for</a>
@@ -176,6 +186,7 @@ header{
     </div>
   </header>
   
+
   <main>
     <!-- Hero -->
     <section class="hero">
@@ -188,16 +199,15 @@ header{
             <a href="#pricing" class="btn primary">See pricing</a>
             <a href="#how" class="btn">How it works</a>
             <a href="#contact" class="btn">Talk to us</a>
-            <a href="./marketing.html" class="btn">View Marketing Plan</a>
-            <a href
-            <a href="./Ticket_Warehouse_Business_Plan.pdf" class="btn">View Business Plan</a>
+            <a href="marketing.html" class="btn">View Marketing Plan</a>
+            <a href="Ticket_Warehouse_Business_Plan.pdf" class="btn">View Business Plan</a>
           </div>
         </div>
 
         <aside class="card" aria-label="Key stats">
           <div class="stat">
             <div>
-              <strong>Real-time sync</strong><br/><small>API & webhooks</small>
+              <strong>Real-time sync</strong><br/><small>API &amp; webhooks</small>
             </div>
             <small>~150ms</small>
           </div>
@@ -245,11 +255,11 @@ header{
         <h2>Who it's for</h2>
         <div class="grid-3">
           <div class="card item">
-            <h3>Ticket Brokers & Resellers</h3>
+            <h3>Ticket Brokers &amp; Resellers</h3>
             <p class="muted">Manage inventory in one place and stop oversells across platforms.</p>
           </div>
           <div class="card item">
-            <h3>Venues & Promoters</h3>
+            <h3>Venues &amp; Promoters</h3>
             <p class="muted">Protect your brand with verified availability and clean audit trails.</p>
           </div>
           <div class="card item">
@@ -352,7 +362,7 @@ header{
         </div>
 
         <p class="muted" style="margin-top:14px">
-          Want the full details? <a href="./Ticket_Warehouse_Business_Plan.pdf">Read the business plan (PDF)</a>.
+          Want the full details? <a href="Ticket_Warehouse_Business_Plan.pdf">Read the business plan (PDF)</a>.
         </p>
       </div>
     </section>
@@ -369,9 +379,8 @@ header{
     </div>
   </footer>
 
-
   <script>
-    // Contact form handler
+    // Demo form handler
     const f = document.getElementById('contact-form');
     if (f) {
       f.addEventListener('submit', function (e) {
@@ -380,11 +389,9 @@ header{
         alert("Thanks! We'll get back to you shortly.");
       });
     }
-
     // Footer year
     const y = document.getElementById('y');
     if (y) y.textContent = new Date().getFullYear();
-
-</script>
+  </script>
 </body>
 </html>
