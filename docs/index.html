@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket Warehouse — One Ticket. One Sale. One Source of Truth.</title>
+  <title>T W</title>
   <meta name="description" content="Ticket Warehouse keeps ticket listings perfectly in sync across marketplaces with real-time APIs and webhooks. Prevent duplicate sales and protect your brand."/>
-  <link rel="shortcut icon" href="/img/favicon_logo.png" />
+  <link rel="shortcut icon" href="/img/logo.png" />
   <style>
     :root{
       --bg:#0b0f14;
@@ -36,23 +36,74 @@
     a:hover{text-decoration:underline}
     .container{max-width:1100px; margin:0 auto; padding:0 20px}
 
-    /* Header */
-    header{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(10px);
-      background: rgba(11,15,20,.65);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      height:64px;
-    }
-    .logo{
-      display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.3px; padding-top: 80px;
-    }
-    .logo-dot{width:10px; height:10px; border-radius:999px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); box-shadow:0 0 0 3px rgba(79,70,229,.25)}
-    .nav a.btn{display:inline-block; padding:10px 16px; border-radius:12px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:white; box-shadow:var(--shadow)}
-    .nav a.btn:hover{filter:brightness(1.05); text-decoration:none}
+/* === Tight capsule header that matches the logo height === */
+/* ---- banner stays the same height ---- */
+:root{
+  --banner-h: 32px;   /* keep your banner */
+  --logo-h: 64px;     /* nav height ≈ logo height; tweak to taste (56–72) */
+}
+
+/* sticky, glowing, compact */
+header{
+  position: sticky;
+  top: var(--banner-h);
+  z-index: 50;
+  background: rgba(11,15,20,.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 18px;
+  margin: 12px 16px 0 16px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
+}
+
+.nav--brand{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 18px;
+  height: calc(var(--logo-h) + 10px);   /* a few px above/below logo */
+  padding: 5px 14px;
+}
+
+.brand-mark{
+  height: var(--logo-h);
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(34,211,238,.45));
+}
+
+/* links like your example: clearer spacing, subtle pill hover, no underline */
+.topnav{
+  display:flex; align-items:center; justify-content:flex-end; gap:22px;
+}
+
+.topnav a{
+  color: rgba(229,231,235,.92);
+  font-weight: 600;
+  line-height: 1;
+  padding: 8px 10px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+.topnav a:hover{
+  background: rgba(255,255,255,.06);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* “Get a demo” stays as a gradient pill */
+.topnav .btn{
+  padding: 10px 16px;
+  background: linear-gradient(45deg,var(--brand),var(--brand-2));
+  color:#fff;
+  box-shadow: var(--shadow);
+}
+
+/* keep hero clear of the capsule */
+.hero{ padding-top: 12px; }
 
     /* Hero */
     .hero{padding:72px 0 40px}
@@ -100,29 +151,31 @@
     @media (max-width: 940px){
       .hero-grid, .grid-3, .pricing, .grid-2{grid-template-columns:1fr}
       h1{font-size:36px}
+      .logo-text{display:none} /* keep icon only on small screens */
     }
-    input, textarea{
-      outline:none;
-    }
-    input:focus, textarea:focus{
-      box-shadow: var(--ring);
-      border-color: transparent !important;
-    }
+    input, textarea{ outline:none; }
+    input:focus, textarea:focus{ box-shadow: var(--ring); border-color: transparent !important; }
   </style>
 </head>
 <body>
+
+  <!-- Prototype banner -->
+  <div class="proto-banner" role="note">
+    <strong>Early-stage demo:</strong> Not for production use.
+  </div>
+
   <header>
-    <div class="container nav">
-      <div class="logo">
-        <img src="/img/tw_logo.svg" alt="Ticket Warehouse logo" />
-        <a href="#how" class="muted" style="margin-right:14px">How it works</a>
-        <a href="#who" class="muted" style="margin-right:14px">Who it's for</a>
-        <a href="#pricing" class="muted" style="margin-right:14px">Pricing</a>
+    <div class="container nav nav--brand">
+      <img class="brand-mark" src="/img/logo.png" alt="Ticket Warehouse logo" width="256" height="256">
+      <nav class="topnav">
+        <a href="#how" class="muted">How it works</a>
+        <a href="#who" class="muted">Who it's for</a>
+        <a href="#pricing" class="muted">Pricing</a>
         <a href="#contact" class="btn">Get a demo</a>
       </nav>
     </div>
   </header>
-
+  
   <main>
     <!-- Hero -->
     <section class="hero">
@@ -136,6 +189,8 @@
             <a href="#how" class="btn">How it works</a>
             <a href="#contact" class="btn">Talk to us</a>
             <a href="./marketing.html" class="btn">View Marketing Plan</a>
+            <a href
+            <a href="./Ticket_Warehouse_Business_Plan.pdf" class="btn">View Business Plan</a>
           </div>
         </div>
 
@@ -314,19 +369,8 @@
     </div>
   </footer>
 
-  <script>
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', e=>{
-        const id = a.getAttribute('href').slice(1);
-        const el = document.getElementById(id);
-        if(el){
-          e.preventDefault();
-          el.scrollIntoView({behavior:'smooth', block:'start'});
-        }
-      });
-    });
 
+  <script>
     // Contact form handler
     const f = document.getElementById('contact-form');
     if (f) {
@@ -340,6 +384,7 @@
     // Footer year
     const y = document.getElementById('y');
     if (y) y.textContent = new Date().getFullYear();
-  </script>
+
+</script>
 </body>
 </html>
