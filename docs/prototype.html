@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Ticket Warehouse — How It Works (Prototype)</title>
+  <meta name="description" content="A plain-English walkthrough of what Ticket Warehouse does, why it matters, and how the prototype works."/>
+  <link rel="icon" href="favicon_logo.png" type="image/png"/>
+
+  <style>
+    :root{
+      --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
+      --text:#e5e7eb; --muted:#94a3b8; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      /* header controls */
+      --banner-h: 32px;  /* set to 0 to hide banner */
+      --nav-h: 120px;
+      --logo-w: 360px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.15), transparent),
+        radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:var(--brand); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1000px; margin:0 auto; padding:0 20px}
+
+    /* banner (optional) */
+    .proto-banner{
+      position:sticky; top:0; z-index:60;
+      height:var(--banner-h);
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
+      color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
+      pointer-events:none;
+    }
+    .proto-banner strong{font-weight:800}
+
+    /* header */
+    header{
+      position: sticky; top: var(--banner-h); z-index: 50;
+      background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 18px; margin: 12px 16px 0 16px; overflow: hidden;
+      box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
+    }
+    .nav--brand{
+      display:grid; grid-template-columns: var(--logo-w) 1fr;
+      align-items:center; height: var(--nav-h); column-gap:22px; padding:0 18px;
+    }
+    .logo-bay{
+      height: calc(var(--nav-h) - 12px);
+      padding-left: 10px;
+      display:flex; align-items:center; justify-content:flex-start;
+      background:none; border-radius:0; box-shadow:none;
+    }
+    .logo-img{ height:100%; width:auto; object-fit:contain; object-position:left center; display:block; border-radius:0; filter:none; }
+    .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:28px; flex-wrap:wrap; }
+    .topnav a{
+      color:rgba(229,231,235,.92); font-weight:600; line-height:1;
+      padding:8px 10px; border-radius:999px; text-decoration:none;
+      transition: background-color .18s ease, color .18s ease, transform .18s ease;
+    }
+    .topnav a:hover{ background:rgba(255,255,255,.06); color:#fff; transform:translateY(-1px); }
+    .topnav .btn{ padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); }
+
+    /* content */
+    .section{padding:56px 0}
+    h1{font-size:42px; margin:20px 0 12px}
+    h2{margin:24px 0 10px; font-size:28px}
+    p{margin-bottom:14px}
+    .lead{color:var(--muted); font-size:18px}
+
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+    .grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
+    @media(max-width:900px){ .grid-3, .grid-2{ grid-template-columns:1fr } h1{font-size:34px} }
+
+    .card{
+      background: rgba(17,24,38,.6);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+    .muted{ color:var(--muted) }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border:1px solid rgba(255,255,255,.12);
+      border-radius:999px; color:var(--muted); font-size:14px;
+    }
+
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:8px; padding:3px 6px; font-size: .95em;
+    }
+    pre{
+      background:#0e1420; border:1px solid rgba(255,255,255,.08);
+      border-radius:12px; padding:14px; overflow:auto;
+    }
+
+    .cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px }
+    .btn{
+      display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600;
+      border:1px solid rgba(255,255,255,.1); background:var(--panel); color:var(--text)
+    }
+    .btn.primary{ background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; border-color:transparent }
+
+    footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:var(--muted)}
+  </style>
+</head>
+<body>
+
+  <!-- Optional banner -->
+  <div class="proto-banner" role="note">
+    <strong>Early-stage demo:</strong> Not for production use.
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav nav--brand">
+      <div class="logo-bay">
+        <img src="img/tw_logo.svg" alt="Ticket Warehouse logo" class="logo-img">
+      </div>
+      <nav class="topnav">
+        <a href="index.html" class="muted">Home</a>
+        <a href="marketing.html" class="muted">Marketing Plan</a>
+        <a href="business.html" class="muted">Business Plan</a>
+        <a href="index.html#contact" class="btn">Get a demo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="section">
+      <div class="container">
+        <span class="pill">🔍 In plain English</span>
+        <h1>How Ticket Warehouse Works</h1>
+        <p class="lead">
+          Imagine you’re selling the same pair of seats on a few websites. When one buyer checks out,
+          the others must be told “that ticket’s gone” <em>immediately</em>. Ticket Warehouse is the
+          little traffic-cop that keeps every site in sync so the same ticket is never sold twice.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="index.html#contact">Talk to us</a>
+          <a class="btn" href="marketing.html">See the Marketing Plan</a>
+          <a class="btn" href="business.html">Read the Business Plan</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 steps -->
+    <section class="section">
+      <div class="container">
+        <h2>The 3 simple steps</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>1) Connect</h3>
+            <p class="muted">We give you secure API keys. You plug Ticket Warehouse into your POS or marketplaces.</p>
+          </div>
+          <div class="card">
+            <h3>2) Register tickets</h3>
+            <p class="muted">You add each ticket once. We keep a single “source of truth” record for it.</p>
+          </div>
+          <div class="card">
+            <h3>3) Stay in sync</h3>
+            <p class="muted">When a sale happens anywhere, we notify the other sites instantly so nobody can buy what’s already sold.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- race condition story -->
+    <section class="section">
+      <div class="container">
+        <h2>“Two people tried to buy the same ticket” — what happens?</h2>
+        <div class="card">
+          <p>
+            Without coordination, both checkouts might succeed. With Ticket Warehouse, the first
+            confirmed buyer “wins.” The moment that happens, we send a message (a <span class="kbd">webhook</span>)
+            to the other marketplaces saying “this ticket is no longer available.” Their pages update, and
+            the second buyer gets a friendly “already sold” message before paying. No refund. No angry emails.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- why it matters -->
+    <section class="section">
+      <div class="container">
+        <h2>Why it matters</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Happier customers</h3>
+            <p class="muted">No more selling the same ticket twice. Fewer refunds, fewer support tickets, better reviews.</p>
+          </div>
+          <div class="card">
+            <h3>Happier teams</h3>
+            <p class="muted">Less manual reconciliation. A clear audit trail for every ticket change.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- security / privacy -->
+    <section class="section">
+      <div class="container">
+        <h2>Security & privacy (short and sweet)</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>API keys</h3>
+            <p class="muted">Only your systems can talk to your account. Keys can be rotated anytime.</p>
+          </div>
+          <div class="card">
+            <h3>Idempotent updates</h3>
+            <p class="muted">We guarantee “one ticket, one sale.” Repeated events won’t double-count.</p>
+          </div>
+          <div class="card">
+            <h3>Audit logs</h3>
+            <p class="muted">Every change is tracked. Who changed what, and when.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- tiny prototype examples (readable) -->
+    <section class="section">
+      <div class="container">
+        <h2>Prototype: what the requests look like</h2>
+
+        <div class="card" style="margin-bottom:18px">
+          <h3>Add a ticket</h3>
+          <pre><code>POST /api/tickets
+Authorization: Bearer &lt;YOUR_API_KEY&gt;
+
+{
+  "ticket_id": "A1-ROW3-12",
+  "event": "RockFest 2025",
+  "face_value": 120.00,
+  "currency": "USD",
+  "status": "available"
+}</code></pre>
+        </div>
+
+        <div class="card" style="margin-bottom:18px">
+          <h3>Mark as sold (we broadcast the change)</h3>
+          <pre><code>POST /api/tickets/A1-ROW3-12/sold
+Authorization: Bearer &lt;YOUR_API_KEY&gt;
+
+{
+  "marketplace": "ExampleMarket",
+  "order_id": "ORD-983221"
+}</code></pre>
+          <p class="muted" style="margin-top:8px">We send a webhook to your other marketplaces: <span class="kbd">POST https://yourapp.com/webhooks/tickets</span> with <span class="kbd">{"ticket_id":"A1-ROW3-12","status":"sold"}</span></p>
+        </div>
+
+        <div class="card">
+          <h3>Double-click protection</h3>
+          <pre><code># Send the same "sold" event twice (by accident)
+# We still record exactly one sale.
+
+Idempotency-Key: 8c2a-9b1e-xyz
+</code></pre>
+          <p class="muted" style="margin-top:8px">Using an <span class="kbd">Idempotency-Key</span>, duplicates are ignored safely.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <div class="container">
+        <h2>Quick FAQ</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Do I need to change all my systems?</h3>
+            <p class="muted">No. Start by registering tickets and listening for webhooks. You can integrate deeper over time.</p>
+          </div>
+          <div class="card">
+            <h3>How fast are updates?</h3>
+            <p class="muted">Typically in milliseconds—fast enough to catch near-simultaneous checkouts.</p>
+          </div>
+          <div class="card">
+            <h3>What if a marketplace is offline?</h3>
+            <p class="muted">We queue notifications and retry. Your source of truth stays correct, and late systems catch up.</p>
+          </div>
+          <div class="card">
+            <h3>Can I try a sandbox?</h3>
+            <p class="muted">Yes—email <a href="mailto:hello@ticketwarehouse.dev">hello@ticketwarehouse.dev</a> and we’ll set you up.</p>
+          </div>
+        </div>
+
+        <div class="cta-row" style="margin-top:18px">
+          <a class="btn primary" href="index.html#contact">Request a demo</a>
+          <a class="btn" href="marketing.html">Marketing Plan</a>
+          <a class="btn" href="business.html">Business Plan</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
+      <div class="muted">© <span id="y"></span> Ticket Warehouse</div>
+      <div class="muted">
+        <a class="muted" href="#">Terms</a> · <a class="muted" href="#">Privacy</a> · <a class="muted" href="#">Status</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
