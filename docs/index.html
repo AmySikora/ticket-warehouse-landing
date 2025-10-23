@@ -4,8 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Ticket Warehouse</title>
-  <meta name="description" content="Ticket Warehouse keeps ticket listings perfectly in sync across marketplaces with real-time APIs and webhooks. Prevent duplicate sales and protect your brand."/>
-  <!-- Favicon lives in /docs -->
+  <meta name="description" content="Keep ticket listings in sync across marketplaces. Prevent duplicate sales with real-time APIs and webhooks."/>
   <link rel="icon" href="favicon_logo.png" type="image/png"/>
 
   <style>
@@ -16,15 +15,18 @@
       --radius:16px; --ring:0 0 0 3px rgba(79,70,229,.35);
 
       /* Layout controls */
-      --banner-h: 32px;      /* proto banner height (already in your file) */
-        --nav-h: 96px;         /* << set the total navbar height here */
-}
+      --banner-h: 32px;      /* small banner above header */
+      --nav-h: 110px;        /* desktop header height */
+      --logo-w: 300px;       /* desktop logo column width */
+      --nav-h-sm: 72px;      /* mobile header height */
+      --logo-w-sm: 200px;    /* mobile logo column width */
+    }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
       background:
         radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.15), transparent),
         radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
@@ -36,125 +38,111 @@
     a:hover{text-decoration:underline}
     .container{max-width:1100px; margin:0 auto; padding:0 20px}
 
-    /* Prototype banner */
+    /* Banner */
     .proto-banner{
       position:sticky; top:0; z-index:60;
       height:var(--banner-h);
       display:flex; align-items:center; justify-content:center;
       background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
-      color:#fff; font-size:14px;
-      border-bottom:1px solid rgba(255,255,255,.2);
-      pointer-events:none; /* never block clicks below */
+      color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
+      pointer-events:none;
     }
     .proto-banner strong{font-weight:800}
 
-    :root{
-  /* desktop */
-  --banner-h: 32px;
-  --nav-h: 110px;
-  --logo-w: 300px;
-  /* mobile */
-  --nav-h-sm: 72px;
-  --logo-w-sm: 200px;
-}
+    /* Header shell */
+    header{
+      position: sticky; top: var(--banner-h); z-index: 50;
+      background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 18px; margin: 12px 16px 0 16px; overflow: visible; /* allow dropdown */
+      box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
+    }
+    /* grid: logo | toggle | nav */
+    .nav--brand{
+      display: grid;
+      grid-template-columns: var(--logo-w) 1fr;
+      align-items: center;
+      height: var(--nav-h);
+      column-gap: 22px;
+      padding: 0 18px;
+      position: relative;
+    }
+    /* logo */
+    .logo-bay{
+      height: calc(var(--nav-h) - 12px);
+      padding-left: 10px;
+      display: flex; align-items: center; justify-content: flex-start;
+      text-decoration: none;
+    }
+    .logo-img{
+      height: 100%; width: auto; object-fit: contain; object-position: left center; display:block;
+    }
+    /* desktop nav */
+    .topnav{
+      display:flex; align-items:center; justify-content:flex-end; gap: 24px; flex-wrap: wrap;
+    }
+    .topnav a{
+      color: rgba(229,231,235,.92); font-weight:600; line-height:1;
+      padding: 8px 10px; border-radius:999px; text-decoration:none;
+      transition: background-color .18s ease, color .18s ease, transform .18s ease;
+    }
+    .topnav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px); }
+    .topnav .btn{ padding: 10px 16px; background: linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow: var(--shadow); }
 
-/* Header shell (unchanged) */
-header{
-  position: sticky; top: var(--banner-h); z-index: 50;
-  background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 18px; margin: 12px 16px 0 16px; overflow: hidden;
-  box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
-}
+    /* toggle button (hidden on desktop) */
+    .nav-toggle{
+      display:none;
+      position: relative;
+      justify-self: end;
+      width: 42px; height: 36px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 10px;
+      background: rgba(17,24,38,.65);
+      cursor: pointer;
+    }
+    .nav-toggle .bar{
+      position: absolute; left: 8px; right: 8px; height: 2px; background: #e5e7eb; border-radius: 1px;
+      transition: transform .2s ease, opacity .2s ease, top .2s ease;
+    }
+    .nav-toggle .bar:nth-child(1){ top: 10px; }
+    .nav-toggle .bar:nth-child(2){ top: 17px; }
+    .nav-toggle .bar:nth-child(3){ top: 24px; }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top: 17px; transform: rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity: 0; }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top: 17px; transform: rotate(-45deg); }
 
-/* grid: logo | nav (and toggle overlays in small) */
-.nav--brand{
-  display: grid;
-  grid-template-columns: var(--logo-w) 1fr;
-  align-items: center;
-  height: var(--nav-h);
-  column-gap: 22px;
-  padding: 0 18px;
-}
-
-/* logo */
-.logo-bay{
-  height: calc(var(--nav-h) - 12px);
-  padding-left: 10px;
-  display: flex; align-items: center; justify-content: flex-start;
-  text-decoration: none;
-}
-.logo-img{
-  height: 100%; width: auto; object-fit: contain; object-position: left center; display:block;
-}
-
-/* desktop nav */
-.topnav{
-  display:flex; align-items:center; justify-content:flex-end; gap: 24px; flex-wrap: wrap;
-}
-.topnav a{
-  color: rgba(229,231,235,.92); font-weight:600; line-height:1;
-  padding: 8px 10px; border-radius:999px; text-decoration:none;
-  transition: background-color .18s ease, color .18s ease, transform .18s ease;
-}
-.topnav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px); }
-.topnav .btn{ padding: 10px 16px; background: linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow: var(--shadow); }
-
-/* toggle button (hidden on desktop) */
-.nav-toggle{
-  display:none;
-  position: relative;
-  justify-self: end;
-  width: 42px; height: 36px;
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 10px;
-  background: rgba(17,24,38,.65);
-  cursor: pointer;
-}
-.nav-toggle .bar{
-  position: absolute; left: 8px; right: 8px; height: 2px; background: #e5e7eb; border-radius: 1px;
-  transition: transform .2s ease, opacity .2s ease, top .2s ease;
-}
-.nav-toggle .bar:nth-child(1){ top: 10px; }
-.nav-toggle .bar:nth-child(2){ top: 17px; }
-.nav-toggle .bar:nth-child(3){ top: 24px; }
-.nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top: 17px; transform: rotate(45deg); }
-.nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity: 0; }
-.nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top: 17px; transform: rotate(-45deg); }
-
-/* ===== MOBILE LAYOUT ===== */
-@media (max-width: 900px){
-  .nav--brand{
-    grid-template-columns: var(--logo-w-sm) auto; /* logo + toggle */
-    height: var(--nav-h-sm);
-    column-gap: 12px;
-  }
-  /* show toggle, hide inline nav */
-  .nav-toggle{ display:flex; align-items:center; justify-content:center; }
-  .topnav{
-    position: absolute;
-    left: 0; right: 0;
-    top: calc(var(--banner-h) + var(--nav-h-sm)); /* directly below header */
-    display: none; /* hidden until opened */
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    background: rgba(11,15,20,.95);
-    border: 1px solid rgba(255,255,255,.06);
-    border-top: none;
-    border-radius: 0 0 18px 18px;
-    overflow: hidden;
-  }
-  .topnav a{
-    padding: 14px 18px;
-    border-bottom: 1px solid rgba(255,255,255,.06);
-  }
-  .topnav a:last-child{ border-bottom: none; }
-
-  /* open state */
-  header.nav-open .topnav{ display: flex; }
-}
-
+    /* ===== MOBILE ===== */
+    @media (max-width: 900px){
+      .nav--brand{
+        grid-template-columns: var(--logo-w-sm) auto; /* logo + toggle */
+        height: var(--nav-h-sm);
+        column-gap: 12px;
+      }
+      .nav-toggle{ display:flex; align-items:center; justify-content:center; }
+      /* dropdown as fixed overlay below header */
+      .topnav{
+        position: fixed;
+        left: 16px; right: 16px;
+        top: calc(var(--banner-h) + var(--nav-h-sm) + 12px);
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background: rgba(11,15,20,.95);
+        border: 1px solid rgba(255,255,255,.06);
+        border-top: none;
+        border-radius: 0 0 18px 18px;
+        overflow: hidden;
+        transform: translateY(-6px); opacity: 0; transition: transform .2s ease, opacity .2s ease;
+        z-index: 60;
+      }
+      .topnav a{
+        padding: 14px 18px;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+      }
+      .topnav a:last-child{ border-bottom: none; }
+      header.nav-open .topnav{ display: flex; transform: translateY(0); opacity: 1; }
+    }
 
     /* Hero */
     .hero{padding:72px 0 40px}
@@ -163,16 +151,12 @@ header{
     h1{margin:14px 0 8px; font-size:44px; line-height:1.1}
     .lead{color:var(--muted); font-size:18px}
     .cta{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap}
-    .btn{
-      display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600;
-      border:1px solid rgba(255,255,255,.1); background:var(--panel); color:var(--text)
-    }
+    .btn{display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600;
+      border:1px solid rgba(255,255,255,.1); background:var(--panel); color:var(--text)}
     .btn.primary{background:linear-gradient(45deg,var(--brand),var(--brand-2)); border-color:transparent; color:white}
     .btn:hover{transform:translateY(-1px); text-decoration:none}
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px;
-    }
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px}
     .hero .card{display:grid; gap:12px}
     .stat{display:flex; align-items:center; justify-content:space-between; background:rgba(17,24,38,.6); padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.06)}
     .stat small{color:var(--muted)}
@@ -206,26 +190,25 @@ header{
 </head>
 <body>
 
-  <!-- Prototype banner -->
+  <!-- Banner -->
   <div class="proto-banner" role="note">
     <strong>Early-stage demo:</strong> Not for production use.
   </div>
 
+  <!-- Header -->
   <header>
     <div class="container nav nav--brand">
-      <!-- Left: logo -->
       <a class="logo-bay" href="index.html" aria-label="Ticket Warehouse">
         <img src="favicon_logo.png" alt="Ticket Warehouse logo" class="logo-img">
       </a>
-  
+
       <!-- Mobile toggle -->
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
-  
-      <!-- Right: nav -->
+
+      <!-- Nav -->
       <nav id="primary-nav" class="topnav">
-        <!-- Use ./ when linking from index.html; use relative paths on other pages too -->
         <a href="./prototype.html" class="muted">How it works</a>
         <a href="#who" class="muted">Who it's for</a>
         <a href="#pricing" class="muted">Pricing</a>
@@ -233,8 +216,7 @@ header{
       </nav>
     </div>
   </header>
-  
-  
+
   <main>
     <!-- Hero -->
     <section class="hero">
@@ -249,7 +231,7 @@ header{
             <a href="#contact" class="btn">Talk to us</a>
             <a href="./marketing.html" class="btn">Marketing Plan</a>
             <a href="./business.html" class="btn">Business Plan</a>
-          </div>          
+          </div>
         </div>
 
         <aside class="card" aria-label="Key stats">
@@ -428,7 +410,7 @@ header{
   </footer>
 
   <script>
-    // Demo form handler
+    // form demo
     const f = document.getElementById('contact-form');
     if (f) {
       f.addEventListener('submit', function (e) {
@@ -437,24 +419,21 @@ header{
         alert("Thanks! We'll get back to you shortly.");
       });
     }
-    // Footer year
+    // year
     const y = document.getElementById('y');
     if (y) y.textContent = new Date().getFullYear();
-  </script>
-  <script>
+
+    // mobile nav toggle
     (function(){
       const hdr = document.querySelector('header');
       const btn = document.querySelector('.nav-toggle');
       const nav = document.getElementById('primary-nav');
       if(!btn || !hdr || !nav) return;
-  
       btn.addEventListener('click', () => {
         const isOpen = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', String(!isOpen));
         hdr.classList.toggle('nav-open', !isOpen);
       });
-  
-      // close menu when clicking a link (mobile)
       nav.querySelectorAll('a').forEach(a => {
         a.addEventListener('click', () => {
           btn.setAttribute('aria-expanded', 'false');
@@ -462,6 +441,6 @@ header{
         });
       });
     })();
-  </script>  
+  </script>
 </body>
 </html>

@@ -8,17 +8,13 @@
   <link rel="icon" href="favicon_logo.png" type="image/png"/>
 
   <style>
+    /* --- same header + responsive styles as index --- */
     :root{
       --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
       --text:#e5e7eb; --muted:#94a3b8; --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:16px;
-
-      /* header controls */
-      --banner-h: 32px;   /* set to 0 to hide the banner line */
-      --nav-h: 110px;
-      --logo-w: 240px;
+      --radius:16px; --banner-h: 32px;
+      --nav-h: 110px; --logo-w: 300px; --nav-h-sm: 72px; --logo-w-sm: 200px;
     }
-
     *{box-sizing:border-box;margin:0;padding:0}
     body{
       font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
@@ -32,7 +28,6 @@
     a:hover{text-decoration:underline}
     .container{max-width:1000px; margin:0 auto; padding:0 20px}
 
-    /* small banner */
     .proto-banner{
       position:sticky; top:0; z-index:60;
       height:var(--banner-h);
@@ -41,64 +36,52 @@
       color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
       pointer-events:none;
     }
-    .proto-banner strong{font-weight:800}
 
-    /* header */
     header{
       position: sticky; top: var(--banner-h); z-index: 50;
       background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,.06);
-      border-radius: 18px; margin: 12px 16px 0 16px; overflow: hidden;
+      border-radius: 18px; margin: 12px 16px 0 16px; overflow: visible;
       box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
     }
-    .nav--brand{
-      display:grid; grid-template-columns: var(--logo-w) 1fr;
-      align-items:center; height: var(--nav-h); column-gap:22px; padding:0 18px;
-    }
-    .logo-bay{
-      height: calc(var(--nav-h) - 12px);
-      padding-left:10px; display:flex; align-items:center; justify-content:flex-start;
-      background:none; border-radius:0; box-shadow:none;
-    }
-    .logo-img{ height:100%; width:auto; object-fit:contain; object-position:left center; display:block; }
+    .nav--brand{ display:grid; grid-template-columns: var(--logo-w) 1fr; align-items:center; height: var(--nav-h); column-gap:22px; padding:0 18px; position:relative}
+    .logo-bay{ height: calc(var(--nav-h) - 12px); padding-left:10px; display:flex; align-items:center}
+    .logo-img{ height:100%; width:auto; object-fit:contain; display:block }
+    .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:24px; flex-wrap:wrap }
+    .topnav a{ color:rgba(229,231,235,.92); font-weight:600; line-height:1; padding:8px 10px; border-radius:999px; text-decoration:none; transition: background-color .18s ease, color .18s ease, transform .18s ease }
+    .topnav a:hover{ background:rgba(255,255,255,.06); color:#fff; transform:translateY(-1px) }
+    .topnav .btn{ padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow: var(--shadow) }
+    .nav-toggle{ display:none; position:relative; justify-self:end; width:42px; height:36px; border:1px solid rgba(255,255,255,.18); border-radius:10px; background:rgba(17,24,38,.65); cursor:pointer }
+    .nav-toggle .bar{ position:absolute; left:8px; right:8px; height:2px; background:#e5e7eb; border-radius:1px; transition:transform .2s ease, opacity .2s ease, top .2s ease }
+    .nav-toggle .bar:nth-child(1){ top:10px } .nav-toggle .bar:nth-child(2){ top:17px } .nav-toggle .bar:nth-child(3){ top:24px }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top:17px; transform:rotate(45deg) }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity:0 }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top:17px; transform:rotate(-45deg) }
 
-    .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:24px; flex-wrap:wrap; }
-    .topnav a{
-      color:rgba(229,231,235,.92); font-weight:600; line-height:1;
-      padding:8px 10px; border-radius:999px; text-decoration:none;
-      transition: background-color .18s ease, color .18s ease, transform .18s ease;
+    @media(max-width:900px){
+      .nav--brand{ grid-template-columns: var(--logo-w-sm) auto; height: var(--nav-h-sm); column-gap:12px }
+      .nav-toggle{ display:flex; align-items:center; justify-content:center }
+      .topnav{
+        position: fixed; left:16px; right:16px;
+        top: calc(var(--banner-h) + var(--nav-h-sm) + 12px);
+        display:none; flex-direction:column; align-items:stretch; gap:0;
+        background:rgba(11,15,20,.95); border:1px solid rgba(255,255,255,.06); border-top:none;
+        border-radius:0 0 18px 18px; overflow:hidden; transform:translateY(-6px); opacity:0; transition:transform .2s ease, opacity .2s ease; z-index:60;
+      }
+      .topnav a{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06) }
+      .topnav a:last-child{ border-bottom:none }
+      header.nav-open .topnav{ display:flex; transform:translateY(0); opacity:1 }
     }
-    .topnav a:hover{ background:rgba(255,255,255,.06); color:#fff; transform:translateY(-1px); }
-    .topnav .btn{ padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); }
 
-    /* content */
     .section{padding:56px 0}
     h1{font-size:42px; margin:20px 0 12px}
     h2{margin:24px 0 10px; font-size:28px}
     p{margin-bottom:14px}
-    .lead{color:var(--muted); font-size:18px}
-
-    .card{
-      background:rgba(17,24,38,.6);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:24px; margin-bottom:28px;
-    }
-    .btn, .btn-link{
-      display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600;
-      border:1px solid rgba(255,255,255,.1); background:var(--panel); color:var(--text);
-      text-decoration:none;
-    }
-    .btn.primary{ background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; }
-
-    .muted{color:var(--muted)}
-    footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:var(--muted)}
-
-    @media(max-width:900px){
-      :root{ --nav-h: 96px; --logo-w: 200px; }
-      h1{font-size:34px}
-    }
+    .lead{color:#94a3b8; font-size:18px}
+    .card{ background:rgba(17,24,38,.6); border:1px solid rgba(255,255,255,.08); border-radius:16px; box-shadow:var(--shadow); padding:24px; margin-bottom:28px }
+    .btn{ display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600; border:1px solid rgba(255,255,255,.1); background:#111826; color:#e5e7eb }
+    .btn.primary{ background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff }
+    footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:#94a3b8}
   </style>
 </head>
 <body>
@@ -109,16 +92,18 @@
 
   <header>
     <div class="container nav nav--brand">
-      <div class="logo-bay">
-        <img src="img/logo.png" alt="Ticket Warehouse logo" class="logo-img">
-      </div>
+      <a class="logo-bay" href="index.html" aria-label="Ticket Warehouse">
+        <img src="favicon_logo.png" alt="Ticket Warehouse logo" class="logo-img">
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
       <nav id="primary-nav" class="topnav">
         <a href="index.html" class="muted">Home</a>
         <a href="prototype.html" class="muted">How it works</a>
-        <a href="marketing.html" class="muted">Marketing</a>
-        <a href="business.html" class="muted">Business</a>
+        <a href="business.html" class="muted">Business Plan</a>
         <a href="index.html#contact" class="btn">Get a demo</a>
-      </nav>      
+      </nav>
     </div>
   </header>
 
@@ -126,20 +111,15 @@
     <section class="section">
       <div class="container">
         <h1>Marketing Plan</h1>
-        <p class="lead">
-          The goal is simple. Help people learn what Ticket Warehouse does. Find early users who want to stop selling the same ticket twice. Share real results and clear stories.
-        </p>
+        <p class="lead">The goal is simple. Help people learn what Ticket Warehouse does. Find early users who want to stop selling the same ticket twice. Share real results and clear stories.</p>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-
         <div class="card">
           <h2>What Ticket Warehouse Does</h2>
-          <p>
-            It keeps ticket listings in sync across every site. If a ticket sells on one site, all the other sites update right away. That prevents a second sale of the same seat. It saves time and avoids refunds.
-          </p>
+          <p>It keeps ticket listings in sync across every site. If a ticket sells on one site, all the other sites update right away. That prevents a second sale of the same seat. It saves time and avoids refunds.</p>
         </div>
 
         <div class="card">
@@ -172,7 +152,6 @@
           <a href="index.html" class="btn primary">Back to Home</a>
           <a href="business.html" class="btn" style="margin-left:10px">View Business Plan</a>
         </div>
-
       </div>
     </section>
   </main>
@@ -186,6 +165,22 @@
     </div>
   </footer>
 
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    (function(){
+      const hdr = document.querySelector('header');
+      const btn = document.querySelector('.nav-toggle');
+      const nav = document.getElementById('primary-nav');
+      if(!btn || !hdr || !nav) return;
+      btn.addEventListener('click', () => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        hdr.classList.toggle('nav-open', !isOpen);
+      });
+      nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        btn.setAttribute('aria-expanded','false'); hdr.classList.remove('nav-open');
+      }));
+    })();
+  </script>
 </body>
 </html>
