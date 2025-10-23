@@ -49,12 +49,16 @@
     .proto-banner strong{font-weight:800}
 
     :root{
+  /* desktop */
   --banner-h: 32px;
-  --nav-h: 120px;      /* total header height */
-  --logo-w: 360px;     /* reserved width for the bay */
+  --nav-h: 110px;
+  --logo-w: 300px;
+  /* mobile */
+  --nav-h-sm: 72px;
+  --logo-w-sm: 200px;
 }
 
-/* Sticky capsule header (keep yours if already present) */
+/* Header shell (unchanged) */
 header{
   position: sticky; top: var(--banner-h); z-index: 50;
   background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
@@ -63,61 +67,94 @@ header{
   box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
 }
 
-/* two columns: logo bay | nav */
+/* grid: logo | nav (and toggle overlays in small) */
 .nav--brand{
   display: grid;
   grid-template-columns: var(--logo-w) 1fr;
   align-items: center;
   height: var(--nav-h);
   column-gap: 22px;
-  padding: 0 18px;                 /* no extra vertical padding */
+  padding: 0 18px;
 }
 
-/* Logo bay with internal padding + glow */
-.logo-bay {
+/* logo */
+.logo-bay{
   height: calc(var(--nav-h) - 12px);
-  padding: 0; /* remove internal padding */
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border-radius: 0;
-  background: none; /* remove the glow container */
-  box-shadow: none; /* remove outer glow */
-}
-
-.logo-img {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
-  object-position: left center;
-  display: block;
-  border-radius: 0;
-  filter: none; /* remove drop shadow glow */
-}
-
-.logo-bay {
   padding-left: 10px;
+  display: flex; align-items: center; justify-content: flex-start;
+  text-decoration: none;
+}
+.logo-img{
+  height: 100%; width: auto; object-fit: contain; object-position: left center; display:block;
 }
 
-
-/* Right-side nav */
+/* desktop nav */
 .topnav{
-  display:flex; align-items:center; justify-content:flex-end;
-  gap: 28px; flex-wrap: wrap;
+  display:flex; align-items:center; justify-content:flex-end; gap: 24px; flex-wrap: wrap;
 }
 .topnav a{
-  color: rgba(229,231,235,.92); font-weight: 600; line-height: 1;
-  padding: 8px 10px; border-radius: 999px; text-decoration: none;
+  color: rgba(229,231,235,.92); font-weight:600; line-height:1;
+  padding: 8px 10px; border-radius:999px; text-decoration:none;
   transition: background-color .18s ease, color .18s ease, transform .18s ease;
 }
-.topnav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px);}
+.topnav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px); }
 .topnav .btn{ padding: 10px 16px; background: linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow: var(--shadow); }
 
-/* Responsive */
-@media (max-width: 900px){
-  :root{ --nav-h: 96px; --logo-w: 280px; }
-  .topnav{ gap: 16px; }
+/* toggle button (hidden on desktop) */
+.nav-toggle{
+  display:none;
+  position: relative;
+  justify-self: end;
+  width: 42px; height: 36px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 10px;
+  background: rgba(17,24,38,.65);
+  cursor: pointer;
 }
+.nav-toggle .bar{
+  position: absolute; left: 8px; right: 8px; height: 2px; background: #e5e7eb; border-radius: 1px;
+  transition: transform .2s ease, opacity .2s ease, top .2s ease;
+}
+.nav-toggle .bar:nth-child(1){ top: 10px; }
+.nav-toggle .bar:nth-child(2){ top: 17px; }
+.nav-toggle .bar:nth-child(3){ top: 24px; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top: 17px; transform: rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity: 0; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top: 17px; transform: rotate(-45deg); }
+
+/* ===== MOBILE LAYOUT ===== */
+@media (max-width: 900px){
+  .nav--brand{
+    grid-template-columns: var(--logo-w-sm) auto; /* logo + toggle */
+    height: var(--nav-h-sm);
+    column-gap: 12px;
+  }
+  /* show toggle, hide inline nav */
+  .nav-toggle{ display:flex; align-items:center; justify-content:center; }
+  .topnav{
+    position: absolute;
+    left: 0; right: 0;
+    top: calc(var(--banner-h) + var(--nav-h-sm)); /* directly below header */
+    display: none; /* hidden until opened */
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: rgba(11,15,20,.95);
+    border: 1px solid rgba(255,255,255,.06);
+    border-top: none;
+    border-radius: 0 0 18px 18px;
+    overflow: hidden;
+  }
+  .topnav a{
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .topnav a:last-child{ border-bottom: none; }
+
+  /* open state */
+  header.nav-open .topnav{ display: flex; }
+}
+
 
     /* Hero */
     .hero{padding:72px 0 40px}
@@ -176,21 +213,27 @@ header{
 
   <header>
     <div class="container nav nav--brand">
-      <!-- Left: logo bay with an IMG, not a background -->
-      <div class="logo-bay">
-        <img src="img/logo.png" alt="Ticket Warehouse" class="logo-img"/>
-      </div>
+      <!-- Left: logo -->
+      <a class="logo-bay" href="index.html" aria-label="Ticket Warehouse">
+        <img src="favicon_logo.png" alt="Ticket Warehouse logo" class="logo-img">
+      </a>
+  
+      <!-- Mobile toggle -->
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
   
       <!-- Right: nav -->
-      <nav class="topnav">
+      <nav id="primary-nav" class="topnav">
+        <!-- Use ./ when linking from index.html; use relative paths on other pages too -->
         <a href="./prototype.html" class="muted">How it works</a>
         <a href="#who" class="muted">Who it's for</a>
         <a href="#pricing" class="muted">Pricing</a>
         <a href="#contact" class="btn">Get a demo</a>
-      </nav>      
       </nav>
     </div>
   </header>
+  
   
   <main>
     <!-- Hero -->
@@ -398,5 +441,27 @@ header{
     const y = document.getElementById('y');
     if (y) y.textContent = new Date().getFullYear();
   </script>
+  <script>
+    (function(){
+      const hdr = document.querySelector('header');
+      const btn = document.querySelector('.nav-toggle');
+      const nav = document.getElementById('primary-nav');
+      if(!btn || !hdr || !nav) return;
+  
+      btn.addEventListener('click', () => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        hdr.classList.toggle('nav-open', !isOpen);
+      });
+  
+      // close menu when clicking a link (mobile)
+      nav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          btn.setAttribute('aria-expanded', 'false');
+          hdr.classList.remove('nav-open');
+        });
+      });
+    })();
+  </script>  
 </body>
 </html>
