@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Ticket Warehouse — Business Plan</title>
-  <meta name="description" content="Ticket Warehouse business plan: strategy, market, technology, financials, and execution roadmap."/>
+  <meta name="description" content="A clear and simple business plan for Ticket Warehouse."/>
   <link rel="icon" href="favicon_logo.png" type="image/png"/>
 
   <style>
@@ -13,10 +13,9 @@
       --text:#e5e7eb; --muted:#94a3b8; --shadow:0 10px 30px rgba(0,0,0,.35);
       --radius:16px;
 
-      /* header controls (match other pages) */
-      --banner-h: 32px;   /* set to 0 to hide the prototype banner on this page */
-      --nav-h: 120px;
-      --logo-w: 360px;
+      --banner-h: 32px;
+      --nav-h: 110px;
+      --logo-w: 240px;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -32,7 +31,6 @@
     a:hover{text-decoration:underline}
     .container{max-width:1000px; margin:0 auto; padding:0 20px}
 
-    /* Prototype banner (optional) */
     .proto-banner{
       position:sticky; top:0; z-index:60;
       height:var(--banner-h);
@@ -43,7 +41,6 @@
     }
     .proto-banner strong{font-weight:800}
 
-    /* Header */
     header{
       position: sticky; top: var(--banner-h); z-index: 50;
       background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
@@ -60,8 +57,9 @@
       padding-left:10px; display:flex; align-items:center; justify-content:flex-start;
       background:none; border-radius:0; box-shadow:none;
     }
-    .logo-img{ height:100%; width:auto; object-fit:contain; object-position:left center; display:block; border-radius:0; filter:none; }
-    .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:28px; flex-wrap:wrap; }
+    .logo-img{ height:100%; width:auto; object-fit:contain; object-position:left center; display:block; }
+
+    .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:24px; flex-wrap:wrap; }
     .topnav a{
       color:rgba(229,231,235,.92); font-weight:600; line-height:1;
       padding:8px 10px; border-radius:999px; text-decoration:none;
@@ -70,19 +68,19 @@
     .topnav a:hover{ background:rgba(255,255,255,.06); color:#fff; transform:translateY(-1px); }
     .topnav .btn{ padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); }
 
-    /* Content */
+    .section{padding:56px 0}
     h1{font-size:42px; margin:20px 0 12px}
     h2{margin:24px 0 10px; font-size:28px}
     p{margin-bottom:14px}
     ul{padding-left:18px; margin:8px 0 14px}
-    .section{padding:56px 0}
+    .lead{color:var(--muted); font-size:18px}
+
     .card{
       background:rgba(17,24,38,.6);
       border:1px solid rgba(255,255,255,.08);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:24px;
-      margin-bottom:28px;
+      padding:24px; margin-bottom:28px;
     }
     .btn, .btn-link{
       display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600;
@@ -90,142 +88,138 @@
       text-decoration:none;
     }
     .btn.primary{ background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; }
-    .muted{ color:var(--muted); }
-    footer{ padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:var(--muted); }
+
+    .muted{color:var(--muted)}
+    footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:var(--muted)}
 
     @media(max-width:900px){
-      :root{ --nav-h: 96px; --logo-w: 280px; }
+      :root{ --nav-h: 96px; --logo-w: 200px; }
       h1{font-size:34px}
     }
   </style>
 </head>
 <body>
 
-  <!-- Optional prototype banner -->
   <div class="proto-banner" role="note">
-    <strong>Early-stage demo:</strong> Not for production use.
+    <strong>Early stage demo:</strong> Not for production use.
   </div>
 
-  <!-- Header -->
   <header>
     <div class="container nav nav--brand">
       <div class="logo-bay">
-        <img src="img/tw_logo.svg" alt="Ticket Warehouse logo" class="logo-img">
+        <img src="img/logo.png" alt="Ticket Warehouse logo" class="logo-img">
       </div>
       <nav class="topnav">
         <a href="index.html" class="muted">Home</a>
+        <a href="prototype.html" class="muted">How it works</a>
         <a href="marketing.html" class="muted">Marketing Plan</a>
+        <a href="index.html#contact" class="btn">Get a demo</a>
+      </nav>
     </div>
   </header>
 
   <main>
     <section class="section">
       <div class="container">
-        <h1>Ticket Warehouse — Business Plan</h1>
-        <p class="muted" style="font-size:18px">
-          A concise plan covering the product, market, operations, and financial outlook for Ticket Warehouse.
+        <h1>Business Plan</h1>
+        <p class="lead">
+          Ticket Warehouse keeps ticket listings in sync. A ticket sells in one place. All other places update right away. That prevents a second sale of the same seat.
         </p>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-        <div class="card">
-          <h2>Executive Summary</h2>
-          <p>
-            Ticket Warehouse is a cloud-based inventory synchronization system that prevents duplicate ticket
-            sales across marketplaces. It offers real-time API and webhook-based communication to ensure
-            every ticket sold is unique and available.
-          </p>
-        </div>
 
         <div class="card">
           <h2>Problem</h2>
           <p>
-            Multiple marketplaces list the same tickets, causing duplicate sales, refunds, and reputation loss.
-            No standardized sync solution currently exists.
+            The same ticket often appears on more than one site. Two people try to buy it. One wins. The other gets a refund and a bad experience. Sellers lose time. Trust drops.
           </p>
         </div>
 
         <div class="card">
           <h2>Solution</h2>
           <p>
-            Ticket Warehouse provides a unified API hub with real-time updates, secure authentication,
-            and webhook notifications. It acts as a central source of truth for ticket availability.
+            Ticket Warehouse acts like a traffic guide. When a ticket sells, it tells all the other sites to remove or update that listing right away. The system keeps a single source of truth for each ticket.
           </p>
         </div>
 
         <div class="card">
-          <h2>Target Market</h2>
-          <p>
-            Independent ticket brokers, marketplaces, and event management systems in a $15B+ secondary
-            ticketing market.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2>Competitive Advantage</h2>
-          <p>
-            Real-time API sync, universal integration, and developer simplicity with FastAPI, Docker, and Python.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2>Revenue Model</h2>
+          <h2>Who It Is For</h2>
           <ul>
-            <li>Subscription plans: <strong>$49–$199/month</strong></li>
-            <li>Per-transaction fees: <strong>$0.05/ticket</strong></li>
-            <li>White-label licensing for marketplaces</li>
+            <li>Independent ticket sellers and brokers</li>
+            <li>Marketplaces that want safe and honest listings</li>
+            <li>Venues and event teams that need accurate inventory</li>
           </ul>
         </div>
 
         <div class="card">
-          <h2>Technology Stack</h2>
+          <h2>What Sets It Apart</h2>
           <ul>
-            <li>FastAPI backend</li>
-            <li>JSON/SQL storage</li>
-            <li>pytest testing</li>
-            <li>Docker deployment</li>
-            <li><code>httpx</code> webhooks</li>
-            <li>Secure API key authentication</li>
+            <li>Updates are fast and feel instant</li>
+            <li>Setup is simple and works with tools people already use</li>
+            <li>Built with reliable and open tools</li>
+            <li>Secure keys and clear logs for every change</li>
           </ul>
         </div>
 
         <div class="card">
-          <h2>Marketing Strategy</h2>
-          <p><strong>Phase 1:</strong> Beta testing with brokers.</p>
-          <p><strong>Phase 2:</strong> Integrations with marketplaces.</p>
-          <p><strong>Phase 3:</strong> Enterprise expansion and SDK releases.</p>
+          <h2>How We Earn</h2>
+          <ul>
+            <li>Monthly plans from <strong>$49</strong> to <strong>$199</strong></li>
+            <li>Per ticket fee of <strong>5 cents</strong></li>
+            <li>Custom plans for large teams and marketplaces</li>
+          </ul>
         </div>
 
         <div class="card">
-          <h2>Operations &amp; Team</h2>
+          <h2>How It Is Built</h2>
+          <ul>
+            <li>Python and FastAPI</li>
+            <li>SQL for storage</li>
+            <li>Docker for deploys</li>
+            <li>Webhooks to notify other systems</li>
+            <li>Private API keys for security</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>How We Grow</h2>
+          <ul>
+            <li>Test with small sellers and learn from real use</li>
+            <li>Connect with marketplaces</li>
+            <li>Expand to larger venues and custom work</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>Team and Operations</h2>
           <p>
-            Founded by <strong>Amy Sikora</strong> (Full-Stack Developer). Remote-first model with contract
-            developers and event industry advisors.
+            Started by <strong>Amy Sikora</strong>. Work is remote. Bring in contract help and trusted advisors as needed.
           </p>
         </div>
 
         <div class="card">
-          <h2>Financial Plan</h2>
+          <h2>Money Plan</h2>
           <p>
-            Year 1: <strong>$60K</strong> revenue &nbsp;|&nbsp; Year 2: <strong>$250K</strong> &nbsp;|&nbsp; Year 3: <strong>$750K</strong>.
-            Seeking <strong>$25K</strong> in seed funding to scale hosting and security.
+            Year 1: <strong>$60,000</strong>. Year 2: <strong>$250,000</strong>. Year 3: <strong>$750,000</strong>.
+            We plan to raise <strong>$25,000</strong> to grow hosting, security, and outreach.
           </p>
         </div>
 
         <div class="card">
-          <h2>Impact &amp; Outlook</h2>
+          <h2>Outlook</h2>
           <p>
-            Ticket Warehouse aims to become the “Stripe of ticket synchronization,” delivering transparency,
-            trust, and reliability across the resale industry.
+            Ticket Warehouse aims to be the trusted layer that keeps ticket sales fair and simple. One ticket. One sale. One source of truth.
           </p>
         </div>
 
-        <div style="text-align:center;margin-top:40px">
-          <a href="index.html" class="btn primary">⬅ Back to Home</a>
+        <div style="text-align:center; margin-top:40px">
+          <a href="index.html" class="btn primary">Back to Home</a>
           <a href="marketing.html" class="btn" style="margin-left:10px">View Marketing Plan</a>
         </div>
+
       </div>
     </section>
   </main>
@@ -239,8 +233,6 @@
     </div>
   </footer>
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
