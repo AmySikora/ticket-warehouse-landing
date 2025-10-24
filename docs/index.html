@@ -371,9 +371,35 @@
       <div class="container">
         <h2>Get a demo</h2>
         <div class="card">
-          <p class="muted">Ready to prevent duplicate sales and protect your brand? Email
-            <a href="mailto:hello@ticketwarehouseverify.com">hello@ticketwarehouseverify.com</a> or embed a form here.
+          <p class="muted">
+            Ready to prevent duplicate sales and protect your brand?
+            <a href="mailto:hello@ticketwarehouseverify.com">hello@ticketwarehouseverify.com</a>
+            ·
+            <a href="https://mail.google.com/mail/?view=cm&to=hello@ticketwarehouseverify.com" target="_blank" rel="noopener">Open in Gmail</a>
           </p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <a class="btn" href="mailto:hello@ticketwarehouseverify.com">Email us</a>
+            <a class="btn" href="https://mail.google.com/mail/?view=cm&to=hello@ticketwarehouseverify.com" target="_blank" rel="noopener">Use Gmail</a>
+            <button class="btn" type="button" id="copy-email">Copy email</button>
+          </div>
+          <p id="copy-status" class="muted" style="margin-top:6px"></p>
+          
+          <script>
+            (function(){
+              const btn = document.getElementById('copy-email');
+              const status = document.getElementById('copy-status');
+              if (!btn) return;
+              btn.addEventListener('click', async () => {
+                try {
+                  await navigator.clipboard.writeText('hello@ticketwarehouseverify.com');
+                  status.textContent = 'Copied!';
+                } catch {
+                  status.textContent = 'Could not copy. Please copy manually: hello@ticketwarehouseverify.com';
+                }
+                setTimeout(()=> status.textContent = '', 2500);
+              });
+            })();
+          </script>
           <form id="contact-form"
             action="https://formspree.io/f/manproow"
             method="POST"
