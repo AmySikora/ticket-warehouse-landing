@@ -373,18 +373,28 @@
       <div class="container">
         <h2 class="section-title">Get a demo</h2>
         <div class="card">
-          <p class="muted">
+          <p class="muted" style="margin:0 0 10px">
             Ready to prevent duplicate sales and protect your brand?
-            <a href="mailto:hello@ticketwarehouseverify.com">hello@ticketwarehouseverify.com</a>
-            ·
-            <a href="https://mail.google.com/mail/?view=cm&to=hello@ticketwarehouseverify.com" target="_blank" rel="noopener">Open in Gmail</a>
+            <a class="link-mailto" href="mailto:hello@ticketwarehouseverify.com"
+               data-mailto="hello@ticketwarehouseverify.com">hello@ticketwarehouseverify.com</a>
+            •
+            <a class="link-gmail" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketwarehouseverify.com"
+               target="_blank" rel="noopener">Open in Gmail</a>
           </p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap">
-            <a class="btn" href="mailto:hello@ticketwarehouseverify.com">Email us</a>
-            <a class="btn" href="https://mail.google.com/mail/?view=cm&to=hello@ticketwarehouseverify.com" target="_blank" rel="noopener">Use Gmail</a>
+          
+          <div class="email-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+            <a class="btn primary mailto-btn"
+               href="mailto:hello@ticketwarehouseverify.com"
+               data-mailto="hello@ticketwarehouseverify.com"
+               data-subject="Ticket Warehouse — demo request"
+               role="button">Email us</a>
+          
+            <a class="btn"
+               href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketwarehouseverify.com&su=Ticket%20Warehouse%20—%20demo%20request"
+               target="_blank" rel="noopener" role="button">Use Gmail</a>
+          
             <button class="btn" type="button" id="copy-email">Copy email</button>
-          </div>
-          <p id="copy-status" class="muted" style="margin-top:6px"></p>
+          </div>          
           
           <script>
             (function(){
@@ -472,6 +482,7 @@
         });
       });
     })();
+    
   </script>
 </body>
 </html>
