@@ -374,11 +374,14 @@
           <p class="muted">Ready to prevent duplicate sales and protect your brand? Email
             <a href="mailto:hello@ticketwarehouseverify.com">hello@ticketwarehouseverify.com</a> or embed a form here.
           </p>
-          <form id="contact-form" aria-label="Contact form" style="display:grid; gap:12px; max-width:520px">
-            <label>
-              <span>Name</span><br/>
-              <input required type="text" name="name" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
-            </label>
+          <form id="contact-form"
+            action="https://formspree.io/f/manproow"
+            method="POST"
+            style="display:grid; gap:12px; max-width:520px">
+        <input type="hidden" name="_redirect"
+         value="https://amysikora.github.io/ticket-warehouse-landing/thanks.html">
+  <!-- keep the rest of your fields exactly as they were -->
+
             <label>
               <span>Email</span><br/>
               <input required type="email" name="email" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
