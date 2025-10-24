@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Thanks — Ticket Warehouse</title>
+  <meta name="description" content="Confirmation page after contacting Ticket Warehouse."/>
+  <link rel="icon" href="favicon_logo.png" type="image/png"/>
+  <link rel="stylesheet" href="docs/styles.css" />
+<body>
+
+  <header>
+    <div class="container nav nav--brand">
+      <a class="logo-bay" href="index.html" aria-label="Ticket Warehouse">
+        <img src="img/logo.png" alt="Ticket Warehouse logo" class="logo-img">
+      </a>
+      <nav class="topnav">
+        <a href="./index.html">Home</a>
+        <a href="./prototype.html">How it works</a>
+        <a href="./marketing.html">Marketing</a>
+        <a href="./business.html">Business Plan</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="text-align:center;min-height:60vh;display:flex;flex-direction:column;justify-content:center;align-items:center">
+      <h1 class="grad-text">Thanks for reaching out!</h1>
+      <p class="muted" style="max-width:480px;margin:16px auto">
+        We’ve received your message and will get back to you soon.
+        If you don’t hear from us within a day, please email
+        <a href="mailto:hello@ticketwarehouseverify.com">hello@ticketwarehouseverify.com</a>
+        directly.
+      </p>
+      <a class="btn primary" href="./index.html" style="margin-top:20px">Return to Home</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
+      <div class="muted">© <span id="y"></span> Ticket Warehouse</div>
+      <div class="muted">
+        <a href="#">Terms</a> · <a href="#">Privacy</a> · <a href="#">Status</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // year
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
