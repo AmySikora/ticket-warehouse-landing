@@ -6,33 +6,10 @@
   <title>Thanks — Ticket Warehouse</title>
   <meta name="description" content="Confirmation page after contacting Ticket Warehouse."/>
   <link rel="icon" href="favicon_logo.png" type="image/png"/>
-  <style>
-    /* --- Mobile logo overrides (win against earlier inline rules) --- */
-@media (max-width: 900px){
-  .logo-bay{
-    height: calc(var(--nav-h-sm) - 8px) !important;
-    padding-left: 6px;
-    overflow: hidden;          /* prevents any tiny overflow */
-  }
-  .logo-img{
-    height: auto !important;   /* cancel the earlier height:100% */
-    max-height: 100% !important;
-    width: auto;
-    max-width: 100%;
-    display: block;
-    object-fit: contain;
-    object-position: left center;
-  }
-  .nav--brand{
-    grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
-  }
-}
-  </style>
   <link rel="stylesheet" href="docs/styles.css" />
 </head>
 <body>
 
-  <!-- Optional banner to match site (can remove if you want) -->
   <div class="proto-banner" role="note">
     <strong>Early-stage demo:</strong> Not for production use.
   </div>
@@ -43,7 +20,6 @@
         <img src="img/logo.png" alt="Ticket Warehouse logo" class="logo-img">
       </a>
 
-      <!-- Mobile toggle -->
       <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
@@ -59,7 +35,7 @@
 
   <main>
     <section class="section" style="text-align:center;min-height:60vh;display:flex;flex-direction:column;justify-content:center;align-items:center">
-      <h1 class="grad-text">Thanks for reaching out!</h1>
+      <h1>Thanks for reaching out!</h1>
       <p class="muted" style="max-width:480px;margin:16px auto">
         We’ve received your message and will get back to you soon.
         If you don’t hear from us within a day, please email
@@ -81,27 +57,35 @@
 
   <script>
     // year
-    const y = document.getElementById('y');
-    if (y) y.textContent = new Date().getFullYear();
+    const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
 
-    // mobile nav toggle (same as index)
+    // same mobile nav behavior
     (function(){
-      const hdr = document.querySelector('header');
       const btn = document.querySelector('.nav-toggle');
       const nav = document.getElementById('primary-nav');
-      if(!btn || !hdr || !nav) return;
-      btn.addEventListener('click', () => {
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!isOpen));
-        hdr.classList.toggle('nav-open', !isOpen);
-        document.body.classList.toggle('menu-open', !isOpen);
-      });
+      if(!btn || !nav) return;
+
+      const toggle = () => {
+        const isOpen = nav.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', String(isOpen));
+        document.body.classList.toggle('menu-open', isOpen);
+      };
+      btn.addEventListener('click', toggle);
+
       nav.querySelectorAll('a').forEach(a => {
         a.addEventListener('click', () => {
+          nav.classList.remove('is-open');
           btn.setAttribute('aria-expanded', 'false');
-          hdr.classList.remove('nav-open');
           document.body.classList.remove('menu-open');
         });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          nav.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('menu-open');
+        }
       });
     })();
   </script>

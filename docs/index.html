@@ -8,19 +8,15 @@
   <link rel="icon" href="favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="docs/styles.css" />
 
+  <!-- Page-specific tweaks kept minimal; most styles live in docs/styles.css -->
   <style>
     :root{
-      /* Brand + UI tokens */
       --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
       --text:#e5e7eb; --muted:#94a3b8; --ok:#10b981; --shadow:0 10px 30px rgba(0,0,0,.35);
       --radius:16px; --ring:0 0 0 3px rgba(79,70,229,.35);
 
-      /* Layout controls */
-      --banner-h: 32px;      /* small banner above header */
-      --nav-h: 110px;        /* desktop header height */
-      --logo-w: 300px;       /* desktop logo column width */
-      --nav-h-sm: 72px;      /* mobile header height */
-      --logo-w-sm: 200px;    /* mobile logo column width */
+      --banner-h:32px; --nav-h:110px; --logo-w:300px;
+      --nav-h-sm:72px; --logo-w-sm:200px;
     }
 
     *{box-sizing:border-box}
@@ -28,25 +24,25 @@
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
-      background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.15), transparent),
-        radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
-        var(--bg);
       color:var(--text);
       line-height:1.6;
+      /* Softer, wider gradients + gentle base blend */
+      background:
+        radial-gradient(1600px 800px at 80% -15%, rgba(79,70,229,0.10), transparent 70%),
+        radial-gradient(1000px 600px at -10% 25%, rgba(34,211,238,0.08), transparent 75%),
+        linear-gradient(180deg, #0b0f14 0%, #0e1218 100%);
     }
+
     a{color:var(--brand); text-decoration:none}
     a:hover{text-decoration:underline}
     .container{max-width:1100px; margin:0 auto; padding:0 20px}
 
     /* Banner */
     .proto-banner{
-      position:sticky; top:0; z-index:60;
-      height:var(--banner-h);
+      position:sticky; top:0; z-index:60; height:var(--banner-h);
       display:flex; align-items:center; justify-content:center;
       background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
       color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
-      pointer-events:auto; /* ensure it doesn't block clicks below */
     }
     .proto-banner strong{font-weight:800}
 
@@ -55,161 +51,137 @@
       position: sticky; top: var(--banner-h); z-index: 50;
       background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,.06);
-      border-radius: 18px; margin: 12px 16px 0 16px; overflow: visible; /* allow dropdown */
+      border-radius: 18px; margin: 12px 16px 0 16px; overflow: visible;
       box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
     }
+
     /* grid: logo | toggle | nav */
     .nav--brand{
-      display: grid;
-      grid-template-columns: var(--logo-w) 1fr;
-      align-items: center;
-      height: var(--nav-h);
-      column-gap: 22px;
-      padding: 0 18px;
-      position: relative;
+      display:grid; grid-template-columns: var(--logo-w) 1fr;
+      align-items:center; height:var(--nav-h); column-gap:22px; padding:0 18px; position:relative;
     }
+
     /* logo */
     .logo-bay{
       height: calc(var(--nav-h) - 12px);
       padding-left: 10px;
-      display: flex; align-items: center; justify-content: flex-start;
-      text-decoration: none;
+      display:flex; align-items:center; justify-content:flex-start; overflow:hidden;
+      text-decoration:none;
     }
-    .logo-img{
-      height: 100%; width: auto; object-fit: contain; object-position: left center; display:block;
-    }
+    .logo-img{ height:100%; width:auto; object-fit:contain; object-position:left center; display:block; }
+
     /* desktop nav */
-    .topnav{
-      display:flex; align-items:center; justify-content:flex-end; gap: 24px; flex-wrap: wrap;
-    }
+    .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:24px; flex-wrap:wrap; }
     .topnav a{
       color: rgba(229,231,235,.92); font-weight:600; line-height:1;
       padding: 8px 10px; border-radius:999px; text-decoration:none;
       transition: background-color .18s ease, color .18s ease, transform .18s ease;
     }
     .topnav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px); }
-    .topnav .btn{ padding: 10px 16px; background: linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow: var(--shadow); }
+    .topnav .btn{ padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); }
 
     /* toggle button (hidden on desktop) */
     .nav-toggle{
-      display:none;
-      position: relative;
-      justify-self: end;
-      width: 42px; height: 36px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 10px;
-      background: rgba(17,24,38,.65);
-      cursor: pointer;
+      display:none; position:relative; justify-self:end;
+      width:42px; height:36px; border:1px solid rgba(255,255,255,.18);
+      border-radius:10px; background:rgba(17,24,38,.65); cursor:pointer; z-index:80;
     }
-    .nav-toggle .bar{
-      position: absolute; left: 8px; right: 8px; height: 2px; background: #e5e7eb; border-radius: 1px;
-      transition: transform .2s ease, opacity .2s ease, top .2s ease;
-    }
-    .nav-toggle .bar:nth-child(1){ top: 10px; }
-    .nav-toggle .bar:nth-child(2){ top: 17px; }
-    .nav-toggle .bar:nth-child(3){ top: 24px; }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top: 17px; transform: rotate(45deg); }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity: 0; }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top: 17px; transform: rotate(-45deg); }
+    .nav-toggle .bar{ position:absolute; left:8px; right:8px; height:2px; background:#e5e7eb; border-radius:1px; transition:transform .2s, opacity .2s, top .2s }
+    .nav-toggle .bar:nth-child(1){ top:10px } .nav-toggle .bar:nth-child(2){ top:17px } .nav-toggle .bar:nth-child(3){ top:24px }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top:17px; transform:rotate(45deg) }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity:0 }
+    .nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top:17px; transform:rotate(-45deg) }
 
     /* ===== MOBILE ===== */
     @media (max-width: 900px){
       .nav--brand{
-        grid-template-columns: var(--logo-w-sm) auto; /* logo + toggle */
+        grid-template-columns: minmax(140px, var(--logo-w-sm)) auto;
         height: var(--nav-h-sm);
-        column-gap: 12px;
+        column-gap:12px;
       }
+      .logo-bay{ height: calc(var(--nav-h-sm) - 8px); padding-left:6px; }
+      .logo-img{ height:auto; max-height:100%; width:auto; max-width:100%; object-fit:contain; }
+
       .nav-toggle{ display:flex; align-items:center; justify-content:center; }
-      /* dropdown as fixed overlay below header */
+
       .topnav{
-        position: fixed;
-        left: 16px; right: 16px;
+        position: fixed; left:16px; right:16px;
         top: calc(var(--banner-h) + var(--nav-h-sm) + 12px);
-        display: none;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-        background: rgba(11,15,20,.95);
-        border: 1px solid rgba(255,255,255,.06);
-        border-top: none;
-        border-radius: 0 0 18px 18px;
-        overflow: hidden;
-        transform: translateY(-6px); opacity: 0; transition: transform .2s ease, opacity .2s ease;
-        z-index: 60;
+        display:none; flex-direction:column; align-items:stretch; gap:0;
+        background: rgba(16,22,38,.98);
+        border:1px solid rgba(255,255,255,.10); border-top:none;
+        border-radius:0 0 18px 18px; overflow:hidden;
+        transform:translateY(-6px); opacity:0; transition:transform .2s, opacity .2s; z-index:60;
       }
-      .topnav a{
-        padding: 14px 18px;
-        border-bottom: 1px solid rgba(255,255,255,.06);
-      }
-      .topnav a:last-child{ border-bottom: none; }
-      header.nav-open .topnav{ display: flex; transform: translateY(0); opacity: 1; }
+      .topnav a{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.08) }
+      .topnav a:last-child{ border-bottom:none }
+
+      /* Force-open state */
+      .topnav.is-open{ display:flex !important; transform:translateY(0) !important; opacity:1 !important; }
+
       body.menu-open::after{
         content:""; position:fixed; inset:0; background:rgba(0,0,0,.35); backdrop-filter:blur(2px); z-index:40;
       }
     }
 
-    /* Hero */
+    /* Hero / common UI */
     .hero{padding:72px 0 40px}
     .hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:40px; align-items:center}
     .badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid rgba(255,255,255,.12); border-radius:999px; color:var(--muted); font-size:14px}
     h1{margin:14px 0 8px; font-size:44px; line-height:1.1}
     .lead{color:var(--muted); font-size:18px}
     .cta{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap}
-    .btn{display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600;
-      border:1px solid rgba(255,255,255,.1); background:var(--panel); color:var(--text)}
+    .btn{display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600; border:1px solid rgba(255,255,255,.1); background:var(--panel); color:var(--text)}
     .btn.primary{background:linear-gradient(45deg,var(--brand),var(--brand-2)); border-color:transparent; color:white}
     .btn:hover{transform:translateY(-1px); text-decoration:none}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px}
     .hero .card{display:grid; gap:12px}
     .stat{display:flex; align-items:center; justify-content:space-between; background:rgba(17,24,38,.6); padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.06)}
     .stat small{color:var(--muted)}
 
-    /* Sections */
     section{padding:56px 0}
     h2{margin:0 0 16px; font-size:28px}
     .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
     .grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
     .item h3{margin:0 0 6px; font-size:18px}
     .muted{color:var(--muted)}
-
-    /* Pricing */
     .pricing{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
     .price{font-size:36px; font-weight:800; line-height:1.1}
     .features{margin:10px 0 0; padding:0; list-style:none}
     .features li{display:flex; gap:10px; align-items:flex-start; margin:8px 0}
     .check{width:18px; height:18px; border-radius:4px; background:linear-gradient(45deg,var(--ok),#34d399)}
-
-    /* Footer */
     footer{padding:32px 0 60px; border-top:1px solid rgba(255,255,255,.08); color:var(--muted)}
 
-    /* Responsive */
-    @media (max-width: 940px){
-      .hero-grid, .grid-3, .pricing, .grid-2{grid-template-columns:1fr}
-      h1{font-size:36px}
+    /* Reveal-on-scroll */
+    section{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+    section.visible{ opacity:1; transform:none; }
+
+    /* Tiny noise layer to kill banding */
+    body::after{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background-image:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">\
+<filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter>\
+<rect width="100%" height="100%" filter="url(%23n)" opacity="0.25"/></svg>');
+      background-size: 240px 240px; mix-blend-mode: overlay; opacity:.035;
     }
+
+    /* Toasts */
+    #toast-root{ position:fixed; left:0; right:0; bottom:18px; display:flex; justify-content:center; pointer-events:none; z-index:1000; }
+    .toast{
+      pointer-events:auto; min-width:260px; max-width:90vw; padding:12px 14px;
+      border-radius:12px; background:var(--panel); color:var(--text);
+      border:1px solid rgba(255,255,255,.12); box-shadow:var(--shadow);
+      display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
+      transform:translateY(16px); opacity:0; transition:transform .2s, opacity .2s;
+    }
+    .toast.show{ transform:translateY(0); opacity:1; }
+    .toast--success{ border-color:rgba(16,185,129,.6) }
+    .toast--error{ border-color:rgba(239,68,68,.7) }
+    .toast button{ border:0; background:transparent; color:inherit; cursor:pointer; font-weight:700; opacity:.9 }
+    @media (max-width: 940px){ .hero-grid, .grid-3, .pricing, .grid-2{grid-template-columns:1fr} h1{font-size:36px} }
     input, textarea{outline:none}
     input:focus, textarea:focus{box-shadow:var(--ring); border-color:transparent !important}
-    /* --- Mobile logo overrides (win against earlier inline rules) --- */
-@media (max-width: 900px){
-  .logo-bay{
-    height: calc(var(--nav-h-sm) - 8px) !important;
-    padding-left: 6px;
-    overflow: hidden;          /* prevents any tiny overflow */
-  }
-  .logo-img{
-    height: auto !important;   /* cancel the earlier height:100% */
-    max-height: 100% !important;
-    width: auto;
-    max-width: 100%;
-    display: block;
-    object-fit: contain;
-    object-position: left center;
-  }
-  .nav--brand{
-    grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
-  }
-}
   </style>
 </head>
 <body>
@@ -247,7 +219,7 @@
       <div class="container hero-grid">
         <div>
           <span class="badge">✨ One Ticket. One Sale. One Source of Truth.</span>
-          <h1 class="grad-text">Keep your ticket listings in sync everywhere you sell.</h1>
+          <h1>Keep your ticket listings in sync everywhere you sell.</h1>
           <p class="lead">Stop duplicate sales, refunds, and reputation hits. Our real-time API + webhooks update availability the instant a sale happens—everywhere.</p>
           <div class="cta">
             <a href="#pricing" class="btn primary">See pricing</a>
@@ -397,52 +369,19 @@
         <div class="card">
           <p class="muted" style="margin:0 0 10px">
             Ready to prevent duplicate sales and protect your brand?
-            <a class="link-mailto" href="mailto:hello@ticketwarehouseverify.com"
-               data-mailto="hello@ticketwarehouseverify.com">hello@ticketwarehouseverify.com</a>
+            <a class="link-mailto" href="mailto:hello@ticketwarehouseverify.com">hello@ticketwarehouseverify.com</a>
             •
-            <a class="link-gmail" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketwarehouseverify.com"
-               target="_blank" rel="noopener">Open in Gmail</a>
+            <a class="link-gmail" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketwarehouseverify.com" target="_blank" rel="noopener">Open in Gmail</a>
           </p>
-          
+
           <div class="email-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-            <a class="btn primary mailto-btn"
-               href="mailto:hello@ticketwarehouseverify.com"
-               data-mailto="hello@ticketwarehouseverify.com"
-               data-subject="Ticket Warehouse — demo request"
-               role="button">Email us</a>
-          
-            <a class="btn"
-               href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketwarehouseverify.com&su=Ticket%20Warehouse%20—%20demo%20request"
-               target="_blank" rel="noopener" role="button">Use Gmail</a>
-          
+            <a class="btn primary" href="mailto:hello@ticketwarehouseverify.com" role="button">Email us</a>
+            <a class="btn" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketwarehouseverify.com&su=Ticket%20Warehouse%20—%20demo%20request" target="_blank" rel="noopener" role="button">Use Gmail</a>
             <button class="btn" type="button" id="copy-email">Copy email</button>
             <span id="copy-status" style="margin-left:8px; color:var(--brand-2); font-weight:600"></span>
-          </div>          
-          
-          <script>
-            (function(){
-              const btn = document.getElementById('copy-email');
-              const status = document.getElementById('copy-status');
-              if (!btn) return;
-              btn.addEventListener('click', async () => {
-                try {
-                  await navigator.clipboard.writeText('hello@ticketwarehouseverify.com');
-                  status.textContent = 'Copied!';
-                } catch {
-                  status.textContent = 'Could not copy. Please copy manually: hello@ticketwarehouseverify.com';
-                }
-                setTimeout(()=> status.textContent = '', 2500);
-              });
-            })();
-          </script>
-           
-           <form id="contact-form"
-            action="https://formspree.io/f/manproow"
-            method="POST"
-            style="display:grid; gap:12px; max-width:520px">
-            <!-- dynamic redirect target (set by the script below) -->
-            <input type="hidden" id="fs-redirect" name="_redirect" value="">
+          </div>
 
+          <form id="contact-form" action="https://formspree.io/f/manproow" method="POST" style="display:grid; gap:12px; max-width:520px">
             <label>
               <span>Email</span><br/>
               <input required type="email" name="email" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
@@ -473,58 +412,119 @@
     </div>
   </footer>
 
+  <!-- Toast root -->
+  <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
   <script>
     // year
     const y = document.getElementById('y');
     if (y) y.textContent = new Date().getFullYear();
 
+    // mobile nav toggle (robust)
     (function(){
-    const hdr = document.querySelector('header');
-    const btn = document.querySelector('.nav-toggle');
-    const nav = document.getElementById('primary-nav');
-    if(!btn || !hdr || !nav) return;
+      const btn = document.querySelector('.nav-toggle');
+      const nav = document.getElementById('primary-nav');
+      if(!btn || !nav) return;
 
-    const toggle = () => {
-      const isOpen = nav.classList.toggle('is-open');
-      btn.setAttribute('aria-expanded', String(isOpen));
-      // optional body backdrop:
-      document.body.classList.toggle('menu-open', isOpen);
-    };
+      const toggle = () => {
+        const isOpen = nav.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', String(isOpen));
+        document.body.classList.toggle('menu-open', isOpen);
+      };
+      btn.addEventListener('click', toggle);
 
-    btn.addEventListener('click', toggle);
-
-    // Close on link click
-    nav.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        nav.classList.remove('is-open');
-        btn.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('menu-open');
+      nav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          nav.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('menu-open');
+        });
       });
-    });
 
-    // Close on ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        nav.classList.remove('is-open');
-        btn.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('menu-open');
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          nav.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('menu-open');
+        }
+      });
+    })();
+
+    // copy email feedback
+    (function(){
+      const btn = document.getElementById('copy-email');
+      const status = document.getElementById('copy-status');
+      if (!btn) return;
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText('hello@ticketwarehouseverify.com');
+          status.textContent = 'Copied!';
+        } catch {
+          status.textContent = 'Copy failed. Long-press to copy.';
+        }
+        setTimeout(()=> status.textContent = '', 2200);
+      });
+    })();
+
+    // toast util
+    function showToast(message, type='success', ttl=4000){
+      const root = document.getElementById('toast-root');
+      if (!root) return;
+      const el = document.createElement('div');
+      el.className = `toast toast--${type}`;
+      el.role = 'status';
+      el.innerHTML = `<div>${message}</div><button aria-label="Dismiss">✕</button>`;
+      const close = () => { el.classList.remove('show'); setTimeout(()=> el.remove(), 180); };
+      el.querySelector('button').addEventListener('click', close);
+      root.appendChild(el);
+      requestAnimationFrame(()=> el.classList.add('show'));
+      setTimeout(close, ttl);
+    }
+
+    // Form submit via fetch -> toast
+    (function () {
+      const form = document.getElementById('contact-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+
+        try {
+          const resp = await fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if (resp.ok) {
+            form.reset();
+            showToast("Thanks! We've got your message and will reply soon.", 'success');
+          } else {
+            showToast("Hmm, something went wrong. Please try again or email us directly.", 'error');
+          }
+        } catch {
+          showToast("Network hiccup. Try again in a moment.", 'error');
+        }
+      });
+    })();
+
+    // Reveal sections smoothly on scroll
+    (function(){
+      const blocks = Array.from(document.querySelectorAll('section'));
+      if (!('IntersectionObserver' in window) || !blocks.length) {
+        blocks.forEach(b => b.classList.add('visible')); return;
       }
-    });
-  })();
-</script>
-<script>
-  // Set redirect to /thanks.html on the same origin (works on localhost and prod)
-  (function () {
-    const form = document.getElementById('contact-form');
-    const redir = document.getElementById('fs-redirect');
-    if (!form || !redir) return;
-
-    const thanksURL = `${location.origin}/thanks.html`;
-    redir.value = thanksURL;
-
-    // (Optional) also set redirect via query param for extra reliability
-    form.action = `https://formspree.io/f/manproow?redirect=${encodeURIComponent(thanksURL)}`;
-  })();
-</script>
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: .1 });
+      blocks.forEach(b => obs.observe(b));
+    })();
+  </script>
 </body>
 </html>
