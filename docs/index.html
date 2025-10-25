@@ -435,12 +435,13 @@
               });
             })();
           </script>
-
-          <form id="contact-form"
+           
+           <form id="contact-form"
             action="https://formspree.io/f/manproow"
             method="POST"
             style="display:grid; gap:12px; max-width:520px">
-            <input type="hidden" name="_redirect" value="https://ticketwarehouseverify.com/thanks.html">
+            <!-- dynamic redirect target (set by the script below) -->
+            <input type="hidden" id="fs-redirect" name="_redirect" value="">
 
             <label>
               <span>Email</span><br/>
@@ -509,6 +510,20 @@
         document.body.classList.remove('menu-open');
       }
     });
+  })();
+</script>
+<script>
+  // Set redirect to /thanks.html on the same origin (works on localhost and prod)
+  (function () {
+    const form = document.getElementById('contact-form');
+    const redir = document.getElementById('fs-redirect');
+    if (!form || !redir) return;
+
+    const thanksURL = `${location.origin}/thanks.html`;
+    redir.value = thanksURL;
+
+    // (Optional) also set redirect via query param for extra reliability
+    form.action = `https://formspree.io/f/manproow?redirect=${encodeURIComponent(thanksURL)}`;
   })();
 </script>
 </body>
