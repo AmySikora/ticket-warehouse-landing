@@ -8,7 +8,6 @@
   <link rel="icon" href="favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="docs/styles.css" />
 
-
   <style>
     :root{
       /* Brand + UI tokens */
@@ -47,7 +46,7 @@
       display:flex; align-items:center; justify-content:center;
       background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
       color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
-      pointer-events:none;
+      pointer-events:auto; /* ensure it doesn't block clicks below */
     }
     .proto-banner strong{font-weight:800}
 
@@ -144,6 +143,9 @@
       }
       .topnav a:last-child{ border-bottom: none; }
       header.nav-open .topnav{ display: flex; transform: translateY(0); opacity: 1; }
+      body.menu-open::after{
+        content:""; position:fixed; inset:0; background:rgba(0,0,0,.35); backdrop-filter:blur(2px); z-index:40;
+      }
     }
 
     /* Hero */
@@ -188,6 +190,26 @@
     }
     input, textarea{outline:none}
     input:focus, textarea:focus{box-shadow:var(--ring); border-color:transparent !important}
+    /* --- Mobile logo overrides (win against earlier inline rules) --- */
+@media (max-width: 900px){
+  .logo-bay{
+    height: calc(var(--nav-h-sm) - 8px) !important;
+    padding-left: 6px;
+    overflow: hidden;          /* prevents any tiny overflow */
+  }
+  .logo-img{
+    height: auto !important;   /* cancel the earlier height:100% */
+    max-height: 100% !important;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: left center;
+  }
+  .nav--brand{
+    grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
+  }
+}
   </style>
 </head>
 <body>
@@ -198,8 +220,8 @@
   </div>
 
   <!-- Header -->
-  <header>
-    <div class="container nav nav--brand">
+  <header class="nav">
+    <div class="container nav--brand">
       <a class="logo-bay" href="index.html" aria-label="Ticket Warehouse">
         <img src="img/logo.png" alt="Ticket Warehouse" class="logo-img">
       </a>      
@@ -394,6 +416,7 @@
                target="_blank" rel="noopener" role="button">Use Gmail</a>
           
             <button class="btn" type="button" id="copy-email">Copy email</button>
+            <span id="copy-status" style="margin-left:8px; color:var(--brand-2); font-weight:600"></span>
           </div>          
           
           <script>
@@ -412,12 +435,12 @@
               });
             })();
           </script>
+
           <form id="contact-form"
             action="https://formspree.io/f/manproow"
             method="POST"
             style="display:grid; gap:12px; max-width:520px">
             <input type="hidden" name="_redirect" value="https://ticketwarehouseverify.com/thanks.html">
-  <!-- keep the rest of your fields exactly as they were -->
 
             <label>
               <span>Email</span><br/>
@@ -450,38 +473,43 @@
   </footer>
 
   <script>
-    // form demo
-    const f = document.getElementById('contact-form');
-    if (f) {
-      f.addEventListener('submit', function (e) {
-        e.preventDefault();
-        f.reset();
-        alert("Thanks! We'll get back to you shortly.");
-      });
-    }
     // year
     const y = document.getElementById('y');
     if (y) y.textContent = new Date().getFullYear();
 
-    // mobile nav toggle
     (function(){
-      const hdr = document.querySelector('header');
-      const btn = document.querySelector('.nav-toggle');
-      const nav = document.getElementById('primary-nav');
-      if(!btn || !hdr || !nav) return;
-      btn.addEventListener('click', () => {
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!isOpen));
-        hdr.classList.toggle('nav-open', !isOpen);
+    const hdr = document.querySelector('header');
+    const btn = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('primary-nav');
+    if(!btn || !hdr || !nav) return;
+
+    const toggle = () => {
+      const isOpen = nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(isOpen));
+      // optional body backdrop:
+      document.body.classList.toggle('menu-open', isOpen);
+    };
+
+    btn.addEventListener('click', toggle);
+
+    // Close on link click
+    nav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        nav.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-open');
       });
-      nav.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-          btn.setAttribute('aria-expanded', 'false');
-          hdr.classList.remove('nav-open');
-        });
-      });
-    })();
-    
-  </script>
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        nav.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-open');
+      }
+    });
+  })();
+</script>
 </body>
 </html>

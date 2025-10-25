@@ -91,7 +91,27 @@
     pre{ background:#0e1420; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; overflow:auto }
     .cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px }
     footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:#94a3b8}
-  </style>
+    /* --- Mobile logo overrides (win against earlier inline rules) --- */
+@media (max-width: 900px){
+  .logo-bay{
+    height: calc(var(--nav-h-sm) - 8px) !important;
+    padding-left: 6px;
+    overflow: hidden;          /* prevents any tiny overflow */
+  }
+  .logo-img{
+    height: auto !important;   /* cancel the earlier height:100% */
+    max-height: 100% !important;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: left center;
+  }
+  .nav--brand{
+    grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
+  }
+}
+ </style>
 </head>
 <body>
 

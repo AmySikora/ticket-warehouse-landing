@@ -2,19 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Thanks — Ticket Warehouse</title>
   <meta name="description" content="Confirmation page after contacting Ticket Warehouse."/>
   <link rel="icon" href="favicon_logo.png" type="image/png"/>
+  <style>
+    /* --- Mobile logo overrides (win against earlier inline rules) --- */
+@media (max-width: 900px){
+  .logo-bay{
+    height: calc(var(--nav-h-sm) - 8px) !important;
+    padding-left: 6px;
+    overflow: hidden;          /* prevents any tiny overflow */
+  }
+  .logo-img{
+    height: auto !important;   /* cancel the earlier height:100% */
+    max-height: 100% !important;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: left center;
+  }
+  .nav--brand{
+    grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
+  }
+}
+  </style>
   <link rel="stylesheet" href="docs/styles.css" />
+</head>
 <body>
 
-  <header>
-    <div class="container nav nav--brand">
+  <!-- Optional banner to match site (can remove if you want) -->
+  <div class="proto-banner" role="note">
+    <strong>Early-stage demo:</strong> Not for production use.
+  </div>
+
+  <header class="nav">
+    <div class="container nav--brand">
       <a class="logo-bay" href="index.html" aria-label="Ticket Warehouse">
         <img src="img/logo.png" alt="Ticket Warehouse logo" class="logo-img">
       </a>
-      <nav class="topnav">
+
+      <!-- Mobile toggle -->
+      <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+
+      <nav class="topnav" id="primary-nav">
         <a href="./index.html">Home</a>
         <a href="./prototype.html">How it works</a>
         <a href="./marketing.html">Marketing</a>
@@ -47,7 +81,29 @@
 
   <script>
     // year
-    document.getElementById('y').textContent = new Date().getFullYear();
+    const y = document.getElementById('y');
+    if (y) y.textContent = new Date().getFullYear();
+
+    // mobile nav toggle (same as index)
+    (function(){
+      const hdr = document.querySelector('header');
+      const btn = document.querySelector('.nav-toggle');
+      const nav = document.getElementById('primary-nav');
+      if(!btn || !hdr || !nav) return;
+      btn.addEventListener('click', () => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        hdr.classList.toggle('nav-open', !isOpen);
+        document.body.classList.toggle('menu-open', !isOpen);
+      });
+      nav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          btn.setAttribute('aria-expanded', 'false');
+          hdr.classList.remove('nav-open');
+          document.body.classList.remove('menu-open');
+        });
+      });
+    })();
   </script>
 </body>
 </html>
