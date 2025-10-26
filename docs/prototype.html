@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket Warehouse — How It Works (Prototype)</title>
-  <meta name="description" content="A plain-English walkthrough of what Ticket Warehouse does and how the prototype works."/>
-  <link rel="icon" href="favicon_logo.png" type="image/png"/>
+  <title>Ticket Veriguard — How It Works (Prototype)</title>
+  <meta name="description" content="A plain-English walkthrough of what Ticket Veriguard does and how the prototype works."/>
+  <link rel="icon" href="img/ticketveriguard.png" type="image/png"/>
   <link rel="stylesheet" href="docs/styles.css" />
 
   <style>
@@ -121,8 +121,8 @@
 
   <header>
     <div class="container nav nav--brand">
-      <a class="logo-bay" href="index.html" aria-label="Ticket Warehouse">
-        <img src="img/logo.png" alt="Ticket Warehouse" class="logo-img">
+      <a class="logo-bay" href="index.html" aria-label="Ticket Veriguard">
+        <img src="img/logo.png" alt="Ticket Veriguard" class="logo-img">
       </a>      
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
@@ -139,8 +139,8 @@
   <main>
     <section class="section">
       <div class="container">
-        <h1>How Ticket Warehouse Works</h1>
-        <p class="lead">Imagine you sell the same pair of seats on a few websites. When one buyer checks out, the others must be told the ticket is gone right away. Ticket Warehouse keeps every site in sync so the same ticket is never sold twice.</p>
+        <h1>How Ticket Veriguard Works</h1>
+        <p class="lead">Imagine you sell the same pair of seats on a few websites. When one buyer checks out, the others must be told the ticket is gone right away. Ticket Veriguard keeps every site in sync so the same ticket is never sold twice.</p>
         <div class="cta-row">
           <a class="btn primary" href="index.html#contact">Talk to us</a>
           <a class="btn" href="marketing.html">Marketing Plan</a>
@@ -215,7 +215,7 @@
       <div class="container">
         <h2>The 3 simple steps</h2>
         <div class="grid-3">
-          <div class="card"><h3>1) Connect</h3><p class="muted">We give you secure API keys. You plug Ticket Warehouse into your POS or marketplaces.</p></div>
+          <div class="card"><h3>1) Connect</h3><p class="muted">We give you secure API keys. You plug Ticket Veriguard into your POS or marketplaces.</p></div>
           <div class="card"><h3>2) Register tickets</h3><p class="muted">You add each ticket once. We keep a single “source of truth” record for it.</p></div>
           <div class="card"><h3>3) Stay in sync</h3><p class="muted">When a sale happens anywhere, we notify the other sites instantly so nobody can buy what’s already sold.</p></div>
         </div>
@@ -226,7 +226,7 @@
       <div class="container">
         <h2>“Two people tried to buy the same ticket” — what happens?</h2>
         <div class="card">
-          <p>Without coordination, both checkouts might succeed. With Ticket Warehouse, the first confirmed buyer wins. The moment that happens, we send a message <span class="kbd">webhook</span> to the other marketplaces saying the ticket is sold. Their pages update, and the second buyer sees it before paying. No refund and no angry emails.</p>
+          <p>Without coordination, both checkouts might succeed. With Ticket Veriguard, the first confirmed buyer wins. The moment that happens, we send a message <span class="kbd">webhook</span> to the other marketplaces saying the ticket is sold. Their pages update, and the second buyer sees it before paying. No refund and no angry emails.</p>
         </div>
       </div>
     </section>
@@ -268,7 +268,7 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
           <div class="card"><h3>Do I need to change all my systems?</h3><p class="muted">No. Start by registering tickets and listening for webhooks. Integrate deeper over time.</p></div>
           <div class="card"><h3>How fast are updates?</h3><p class="muted">Usually in milliseconds. Fast enough to catch near-simultaneous checkouts.</p></div>
           <div class="card"><h3>What if a marketplace is offline?</h3><p class="muted">We queue notifications and retry. Your source of truth stays correct, and late systems catch up.</p></div>
-          <div class="card"><h3>Can I try a sandbox?</h3><p class="muted">Yes. Email <a href="mailto:hello@ticketwarehouse.dev">hello@ticketwarehouse.dev</a> and we’ll set you up.</p></div>
+          <div class="card"><h3>Can I try a sandbox?</h3><p class="muted">Yes. Email <a href="mailto:hello@ticketVeriguard.com">hello@ticketVeriguard.com</a> and we’ll set you up.</p></div>
         </div>
       </div>
     </section>
@@ -276,7 +276,7 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
-      <div class="muted">© <span id="y"></span> Ticket Warehouse</div>
+      <div class="muted">© <span id="y"></span> Ticket Veriguard</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> · <a class="muted" href="#">Privacy</a> · <a class="muted" href="#">Status</a>
       </div>
