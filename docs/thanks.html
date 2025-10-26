@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Thanks — Ticket Veriguard</title>
-  <meta name="description" content="Confirmation page after contacting Ticket Veriguard."/>
-  <link rel="icon" href="img/ticketveriguard.png" type="image/png"/>
-  <link rel="stylesheet" href="docs/styles.css" />
+  <title>Thanks — TicketVeriGuard</title>
+  <meta name="description" content="Confirmation page after contacting TicketVeriGuard."/>
+  <!-- if styles.css is in /docs -->
+  <link rel="icon" href="./img/ticketveriguard.png" type="image/png"/>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
 
@@ -16,8 +17,8 @@
 
   <header class="nav">
     <div class="container nav--brand">
-      <a class="logo-bay" href="index.html" aria-label="Ticket Veriguard">
-        <img src="img/logo.png" alt="Ticket Veriguard logo" class="logo-img">
+      <a class="logo-bay" href="./index.html" aria-label="TicketVeriGuard">
+        <img src="./img/logo.png" alt="TicketVeriGuard logo" class="logo-img">
       </a>
 
       <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
@@ -39,7 +40,7 @@
       <p class="muted" style="max-width:480px;margin:16px auto">
         We’ve received your message and will get back to you soon.
         If you don’t hear from us within a day, please email
-        <a href="mailto:hello@ticketVeriguard.com">hello@ticketVeriguard.com</a>
+        <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>
         directly.
       </p>
       <a class="btn primary" href="./index.html" style="margin-top:20px">Return to Home</a>
@@ -48,7 +49,7 @@
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
-      <div class="muted">© <span id="y"></span> Ticket Veriguard</div>
+      <div class="muted">© <span id="y"></span> TicketVeriGuard</div>
       <div class="muted">
         <a href="#">Terms</a> · <a href="#">Privacy</a> · <a href="#">Status</a>
       </div>
@@ -59,7 +60,7 @@
     // year
     const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
 
-    // same mobile nav behavior
+    // mobile nav
     (function(){
       const btn = document.querySelector('.nav-toggle');
       const nav = document.getElementById('primary-nav');

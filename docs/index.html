@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <<title>Ticket VeriGuard — Smart Ticket Validation</title>
+  <title>Ticket VeriGuard — Smart Ticket Validation</title>
   <meta name="description" content="TicketVeriGuard helps marketplaces verify tickets with confidence.">
   <meta property="og:title" content="TicketVeriGuard" />
   <meta property="og:description" content="Smart ticket validation and anti-duplicate protection." />
@@ -239,7 +239,7 @@
 
   <!-- Banner -->
   <div class="proto-banner" role="note">
-    <strong>Early-stage demo:</strong> Not for production use.
+    <strong>Early-stage demo:</strong> Not for production use. />
   </div>
 
   <!-- Header -->
@@ -442,10 +442,16 @@
             <span id="copy-status" style="margin-left:8px; color:var(--brand-2); font-weight:600"></span>
           </div>          
           
-          <form id="contact-form"
-                action="https://formspree.io/f/manproow"
-                method="POST"
-                style="display:grid; gap:12px; max-width:520px">
+          <form action="https://formsubmit.co/hello@ticketveriguard.com" method="POST" style="display:grid; gap:12px; max-width:520px">
+            <!-- redirect after success -->
+            <input type="hidden" name="_next" value="https://ticketveriguard.com/thanks.html">
+            <!-- subject line -->
+            <input type="hidden" name="_subject" value="New message from TicketVeriGuard">
+            <!-- optional: disable captcha -->
+            <input type="hidden" name="_captcha" value="false">
+            <!-- spam honeypot -->
+            <input type="text" name="_honey" style="display:none">
+          
             <label>
               <span>Email</span><br/>
               <input required type="email" name="email" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
@@ -457,10 +463,7 @@
             <button class="btn primary" type="submit">Request demo</button>
           </form>
         </div>
-
         <p class="muted" style="margin-top:14px">
-          Want the full details? <a href="Ticket_Veriguard_Business_Plan.pdf">Read the business plan (PDF)</a>.
-        </p>
       </div>
     </section>
   </main>
@@ -554,35 +557,8 @@
       // trigger animation
       requestAnimationFrame(()=> el.classList.add('show'));
       setTimeout(close, ttl);
-    }
-
-    // Form submit via fetch -> toast (no redirect)
-    (function () {
-      const form = document.getElementById('contact-form');
-      if (!form) return;
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const data = new FormData(form);
-
-        try {
-          const resp = await fetch(form.action, {
-            method: 'POST',
-            body: data,
-            headers: { 'Accept': 'application/json' }
-          });
-
-          if (resp.ok) {
-            form.reset();
-            showToast("Thanks! We've got your message and will reply soon.", 'success');
-          } else {
-            showToast("Hmm, something went wrong. Please try again or email us directly.", 'error');
-          }
-        } catch {
-          showToast("Network hiccup. Try again in a moment.", 'error');
-        }
-      });
-    })();
+    };
+  
   </script>
 </body>
 </html>
