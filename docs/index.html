@@ -4,13 +4,17 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Ticket VeriGuard — Smart Ticket Validation</title>
-  <meta name="description" content="TicketVeriGuard helps marketplaces verify tickets with confidence.">
+
+  <!-- SEO / Social -->
+  <meta name="description" content="TicketVeriGuard helps marketplaces verify tickets with confidence. Keep your ticket listings accurate across all marketplaces and prevent duplicate sales." />
   <meta property="og:title" content="TicketVeriGuard" />
   <meta property="og:description" content="Smart ticket validation and anti-duplicate protection." />
-  <meta property="og:image" content="/assets/og-cover.png" />
-  <meta name="description" content="Keep your ticket listings accurate across all marketplaces. Make sure every ticket sold is unique and available in real time."/>
-  <link rel="icon" href="img/ticketveriguard.png" type="image/png"/>
-  <link rel="stylesheet" href="docs/styles.css" />
+  <!-- Use a file that exists to avoid 404s; update later if you add a dedicated og image -->
+  <meta property="og:image" content="./favicon_logo.png" />
+
+  <!-- Favicon / Styles -->
+  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="stylesheet" href="./styles.css" />
 
   <style>
     :root{
@@ -232,22 +236,22 @@
     }
     input, textarea{outline:none}
     input:focus, textarea:focus{box-shadow:var(--ring); border-color:transparent !important}
-
   </style>
 </head>
 <body>
 
   <!-- Banner -->
   <div class="proto-banner" role="note">
-    <strong>Early-stage demo:</strong> Not for production use. />
+    <strong>Early-stage demo:</strong> Not for production use.
   </div>
 
   <!-- Header -->
   <header class="nav">
     <div class="container nav--brand">
-      <a class="logo-bay" href="index.html" aria-label="Ticket Veriguard">
-        <img src="img/ticketveriguard.png" alt="Ticket Veriguard" class="logo-img">
-      </a>      
+      <a class="logo-bay" href="./index.html" aria-label="Ticket Veriguard">
+        <!-- Use a guaranteed-present file to avoid 404s; swap to ./img/ticketveriguard.png if you add it -->
+        <img src="./favicon_logo.png" alt="Ticket Veriguard" class="logo-img">
+      </a>
 
       <!-- Mobile toggle -->
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
@@ -417,53 +421,49 @@
     <section id="contact">
       <div class="container">
         <h2 class="section-title">Get a demo</h2>
-      <div class="card">
+        <div class="card">
           <p class="muted" style="margin:0 0 10px">
             Want to see it in action or ask a question?
-            <a class="link-mailto" href="mailto:hello@ticketVeriguard.com"
-               data-mailto="hello@ticketVeriguard.com">hello@ticketVeriguard.com</a>
+            <a class="link-mailto" href="mailto:hello@ticketveriguard.com"
+               data-mailto="hello@ticketveriguard.com">hello@ticketveriguard.com</a>
             •
-            <a class="link-gmail" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketVeriguard.com"
+            <a class="link-gmail" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com"
                target="_blank" rel="noopener">Open in Gmail</a>
           </p>
           
           <div class="email-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
             <a class="btn primary mailto-btn"
-               href="mailto:hello@ticketVeriguard.com"
-               data-mailto="hello@ticketVeriguard.com"
+               href="mailto:hello@ticketveriguard.com"
+               data-mailto="hello@ticketveriguard.com"
                data-subject="Ticket Veriguard Demo Request"
                role="button">Email us</a>
           
             <a class="btn"
-               href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketVeriguard.com&su=Ticket%20Veriguard%20Demo%20Request"
+               href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com&su=Ticket%20Veriguard%20Demo%20Request"
                target="_blank" rel="noopener" role="button">Use Gmail</a>
           
             <button class="btn" type="button" id="copy-email">Copy email</button>
             <span id="copy-status" style="margin-left:8px; color:var(--brand-2); font-weight:600"></span>
           </div>          
           
-          <form action="https://formsubmit.co/hello@ticketveriguard.com" method="POST" style="display:grid; gap:12px; max-width:520px">
-            <!-- redirect after success -->
-            <input type="hidden" name="_next" value="https://ticketveriguard.com/thanks.html">
-            <!-- subject line -->
-            <input type="hidden" name="_subject" value="New message from TicketVeriGuard">
-            <!-- optional: disable captcha -->
-            <input type="hidden" name="_captcha" value="false">
-            <!-- spam honeypot -->
-            <input type="text" name="_honey" style="display:none">
-          
+          <form id="contact-form" style="display:grid; gap:12px; max-width:520px" novalidate>
+            <!-- Honeypot: bots fill this, humans don't -->
+            <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
+                   style="position:absolute;left:-9999px;width:0;height:0;opacity:0" />
             <label>
               <span>Email</span><br/>
-              <input required type="email" name="email" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
+              <input required type="email" name="email" autocomplete="email"
+                     style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
             </label>
             <label>
               <span>Message</span><br/>
-              <textarea required name="message" rows="4" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
+              <textarea required name="message" rows="4"
+                        style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
             </label>
-            <button class="btn primary" type="submit">Request demo</button>
+            <button class="btn primary" type="submit" id="contact-submit">Request demo</button>
+            <p id="contact-status" class="muted" style="margin:6px 0 0"></p>
           </form>
         </div>
-        <p class="muted" style="margin-top:14px">
       </div>
     </section>
   </main>
@@ -528,7 +528,7 @@
       if (!btn) return;
       btn.addEventListener('click', async () => {
         try {
-          await navigator.clipboard.writeText('hello@ticketVeriguard.com');
+          await navigator.clipboard.writeText('hello@ticketveriguard.com');
           status.textContent = 'Copied!';
         } catch {
           status.textContent = 'Copy failed. Long-press to copy.';
@@ -558,7 +558,48 @@
       requestAnimationFrame(()=> el.classList.add('show'));
       setTimeout(close, ttl);
     };
-  
+
+    (function(){
+      const form   = document.getElementById('contact-form');
+      const btn    = document.getElementById('contact-submit');
+      const status = document.getElementById('contact-status');
+
+      // Live API URL
+      const API_URL = 'https://tvg-contact-f9046a-5bc794bd5ce3.herokuapp.com/api/contact';
+
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        status.textContent = '';
+        btn.disabled = true; btn.textContent = 'Sending...';
+
+        const data = {
+          email:   form.email.value.trim(),
+          message: form.message.value.trim(),
+          website: form.website ? form.website.value : '' // honeypot
+        };
+
+        try {
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+          });
+
+          if (!res.ok) throw new Error('Request failed');
+
+          form.reset();
+          status.textContent = 'Thanks! We’ll get back to you shortly.';
+          showToast && showToast('Message sent ✔');
+        } catch (err) {
+          status.textContent = 'Sorry—could not send right now. Please email hello@ticketveriguard.com.';
+          showToast && showToast('Send failed', 'error');
+        } finally {
+          btn.disabled = false; btn.textContent = 'Request demo';
+        }
+      });
+    })();
   </script>
 </body>
 </html>
