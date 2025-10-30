@@ -32,3 +32,34 @@ section {
     transition: background 1s ease-in-out;
   }
   
+  .navbar-logo img {
+    height: 48px;
+    width: auto;
+  }
+  
+  .nav-links {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 24px;
+  }
+  
+  @media (max-width: 820px) {
+    .navbar {
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  
+    .nav-links {
+      width: 100%;
+      justify-content: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  
+    .get-demo-btn {
+      order: 3;
+      width: auto;
+    }
+  }
+  
