@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket Veriguard — How It Works (Prototype)</title>
-  <meta name="description" content="A plain-English walkthrough of what Ticket Veriguard does and how the prototype works."/>
-  <link rel="icon" href="img/ticketveriguard.png" type="image/png"/>
-  <link rel="stylesheet" href="docs/styles.css" />
+  <title>Ticket VeriGuard — How It Works (Prototype)</title>
+  <meta name="description" content="A plain-English walkthrough of what Ticket VeriGuard does and how the prototype works."/>
+  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="stylesheet" href="./styles.css" />
 
   <style>
     /* same header + responsive styles */
@@ -36,7 +36,7 @@
       display:flex; align-items:center; justify-content:center;
       background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
       color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
-      pointer-events:none;
+      pointer-events:auto;
     }
 
     header{
@@ -91,27 +91,28 @@
     pre{ background:#0e1420; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; overflow:auto }
     .cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px }
     footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:#94a3b8}
-    /* --- Mobile logo overrides (win against earlier inline rules) --- */
-@media (max-width: 900px){
-  .logo-bay{
-    height: calc(var(--nav-h-sm) - 8px) !important;
-    padding-left: 6px;
-    overflow: hidden;          /* prevents any tiny overflow */
-  }
-  .logo-img{
-    height: auto !important;   /* cancel the earlier height:100% */
-    max-height: 100% !important;
-    width: auto;
-    max-width: 100%;
-    display: block;
-    object-fit: contain;
-    object-position: left center;
-  }
-  .nav--brand{
-    grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
-  }
-}
- </style>
+
+    /* --- Mobile logo overrides --- */
+    @media (max-width: 900px){
+      .logo-bay{
+        height: calc(var(--nav-h-sm) - 8px) !important;
+        padding-left: 6px;
+        overflow: hidden;
+      }
+      .logo-img{
+        height: auto !important;
+        max-height: 100% !important;
+        width: auto;
+        max-width: 100%;
+        display: block;
+        object-fit: contain;
+        object-position: left center;
+      }
+      .nav--brand{
+        grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -121,17 +122,18 @@
 
   <header>
     <div class="container nav nav--brand">
-      <a class="logo-bay" href="index.html" aria-label="Ticket Veriguard">
-        <img src="img/logo.png" alt="Ticket Veriguard" class="logo-img">
-      </a>      
+      <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
+        <!-- Use an existing file to avoid 404s; swap to ./img/ticketveriguard.png later if you add it -->
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
+      </a>
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
       <nav id="primary-nav" class="topnav">
-        <a href="index.html" class="muted">Home</a>
-        <a href="marketing.html" class="muted">Marketing Plan</a>
-        <a href="business.html" class="muted">Business Plan</a>
-        <a href="index.html#contact" class="btn">Get a demo</a>
+        <a href="./index.html" class="muted">Home</a>
+        <a href="./marketing.html" class="muted">Marketing Plan</a>
+        <a href="./business.html" class="muted">Business Plan</a>
+        <a href="./index.html#contact" class="btn">Get a demo</a>
       </nav>
     </div>
   </header>
@@ -139,15 +141,16 @@
   <main>
     <section class="section">
       <div class="container">
-        <h1>How Ticket Veriguard Works</h1>
-        <p class="lead">Imagine you sell the same pair of seats on a few websites. When one buyer checks out, the others must be told the ticket is gone right away. Ticket Veriguard keeps every site in sync so the same ticket is never sold twice.</p>
+        <h1>How Ticket VeriGuard Works</h1>
+        <p class="lead">Imagine you sell the same pair of seats on a few websites. When one buyer checks out, the others must be told the ticket is gone right away. Ticket VeriGuard keeps every site in sync so the same ticket is never sold twice.</p>
         <div class="cta-row">
-          <a class="btn primary" href="index.html#contact">Talk to us</a>
-          <a class="btn" href="marketing.html">Marketing Plan</a>
-          <a class="btn" href="business.html">Business Plan</a>
+          <a class="btn primary" href="./index.html#contact">Talk to us</a>
+          <a class="btn" href="./marketing.html">Marketing Plan</a>
+          <a class="btn" href="./business.html">Business Plan</a>
         </div>
       </div>
     </section>
+
     <section class="section">
       <div class="container">
         <h2>Find this ticket across the web</h2>
@@ -169,36 +172,36 @@
             </div>
             <button class="btn primary" type="submit">Search marketplaces</button>
           </form>
-    
+
           <div id="out-links" style="margin-top:16px; display:grid; gap:10px"></div>
         </div>
       </div>
     </section>
-    
+
     <script>
     (function(){
       const f = document.getElementById('metasearch');
       const out = document.getElementById('out-links');
       if(!f || !out) return;
-    
+
       const mk = (label, url) =>
         `<a class="btn" href="${url}" target="_blank" rel="noopener">${label}</a>`;
-    
+
       f.addEventListener('submit', (e)=>{
         e.preventDefault();
         const q = new FormData(f);
         const parts = [q.get('event'), q.get('city'), q.get('srs')].filter(Boolean).join(' ');
         const enc = encodeURIComponent(parts.trim());
-    
+
         // Build marketplace/site searches (adjust or remove any you don’t want)
         const links = [
           mk('Google (exact phrase + site filters)', `https://www.google.com/search?q=${enc}+site%3Aviagogo.com+OR+site%3Astubhub.com+OR+site%3Avividseats.com+OR+site%3Aseatgeek.com`),
           mk('SeatGeek', `https://seatgeek.com/search?search=${enc}`),
-          mk('Vivid Seats', `https://www.vividseats.com/concerts/${enc}`), // Vivid uses paths; still helpful as a search jump-off
+          mk('Vivid Seats', `https://www.vividseats.com/concerts/${enc}`),
           mk('StubHub', `https://www.stubhub.com/find?q=${enc}`),
           mk('Ticketmaster', `https://www.ticketmaster.com/search?q=${enc}`)
         ];
-    
+
         out.innerHTML = `
           <div class="muted">Open these in new tabs to compare listings quickly:</div>
           <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:8px">
@@ -209,13 +212,12 @@
       });
     })();
     </script>
-    
 
     <section class="section">
       <div class="container">
         <h2>The 3 simple steps</h2>
         <div class="grid-3">
-          <div class="card"><h3>1) Connect</h3><p class="muted">We give you secure API keys. You plug Ticket Veriguard into your POS or marketplaces.</p></div>
+          <div class="card"><h3>1) Connect</h3><p class="muted">We give you secure API keys. You plug Ticket VeriGuard into your POS or marketplaces.</p></div>
           <div class="card"><h3>2) Register tickets</h3><p class="muted">You add each ticket once. We keep a single “source of truth” record for it.</p></div>
           <div class="card"><h3>3) Stay in sync</h3><p class="muted">When a sale happens anywhere, we notify the other sites instantly so nobody can buy what’s already sold.</p></div>
         </div>
@@ -226,7 +228,7 @@
       <div class="container">
         <h2>“Two people tried to buy the same ticket” — what happens?</h2>
         <div class="card">
-          <p>Without coordination, both checkouts might succeed. With Ticket Veriguard, the first confirmed buyer wins. The moment that happens, we send a message <span class="kbd">webhook</span> to the other marketplaces saying the ticket is sold. Their pages update, and the second buyer sees it before paying. No refund and no angry emails.</p>
+          <p>Without coordination, both checkouts might succeed. With Ticket VeriGuard, the first confirmed buyer wins. The moment that happens, we send a webhook <span class="kbd">POST</span> to the other marketplaces saying the ticket is sold. Their pages update, and the second buyer sees it before paying. No refund and no angry emails.</p>
         </div>
       </div>
     </section>
@@ -268,7 +270,7 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
           <div class="card"><h3>Do I need to change all my systems?</h3><p class="muted">No. Start by registering tickets and listening for webhooks. Integrate deeper over time.</p></div>
           <div class="card"><h3>How fast are updates?</h3><p class="muted">Usually in milliseconds. Fast enough to catch near-simultaneous checkouts.</p></div>
           <div class="card"><h3>What if a marketplace is offline?</h3><p class="muted">We queue notifications and retry. Your source of truth stays correct, and late systems catch up.</p></div>
-          <div class="card"><h3>Can I try a sandbox?</h3><p class="muted">Yes. Email <a href="mailto:hello@ticketVeriguard.com">hello@ticketVeriguard.com</a> and we’ll set you up.</p></div>
+          <div class="card"><h3>Can I try a sandbox?</h3><p class="muted">Yes. Email <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a> and we’ll set you up.</p></div>
         </div>
       </div>
     </section>
@@ -276,7 +278,7 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
-      <div class="muted">© <span id="y"></span> Ticket Veriguard</div>
+      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> · <a class="muted" href="#">Privacy</a> · <a class="muted" href="#">Status</a>
       </div>
@@ -284,20 +286,31 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
   </footer>
 
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    // year
+    const y = document.getElementById('y');
+    if (y) y.textContent = new Date().getFullYear();
+
+    // mobile nav toggle
     (function(){
       const hdr = document.querySelector('header');
       const btn = document.querySelector('.nav-toggle');
       const nav = document.getElementById('primary-nav');
       if(!btn || !hdr || !nav) return;
-      btn.addEventListener('click', () => {
+      const toggle = () => {
         const isOpen = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', String(!isOpen));
         hdr.classList.toggle('nav-open', !isOpen);
-      });
+      };
+      btn.addEventListener('click', toggle);
       nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
         btn.setAttribute('aria-expanded','false'); hdr.classList.remove('nav-open');
       }));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          btn.setAttribute('aria-expanded','false');
+          hdr.classList.remove('nav-open');
+        }
+      });
     })();
   </script>
 </body>

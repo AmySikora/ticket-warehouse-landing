@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket Veriguard — Marketing Plan</title>
-  <meta name="description" content="A clear and simple marketing plan for Ticket Veriguard."/>
-  <link rel="icon" href="img/ticketveriguard.png" type="image/png"/>
-  <!-- Styles -->
-  <link rel="stylesheet" href="docs/styles.css" />
+  <title>Ticket VeriGuard — Marketing Plan</title>
+  <meta name="description" content="A clear and simple marketing plan for Ticket VeriGuard."/>
+  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <!-- Styles (relative to docs/) -->
+  <link rel="stylesheet" href="./styles.css" />
 
   <style>
     /* --- same header + responsive styles as index --- */
@@ -36,7 +36,7 @@
       display:flex; align-items:center; justify-content:center;
       background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
       color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
-      pointer-events:none;
+      pointer-events:auto;
     }
 
     header{
@@ -84,47 +84,49 @@
     .btn{ display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600; border:1px solid rgba(255,255,255,.1); background:#111826; color:#e5e7eb }
     .btn.primary{ background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff }
     footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:#94a3b8}
-    /* --- Mobile logo overrides (win against earlier inline rules) --- */
-@media (max-width: 900px){
-  .logo-bay{
-    height: calc(var(--nav-h-sm) - 8px) !important;
-    padding-left: 6px;
-    overflow: hidden;          /* prevents any tiny overflow */
-  }
-  .logo-img{
-    height: auto !important;   /* cancel the earlier height:100% */
-    max-height: 100% !important;
-    width: auto;
-    max-width: 100%;
-    display: block;
-    object-fit: contain;
-    object-position: left center;
-  }
-  .nav--brand{
-    grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
-  }
-}
+
+    /* --- Mobile logo overrides --- */
+    @media (max-width: 900px){
+      .logo-bay{
+        height: calc(var(--nav-h-sm) - 8px) !important;
+        padding-left: 6px;
+        overflow: hidden;
+      }
+      .logo-img{
+        height: auto !important;
+        max-height: 100% !important;
+        width: auto;
+        max-width: 100%;
+        display: block;
+        object-fit: contain;
+        object-position: left center;
+      }
+      .nav--brand{
+        grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="proto-banner" role="note">
-    <strong>Early stage demo:</strong> Not for production use.
+    <strong>Early-stage demo:</strong> Not for production use.
   </div>
 
   <header>
     <div class="container nav nav--brand">
-      <a class="logo-bay" href="index.html" aria-label="Ticket Veriguard">
-        <img src="img/ticketveriguard.png" alt="Ticket Veriguarde" class="logo-img">
-      </a>      
+      <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
+        <!-- Use an existing file to avoid 404s; swap to ./img/ticketveriguard.png later if you add it -->
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
+      </a>
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
       <nav id="primary-nav" class="topnav">
-        <a href="index.html" class="muted">Home</a>
-        <a href="prototype.html" class="muted">How it works</a>
-        <a href="business.html" class="muted">Business Plan</a>
-        <a href="index.html#contact" class="btn">Get a demo</a>
+        <a href="./index.html" class="muted">Home</a>
+        <a href="./prototype.html" class="muted">How it works</a>
+        <a href="./business.html" class="muted">Business Plan</a>
+        <a href="./index.html#contact" class="btn">Get a demo</a>
       </nav>
     </div>
   </header>
@@ -133,14 +135,14 @@
     <section class="section">
       <div class="container">
         <h1>Marketing Plan</h1>
-        <p class="lead">The goal is simple. Help people learn what Ticket Veriguard does. Find early users who want to stop selling the same ticket twice. Share real results and clear stories.</p>
+        <p class="lead">The goal is simple. Help people learn what Ticket VeriGuard does. Find early users who want to stop selling the same ticket twice. Share real results and clear stories.</p>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
         <div class="card">
-          <h2>What Ticket Veriguard Does</h2>
+          <h2>What Ticket VeriGuard Does</h2>
           <p>It keeps ticket listings in sync across every site. If a ticket sells on one site, all the other sites update right away. That prevents a second sale of the same seat. It saves time and avoids refunds.</p>
         </div>
 
@@ -171,8 +173,8 @@
         </div>
 
         <div style="text-align:center; margin-top:40px">
-          <a href="index.html" class="btn primary">Back to Home</a>
-          <a href="business.html" class="btn" style="margin-left:10px">View Business Plan</a>
+          <a href="./index.html" class="btn primary">Back to Home</a>
+          <a href="./business.html" class="btn" style="margin-left:10px">View Business Plan</a>
         </div>
       </div>
     </section>
@@ -180,7 +182,7 @@
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
-      <div class="muted">© <span id="y"></span> Ticket Veriguard</div>
+      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> · <a class="muted" href="#">Privacy</a> · <a class="muted" href="#">Status</a>
       </div>
@@ -188,20 +190,32 @@
   </footer>
 
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    // year
+    const y = document.getElementById('y');
+    if (y) y.textContent = new Date().getFullYear();
+
+    // mobile nav toggle (matches index behavior)
     (function(){
       const hdr = document.querySelector('header');
       const btn = document.querySelector('.nav-toggle');
       const nav = document.getElementById('primary-nav');
       if(!btn || !hdr || !nav) return;
-      btn.addEventListener('click', () => {
+      const toggle = () => {
         const isOpen = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', String(!isOpen));
         hdr.classList.toggle('nav-open', !isOpen);
-      });
+      };
+      btn.addEventListener('click', toggle);
       nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-        btn.setAttribute('aria-expanded','false'); hdr.classList.remove('nav-open');
+        btn.setAttribute('aria-expanded','false');
+        hdr.classList.remove('nav-open');
       }));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          btn.setAttribute('aria-expanded','false');
+          hdr.classList.remove('nav-open');
+        }
+      });
     })();
   </script>
 </body>
