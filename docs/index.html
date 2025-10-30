@@ -418,188 +418,153 @@
     </section>
 
     <!-- Contact / Get a demo -->
-    <section id="contact">
-      <div class="container">
-        <h2 class="section-title">Get a demo</h2>
-        <div class="card">
-          <p class="muted" style="margin:0 0 10px">
-            Want to see it in action or ask a question?
-            <a class="link-mailto" href="mailto:hello@ticketveriguard.com"
-               data-mailto="hello@ticketveriguard.com">hello@ticketveriguard.com</a>
-            •
-            <a class="link-gmail" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com"
-               target="_blank" rel="noopener">Open in Gmail</a>
-          </p>
-          
-          <div class="email-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-            <a class="btn primary mailto-btn"
-               href="mailto:hello@ticketveriguard.com"
-               data-mailto="hello@ticketveriguard.com"
-               data-subject="Ticket Veriguard Demo Request"
-               role="button">Email us</a>
-          
-            <a class="btn"
-               href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com&su=Ticket%20Veriguard%20Demo%20Request"
-               target="_blank" rel="noopener" role="button">Use Gmail</a>
-          
-            <button class="btn" type="button" id="copy-email">Copy email</button>
-            <span id="copy-status" style="margin-left:8px; color:var(--brand-2); font-weight:600"></span>
-          </div>          
-          
-          <form id="contact-form" style="display:grid; gap:12px; max-width:520px" novalidate>
-            <!-- Honeypot: bots fill this, humans don't -->
-            <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
-                   style="position:absolute;left:-9999px;width:0;height:0;opacity:0" />
-            <label>
-              <span>Email</span><br/>
-              <input required type="email" name="email" autocomplete="email"
-                     style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
-            </label>
-            <label>
-              <span>Message</span><br/>
-              <textarea required name="message" rows="4"
-                        style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
-            </label>
-            <button class="btn primary" type="submit" id="contact-submit">Request demo</button>
-            <p id="contact-status" class="muted" style="margin:6px 0 0"></p>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
+<section id="contact">
+  <div class="container">
+    <h2 class="section-title">Get a demo</h2>
+    <div class="card">
+      <p class="muted" style="margin:0 0 10px">
+        Want to see it in action or ask a question?
+        <a class="link-mailto" href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>
+        •
+        <a class="link-gmail" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com"
+           target="_blank" rel="noopener">Open in Gmail</a>
+      </p>
 
-  <footer>
-    <div class="container" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap">
-      <div class="muted">© <span id="y"></span> Ticket Veriguard</div>
-      <div class="muted">
-        <a class="muted" href="#">Terms</a> ·
-        <a class="muted" href="#">Privacy</a> ·
-        <a class="muted" href="#">Status</a>
+      <div class="email-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <a class="btn primary" href="mailto:hello@ticketveriguard.com" role="button">Email us</a>
+        <a class="btn"
+           href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com&su=Ticket%20VeriGuard%20Demo%20Request"
+           target="_blank" rel="noopener" role="button">Use Gmail</a>
+        <button class="btn" type="button" id="copy-email">Copy email</button>
+        <span id="copy-status" style="margin-left:8px; color:var(--brand-2); font-weight:600"></span>
       </div>
+
+      <form id="contact-form" style="display:grid; gap:12px; max-width:520px" novalidate>
+        <!-- Honeypot -->
+        <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
+               style="position:absolute;left:-9999px;width:0;height:0;opacity:0" />
+        <label>
+          <span>Email</span><br/>
+          <input required type="email" name="email" autocomplete="email"
+                 style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
+        </label>
+        <label>
+          <span>Message</span><br/>
+          <textarea required name="message" rows="4"
+                    style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
+        </label>
+        <button class="btn primary" type="submit" id="contact-submit">Request demo</button>
+        <p id="contact-status" class="muted" style="margin:6px 0 0"></p>
+      </form>
     </div>
-  </footer>
+  </div>
+</section>
+</main>
 
-  <!-- Toast root -->
-  <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+<footer>
+  <div class="container" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap">
+    <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
+    <div class="muted">
+      <a class="muted" href="#">Terms</a> ·
+      <a class="muted" href="#">Privacy</a> ·
+      <a class="muted" href="#">Status</a>
+    </div>
+  </div>
+</footer>
 
-  <script>
-    // year
-    const y = document.getElementById('y');
-    if (y) y.textContent = new Date().getFullYear();
+<!-- Toast root -->
+<div id="toast-root" aria-live="polite" aria-atomic="true"></div>
 
-    // nav toggle (opens overlay & traps state)
-    (function(){
-      const hdr = document.querySelector('header');
-      const btn = document.querySelector('.nav-toggle');
-      const nav = document.getElementById('primary-nav');
-      if(!btn || !hdr || !nav) return;
+<script>
+  // year
+  const y = document.getElementById('y');
+  if (y) y.textContent = new Date().getFullYear();
 
-      const toggle = () => {
-        const isOpen = nav.classList.toggle('is-open');
-        btn.setAttribute('aria-expanded', String(isOpen));
-        hdr.classList.toggle('nav-open', isOpen);
-        document.body.classList.toggle('menu-open', isOpen);
-      };
-
-      btn.addEventListener('click', toggle);
-
-      nav.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-          nav.classList.remove('is-open');
-          btn.setAttribute('aria-expanded', 'false');
-          hdr.classList.remove('nav-open');
-          document.body.classList.remove('menu-open');
-        });
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          nav.classList.remove('is-open');
-          btn.setAttribute('aria-expanded', 'false');
-          hdr.classList.remove('nav-open');
-          document.body.classList.remove('menu-open');
-        }
-      });
-    })();
-
-    // copy email feedback
-    (function(){
-      const btn = document.getElementById('copy-email');
-      const status = document.getElementById('copy-status');
-      if (!btn) return;
-      btn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText('hello@ticketveriguard.com');
-          status.textContent = 'Copied!';
-        } catch {
-          status.textContent = 'Copy failed. Long-press to copy.';
-        }
-        setTimeout(()=> status.textContent = '', 2200);
-      });
-    })();
-
-    // toast util
-    function showToast(message, type='success', ttl=4000){
-      const root = document.getElementById('toast-root');
-      if (!root) return;
-      const el = document.createElement('div');
-      el.className = `toast toast--${type}`;
-      el.role = 'status';
-      el.innerHTML = `
-        <div>${message}</div>
-        <button aria-label="Dismiss">✕</button>
-      `;
-      const close = () => {
-        el.classList.remove('show');
-        setTimeout(()=> el.remove(), 180);
-      };
-      el.querySelector('button').addEventListener('click', close);
-      root.appendChild(el);
-      // trigger animation
-      requestAnimationFrame(()=> el.classList.add('show'));
-      setTimeout(close, ttl);
+  // nav toggle
+  (function(){
+    const hdr = document.querySelector('header');
+    const btn = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('primary-nav');
+    if(!btn || !hdr || !nav) return;
+    const toggle = () => {
+      const isOpen = nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(isOpen));
+      hdr.classList.toggle('nav-open', isOpen);
+      document.body.classList.toggle('menu-open', isOpen);
     };
+    btn.addEventListener('click', toggle);
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      nav.classList.remove('is-open'); btn.setAttribute('aria-expanded','false');
+      hdr.classList.remove('nav-open'); document.body.classList.remove('menu-open');
+    }));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggle(false); });
+  })();
 
-    (function(){
-      const form   = document.getElementById('contact-form');
-      const btn    = document.getElementById('contact-submit');
-      const status = document.getElementById('contact-status');
+  // copy email feedback
+  (function(){
+    const btn = document.getElementById('copy-email');
+    const status = document.getElementById('copy-status');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText('hello@ticketveriguard.com'); status.textContent = 'Copied!'; }
+      catch { status.textContent = 'Copy failed. Long-press to copy.'; }
+      setTimeout(()=> status.textContent = '', 2200);
+    });
+  })();
 
-      // Live API URL
-      const API_URL = 'https://tvg-contact-f9046a-5bc794bd5ce3.herokuapp.com/api/contact';
+  // tiny toast util (optional)
+  function showToast(message, type='success', ttl=4000){
+    const root = document.getElementById('toast-root'); if (!root) return;
+    const el = document.createElement('div');
+    el.className = `toast toast--${type}`; el.role = 'status';
+    el.innerHTML = `<div>${message}</div><button aria-label="Dismiss">✕</button>`;
+    const close = () => { el.classList.remove('show'); setTimeout(()=> el.remove(), 180); };
+    el.querySelector('button').addEventListener('click', close);
+    root.appendChild(el); requestAnimationFrame(()=> el.classList.add('show')); setTimeout(close, ttl);
+  }
 
-      if (!form) return;
+  // POST to API, then redirect to thanks.html on success
+  (function(){
+    const form   = document.getElementById('contact-form');
+    const btn    = document.getElementById('contact-submit');
+    const status = document.getElementById('contact-status');
+    const API_URL = 'https://tvg-contact-f9046a-5bc794bd5ce3.herokuapp.com/api/contact';
+    if (!form) return;
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        status.textContent = '';
-        btn.disabled = true; btn.textContent = 'Sending...';
+    // fetch with timeout helper
+    const withTimeout = (ms, promise) =>
+      Promise.race([promise, new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')), ms))]);
 
-        const data = {
-          email:   form.email.value.trim(),
-          message: form.message.value.trim(),
-          website: form.website ? form.website.value : '' // honeypot
-        };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = '';
+      btn.disabled = true; btn.textContent = 'Sending...';
 
-        try {
-          const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-          });
+      const data = {
+        email:   form.email.value.trim(),
+        message: form.message.value.trim(),
+        website: form.website ? form.website.value : '' // honeypot
+      };
 
-          if (!res.ok) throw new Error('Request failed');
+      try {
+        const res = await withTimeout(10000, fetch(API_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        }));
+        if (!res.ok) throw new Error('Request failed');
 
-          form.reset();
-          status.textContent = 'Thanks! We’ll get back to you shortly.';
-          showToast && showToast('Message sent ✔');
-        } catch (err) {
-          status.textContent = 'Sorry—could not send right now. Please email hello@ticketveriguard.com.';
-          showToast && showToast('Send failed', 'error');
-        } finally {
-          btn.disabled = false; btn.textContent = 'Request demo';
-        }
-      });
-    })();
-  </script>
+        // ✅ redirect on success (relative path works local & on your domain)
+        window.location.href = 'thanks.html';
+
+      } catch (err) {
+        status.textContent = 'Sorry—could not send right now. Please email hello@ticketveriguard.com.';
+        showToast && showToast('Send failed', 'error');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Request demo';
+      }
+    });
+  })();
+</script>
 </body>
 </html>
