@@ -63,3 +63,63 @@ section {
     }
   }
   
+  /* ===== Global header/nav sizing (shared across all pages) ===== */
+:root {
+  /* bump sizes globally */
+  --banner-h: 32px;
+  --nav-h: 120px;        /* was ~110 */
+  --logo-w: 360px;       /* was ~300 */
+  --nav-h-sm: 84px;      /* was ~72 */
+  --logo-w-sm: 240px;    /* was ~200 */
+}
+
+/* Layout of brand row: [logo | nav] */
+.nav--brand{
+  display:grid;
+  grid-template-columns: var(--logo-w) 1fr;
+  align-items:center;
+  height: var(--nav-h);
+  column-gap: 22px;
+  padding: 0 18px;
+  position: relative;
+}
+
+/* Logo area + image sizing */
+.logo-bay{
+  height: calc(var(--nav-h) - 8px) !important;
+  padding-left: 10px;
+  display:flex; align-items:center; justify-content:flex-start;
+  overflow:hidden;
+}
+.logo-img{
+  height: 100% !important;     /* fills the brand row height */
+  width: auto !important;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* Desktop nav shouldn’t wrap/squish */
+.topnav{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap: 24px;
+  flex-wrap: nowrap;           /* keep items on one row on wide screens */
+  min-width: 0;                /* prevent overflow pushing grid */
+}
+
+/* Container a touch wider so the logo+nav breathe */
+.container{ max-width: 1200px; }
+
+/* ===== Mobile tweaks ===== */
+@media (max-width: 900px){
+  .nav--brand{
+    grid-template-columns: minmax(160px, var(--logo-w-sm)) auto !important;
+    height: var(--nav-h-sm);
+    column-gap: 12px;
+  }
+  .logo-bay{ height: calc(var(--nav-h-sm) - 6px) !important; padding-left: 6px; }
+  .logo-img{ height: auto !important; max-height: 100% !important; }
+  .topnav{ flex-wrap: wrap; }  /* in the slide-down menu it’s okay to wrap */
+}
