@@ -92,7 +92,7 @@ display:flex; align-items:center; justify-content:flex-start;
 overflow:hidden;
 }
 .logo-img{
-height: 100% !important;     /* fills the brand row height */
+height: 125% !important;     /* fills the brand row height */
 width: auto !important;
 max-width: 100%;
 object-fit: contain;
