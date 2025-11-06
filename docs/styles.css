@@ -369,3 +369,244 @@ a.btn-primary:hover {
   transform: translateY(-3px);
   box-shadow: 0 0 42px rgba(34,211,238,.6);
 }
+/* === Broker Teaser === */
+:root{
+  --brand: var(--brand, #6366f1);
+  --brand-2: var(--brand-2, #22d3ee);
+  --text: var(--text, #e5e7eb);
+  --muted: var(--muted, #94a3b8);
+  --panel: var(--panel, #101827);
+  --radius: var(--radius, 16px);
+  --shadow: var(--shadow, 0 14px 36px rgba(0,0,0,.35));
+  }
+  
+  
+  .tvb-broker-teaser{
+  position: relative;
+  padding: clamp(40px, 6vw, 72px) 0;
+  background:
+  radial-gradient(1000px 520px at 105% 10%, rgba(34,211,238,.08), transparent 60%),
+  radial-gradient(1200px 600px at -5% 40%, rgba(99,102,241,.12), transparent 70%);
+  }
+  
+  
+  .tvb-wrap{ max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  
+  
+  .tvb-head h2{ font-size: clamp(24px, 2.4vw, 34px); color: var(--text); margin: 0 0 6px; }
+  .tvb-sub{ color: var(--muted); font-size: clamp(15px, 1.4vw, 18px); margin: 0 0 24px; }
+  
+  
+  .tvb-benefits{ display: grid; grid-template-columns: 1fr; gap: 14px; margin: 24px 0; padding: 0; list-style: none; }
+  .tvb-benefits li{ display: grid; grid-template-columns: 24px 1fr; align-items: center; gap: 12px; background: rgba(16,24,39,.5); border: 1px solid rgba(148,163,184,.18); padding: 12px 14px; border-radius: 14px; color: var(--text); box-shadow: var(--shadow);
+  transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+  .tvb-benefits li:hover{ transform: translateY(-2px); border-color: rgba(99,102,241,.35); background: rgba(16,24,39,.7); }
+  .tvb-benefits svg{ width: 20px; height: 20px; opacity: .9; }
+  
+  
+  @media (min-width: 820px){
+  .tvb-benefits{ grid-template-columns: 1fr 1fr 1fr; }
+  }
+  
+  
+  .tvb-cta{ display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+  .btn{
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 16px; border-radius: 12px; text-decoration: none; font-weight: 600;
+  border: 1px solid transparent; transition: transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn-primary{ background: linear-gradient(90deg, var(--brand), var(--brand-2)); color: #0b0f14; box-shadow: 0 10px 30px rgba(34,211,238,.16); }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 12px 32px rgba(34,211,238,.24); }
+  .btn-ghost{ background: transparent; border-color: rgba(148,163,184,.28); color: var(--text); }
+  .btn-ghost:hover{ border-color: var(--brand-2); }
+  /* === Global button variants (match brand) === */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 16px; border-radius:12px; font-weight:600; text-decoration:none;
+  border:1px solid rgba(255,255,255,.10); background:var(--panel); color:var(--text);
+  transition:transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
+}
+.btn:hover { transform: translateY(-1px); text-decoration:none; }
+.btn-primary { background: linear-gradient(90deg, var(--brand), var(--brand-2)); border-color:transparent; color:#0b0f14; }
+.btn-ghost { background: transparent; border-color: rgba(148,163,184,.28); color: var(--text); }
+.btn-ghost:hover { border-color: var(--brand-2); }
+
+/* === Broker teaser (homepage) === */
+.tvb-broker-teaser{
+  position:relative; padding:clamp(40px,6vw,72px) 0;
+  background:
+    radial-gradient(1000px 520px at 105% 10%, rgba(34,211,238,.08), transparent 60%),
+    radial-gradient(1200px 600px at -5% 40%, rgba(99,102,241,.12), transparent 70%);
+}
+.tvb-wrap{ max-width:1100px; margin:0 auto; padding:0 20px; }
+.tvb-head h2{ font-size:clamp(24px,2.4vw,34px); color:var(--text); margin:0 0 6px; }
+.tvb-sub{ color:var(--muted); font-size:clamp(15px,1.4vw,18px); margin:0 0 24px; }
+.tvb-benefits{ display:grid; grid-template-columns:1fr; gap:14px; margin:24px 0; padding:0; list-style:none; }
+.tvb-benefits li{
+  display:grid; grid-template-columns:24px 1fr; align-items:center; gap:12px;
+  background:rgba(16,24,39,.5); border:1px solid rgba(148,163,184,.18);
+  padding:12px 14px; border-radius:14px; color:var(--text); box-shadow:var(--shadow);
+  transition:transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.tvb-benefits li:hover{ transform:translateY(-2px); border-color:rgba(99,102,241,.35); background:rgba(16,24,39,.7); }
+.tvb-benefits svg,
+.tvb-list svg{ width:20px; height:20px; display:block; stroke:currentColor; }
+
+/* responsive grid for teaser */
+@media (min-width:820px){
+  .tvb-benefits{ grid-template-columns:1fr 1fr 1fr; }
+}
+
+/* === Shared broker page styles (used by /brokers.html) === */
+.tvb-page{ padding:clamp(36px,6vw,64px) 0 80px; }
+.tvb-container{ max-width:1100px; margin:0 auto; padding:0 20px; }
+.tvb-panels{ display:grid; gap:16px; margin:28px 0; }
+.tvb-card{ background:rgba(16,24,39,.55); border:1px solid rgba(148,163,184,.18);
+  border-radius:16px; padding:18px; box-shadow:var(--shadow); }
+.tvb-card h3{ margin:0 0 8px; color:var(--text); font-size:clamp(18px,1.8vw,22px); }
+.tvb-card p{ margin:0; color:var(--muted); }
+.tvb-grid-2{ display:grid; gap:16px; }
+@media(min-width:900px){ .tvb-grid-2{ grid-template-columns:1fr 1fr; } }
+@media(min-width:1100px){ .tvb-panels{ grid-template-columns:1.2fr .8fr; } }
+.tvb-list{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.tvb-list li{ display:grid; grid-template-columns:22px 1fr; align-items:start; gap:10px; color:var(--text); }
+.tvb-cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+.tvb-note{ font-size:13.5px; color:var(--muted); margin-top:10px; }
+/* ==== GLOBAL PACK: header/nav + buttons + teaser + brokers ==== */
+
+/* Tokens + base (safe to duplicate) */
+:root{
+  --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
+  --text:#e5e7eb; --muted:#94a3b8; --ok:#10b981; --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:16px; --ring:0 0 0 3px rgba(79,70,229,.35);
+  --banner-h:32px; --nav-h:110px; --logo-w:300px; --nav-h-sm:72px; --logo-w-sm:200px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.15), transparent),
+    radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
+    var(--bg);
+  color:var(--text); line-height:1.6;
+}
+a{color:var(--brand); text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1100px; margin:0 auto; padding:0 20px}
+
+/* Header / nav (moved from index.html so brokers page gets it) */
+header.nav{
+  position: sticky; top: var(--banner-h, 0px); z-index: 50;
+  background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 18px; margin: 12px 16px 0 16px; overflow: visible;
+  box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
+}
+.nav--brand{ display:grid; grid-template-columns: var(--logo-w) 1fr; align-items:center;
+  height: var(--nav-h); column-gap:22px; padding:0 18px; position:relative; }
+.logo-bay{ height: calc(var(--nav-h) - 12px); padding-left:10px; display:flex; align-items:center; overflow:hidden; }
+.logo-img{ height:125%; width:auto; object-fit:contain; object-position:left center; display:block; }
+.topnav{ display:flex; align-items:center; justify-content:flex-end; gap:24px; flex-wrap:wrap; }
+.topnav a{ color: rgba(229,231,235,.92); font-weight:600; line-height:1; padding:8px 10px; border-radius:999px; text-decoration:none;
+  transition: background-color .18s ease, color .18s ease, transform .18s ease; }
+.topnav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px); }
+.nav-toggle{ display:none; position:relative; justify-self:end; width:42px; height:36px;
+  border:1px solid rgba(255,255,255,.18); border-radius:10px; background: rgba(17,24,38,.65); cursor:pointer; }
+.nav-toggle .bar{ position:absolute; left:8px; right:8px; height:2px; background:#e5e7eb; border-radius:1px;
+  transition: transform .2s ease, opacity .2s ease, top .2s ease; }
+.nav-toggle .bar:nth-child(1){ top:10px; } .nav-toggle .bar:nth-child(2){ top:17px; } .nav-toggle .bar:nth-child(3){ top:24px; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top:17px; transform:rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity:0; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top:17px; transform:rotate(-45deg); }
+
+@media (max-width:900px){
+  .nav--brand{ grid-template-columns: var(--logo-w-sm) auto; height: var(--nav-h-sm); column-gap:12px; }
+  .logo-bay{ height: calc(var(--nav-h-sm) - 8px); padding-left:6px; }
+  .logo-img{ height:auto; max-height:100%; width:auto; max-width:100%; object-fit:contain; }
+  .nav-toggle{ display:flex; align-items:center; justify-content:center; }
+  .topnav{
+    position: fixed; left: 16px; right: 16px; top: calc(var(--banner-h) + var(--nav-h-sm) + 12px);
+    display:none; flex-direction:column; align-items:stretch; gap:0;
+    background: rgba(11,15,20,.95); border:1px solid rgba(255,255,255,.06); border-top:none; border-radius:0 0 18px 18px;
+    overflow:hidden; transform:translateY(-6px); opacity:0; transition: transform .2s ease, opacity .2s ease; z-index:60;
+  }
+  .topnav a{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06); }
+  .topnav a:last-child{ border-bottom:none; }
+  header.nav.nav-open .topnav{ display:flex; transform:translateY(0); opacity:1; }
+  body.menu-open::after{ content:""; position:fixed; inset:0; background:rgba(0,0,0,.35); backdrop-filter:blur(2px); z-index:40; }
+  .nav--brand{ grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important; }
+}
+
+/* Buttons */
+.btn{ display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 16px; border-radius:12px; font-weight:600; text-decoration:none;
+  border:1px solid rgba(255,255,255,.10); background:var(--panel); color:var(--text);
+  transition:transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease; }
+.btn:hover{ transform: translateY(-1px); text-decoration:none; }
+.btn-primary{ background: linear-gradient(90deg, var(--brand), var(--brand-2)); border-color:transparent; color:#0b0f14; }
+.btn-ghost{ background: transparent; border-color: rgba(148,163,184,.28); color: var(--text); }
+.btn-ghost:hover{ border-color: var(--brand-2); }
+
+/* Homepage broker teaser */
+.tvb-broker-teaser{
+  position:relative; padding:clamp(40px,6vw,72px) 0;
+  background:
+    radial-gradient(1000px 520px at 105% 10%, rgba(34,211,238,.08), transparent 60%),
+    radial-gradient(1200px 600px at -5% 40%, rgba(99,102,241,.12), transparent 70%);
+}
+.tvb-wrap{ max-width:1100px; margin:0 auto; padding:0 20px; }
+.tvb-head h2{ font-size:clamp(24px,2.4vw,34px); color:var(--text); margin:0 0 6px; }
+.tvb-sub{ color:var(--muted); font-size:clamp(15px,1.4vw,18px); margin:0 0 24px; }
+.tvb-benefits{ display:grid; grid-template-columns:1fr; gap:14px; margin:24px 0; padding:0; list-style:none; }
+.tvb-benefits li{
+  display:grid; grid-template-columns:24px 1fr; align-items:center; gap:12px;
+  background:rgba(16,24,39,.5); border:1px solid rgba(148,163,184,.18);
+  padding:12px 14px; border-radius:14px; color:var(--text); box-shadow:var(--shadow);
+  transition:transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.tvb-benefits li:hover{ transform:translateY(-2px); border-color:rgba(99,102,241,.35); background:rgba(16,24,39,.7); }
+.tvb-benefits svg{ width:20px; height:20px; display:block; stroke:currentColor; }
+@media (min-width:820px){ .tvb-benefits{ grid-template-columns:1fr 1fr 1fr; } }
+
+/* Brokers page */
+.tvb-page{ padding:clamp(36px,6vw,64px) 0 80px; }
+.tvb-container{ max-width:1100px; margin:0 auto; padding:0 20px; }
+.tvb-hero h1{ font-size: clamp(28px,3vw,42px); margin:0; }
+.tvb-hero p{ color:var(--muted); font-size: clamp(16px,1.6vw,20px); margin: 6px 0 0; }
+.tvb-panels{ display:grid; gap:16px; margin: 28px 0; }
+.tvb-card{ background: rgba(16,24,39,.55); border:1px solid rgba(148,163,184,.18); border-radius:16px; padding:18px; box-shadow: var(--shadow); }
+.tvb-card h3{ margin:0 0 8px; font-size: clamp(18px,1.8vw,22px); }
+.tvb-card p{ margin:0; color: var(--muted); }
+.tvb-grid-2{ display:grid; gap:16px; }
+@media(min-width:900px){ .tvb-grid-2{ grid-template-columns:1fr 1fr; } }
+@media(min-width:1100px){ .tvb-panels{ grid-template-columns:1.2fr .8fr; } }
+.tvb-list{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.tvb-list li{ display:grid; grid-template-columns:22px 1fr; align-items:start; gap:10px; }
+.tvb-list svg{ width:20px; height:20px; display:block; stroke:currentColor; }
+.tvb-cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+.tvb-note{ font-size:13.5px; color:var(--muted); margin-top:10px; }
+/* --- Button system (robust aliases) --- */
+a.btn, button.btn, .btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 16px; border-radius:12px; font-weight:600; text-decoration:none;
+  border:1px solid rgba(255,255,255,.10); background:var(--panel); color:var(--text);
+  transition:transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
+  cursor:pointer;
+}
+a.btn:hover, button.btn:hover, .btn:hover { transform: translateY(-1px); text-decoration:none; }
+
+/* Primary variant: supports both 'btn-primary' and 'btn primary' */
+.btn-primary, .btn.primary {
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  border-color: transparent;
+  color: #0b0f14;
+}
+
+/* Ghost variant: supports 'btn-ghost' and 'btn ghost' */
+.btn-ghost, .btn.ghost {
+  background: transparent;
+  border-color: rgba(148,163,184,.28);
+  color: var(--text);
+}
+.btn-ghost:hover, .btn.ghost:hover { border-color: var(--brand-2); }
