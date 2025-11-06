@@ -7,15 +7,14 @@
 
   <!-- SEO / Social -->
   <meta name="description" content="TicketVeriGuard helps marketplaces verify tickets with confidence. Keep your ticket listings accurate across all marketplaces and prevent duplicate sales." />
-  <meta property="og:title" content="TicketVeriGuard" />
+  <meta property="og:title" content="Ticket VeriGuard" />
   <meta property="og:description" content="Smart ticket validation and anti-duplicate protection." />
-  <!-- Use a file that exists to avoid 404s; update later if you add a dedicated og image -->
   <meta property="og:image" content="./favicon_logo.png" />
 
-  <!-- Favicon / Styles -->
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css" />
 
+  <!-- Page-local layout tokens only (shared look lives in styles.css) -->
   <style>
     :root{
       /* Brand + UI tokens */
@@ -240,34 +239,29 @@
 </head>
 <body>
 
+
   <!-- Header -->
   <header class="nav">
     <div class="container nav--brand">
-      <a class="logo-bay" href="./index.html" aria-label="Ticket Veriguard">
-        <!-- Use a guaranteed-present file to avoid 404s; swap to ./img/ticketveriguard.png if you add it -->
-        <img src="./favicon_logo.png" alt="Ticket Veriguard" class="logo-img">
+      <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <!-- Mobile toggle -->
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
 
-      <!-- Nav -->
+      <!-- Nav (pills + demo) -->
       <nav id="primary-nav" class="topnav">
-        <a href="./prototype.html" class="muted">How it works</a>
-        <a href="#who" class="muted">Who it's for</a>
-        <a href="#pricing" class="muted">Pricing</a>
-          <a href="https://amysikora.github.io/tvg-demo/index.html"
-             class="btn btn-demo"
-             target="_blank" 
-             rel="noopener"
-          >Try Live Demo</a>       
+        <a href="./prototype.html" class="pill-link pill-link--accent" aria-label="How it works">How it works</a>
+        <a href="#contact" class="pill-link" aria-label="Contact">Contact</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="btn btn-demo" target="_blank" rel="noopener">Try Live Demo</a>
       </nav>
     </div>
   </header>
 
   <main>
+    <!-- Hero -->
     <!-- Hero -->
     <section class="hero">
       <div class="container hero-grid">
@@ -276,92 +270,71 @@
           <h1 class="grad-text">Keep your ticket sales clean and accurate everywhere you sell.</h1>
           <p class="lead">When a ticket sells on one site, we instantly update all the others. Buyers only see tickets that are still available. You avoid double sales, refunds, and headaches.</p>
           <div class="cta">
-            <a href="#pricing" class="btn primary">See pricing</a>
-            <a href="./prototype.html" class="btn">How it works</a>
-            <a href="#contact" class="btn">Talk to us</a>
-            <a href="./marketing.html" class="btn">Marketing Plan</a>
-            <a href="./business.html" class="btn">Business Plan</a>
+            <a href="#contact" class="btn">Contact us</a>
           </div>
         </div>
 
         <aside class="card" aria-label="Key stats">
-          <div class="stat">
-            <div>
-              <strong>Instant updates</strong><br/><small>Across every marketplace</small>
-            </div>
-            <small>~150ms</small>
+          <div class="stat" style="display:flex;align-items:center;justify-content:space-between;background:rgba(17,24,38,.6);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.06);margin-bottom:10px">
+            <div><strong>Instant updates</strong><br/><small class="muted">Across every marketplace</small></div>
+            <small class="muted">~150ms</small>
           </div>
-          <div class="stat">
-            <div>
-              <strong>No duplicates</strong><br/><small>Each seat sold once</small>
-            </div>
-            <small>Guaranteed*</small>
+          <div class="stat" style="display:flex;align-items:center;justify-content:space-between;background:rgba(17,24,38,.6);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.06);margin-bottom:10px">
+            <div><strong>Never double sell</strong><br/><small class="muted">Each seat sells once</small></div>
+            <small class="muted">Guaranteed*</small>
           </div>
-          <div class="stat">
-            <div>
-              <strong>Simple setup</strong><br/><small>Connect and go</small>
-            </div>
-            <small>Dev-friendly</small>
+          <div class="stat" style="display:flex;align-items:center;justify-content:space-between;background:rgba(17,24,38,.6);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.06)">
+            <div><strong>Simple setup</strong><br/><small class="muted">Connect and go</small></div>
+            <small class="muted">Dev-friendly</small>
           </div>
-          <small class="muted">*When connected to all active marketplaces for the same event inventory.</small>
+          <small class="muted" style="display:block;margin-top:8px">*When connected to all active marketplaces for the same event inventory.</small>
         </aside>
       </div>
     </section>
 
-    <!-- How it works -->
-    <section id="how">
+    <!-- What is (full width) -->
+    <section id="what" class="section--what">
       <div class="container">
-        <h2 class="section-title">How it works</h2>
-        <div class="grid-3">
+        <h2 class="section-title">What is Ticket VeriGuard?</h2>
+        <p class="why">
+          Ticket VeriGuard keeps your ticket listings in sync across the internet.
+          When one ticket sells, we instantly update all your other listings.
+        </p>
+        <div class="cards-grid grid-2"style="display:grid; grid-template-columns:repeat(2,1fr); gap:20px">
           <div class="card item">
-            <h3>1) Connect</h3>
-            <p class="muted">Link your sales platforms or point of sale to Ticket Veriguard. You decide what to share and where.</p>
+            <h3>How to make it work</h3>
+          <ul class="feature-list">
+            <li>Connect your marketplaces or point of sale</li>
+            <li>Watch sales update in real time</li>
+            <li>Stop duplicate sales automatically</li>
+          </ul>
           </div>
+    
           <div class="card item">
-            <h3>2) Add your tickets</h3>
-            <p class="muted">Upload your ticket details once. We keep a single source that all sites use for availability.</p>
-          </div>
-          <div class="card item">
-            <h3>3) Stay in sync</h3>
-            <p class="muted">When one ticket sells, it’s marked sold everywhere else right away. Your listings always match reality.</p>
+            <strong>Behind the scenes:</strong>
+            <ol class="steps">
+              <li>We detect a sale event</li>
+              <li>We lock that seat</li>
+              <li>We notify your connected sites instantly</li>
+              <li>They update their listings within seconds</li>
+            </ol>
           </div>
         </div>
       </div>
-    </section>
+    </section>    
 
-    <!-- Who it's for -->
-    <section id="who">
-      <div class="container">
-        <h2 class="section-title">Who it's for</h2>
-        <div class="grid-3">
-          <div class="card item">
-            <h3>Ticket brokers and resellers</h3>
-            <p class="muted">Run all of your listings from one place and prevent selling the same seat twice.</p>
-          </div>
-          <div class="card item">
-            <h3>Venues and promoters</h3>
-            <p class="muted">Show fans tickets that are real and still available, which builds trust and fewer support issues.</p>
-          </div>
-          <div class="card item">
-            <h3>Marketplaces</h3>
-            <p class="muted">Give buyers reliable, up-to-date inventory without cancellations from duplicate sales.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Why Ticket Veriguard -->
+    <!-- Why Ticket VeriGuard -->
     <section id="why">
       <div class="container">
-        <h2 class="section-title">Why Ticket Veriguard</h2>
-        <div class="grid-2" style="display:grid; grid-template-columns:repeat(2,1fr); gap:20px">
+        <h2 class="section-title">Why Ticket VeriGuard?</h2>
+        <div class="grid-2">
           <div class="card item">
             <h3>Fast updates</h3>
-            <p class="muted">Listings refresh in milliseconds so your store matches what’s actually available.</p>
+            <p class="muted">Listings refresh in milliseconds so your store matches what is actually available.</p>
           </div>
           <div class="card item">
             <h3>Easy to use</h3>
-            <p class="muted">Setup is quick and simple. Once connected, it just works in the background.</p>
+            <p class="muted">Setup is quick and simple. Once connected, it runs quietly while you focus on sales.</p>
           </div>
           <div class="card item">
             <h3>Secure system</h3>
@@ -369,201 +342,141 @@
           </div>
           <div class="card item">
             <h3>Built to grow</h3>
-            <p class="muted">Start with one seller or connect many marketplaces. We scale as you do.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Pricing -->
-    <section id="pricing">
-      <div class="container">
-        <h2 class="section-title">Pricing</h2>
-        <div class="pricing">
-          <div class="card">
-            <h3>Starter</h3>
-            <div class="price">$49<span class="muted" style="font-size:14px">/mo</span></div>
-            <ul class="features">
-              <li><span class="check"></span> 1 connected platform</li>
-              <li><span class="check"></span> Up to 500 listings</li>
-              <li><span class="check"></span> Email support</li>
-            </ul>
-            <p><a class="btn" href="#contact">Get started</a></p>
-          </div>
-
-          <div class="card" style="border-color: rgba(255,255,255,.18)">
-            <h3>Professional</h3>
-            <div class="price">$199<span class="muted" style="font-size:14px">/mo</span></div>
-            <ul class="features">
-              <li><span class="check"></span> Multi-site syncing</li>
-              <li><span class="check"></span> Sales insights dashboard</li>
-              <li><span class="check"></span> Priority support</li>
-            </ul>
-            <p><a class="btn primary" href="#contact">Start trial</a></p>
-          </div>
-
-          <div class="card">
-            <h3>Enterprise</h3>
-            <div class="price">Custom</div>
-            <ul class="features">
-              <li><span class="check"></span> Large-scale integrations</li>
-              <li><span class="check"></span> Custom hosting options</li>
-              <li><span class="check"></span> Dedicated account team</li>
-            </ul>
-            <p><a class="btn" href="#contact">Talk to sales</a></p>
+            <p class="muted">Start with one seller or connect many marketplaces. It scales with you.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Contact / Get a demo -->
-<section id="contact">
-  <div class="container">
-    <h2 class="section-title">Get a demo</h2>
-    <div class="card">
-      <p class="muted" style="margin:0 0 10px">
-        Want to see it in action or ask a question?
-        <a class="link-mailto" href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>
-        •
-        <a class="link-gmail" href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com"
-           target="_blank" rel="noopener">Open in Gmail</a>
-      </p>
+    <section id="contact">
+      <div class="container">
+        <h2 class="section-title">Questions? Contact us!</h2>
 
-      <div class="email-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-        <a class="btn primary" href="mailto:hello@ticketveriguard.com" role="button">Email us</a>
-        <a class="btn"
-           href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com&su=Ticket%20VeriGuard%20Demo%20Request"
-           target="_blank" rel="noopener" role="button">Use Gmail</a>
-        <button class="btn" type="button" id="copy-email">Copy email</button>
-        <span id="copy-status" style="margin-left:8px; color:var(--brand-2); font-weight:600"></span>
+        <div class="card">
+          <!-- unified top strip -->
+          <div class="contact-cta">
+            <div>
+              <h3>Want to see it with your tickets?</h3>
+              <p>We can walk through a real event and connect a couple of marketplaces.
+                Or email us directly: <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>
+                • <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com" target="_blank" rel="noopener">Open in Gmail</a>
+              </p>
+            </div>
+            <div class="actions">
+              <a class="btn primary" href="mailto:hello@ticketveriguard.com">Request a demo</a>
+              <a class="btn" href="https://amysikora.github.io/tvg-demo/index.html" target="_blank" rel="noopener">Try the live demo</a>
+            </div>
+          </div>
+
+          <!-- form -->
+          <form id="contact-form" style="display:grid; gap:12px; max-width:520px; margin-top:14px" novalidate>
+            <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
+                   style="position:absolute;left:-9999px;width:0;height:0;opacity:0" />
+            <label>
+              <span>Email</span><br/>
+              <input required type="email" name="email" autocomplete="email"
+                     style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
+            </label>
+            <label>
+              <span>Message</span><br/>
+              <textarea required name="message" rows="4"
+                        style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
+            </label>
+            <button class="btn primary" type="submit" id="contact-submit">Request demo</button>
+            <p id="contact-status" class="muted" style="margin:6px 0 0"></p>
+          </form>
+        </div>
       </div>
+    </section>
+  </main>
 
-      <form id="contact-form" style="display:grid; gap:12px; max-width:520px" novalidate>
-        <!-- Honeypot -->
-        <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
-               style="position:absolute;left:-9999px;width:0;height:0;opacity:0" />
-        <label>
-          <span>Email</span><br/>
-          <input required type="email" name="email" autocomplete="email"
-                 style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
-        </label>
-        <label>
-          <span>Message</span><br/>
-          <textarea required name="message" rows="4"
-                    style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
-        </label>
-        <button class="btn primary" type="submit" id="contact-submit">Request demo</button>
-        <p id="contact-status" class="muted" style="margin:6px 0 0"></p>
-      </form>
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap">
+      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
+      <div class="muted">
+        <a class="muted" href="#">Terms</a> ·
+        <a class="muted" href="#">Privacy</a> ·
+        <a class="muted" href="#">Status</a>
+      </div>
     </div>
-  </div>
-</section>
-</main>
+  </footer>
 
-<footer>
-  <div class="container" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap">
-    <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
-    <div class="muted">
-      <a class="muted" href="#">Terms</a> ·
-      <a class="muted" href="#">Privacy</a> ·
-      <a class="muted" href="#">Status</a>
-    </div>
-  </div>
-</footer>
+  <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
 
-<!-- Toast root -->
-<div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+  <script>
+    const y = document.getElementById('y');
+    if (y) y.textContent = new Date().getFullYear();
 
-<script>
-  // year
-  const y = document.getElementById('y');
-  if (y) y.textContent = new Date().getFullYear();
-
-  // nav toggle
-  (function(){
-    const hdr = document.querySelector('header');
-    const btn = document.querySelector('.nav-toggle');
-    const nav = document.getElementById('primary-nav');
-    if(!btn || !hdr || !nav) return;
-    const toggle = () => {
-      const isOpen = nav.classList.toggle('is-open');
-      btn.setAttribute('aria-expanded', String(isOpen));
-      hdr.classList.toggle('nav-open', isOpen);
-      document.body.classList.toggle('menu-open', isOpen);
-    };
-    btn.addEventListener('click', toggle);
-    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      nav.classList.remove('is-open'); btn.setAttribute('aria-expanded','false');
-      hdr.classList.remove('nav-open'); document.body.classList.remove('menu-open');
-    }));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggle(false); });
-  })();
-
-  // copy email feedback
-  (function(){
-    const btn = document.getElementById('copy-email');
-    const status = document.getElementById('copy-status');
-    if (!btn) return;
-    btn.addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText('hello@ticketveriguard.com'); status.textContent = 'Copied!'; }
-      catch { status.textContent = 'Copy failed. Long-press to copy.'; }
-      setTimeout(()=> status.textContent = '', 2200);
-    });
-  })();
-
-  // tiny toast util (optional)
-  function showToast(message, type='success', ttl=4000){
-    const root = document.getElementById('toast-root'); if (!root) return;
-    const el = document.createElement('div');
-    el.className = `toast toast--${type}`; el.role = 'status';
-    el.innerHTML = `<div>${message}</div><button aria-label="Dismiss">✕</button>`;
-    const close = () => { el.classList.remove('show'); setTimeout(()=> el.remove(), 180); };
-    el.querySelector('button').addEventListener('click', close);
-    root.appendChild(el); requestAnimationFrame(()=> el.classList.add('show')); setTimeout(close, ttl);
-  }
-
-  // POST to API, then redirect to thanks.html on success
-  (function(){
-    const form   = document.getElementById('contact-form');
-    const btn    = document.getElementById('contact-submit');
-    const status = document.getElementById('contact-status');
-    const API_URL = 'https://tvg-contact-f9046a-5bc794bd5ce3.herokuapp.com/api/contact';
-    if (!form) return;
-
-    // fetch with timeout helper
-    const withTimeout = (ms, promise) =>
-      Promise.race([promise, new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')), ms))]);
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      status.textContent = '';
-      btn.disabled = true; btn.textContent = 'Sending...';
-
-      const data = {
-        email:   form.email.value.trim(),
-        message: form.message.value.trim(),
-        website: form.website ? form.website.value : '' // honeypot
+    // nav toggle
+    (function(){
+      const hdr = document.querySelector('header');
+      const btn = document.querySelector('.nav-toggle');
+      const nav = document.getElementById('primary-nav');
+      if(!btn || !hdr || !nav) return;
+      const toggle = () => {
+        const isOpen = nav.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', String(isOpen));
+        hdr.classList.toggle('nav-open', isOpen);
+        document.body.classList.toggle('menu-open', isOpen);
       };
+      btn.addEventListener('click', toggle);
+      nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        nav.classList.remove('is-open'); btn.setAttribute('aria-expanded','false');
+        hdr.classList.remove('nav-open'); document.body.classList.remove('menu-open');
+      }));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggle(false); });
+    })();
 
-      try {
-        const res = await withTimeout(10000, fetch(API_URL, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(data)
-        }));
-        if (!res.ok) throw new Error('Request failed');
+    // tiny toast util (still available for any future notices)
+    function showToast(message, type='success', ttl=4000){
+      const root = document.getElementById('toast-root'); if (!root) return;
+      const el = document.createElement('div');
+      el.className = `toast toast--${type}`; el.role = 'status';
+      el.innerHTML = `<div>${message}</div><button aria-label="Dismiss">✕</button>`;
+      const close = () => { el.classList.remove('show'); setTimeout(()=> el.remove(), 180); };
+      el.querySelector('button').addEventListener('click', close);
+      root.appendChild(el); requestAnimationFrame(()=> el.classList.add('show')); setTimeout(close, ttl);
+    }
 
-        // ✅ redirect on success (relative path works local & on your domain)
-        window.location.href = 'thanks.html';
+    // POST to API, then redirect to thanks.html on success
+    (function(){
+      const form   = document.getElementById('contact-form');
+      const btn    = document.getElementById('contact-submit');
+      const status = document.getElementById('contact-status');
+      const API_URL = 'https://tvg-contact-f9046a-5bc794bd5ce3.herokuapp.com/api/contact';
+      if (!form) return;
 
-      } catch (err) {
-        status.textContent = 'Sorry—could not send right now. Please email hello@ticketveriguard.com.';
-        showToast && showToast('Send failed', 'error');
-      } finally {
-        btn.disabled = false; btn.textContent = 'Request demo';
-      }
-    });
-  })();
-</script>
+      const withTimeout = (ms, promise) =>
+        Promise.race([promise, new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')), ms))]);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        status.textContent = '';
+        btn.disabled = true; btn.textContent = 'Sending...';
+
+        const data = {
+          email:   form.email.value.trim(),
+          message: form.message.value.trim(),
+          website: form.website ? form.website.value : ''
+        };
+
+        try {
+          const res = await withTimeout(10000, fetch(API_URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+          }));
+          if (!res.ok) throw new Error('Request failed');
+          window.location.href = 'thanks.html';
+        } catch (err) {
+          status.textContent = 'Sorry, we could not send right now. Please email hello@ticketveriguard.com.';
+          showToast && showToast('Send failed', 'error');
+        } finally {
+          btn.disabled = false; btn.textContent = 'Request demo';
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

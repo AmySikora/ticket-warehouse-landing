@@ -137,3 +137,32 @@ min-width: 0;                /* prevent overflow pushing grid */
   opacity: .92;
   transform: translateY(-1px);
 }
+
+/* === What is Ticket VeriGuard — final overrides === */
+
+/* Remove the banded gradient just for this section */
+section#what{
+  background: transparent !important;
+  position: relative;
+  padding-top: 64px;           /* keeps spacing consistent */
+  padding-bottom: 56px;
+}
+
+/* Soft blend into the hero above (no hard line) */
+section#what::before{
+  content:"";
+  position:absolute;
+  left:0; right:0; top:-120px; height:160px;   /* overlaps up into hero */
+  background: linear-gradient(
+    180deg,
+    rgba(11,15,20,0) 0%,
+    rgba(11,15,20,.55) 55%,
+    rgba(11,15,20,1) 100%
+  );
+  pointer-events:none;
+}
+
+/* Stack on mobile */
+@media (max-width: 940px){
+  section#what .grid-2{ grid-template-columns: 1fr; }
+}

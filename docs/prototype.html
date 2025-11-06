@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — How It Works (Prototype)</title>
+  <title>Ticket VeriGuard — How It Works</title>
   <meta name="description" content="A plain-English walkthrough of what Ticket VeriGuard does and how the prototype works."/>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css" />
@@ -166,24 +166,21 @@
 </head>
 <body>
 
+
   <header>
     <div class="container nav nav--brand">
       <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
-        <!-- Use an existing file to avoid 404s; swap to ./img/ticketveriguard.png later if you add it -->
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
       <nav id="primary-nav" class="topnav">
-        <a href="./index.html" class="muted">Home</a>
-        <a href="./marketing.html" class="muted">Marketing Plan</a>
-        <a href="./business.html" class="muted">Business Plan</a>
-       <a href="https://amysikora.github.io/tvg-demo/index.html"
-             class="btn btn-demo"
-             target="_blank" 
-             rel="noopener"
-          >Try Live Demo</a>  
+        <a href="./index.html" class="pill-link">Home</a>
+        <a href="./prototype.html" class="pill-link pill-link--accent" aria-current="page">How it works</a>
+        <a href="./index.html#contact" class="pill-link">Contact</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html"
+           class="btn btn-demo" target="_blank" rel="noopener">Try Live Demo</a>
       </nav>
     </div>
   </header>
@@ -191,124 +188,89 @@
   <main>
     <section class="section">
       <div class="container">
-        <h1>How Ticket VeriGuard Works</h1>
-        <p class="lead">Imagine you sell the same pair of seats on a few websites. When one buyer checks out, the others must be told the ticket is gone right away. Ticket VeriGuard keeps every site in sync so the same ticket is never sold twice.</p>
+        <h1>How Ticket VeriGuard works</h1>
+        <p class="lead">Connect where you sell, register your tickets once, and let instant updates keep every listing accurate. This page shows the nuts and bolts.</p>
         <div class="cta-row">
-          <a class="btn primary" href="./index.html#contact">Talk to us</a>
-          <a class="btn" href="./marketing.html">Marketing Plan</a>
-          <a class="btn" href="./business.html">Business Plan</a>
+          <a class="btn" href="./index.html#contact">Questions? Contact us</a>
         </div>
       </div>
     </section>
 
-    <!-- Upgraded MetaSearch -->
     <section class="section">
       <div class="container">
-        <h2>Find this ticket across the web</h2>
+        <h2>The flow at a glance</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>1) Link accounts</h3>
+            <p class="muted">Choose your marketplaces or point of sale and connect them. You control what gets shared.</p>
+            <h3 style="margin-top:14px">2) Register tickets once</h3>
+            <p class="muted">Add seat details in one place. We keep them tidy and ready for fast updates.</p>
+          </div>
+          <div class="card">
+            <h3>3) Real-time updates</h3>
+            <p class="muted">When a seat sells on any connected site, we flag it and send updates to the rest in a blink.</p>
+            <h3 style="margin-top:14px">4) Clean checkouts</h3>
+            <p class="muted">Fans see what is actually available. You skip double sales, refunds, and support churn.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MetaSearch demo -->
+    <section class="section">
+      <div class="container">
+        <h2>Find your tickets across secondary markets</h2>
         <div class="card search-card">
           <form id="metaSearch" class="ms-form" novalidate>
-            <!-- Top row: event -->
             <label class="ms-label">
               <span class="ms-label-text">Event (required)</span>
               <div class="ms-input-wrap">
-                <span class="ms-icon" aria-hidden="true">🎟️</span>
-                <input
-                  type="text"
-                  id="ms-event"
-                  name="event"
-                  placeholder="Taylor Swift 12/14/2025"
-                  autocomplete="off"
-                  required
-                  class="ms-input"
-                />
+                <span aria-hidden="true">🎟️</span>
+                <input type="text" id="ms-event" name="event" placeholder="Taylor Swift 12/14/2025" autocomplete="off" required class="ms-input"/>
               </div>
             </label>
 
-            <!-- Two-up: city + section/row/seat -->
             <div class="ms-two">
               <label class="ms-label">
                 <span class="ms-label-text">City (optional)</span>
                 <div class="ms-input-wrap">
-                  <span class="ms-icon" aria-hidden="true">📍</span>
-                  <input
-                    type="text"
-                    id="ms-city"
-                    name="city"
-                    placeholder="Nashville"
-                    autocomplete="off"
-                    class="ms-input"
-                  />
+                  <span aria-hidden="true">📍</span>
+                  <input type="text" id="ms-city" name="city" placeholder="Nashville" autocomplete="off" class="ms-input"/>
                 </div>
               </label>
 
               <label class="ms-label">
                 <span class="ms-label-text">Section/Row/Seat (optional)</span>
                 <div class="ms-input-wrap">
-                  <span class="ms-icon" aria-hidden="true">🪑</span>
-                  <input
-                    type="text"
-                    id="ms-srs"
-                    name="srs"
-                    placeholder="Section 110 Row F Seat 12"
-                    autocomplete="off"
-                    class="ms-input"
-                  />
+                  <span aria-hidden="true">🪑</span>
+                  <input type="text" id="ms-srs" name="srs" placeholder="Section 110 Row F Seat 12" autocomplete="off" class="ms-input"/>
                 </div>
               </label>
             </div>
 
-            <!-- Sites -->
             <fieldset class="ms-sites">
               <legend class="ms-legend">Search these sites</legend>
               <div class="ms-site-grid">
-                <label class="pill-check">
-                  <input type="checkbox" id="site-google" checked>
-                  <span>Google (exact + filters)</span>
-                </label>
-                <label class="pill-check">
-                  <input type="checkbox" id="site-seatgeek" checked>
-                  <span>SeatGeek</span>
-                </label>
-                <label class="pill-check">
-                  <input type="checkbox" id="site-vivid" checked>
-                  <span>Vivid Seats</span>
-                </label>
-                <label class="pill-check">
-                  <input type="checkbox" id="site-stubhub" checked>
-                  <span>StubHub</span>
-                </label>
-                <label class="pill-check">
-                  <input type="checkbox" id="site-ticketmaster" checked>
-                  <span>Ticketmaster</span>
-                </label>
+                <label class="pill-check"><input type="checkbox" id="site-google" checked><span>Google (exact + filters)</span></label>
+                <label class="pill-check"><input type="checkbox" id="site-seatgeek" checked><span>SeatGeek</span></label>
+                <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid Seats</span></label>
+                <label class="pill-check"><input type="checkbox" id="site-stubhub" checked><span>StubHub</span></label>
+                <label class="pill-check"><input type="checkbox" id="site-ticketmaster" checked><span>Ticketmaster</span></label>
               </div>
             </fieldset>
 
-            <!-- Actions -->
             <div class="ms-actions">
               <button type="submit" class="btn primary">Open results</button>
               <button type="button" id="ms-copy" class="btn">Copy search</button>
               <button type="button" id="ms-reset" class="btn">Reset</button>
-              <span class="ms-hint muted">Tip: press <span class="kbd">Enter</span> to open all selected.</span>
+              <span class="ms-hint muted">Tip: press Enter to open all selected.</span>
             </div>
           </form>
 
-          <!-- Live preview -->
           <div id="ms-preview">
             <div class="muted" style="margin-top:6px">Preview links:</div>
             <div id="ms-links" class="ms-links"></div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <h2>The 3 simple steps</h2>
-        <div class="grid-3">
-          <div class="card"><h3>1) Connect</h3><p class="muted">We give you secure API keys. You plug Ticket VeriGuard into your POS or marketplaces.</p></div>
-          <div class="card"><h3>2) Register tickets</h3><p class="muted">You add each ticket once. We keep a single “source of truth” record for it.</p></div>
-          <div class="card"><h3>3) Stay in sync</h3><p class="muted">When a sale happens anywhere, we notify the other sites instantly so nobody can buy what’s already sold.</p></div>
         </div>
       </div>
     </section>
@@ -375,7 +337,6 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
   </footer>
 
   <script>
-    // year
     const y = document.getElementById('y');
     if (y) y.textContent = new Date().getFullYear();
 
@@ -402,21 +363,16 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
       });
     })();
 
-    // ===== Upgraded MetaSearch logic =====
+    // MetaSearch logic (unchanged)
     (function(){
       const $ = (s, r=document) => r.querySelector(s);
       const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
-      const f = $('#metaSearch');
-      if(!f) return;
+      const f = $('#metaSearch'); if(!f) return;
 
-      // Inputs
-      const iEvent = $('#ms-event');
-      const iCity  = $('#ms-city');
-      const iSRS   = $('#ms-srs');
+      const iEvent = $('#ms-event'), iCity = $('#ms-city'), iSRS = $('#ms-srs');
       const linksWrap = $('#ms-links');
 
-      // Site toggles
       const sites = {
         google:       $('#site-google'),
         seatgeek:     $('#site-seatgeek'),
@@ -425,15 +381,9 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
         ticketmaster: $('#site-ticketmaster'),
       };
 
-      // Build query
-      const buildQuery = () => {
-        const parts = [iEvent.value.trim(), iCity.value.trim(), iSRS.value.trim()].filter(Boolean);
-        return parts.join(' ').replace(/\s+/g, ' ').trim();
-      };
-
+      const buildQuery = () => [iEvent.value.trim(), iCity.value.trim(), iSRS.value.trim()].filter(Boolean).join(' ').replace(/\s+/g,' ').trim();
       const enc = (s) => encodeURIComponent(s);
 
-      // Build URLs for each site
       function urlMap(q){
         const e = enc(q);
         return {
@@ -445,105 +395,61 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
         };
       }
 
-      // Live preview links
       function renderPreview(){
         const q = buildQuery();
         linksWrap.innerHTML = '';
         if(!q){ return; }
         const urls = urlMap(q);
-        for(const [key, checkedEl] of Object.entries(sites)){
-          if(!checkedEl.checked) continue;
+        for(const [key, el] of Object.entries(sites)){
+          if(!el.checked) continue;
           const a = document.createElement('a');
-          a.className = 'btn';
-          a.target = '_blank'; a.rel = 'noopener';
+          a.className = 'btn'; a.target = '_blank'; a.rel = 'noopener';
           a.href = urls[key];
-          a.textContent = ({
-            google:'Google',
-            seatgeek:'SeatGeek',
-            vivid:'Vivid Seats',
-            stubhub:'StubHub',
-            ticketmaster:'Ticketmaster',
-          })[key] || key;
+          a.textContent = ({google:'Google',seatgeek:'SeatGeek',vivid:'Vivid Seats',stubhub:'StubHub',ticketmaster:'Ticketmaster'})[key] || key;
           linksWrap.appendChild(a);
         }
       }
 
-      // Debounce
-      let t=null;
-      const debounced = (fn) => { clearTimeout(t); t=setTimeout(fn, 200); };
+      let t=null; const debounced = (fn)=>{ clearTimeout(t); t=setTimeout(fn,200); };
 
-      // Persist last search
       const KEY='tvg.metaSearch';
       function loadSaved(){
         try{
-          const raw = localStorage.getItem(KEY);
-          if(!raw) return;
+          const raw = localStorage.getItem(KEY); if(!raw) return;
           const s = JSON.parse(raw);
-          iEvent.value = s.event || '';
-          iCity.value  = s.city  || '';
-          iSRS.value   = s.srs   || '';
-          for(const k of Object.keys(sites)){
-            if(typeof s.sites?.[k] === 'boolean') sites[k].checked = s.sites[k];
-          }
+          iEvent.value = s.event || ''; iCity.value = s.city || ''; iSRS.value = s.srs || '';
+          for(const k of Object.keys(sites)){ if(typeof s.sites?.[k] === 'boolean') sites[k].checked = s.sites[k]; }
         }catch{}
       }
       function saveNow(){
         try{
-          const data = {
-            event: iEvent.value,
-            city:  iCity.value,
-            srs:   iSRS.value,
-            sites: Object.fromEntries(Object.entries(sites).map(([k,el])=>[k,el.checked])),
-          };
+          const data = { event:iEvent.value, city:iCity.value, srs:iSRS.value, sites:Object.fromEntries(Object.entries(sites).map(([k,el])=>[k,el.checked])) };
           localStorage.setItem(KEY, JSON.stringify(data));
         }catch{}
       }
 
-      // Actions
-      f.addEventListener('input', () => { debounced(()=>{ saveNow(); renderPreview(); }); });
+      f.addEventListener('input', ()=>{ debounced(()=>{ saveNow(); renderPreview(); }); });
       Object.values(sites).forEach(el => el.addEventListener('change', ()=>{ saveNow(); renderPreview(); }));
 
       f.addEventListener('submit', (e)=>{
         e.preventDefault();
-        const q = buildQuery();
-        if(!q){ iEvent.focus(); return; }
+        const q = buildQuery(); if(!q){ iEvent.focus(); return; }
         const urls = urlMap(q);
-        const selected = Object.entries(sites).filter(([_,el])=>el.checked);
-        // open all selected in new tabs
-        selected.forEach(([key]) => window.open(urls[key], '_blank', 'noopener'));
+        Object.entries(sites).filter(([_,el])=>el.checked).forEach(([k])=> window.open(urls[k], '_blank', 'noopener'));
       });
 
       $('#ms-copy').addEventListener('click', async ()=>{
-        const q = buildQuery();
-        if(!q){ return; }
-        try{
-          await navigator.clipboard.writeText(q);
-          toast('Search copied');
-        }catch{
-          toast('Copy failed', 'error');
-        }
+        const q = buildQuery(); if(!q) return;
+        try{ await navigator.clipboard.writeText(q); }catch{}
       });
 
       $('#ms-reset').addEventListener('click', ()=>{
         iEvent.value=''; iCity.value=''; iSRS.value='';
         Object.values(sites).forEach(el => el.checked = true);
-        saveNow(); renderPreview();
-        iEvent.focus();
+        saveNow(); renderPreview(); iEvent.focus();
       });
 
-      // Tiny toast (uses your existing showToast if present)
-      function toast(message, type='success'){
-        if (window.showToast) { showToast(message, type); return; }
-        const el = document.createElement('div');
-        el.style.cssText='position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#111826;color:#e5e7eb;border:1px solid rgba(255,255,255,.12);padding:10px 12px;border-radius:10px;z-index:1000;';
-        el.textContent = message;
-        document.body.appendChild(el);
-        setTimeout(()=>el.remove(),1600);
-      }
-
-      // init
-      loadSaved();
-      renderPreview();
+      loadSaved(); renderPreview();
     })();
   </script>
 </body>
