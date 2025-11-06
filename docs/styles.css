@@ -166,3 +166,206 @@ section#what::before{
 @media (max-width: 940px){
   section#what .grid-2{ grid-template-columns: 1fr; }
 }
+
+/* === Ticket VeriGuard — What section polish (paste at END of styles.css) === */
+
+/* Unify card look (same feel as your Why cards) */
+:root{
+  --card-bg: rgba(17,24,38,.55);
+  --card-bd: rgba(255,255,255,.08);
+  --card-radius: 16px;
+}
+.card,
+#what .card.item,
+#why .card.item{
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: var(--card-radius);
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+
+/* What section: soft seam + spacing */
+section#what{
+  background: transparent;              /* remove the hard banding */
+  position: relative;
+  padding: 72px 0 56px;
+}
+section#what::before{
+  content:"";
+  position:absolute; left:0; right:0; top:-120px; height:140px;
+  background: linear-gradient(
+    180deg,
+    rgba(11,15,20,0) 0%,
+    rgba(11,15,20,.55) 55%,
+    rgba(11,15,20,1) 100%
+  );
+  pointer-events:none;
+}
+
+/* Layout: two equal cards that align with Why grid */
+section#what .container{ max-width: 1200px; }
+section#what .grid-2{
+  display:grid; grid-template-columns:repeat(2,1fr);
+  gap:20px; align-items:stretch;
+}
+section#what .card.item{
+  display:flex; flex-direction:column; height:100%;
+}
+@media (max-width: 940px){
+  section#what .grid-2{ grid-template-columns:1fr; }
+}
+
+/* “How to make it work” bullets */
+.feature-list{ list-style:none; margin:12px 0 0; padding:0; }
+.feature-list li{
+  position:relative; padding-left:26px; margin:8px 0; color:var(--text);
+}
+.feature-list li::before{
+  content:""; position:absolute; left:0; top:7px;
+  width:12px; height:12px; border-radius:50%;
+  background: linear-gradient(45deg, #10b981, #34d399);
+  box-shadow: 0 0 0 2px rgba(16,185,129,.25);
+}
+
+/* “Behind the scenes” numbered steps */
+.steps{ list-style:none; counter-reset:step; margin:12px 0 0; padding:0; }
+.steps li{
+  counter-increment:step;
+  display:grid; grid-template-columns:28px 1fr; gap:10px;
+  margin:8px 0; color:var(--text);
+}
+.steps li::before{
+  content: counter(step);
+  display:grid; place-items:center;
+  width:28px; height:28px; border-radius:999px; font-weight:800; color:#0b0f14;
+  background: radial-gradient(circle at 30% 30%, #22d3ee, #4f46e5);
+  box-shadow: 0 8px 18px rgba(79,70,229,.35);
+}
+
+/* Title + lead copy rhythm */
+#what .section-title{ margin:0 0 12px; }
+#what p{ color:#b6c2d9; max-width:760px; }
+
+/* Match What-card visual height to Why cards */
+#what .card.item {
+  padding: 24px 28px !important;
+  min-height: 240px;
+}
+
+#what .card.item h3 {
+  margin-bottom: 10px;
+}
+
+#what .feature-list,
+#what .steps {
+  margin-top: 10px;
+}
+
+/* ==== Button System (Global) ==== */
+
+.btn,
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(17,24,38,.55);
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: background .18s ease, transform .18s ease, border-color .18s ease;
+}
+
+.btn:hover,
+a.btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08);
+}
+
+/* Primary Variant — Gradient */
+.btn-primary,
+a.btn-primary {
+  background: linear-gradient(45deg, var(--brand), var(--brand-2));
+  box-shadow: 0 4px 18px rgba(79,70,229,.45);
+  border-color: transparent;
+  color: #fff;
+}
+
+.btn-primary:hover,
+a.btn-primary:hover {
+  background: linear-gradient(45deg, var(--brand-2), var(--brand));
+  transform: translateY(-3px);
+}
+/* --- Make the WHAT cards horizontally match the WHY cards --- */
+
+/* Use the same inner width as the rest of the page */
+#what .container {
+  max-width: 1200px;          /* same as your global .container */
+  margin: 0 auto;
+  padding: 0 20px;            /* same side padding as elsewhere */
+}
+
+/* Force the same 2-column grid and gap as WHY */
+#what .grid-2 {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 20px;                  /* match WHY */
+}
+
+/* Normalize card chrome so it “feels” the same width */
+#what .card.item {
+  box-sizing: border-box;
+  padding: 20px;              /* match WHY card padding */
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* Keep the intro line from visually widening the section */
+#what > .container > p:first-of-type {
+  max-width: 68ch;            /* same readable line length as hero/why */
+  margin-bottom: 16px;
+}
+/* ==== Button System: Glow-Pill Variant ==== */
+
+.btn,
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  border: 1px solid rgba(34,211,238,.28);
+  background: rgba(15,20,28,.45);
+  color: #eaf2ff;
+  box-shadow: 0 0 20px rgba(79,70,229,.15);
+  transition: background .2s ease, transform .2s ease, box-shadow .3s ease;
+}
+
+.btn:hover,
+a.btn:hover {
+  background: rgba(34,211,238,.14);
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(34,211,238,.35);
+}
+
+/* Primary CTA — big glow gradient */
+.btn-primary,
+a.btn-primary {
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 28px rgba(79,70,229,.45);
+}
+
+.btn-primary:hover,
+a.btn-primary:hover {
+  background: linear-gradient(90deg, var(--brand-2), var(--brand));
+  transform: translateY(-3px);
+  box-shadow: 0 0 42px rgba(34,211,238,.6);
+}
