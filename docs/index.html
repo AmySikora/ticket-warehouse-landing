@@ -11,31 +11,35 @@
   <meta property="og:description" content="Smart ticket validation and anti-duplicate protection." />
   <meta property="og:image" content="./favicon_logo.png" />
 
-  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="icon" href="/favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="page-index">
   <!-- Header -->
   <header class="nav">
-    <div class="container nav--brand">
-      <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
+    <div class="nav--brand">
+      <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
-
-      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+  
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
       </button>
-
-      <!-- Nav (pills + demo) -->
-      <nav id="primary-nav" class="topnav">
-        <a href="./brokers.html" class="btn-primary" aria-current="Brokers">Brokers</a>
-        <a href="./prototype.html" class="btn-primary" aria-label="How it works">How it works</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html" class="btn-primary" target="_blank" rel="noopener">Try Live Demo</a>
-        <a href="#contact" class="btn-primary" aria-label="Contact">Contact Us</a>
+  
+      <nav class="topnav" id="primary-nav">
+        <a href="index.html"      class="nav-link nav-active btn-primary">Home</a>
+        <a href="brokers.html"    class="nav-link">Brokers</a>
+        <a href="prototype.html"  class="nav-link">How it works</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html"
+           class="nav-link" target="_blank" rel="noopener">Try Live Demo</a>
+        <a href="#contact" class="nav-link">Contact Us</a>
       </nav>
     </div>
   </header>
-
+  
+  
   <main>
     <!-- Hero -->
     <section class="hero">
@@ -161,6 +165,7 @@
         <h2 class="section-title">Questions? Contact us!</h2>
 
         <div class="card">
+          <!-- unified top strip -->
           <div class="contact-cta">
             <div>
               <h3>Want to see it with your tickets?</h3>
@@ -175,19 +180,28 @@
             </div>
           </div>
 
-          <form id="contact-form" class="contact-form" novalidate>
-            <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true" class="sr-only-trap" />
+          <!-- form -->
+          <form id="contact-form" style="display:grid; gap:12px; max-width:520px; margin-top:14px" novalidate>
+            <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
+                   style="position:absolute;left:-9999px;width:0;height:0;opacity:0" />
             <label>
               <span>Email</span><br/>
-              <input required type="email" name="email" autocomplete="email" class="contact-input"/>
+              <input required type="email" name="email" autocomplete="email"
+                     style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
             </label>
             <label>
               <span>Message</span><br/>
-              <textarea required name="message" rows="4" class="contact-textarea"></textarea>
+              <textarea required name="message" rows="4"
+                        style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
             </label>
             <button class="btn primary" type="submit" id="contact-submit">Request demo</button>
-            <p id="contact-status" class="muted mt-6"></p>
+            <p id="contact-status" class="muted" style="margin:6px 0 0"></p>
           </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
         </div>
       </div>
     </section>

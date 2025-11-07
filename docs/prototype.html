@@ -10,22 +10,29 @@
 </head>
 <body class="page-prototype">
  
-  <header>
-    <div class="container nav nav--brand">
-      <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
+  <header class="nav">
+    <div class="nav--brand">
+      <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+  
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
       </button>
-      <nav id="primary-nav" class="topnav">
-        <a href="./index.html" class="btn-primary">Home</a>
-        <a href="./brokers.html" class="btn-primary">Brokers</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html" class="btn-primary" target="_blank" rel="noopener">Try Live Demo</a>
-        <a href="./index.html#contact" class="btn-primary">Contact Us</a>
-      </nav>
+  
+      <nav class="topnav" id="primary-nav">
+        <a href="index.html"      class="nav-link">Home</a>
+        <a href="brokers.html"    class="nav-link">Brokers</a>
+        <a href="prototype.html"  class="nav-link nav-active btn-primary">How it works</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html"
+           class="nav-link" target="_blank" rel="noopener">Try Live Demo</a>
+           <a href="./index.html#contact" class="nav-link">Contact Us</a>
     </div>
   </header>
+  
+  
 
   <main>
     <section class="section">
