@@ -677,3 +677,98 @@ a.btn:hover, button.btn:hover, .btn:hover { transform: translateY(-1px); text-de
   transform: translateY(-1px);
   background: rgba(17, 24, 38, 0.95);
 }
+/* Hero layout */
+.hero {
+  padding: 72px 0 40px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr);
+  gap: 32px;
+  align-items: center;
+}
+
+/* Copy */
+.hero-copy h1 {
+  margin: 14px 0 10px;
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.1;
+}
+
+.hero-copy .lead {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: clamp(15px, 1.7vw, 18px);
+  max-width: 34rem;
+}
+
+/* CTA row */
+.hero .cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+/* Stats card */
+.hero-card {
+  display: grid;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.hero-card .stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(11,15,20,0.9);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.hero-card .note {
+  margin-top: 4px;
+  display: block;
+  font-size: 12px;
+}
+
+/* ===== Responsive tweaks ===== */
+@media (max-width: 900px) {
+  .hero {
+    padding: 56px 0 32px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .hero-copy {
+    order: 1;
+  }
+
+  .hero-card {
+    order: 2;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(26px, 7vw, 34px);
+  }
+
+  .hero .cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero .cta .btn {
+    width: auto;
+    min-width: 56%;
+  }
+
+  .hero-card {
+    width: 100%;
+  }
+}
