@@ -7,166 +7,9 @@
   <meta name="description" content="A plain-English walkthrough of what Ticket VeriGuard does and how the prototype works."/>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css" />
-
-  <style>
-    /* same header + responsive styles */
-    :root{
-      --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
-      --text:#e5e7eb; --muted:#94a3b8; --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:16px; --banner-h: 32px;
-      --nav-h: 110px; --logo-w: 300px; --nav-h-sm: 72px; --logo-w-sm: 200px;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif;
-      background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.15), transparent),
-        radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
-        var(--bg);
-      color:var(--text);
-      line-height:1.6;
-    }
-    a{color:var(--brand); text-decoration:none}
-    a:hover{text-decoration:underline}
-    .container{max-width:1000px; margin:0 auto; padding:0 20px}
-
-    .proto-banner{
-      position:sticky; top:0; z-index:60;
-      height:var(--banner-h);
-      display:flex; align-items:center; justify-content:center;
-      background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
-      color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
-      pointer-events:auto;
-    }
-
-    header{
-      position: sticky; top: var(--banner-h); z-index: 50;
-      background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 18px; margin: 12px 16px 0 16px; overflow: visible;
-      box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
-    }
-    .nav--brand{ display:grid; grid-template-columns: var(--logo-w) 1fr; align-items:center; height: var(--nav-h); column-gap:22px; padding:0 18px; position:relative}
-    .logo-bay{ height: calc(var(--nav-h) - 12px); padding-left:10px; display:flex; align-items:center}
-    .logo-img{ height:100%; width:auto; object-fit:contain; display:block }
-    .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:24px; flex-wrap:wrap }
-    .topnav a{ color:rgba(229,231,235,.92); font-weight:600; line-height:1; padding:8px 10px; border-radius:999px; text-decoration:none; transition: background-color .18s ease, color .18s ease, transform .18s ease }
-    .topnav a:hover{ background:rgba(255,255,255,.06); color:#fff; transform:translateY(-1px) }
-    .topnav .btn{ padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow: var(--shadow) }
-    .nav-toggle{ display:none; position:relative; justify-self:end; width:42px; height:36px; border:1px solid rgba(255,255,255,.18); border-radius:10px; background:rgba(17,24,38,.65); cursor:pointer }
-    .nav-toggle .bar{ position:absolute; left:8px; right:8px; height:2px; background:#e5e7eb; border-radius:1px; transition:transform .2s ease, opacity .2s ease, top .2s ease }
-    .nav-toggle .bar:nth-child(1){ top:10px } .nav-toggle .bar:nth-child(2){ top:17px } .nav-toggle .bar:nth-child(3){ top:24px }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top:17px; transform:rotate(45deg) }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity:0 }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top:17px; transform:rotate(-45deg) }
-
-    @media(max-width:900px){
-      .nav--brand{ grid-template-columns: var(--logo-w-sm) auto; height: var(--nav-h-sm); column-gap:12px }
-      .nav-toggle{ display:flex; align-items:center; justify-content:center }
-      .topnav{
-        position: fixed; left:16px; right:16px;
-        top: calc(var(--banner-h) + var(--nav-h-sm) + 12px);
-        display:none; flex-direction:column; align-items:stretch; gap:0;
-        background:rgba(11,15,20,.95); border:1px solid rgba(255,255,255,.06); border-top:none;
-        border-radius:0 0 18px 18px; overflow:hidden; transform:translateY(-6px); opacity:0; transition:transform .2s ease, opacity .2s ease; z-index:60;
-      }
-      .topnav a{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06) }
-      .topnav a:last-child{ border-bottom:none }
-      header.nav-open .topnav{ display:flex; transform:translateY(0); opacity:1 }
-    }
-
-    .section{padding:56px 0}
-    h1{font-size:42px; margin:20px 0 12px}
-    h2{margin:24px 0 10px; font-size:28px}
-    p{margin-bottom:14px}
-    .lead{color:#94a3b8; font-size:18px}
-    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
-    .grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
-    @media(max-width:900px){ .grid-3, .grid-2{ grid-template-columns:1fr } h1{font-size:34px} }
-    .card{ background:rgba(17,24,38,.6); border:1px solid rgba(255,255,255,.08); border-radius:16px; box-shadow:var(--shadow); padding:24px }
-    .btn{ display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600; border:1px solid rgba(255,255,255,.1); background:#111826; color:#e5e7eb }
-    .btn.primary{ background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff }
-    .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid rgba(255,255,255,.12); border-radius:999px; color:#94a3b8; font-size:14px }
-    .kbd{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:8px; padding:3px 6px; font-size: .95em; }
-    pre{ background:#0e1420; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; overflow:auto }
-    .cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px }
-    footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:#94a3b8}
-
-    /* --- Mobile logo overrides --- */
-    @media (max-width: 900px){
-      .logo-bay{
-        height: calc(var(--nav-h-sm) - 8px) !important;
-        padding-left: 6px;
-        overflow: hidden;
-      }
-      .logo-img{
-        height: auto !important;
-        max-height: 100% !important;
-        width: auto;
-        max-width: 100%;
-        display: block;
-        object-fit: contain;
-        object-position: left center;
-      }
-      .nav--brand{
-        grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
-      }
-    }
-
-    /* ===== MetaSearch UI (new) ===== */
-    .search-card { display:grid; gap:14px; }
-
-    .ms-form{ display:grid; gap:12px; }
-
-    .ms-label{ display:grid; gap:6px; }
-    .ms-label-text{ font-weight:700; color:#dbe4ff; }
-
-    .ms-two{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    @media (max-width: 900px){ .ms-two{ grid-template-columns:1fr; } }
-
-    .ms-input-wrap{
-      display:grid; grid-template-columns:auto 1fr; align-items:center;
-      gap:8px; background:#0e1420; border:1px solid rgba(255,255,255,.12);
-      border-radius:12px; padding:10px 12px;
-    }
-    .ms-icon{ opacity:.9; }
-    .ms-input{
-      width:100%; border:0; background:transparent; color:var(--text);
-      font-size:16px; line-height:1.4; padding:0;
-    }
-    .ms-input:focus{ outline:none; }
-
-    .ms-sites{ border:0; padding:0; margin:4px 0 0; }
-    .ms-legend{ font-weight:700; margin-bottom:8px; color:#c8d3f9; }
-
-    .ms-site-grid{ display:flex; flex-wrap:wrap; gap:8px; }
-    .pill-check{
-      display:inline-flex; align-items:center; gap:8px;
-      background:#0f1726; border:1px solid rgba(255,255,255,.12);
-      color:#e5e7eb; padding:8px 12px; border-radius:999px; cursor:pointer;
-      user-select:none;
-    }
-    .pill-check input{
-      appearance:none; width:14px; height:14px; border-radius:3px;
-      border:1px solid rgba(255,255,255,.35); display:inline-block; position:relative;
-    }
-    .pill-check input:checked{
-      background:linear-gradient(45deg,var(--brand),var(--brand-2)); border-color:transparent;
-    }
-    .pill-check input:checked::after{
-      content:""; position:absolute; inset:3px; background:#fff; border-radius:1px; mix-blend-mode:soft-light;
-    }
-
-    .ms-actions{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-    .ms-hint{ font-size:14px; }
-
-    .ms-links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
-    .ms-links a.btn{ padding:10px 14px; }
-  </style>
 </head>
-<body>
-
-
+<body class="page-prototype">
+ 
   <header>
     <div class="container nav nav--brand">
       <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
@@ -176,11 +19,10 @@
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
       <nav id="primary-nav" class="topnav">
-        <a href="./index.html" class="btn">Home</a>
-        <a href=".brokers.html" class="btn btn-ghost">Brokers</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html"
-           class="btn-ghost" target="_blank" rel="noopener">Try Live Demo</a>
-        <a href="./index.html#contact" class="btn-ghost">Contact Us</a>
+        <a href="./index.html" class="btn-primary">Home</a>
+        <a href="./brokers.html" class="btn-primary">Brokers</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="btn-primary" target="_blank" rel="noopener">Try Live Demo</a>
+        <a href="./index.html#contact" class="btn-primary">Contact Us</a>
       </nav>
     </div>
   </header>
@@ -203,13 +45,13 @@
           <div class="card">
             <h3>1) Link accounts</h3>
             <p class="muted">Choose your marketplaces or point of sale and connect them. You control what gets shared.</p>
-            <h3 style="margin-top:14px">2) Register tickets once</h3>
+            <h3 class="mt-8">2) Register tickets once</h3>
             <p class="muted">Add seat details in one place. We keep them tidy and ready for fast updates.</p>
           </div>
           <div class="card">
             <h3>3) Real-time updates</h3>
             <p class="muted">When a seat sells on any connected site, we flag it and send updates to the rest in a blink.</p>
-            <h3 style="margin-top:14px">4) Clean checkouts</h3>
+            <h3 class="mt-8">4) Clean checkouts</h3>
             <p class="muted">Fans see what is actually available. You skip double sales, refunds, and support churn.</p>
           </div>
         </div>
@@ -268,7 +110,7 @@
           </form>
 
           <div id="ms-preview">
-            <div class="muted" style="margin-top:6px">Preview links:</div>
+            <div class="muted mt-6">Preview links:</div>
             <div id="ms-links" class="ms-links"></div>
           </div>
         </div>
@@ -287,7 +129,7 @@
     <section class="section">
       <div class="container">
         <h2>Prototype: what the requests look like</h2>
-        <div class="card" style="margin-bottom:18px">
+        <div class="card mb-10">
           <h3>Add a ticket</h3>
 <pre><code>POST /api/tickets
 Authorization: Bearer &lt;YOUR_API_KEY&gt;
@@ -300,7 +142,7 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
   "status": "available"
 }</code></pre>
         </div>
-        <div class="card" style="margin-bottom:18px">
+        <div class="card mb-10">
           <h3>Mark as sold</h3>
 <pre><code>POST /api/tickets/A1-ROW3-12/sold
 Authorization: Bearer &lt;YOUR_API_KEY&gt;
@@ -309,7 +151,7 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
   "marketplace": "ExampleMarket",
   "order_id": "ORD-983221"
 }</code></pre>
-          <p class="muted" style="margin-top:8px">We send a webhook (POST to <span class="kbd">/webhooks/tickets</span>) with <span class="kbd">{"ticket_id":"A1-ROW3-12","status":"sold"}</span>.</p>
+          <p class="muted mt-6">We send a webhook (POST to <span class="kbd">/webhooks/tickets</span>) with <span class="kbd">{"ticket_id":"A1-ROW3-12","status":"sold"}</span>.</p>
         </div>
       </div>
     </section>
@@ -328,14 +170,13 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
   </main>
 
   <footer>
-    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
+    <div class="container footer-bar">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> · <a class="muted" href="#">Privacy</a> · <a class="muted" href="#">Status</a>
       </div>
     </div>
   </footer>
-
   <script>
     const y = document.getElementById('y');
     if (y) y.textContent = new Date().getFullYear();

@@ -1,486 +1,12 @@
-/* === Smooth section transitions (soft teal shimmer version) === */
-section {
-  position: relative;
-  padding: 56px 0;
-  background: linear-gradient(
-    180deg,
-    rgba(13,17,25,0.0) 0%,       /* transparent top */
-    rgba(34,211,238,0.10) 25%,   /* soft teal glow fade-in */
-    rgba(13,17,25,0.95) 75%,     /* darker base */
-    rgba(13,17,25,1) 100%        /* deep finish */
-  );
-  transition: background 1.2s ease-in-out;
-}
-
-/* Alternate subtle hue variation for depth */
-section:nth-of-type(even) {
-  background: linear-gradient(
-    180deg,
-    rgba(15,20,28,0.0) 0%,
-    rgba(99,102,241,0.12) 25%,   /* soft violet shimmer */
-    rgba(15,20,28,0.95) 75%,
-    rgba(15,20,28,1) 100%
-  );
-}
-
-/* Main background — continuous and cohesive fade */
-main {
-  background:
-    radial-gradient(circle at top center, rgba(99,102,241,0.06), transparent 70%),
-    radial-gradient(1600px 800px at 70% 0%, rgba(34,211,238,0.08), transparent 60%),
-    linear-gradient(180deg, #0b0f14 0%, #111826 100%);
-  transition: background 1s ease-in-out;
-}
-
-.navbar-logo img {
-  height: 48px;
-  width: auto;
-}
-
-.nav-links {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 24px;
-}
-
-@media (max-width: 820px) {
-  .navbar {
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .nav-links {
-    width: 100%;
-    justify-content: center;
-    margin-top: 12px;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .get-demo-btn {
-    order: 3;
-    width: auto;
-  }
-}
-
-/* ===== Global header/nav sizing (shared across all pages) ===== */
-:root {
-/* bump sizes globally */
---banner-h: 32px;
---nav-h: 120px;        /* was ~110 */
---logo-w: 360px;       /* was ~300 */
---nav-h-sm: 84px;      /* was ~72 */
---logo-w-sm: 240px;    /* was ~200 */
-}
-
-/* Layout of brand row: [logo | nav] */
-.nav--brand{
-display:grid;
-grid-template-columns: var(--logo-w) 1fr;
-align-items:center;
-height: var(--nav-h);
-column-gap: 22px;
-padding: 0 18px;
-position: relative;
-}
-
-/* Logo area + image sizing */
-.logo-bay{
-height: calc(var(--nav-h) - 8px) !important;
-padding-left: 10px;
-display:flex; align-items:center; justify-content:flex-start;
-overflow:hidden;
-}
-.logo-img{
-height: 125% !important;     /* fills the brand row height */
-width: auto !important;
-max-width: 100%;
-object-fit: contain;
-object-position: left center;
-}
-
-/* Desktop nav shouldn’t wrap/squish */
-.topnav{
-display:flex;
-align-items:center;
-justify-content:flex-end;
-gap: 24px;
-flex-wrap: nowrap;           /* keep items on one row on wide screens */
-min-width: 0;                /* prevent overflow pushing grid */
-}
-
-/* Container a touch wider so the logo+nav breathe */
-.container{ max-width: 1200px; }
-
-/* ===== Mobile tweaks ===== */
-@media (max-width: 900px){
-.nav--brand{
-  grid-template-columns: minmax(160px, var(--logo-w-sm)) auto !important;
-  height: var(--nav-h-sm);
-  column-gap: 12px;
-}
-.logo-bay{ height: calc(var(--nav-h-sm) - 6px) !important; padding-left: 6px; }
-.logo-img{ height: auto !important; max-height: 100% !important; }
-.topnav{ flex-wrap: wrap; }  /* in the slide-down menu it’s okay to wrap */
-}
-
-.btn-demo {
-  background: linear-gradient(90deg, #6366f1, #22d3ee);
-  padding: 10px 18px;
-  border-radius: 28px;
-  font-weight: 600;
-  color: white;
-  box-shadow: 0 6px 20px rgba(99,102,241,.32);
-  transition: transform .15s, opacity .15s;
-}
-.btn-demo:hover {
-  opacity: .92;
-  transform: translateY(-1px);
-}
-
-/* === What is Ticket VeriGuard — final overrides === */
-
-/* Remove the banded gradient just for this section */
-section#what{
-  background: transparent !important;
-  position: relative;
-  padding-top: 64px;           /* keeps spacing consistent */
-  padding-bottom: 56px;
-}
-
-/* Soft blend into the hero above (no hard line) */
-section#what::before{
-  content:"";
-  position:absolute;
-  left:0; right:0; top:-120px; height:160px;   /* overlaps up into hero */
-  background: linear-gradient(
-    180deg,
-    rgba(11,15,20,0) 0%,
-    rgba(11,15,20,.55) 55%,
-    rgba(11,15,20,1) 100%
-  );
-  pointer-events:none;
-}
-
-/* Stack on mobile */
-@media (max-width: 940px){
-  section#what .grid-2{ grid-template-columns: 1fr; }
-}
-
-/* === Ticket VeriGuard — What section polish (paste at END of styles.css) === */
-
-/* Unify card look (same feel as your Why cards) */
-:root{
-  --card-bg: rgba(17,24,38,.55);
-  --card-bd: rgba(255,255,255,.08);
-  --card-radius: 16px;
-}
-.card,
-#what .card.item,
-#why .card.item{
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  border-radius: var(--card-radius);
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
-}
-
-/* What section: soft seam + spacing */
-section#what{
-  background: transparent;              /* remove the hard banding */
-  position: relative;
-  padding: 72px 0 56px;
-}
-section#what::before{
-  content:"";
-  position:absolute; left:0; right:0; top:-120px; height:140px;
-  background: linear-gradient(
-    180deg,
-    rgba(11,15,20,0) 0%,
-    rgba(11,15,20,.55) 55%,
-    rgba(11,15,20,1) 100%
-  );
-  pointer-events:none;
-}
-
-/* Layout: two equal cards that align with Why grid */
-section#what .container{ max-width: 1200px; }
-section#what .grid-2{
-  display:grid; grid-template-columns:repeat(2,1fr);
-  gap:20px; align-items:stretch;
-}
-section#what .card.item{
-  display:flex; flex-direction:column; height:100%;
-}
-@media (max-width: 940px){
-  section#what .grid-2{ grid-template-columns:1fr; }
-}
-
-/* “How to make it work” bullets */
-.feature-list{ list-style:none; margin:12px 0 0; padding:0; }
-.feature-list li{
-  position:relative; padding-left:26px; margin:8px 0; color:var(--text);
-}
-.feature-list li::before{
-  content:""; position:absolute; left:0; top:7px;
-  width:12px; height:12px; border-radius:50%;
-  background: linear-gradient(45deg, #10b981, #34d399);
-  box-shadow: 0 0 0 2px rgba(16,185,129,.25);
-}
-
-/* “Behind the scenes” numbered steps */
-.steps{ list-style:none; counter-reset:step; margin:12px 0 0; padding:0; }
-.steps li{
-  counter-increment:step;
-  display:grid; grid-template-columns:28px 1fr; gap:10px;
-  margin:8px 0; color:var(--text);
-}
-.steps li::before{
-  content: counter(step);
-  display:grid; place-items:center;
-  width:28px; height:28px; border-radius:999px; font-weight:800; color:#0b0f14;
-  background: radial-gradient(circle at 30% 30%, #22d3ee, #4f46e5);
-  box-shadow: 0 8px 18px rgba(79,70,229,.35);
-}
-
-/* Title + lead copy rhythm */
-#what .section-title{ margin:0 0 12px; }
-#what p{ color:#b6c2d9; max-width:760px; }
-
-/* Match What-card visual height to Why cards */
-#what .card.item {
-  padding: 24px 28px !important;
-  min-height: 240px;
-}
-
-#what .card.item h3 {
-  margin-bottom: 10px;
-}
-
-#what .feature-list,
-#what .steps {
-  margin-top: 10px;
-}
-
-/* ==== Button System (Global) ==== */
-
-.btn,
-a.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 20px;
-  font-weight: 600;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(17,24,38,.55);
-  color: #e5e7eb;
-  cursor: pointer;
-  transition: background .18s ease, transform .18s ease, border-color .18s ease;
-}
-
-.btn:hover,
-a.btn:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255,255,255,.25);
-  background: rgba(255,255,255,.08);
-}
-
-/* Primary Variant — Gradient */
-.btn-primary,
-a.btn-primary {
-  background: linear-gradient(45deg, var(--brand), var(--brand-2));
-  box-shadow: 0 4px 18px rgba(79,70,229,.45);
-  border-color: transparent;
-  color: #fff;
-}
-
-.btn-primary:hover,
-a.btn-primary:hover {
-  background: linear-gradient(45deg, var(--brand-2), var(--brand));
-  transform: translateY(-3px);
-}
-/* --- Make the WHAT cards horizontally match the WHY cards --- */
-
-/* Use the same inner width as the rest of the page */
-#what .container {
-  max-width: 1200px;          /* same as your global .container */
-  margin: 0 auto;
-  padding: 0 20px;            /* same side padding as elsewhere */
-}
-
-/* Force the same 2-column grid and gap as WHY */
-#what .grid-2 {
-  display: grid;
-  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-  gap: 20px;                  /* match WHY */
-}
-
-/* Normalize card chrome so it “feels” the same width */
-#what .card.item {
-  box-sizing: border-box;
-  padding: 20px;              /* match WHY card padding */
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
-}
-
-/* Keep the intro line from visually widening the section */
-#what > .container > p:first-of-type {
-  max-width: 68ch;            /* same readable line length as hero/why */
-  margin-bottom: 16px;
-}
-/* ==== Button System: Glow-Pill Variant ==== */
-
-.btn,
-a.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 22px;
-  border-radius: 999px;
-  font-weight: 600;
-  border: 1px solid rgba(34,211,238,.28);
-  background: rgba(15,20,28,.45);
-  color: #eaf2ff;
-  box-shadow: 0 0 20px rgba(79,70,229,.15);
-  transition: background .2s ease, transform .2s ease, box-shadow .3s ease;
-}
-
-.btn:hover,
-a.btn:hover {
-  background: rgba(34,211,238,.14);
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(34,211,238,.35);
-}
-
-/* Primary CTA — big glow gradient */
-.btn-primary,
-a.btn-primary {
-  background: linear-gradient(90deg, var(--brand), var(--brand-2));
-  border-color: transparent;
-  color: #fff;
-  box-shadow: 0 0 28px rgba(79,70,229,.45);
-}
-
-.btn-primary:hover,
-a.btn-primary:hover {
-  background: linear-gradient(90deg, var(--brand-2), var(--brand));
-  transform: translateY(-3px);
-  box-shadow: 0 0 42px rgba(34,211,238,.6);
-}
-/* === Broker Teaser === */
-:root{
-  --brand: var(--brand, #6366f1);
-  --brand-2: var(--brand-2, #22d3ee);
-  --text: var(--text, #e5e7eb);
-  --muted: var(--muted, #94a3b8);
-  --panel: var(--panel, #101827);
-  --radius: var(--radius, 16px);
-  --shadow: var(--shadow, 0 14px 36px rgba(0,0,0,.35));
-  }
-  
-  
-  .tvb-broker-teaser{
-  position: relative;
-  padding: clamp(40px, 6vw, 72px) 0;
-  background:
-  radial-gradient(1000px 520px at 105% 10%, rgba(34,211,238,.08), transparent 60%),
-  radial-gradient(1200px 600px at -5% 40%, rgba(99,102,241,.12), transparent 70%);
-  }
-  
-  
-  .tvb-wrap{ max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-  
-  
-  .tvb-head h2{ font-size: clamp(24px, 2.4vw, 34px); color: var(--text); margin: 0 0 6px; }
-  .tvb-sub{ color: var(--muted); font-size: clamp(15px, 1.4vw, 18px); margin: 0 0 24px; }
-  
-  
-  .tvb-benefits{ display: grid; grid-template-columns: 1fr; gap: 14px; margin: 24px 0; padding: 0; list-style: none; }
-  .tvb-benefits li{ display: grid; grid-template-columns: 24px 1fr; align-items: center; gap: 12px; background: rgba(16,24,39,.5); border: 1px solid rgba(148,163,184,.18); padding: 12px 14px; border-radius: 14px; color: var(--text); box-shadow: var(--shadow);
-  transition: transform .18s ease, border-color .18s ease, background .18s ease; }
-  .tvb-benefits li:hover{ transform: translateY(-2px); border-color: rgba(99,102,241,.35); background: rgba(16,24,39,.7); }
-  .tvb-benefits svg{ width: 20px; height: 20px; opacity: .9; }
-  
-  
-  @media (min-width: 820px){
-  .tvb-benefits{ grid-template-columns: 1fr 1fr 1fr; }
-  }
-  
-  
-  .tvb-cta{ display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
-  .btn{
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 10px 16px; border-radius: 12px; text-decoration: none; font-weight: 600;
-  border: 1px solid transparent; transition: transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
-  }
-  .btn-primary{ background: linear-gradient(90deg, var(--brand), var(--brand-2)); color: #0b0f14; box-shadow: 0 10px 30px rgba(34,211,238,.16); }
-  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 12px 32px rgba(34,211,238,.24); }
-  .btn-ghost{ background: transparent; border-color: rgba(148,163,184,.28); color: var(--text); }
-  .btn-ghost:hover{ border-color: var(--brand-2); }
-  /* === Global button variants (match brand) === */
-.btn {
-  display:inline-flex; align-items:center; justify-content:center;
-  padding:10px 16px; border-radius:12px; font-weight:600; text-decoration:none;
-  border:1px solid rgba(255,255,255,.10); background:var(--panel); color:var(--text);
-  transition:transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
-}
-.btn:hover { transform: translateY(-1px); text-decoration:none; }
-.btn-primary { background: linear-gradient(90deg, var(--brand), var(--brand-2)); border-color:transparent; color:#0b0f14; }
-.btn-ghost { background: transparent; border-color: rgba(148,163,184,.28); color: var(--text); }
-.btn-ghost:hover { border-color: var(--brand-2); }
-
-/* === Broker teaser (homepage) === */
-.tvb-broker-teaser{
-  position:relative; padding:clamp(40px,6vw,72px) 0;
-  background:
-    radial-gradient(1000px 520px at 105% 10%, rgba(34,211,238,.08), transparent 60%),
-    radial-gradient(1200px 600px at -5% 40%, rgba(99,102,241,.12), transparent 70%);
-}
-.tvb-wrap{ max-width:1100px; margin:0 auto; padding:0 20px; }
-.tvb-head h2{ font-size:clamp(24px,2.4vw,34px); color:var(--text); margin:0 0 6px; }
-.tvb-sub{ color:var(--muted); font-size:clamp(15px,1.4vw,18px); margin:0 0 24px; }
-.tvb-benefits{ display:grid; grid-template-columns:1fr; gap:14px; margin:24px 0; padding:0; list-style:none; }
-.tvb-benefits li{
-  display:grid; grid-template-columns:24px 1fr; align-items:center; gap:12px;
-  background:rgba(16,24,39,.5); border:1px solid rgba(148,163,184,.18);
-  padding:12px 14px; border-radius:14px; color:var(--text); box-shadow:var(--shadow);
-  transition:transform .18s ease, border-color .18s ease, background .18s ease;
-}
-.tvb-benefits li:hover{ transform:translateY(-2px); border-color:rgba(99,102,241,.35); background:rgba(16,24,39,.7); }
-.tvb-benefits svg,
-.tvb-list svg{ width:20px; height:20px; display:block; stroke:currentColor; }
-
-/* responsive grid for teaser */
-@media (min-width:820px){
-  .tvb-benefits{ grid-template-columns:1fr 1fr 1fr; }
-}
-
-/* === Shared broker page styles (used by /brokers.html) === */
-.tvb-page{ padding:clamp(36px,6vw,64px) 0 80px; }
-.tvb-container{ max-width:1100px; margin:0 auto; padding:0 20px; }
-.tvb-panels{ display:grid; gap:16px; margin:28px 0; }
-.tvb-card{ background:rgba(16,24,39,.55); border:1px solid rgba(148,163,184,.18);
-  border-radius:16px; padding:18px; box-shadow:var(--shadow); }
-.tvb-card h3{ margin:0 0 8px; color:var(--text); font-size:clamp(18px,1.8vw,22px); }
-.tvb-card p{ margin:0; color:var(--muted); }
-.tvb-grid-2{ display:grid; gap:16px; }
-@media(min-width:900px){ .tvb-grid-2{ grid-template-columns:1fr 1fr; } }
-@media(min-width:1100px){ .tvb-panels{ grid-template-columns:1.2fr .8fr; } }
-.tvb-list{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
-.tvb-list li{ display:grid; grid-template-columns:22px 1fr; align-items:start; gap:10px; color:var(--text); }
-.tvb-cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
-.tvb-note{ font-size:13.5px; color:var(--muted); margin-top:10px; }
-/* ==== GLOBAL PACK: header/nav + buttons + teaser + brokers ==== */
-
-/* Tokens + base (safe to duplicate) */
+/* ---- Tokens ---- */
 :root{
   --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
   --text:#e5e7eb; --muted:#94a3b8; --ok:#10b981; --shadow:0 10px 30px rgba(0,0,0,.35);
   --radius:16px; --ring:0 0 0 3px rgba(79,70,229,.35);
   --banner-h:32px; --nav-h:110px; --logo-w:300px; --nav-h-sm:72px; --logo-w-sm:200px;
 }
+
+/* ---- Base ---- */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -494,27 +20,60 @@ body{
 a{color:var(--brand); text-decoration:none}
 a:hover{text-decoration:underline}
 .container{max-width:1100px; margin:0 auto; padding:0 20px}
+.block{display:block}
 
-/* Header / nav (moved from index.html so brokers page gets it) */
-header.nav{
+/* === Smooth section transitions (soft teal shimmer version) === */
+section {
+  position: relative;
+  padding: 56px 0;
+  background: linear-gradient(
+    180deg,
+    rgba(13,17,25,0.0) 0%,
+    rgba(34,211,238,0.10) 25%,
+    rgba(13,17,25,0.95) 75%,
+    rgba(13,17,25,1) 100%
+  );
+  transition: background 1.2s ease-in-out;
+}
+section:nth-of-type(even) {
+  background: linear-gradient(
+    180deg,
+    rgba(15,20,28,0.0) 0%,
+    rgba(99,102,241,0.12) 25%,
+    rgba(15,20,28,0.95) 75%,
+    rgba(15,20,28,1) 100%
+  );
+}
+main{
+  background:
+    radial-gradient(circle at top center, rgba(99,102,241,0.06), transparent 70%),
+    radial-gradient(1600px 800px at 70% 0%, rgba(34,211,238,0.08), transparent 60%),
+    linear-gradient(180deg, #0b0f14 0%, #111826 100%);
+  transition: background 1s ease-in-out;
+}
+
+/* ---- Header / Nav ---- */
+header.nav, header{
   position: sticky; top: var(--banner-h, 0px); z-index: 50;
   background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,.06);
   border-radius: 18px; margin: 12px 16px 0 16px; overflow: visible;
   box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
 }
-.nav--brand{ display:grid; grid-template-columns: var(--logo-w) 1fr; align-items:center;
-  height: var(--nav-h); column-gap:22px; padding:0 18px; position:relative; }
-.logo-bay{ height: calc(var(--nav-h) - 12px); padding-left:10px; display:flex; align-items:center; overflow:hidden; }
+.nav--brand{
+  display:grid; grid-template-columns: var(--logo-w) 1fr; align-items:center;
+  height: var(--nav-h); column-gap:22px; padding:0 18px; position:relative;
+}
+.logo-bay{
+  height: calc(var(--nav-h) - 12px); padding-left:10px;
+  display:flex; align-items:center; justify-content:flex-start; overflow:hidden;
+}
 .logo-img{ height:125%; width:auto; object-fit:contain; object-position:left center; display:block; }
 .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:24px; flex-wrap:wrap; }
-.topnav a{ color: rgba(229,231,235,.92); font-weight:600; line-height:1; padding:8px 10px; border-radius:999px; text-decoration:none;
-  transition: background-color .18s ease, color .18s ease, transform .18s ease; }
+.topnav a{ color: rgba(229,231,235,.92); font-weight:600; line-height:1; padding:8px 10px; border-radius:999px; text-decoration:none; transition: background-color .18s ease, color .18s ease, transform .18s ease; }
 .topnav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateY(-1px); }
-.nav-toggle{ display:none; position:relative; justify-self:end; width:42px; height:36px;
-  border:1px solid rgba(255,255,255,.18); border-radius:10px; background: rgba(17,24,38,.65); cursor:pointer; }
-.nav-toggle .bar{ position:absolute; left:8px; right:8px; height:2px; background:#e5e7eb; border-radius:1px;
-  transition: transform .2s ease, opacity .2s ease, top .2s ease; }
+.nav-toggle{ display:none; position:relative; justify-self:end; width:42px; height:36px; border:1px solid rgba(255,255,255,.18); border-radius:10px; background: rgba(17,24,38,.65); cursor:pointer; }
+.nav-toggle .bar{ position:absolute; left:8px; right:8px; height:2px; background:#e5e7eb; border-radius:1px; transition: transform .2s ease, opacity .2s ease, top .2s ease; }
 .nav-toggle .bar:nth-child(1){ top:10px; } .nav-toggle .bar:nth-child(2){ top:17px; } .nav-toggle .bar:nth-child(3){ top:24px; }
 .nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top:17px; transform:rotate(45deg); }
 .nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity:0; }
@@ -522,8 +81,8 @@ header.nav{
 
 @media (max-width:900px){
   .nav--brand{ grid-template-columns: var(--logo-w-sm) auto; height: var(--nav-h-sm); column-gap:12px; }
-  .logo-bay{ height: calc(var(--nav-h-sm) - 8px); padding-left:6px; }
-  .logo-img{ height:auto; max-height:100%; width:auto; max-width:100%; object-fit:contain; }
+  .logo-bay{ height: calc(var(--nav-h-sm) - 8px) !important; padding-left:6px; }
+  .logo-img{ height:auto !important; max-height:100% !important; width:auto; max-width:100%; object-fit:contain; }
   .nav-toggle{ display:flex; align-items:center; justify-content:center; }
   .topnav{
     position: fixed; left: 16px; right: 16px; top: calc(var(--banner-h) + var(--nav-h-sm) + 12px);
@@ -533,22 +92,431 @@ header.nav{
   }
   .topnav a{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06); }
   .topnav a:last-child{ border-bottom:none; }
-  header.nav.nav-open .topnav{ display:flex; transform:translateY(0); opacity:1; }
+  header.nav-open .topnav{ display:flex; transform:translateY(0); opacity:1; }
   body.menu-open::after{ content:""; position:fixed; inset:0; background:rgba(0,0,0,.35); backdrop-filter:blur(2px); z-index:40; }
   .nav--brand{ grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important; }
 }
 
-/* Buttons */
-.btn{ display:inline-flex; align-items:center; justify-content:center;
+/* ---- Cards / Grids / Text ---- */
+.card{ background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; }
+.grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+.grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
+@media (max-width: 940px){ .grid-3, .grid-2{grid-template-columns:1fr} }
+.badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid rgba(255,255,255,.12); border-radius:999px; color:var(--muted); font-size:14px}
+.muted{color:var(--muted)}
+
+/* ---- Utilities ---- */
+.mb-10{ margin-bottom:10px; }
+.mt-8{ margin-top:8px; }
+.mt-6{ margin-top:6px; }
+.flex{ display:flex; }
+.between{ justify-content:space-between; }
+.wrap{ flex-wrap:wrap; }
+.w-100{ width:100%; }
+.block{ display:block; }
+
+/* ---- Hero (index) ---- */
+body.page-index .hero{padding:72px 0 40px}
+body.page-index .hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:40px; align-items:center}
+body.page-index h1{margin:14px 0 8px; font-size:44px; line-height:1.1}
+body.page-index .lead{color:var(--muted); font-size:18px}
+body.page-index .cta{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap}
+body.page-index .stat{ display:flex; align-items:center; justify-content:space-between; background:rgba(17,24,38,.6); padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.06) }
+
+/* ---- What / Why sections ---- */
+:root{ --card-bg: rgba(17,24,38,.55); --card-bd: rgba(255,255,255,.08); --card-radius: 16px; }
+.card, #what .card.item, #why .card.item{ background: var(--card-bg); border: 1px solid var(--card-bd); border-radius: var(--card-radius); box-shadow: 0 12px 30px rgba(0,0,0,.35); }
+section#what{ background: transparent; position: relative; padding: 72px 0 56px; }
+section#what::before{ content:""; position:absolute; left:0; right:0; top:-120px; height:140px; background: linear-gradient(180deg, rgba(11,15,20,0) 0%, rgba(11,15,20,.55) 55%, rgba(11,15,20,1) 100%); pointer-events:none; }
+section#what .container{ max-width: 1200px; }
+section#what .grid-2{ display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap:20px; align-items:stretch; }
+section#what .card.item{ display:flex; flex-direction:column; height:100%; box-sizing:border-box; padding:20px; }
+@media (max-width: 940px){ section#what .grid-2{ grid-template-columns:1fr; } }
+.feature-list{ list-style:none; margin:12px 0 0; padding:0; }
+.feature-list li{ position:relative; padding-left:26px; margin:8px 0; color:var(--text); }
+.feature-list li::before{ content:""; position:absolute; left:0; top:7px; width:12px; height:12px; border-radius:50%; background: linear-gradient(45deg, #10b981, #34d399); box-shadow: 0 0 0 2px rgba(16,185,129,.25); }
+.steps{ list-style:none; counter-reset:step; margin:12px 0 0; padding:0; }
+.steps li{ counter-increment:step; display:grid; grid-template-columns:28px 1fr; gap:10px; margin:8px 0; color:var(--text); }
+.steps li::before{ content: counter(step); display:grid; place-items:center; width:28px; height:28px; border-radius:999px; font-weight:800; color:#0b0f14; background: radial-gradient(circle at 30% 30%, #22d3ee, #4f46e5); box-shadow: 0 8px 18px rgba(79,70,229,.35); }
+#what .section-title{ margin:0 0 12px; }
+#what p{ color:#b6c2d9; max-width:760px; }
+
+/* ---- Contact ---- */
+.contact-cta{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.contact-cta .actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.contact-form{ display:grid; gap:12px; max-width:520px; margin-top:14px; }
+.contact-input, .contact-textarea{ width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text); }
+.sr-only-trap{ position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+
+/* ---- Footer ---- */
+footer{padding:32px 0 60px; border-top:1px solid rgba(255,255,255,.08); color:var(--muted)}
+.footer-bar{ display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+
+/* ---- Prototype page specific ---- */
+body.page-prototype .proto-banner{
+  position:sticky; top:0; z-index:60; height:var(--banner-h);
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
+  color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
+}
+body.page-prototype .section{padding:56px 0}
+body.page-prototype h1{font-size:42px; margin:20px 0 12px}
+body.page-prototype h2{margin:24px 0 10px; font-size:28px}
+body.page-prototype p{margin-bottom:14px}
+body.page-prototype .lead{color:#94a3b8; font-size:18px}
+body.page-prototype .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+body.page-prototype .grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
+@media(max-width:900px){ body.page-prototype .grid-3, body.page-prototype .grid-2{ grid-template-columns:1fr } body.page-prototype h1{font-size:34px} }
+body.page-prototype .card{ background:rgba(17,24,38,.6); border:1px solid rgba(255,255,255,.08); border-radius:16px; box-shadow:var(--shadow); padding:24px }
+body.page-prototype .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid rgba(255,255,255,.12); border-radius:999px; color:#94a3b8; font-size:14px }
+body.page-prototype .kbd{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:8px; padding:3px 6px; font-size: .95em; }
+body.page-prototype pre{ background:#0e1420; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; overflow:auto }
+body.page-prototype .cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px }
+
+/* ===== MetaSearch UI ===== */
+.search-card { display:grid; gap:14px; }
+.ms-form{ display:grid; gap:12px; }
+.ms-label{ display:grid; gap:6px; }
+.ms-label-text{ font-weight:700; color:#dbe4ff; }
+.ms-two{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width: 900px){ .ms-two{ grid-template-columns:1fr; } }
+.ms-input-wrap{ display:grid; grid-template-columns:auto 1fr; align-items:center; gap:8px; background:#0e1420; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px; }
+.ms-icon{ opacity:.9; }
+.ms-input{ width:100%; border:0; background:transparent; color:var(--text); font-size:16px; line-height:1.4; padding:0; }
+.ms-input:focus{ outline:none; }
+.ms-sites{ border:0; padding:0; margin:4px 0 0; }
+.ms-legend{ font-weight:700; margin-bottom:8px; color:#c8d3f9; }
+.ms-site-grid{ display:flex; flex-wrap:wrap; gap:8px; }
+.pill-check{ display:inline-flex; align-items:center; gap:8px; background:#0f1726; border:1px solid rgba(255,255,255,.12); color:#e5e7eb; padding:8px 12px; border-radius:999px; cursor:pointer; user-select:none; }
+.pill-check input{ appearance:none; width:14px; height:14px; border-radius:3px; border:1px solid rgba(255,255,255,.35); display:inline-block; position:relative; }
+.pill-check input:checked{ background:linear-gradient(45deg,var(--brand),var(--brand-2)); border-color:transparent; }
+.pill-check input:checked::after{ content:""; position:absolute; inset:3px; background:#fff; border-radius:1px; mix-blend-mode:soft-light; }
+.ms-actions{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.ms-hint{ font-size:14px; }
+.ms-links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+.ms-links a.btn{ padding:10px 14px; }
+
+/* ---- Broker teaser (homepage + brokers) ---- */
+.tvb-broker-teaser{
+  position:relative; padding:clamp(40px,6vw,72px) 0;
+  background:
+    radial-gradient(1000px 520px at 105% 10%, rgba(34,211,238,.08), transparent 60%),
+    radial-gradient(1200px 600px at -5% 40%, rgba(99,102,241,.12), transparent 70%);
+}
+.tvb-wrap{ max-width:1100px; margin:0 auto; padding:0 20px; }
+.tvb-head h2{ font-size:clamp(24px,2.4vw,34px); color:var(--text); margin:0 0 6px; }
+.tvb-sub{ color:var(--muted); font-size:clamp(15px,1.4vw,18px); margin:0 0 24px; }
+.tvb-benefits{ display:grid; grid-template-columns:1fr; gap:14px; margin:24px 0; padding:0; list-style:none; }
+.tvb-benefits li{ display:grid; grid-template-columns:24px 1fr; align-items:center; gap:12px; background:rgba(16,24,39,.5); border:1px solid rgba(148,163,184,.18); padding:12px 14px; border-radius:14px; color:var(--text); box-shadow:var(--shadow); transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+.tvb-benefits li:hover{ transform: translateY(-2px); border-color: rgba(99,102,241,.35); background: rgba(16,24,39,.7); }
+.tvb-benefits svg{ width:20px; height:20px; display:block; stroke:currentColor; }
+@media (min-width:820px){ .tvb-benefits{ grid-template-columns:1fr 1fr 1fr; } }
+.tvb-cta{ display:flex; gap:12px; margin-top:18px; flex-wrap:wrap; }
+
+/* ---- Buttons: Canonical System (keep at end) ---- */
+a.btn, button.btn, .btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 600; line-height: 1;
+  text-decoration: none; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.10); background: var(--panel, #111826); color: var(--text, #e5e7eb);
+  transition: transform .15s ease, box-shadow .15s ease, background .20s ease, border-color .20s ease, opacity .20s ease;
+}
+.btn:hover { transform: translateY(-1px); text-decoration: none; }
+.btn:active { transform: translateY(0); }
+.btn:focus-visible { outline: none; box-shadow: var(--ring, 0 0 0 3px rgba(79,70,229,.35)); }
+.btn[disabled], .btn[aria-disabled="true"], .btn.is-loading { opacity: .6; cursor: not-allowed; transform: none; }
+.btn-primary, .btn.primary { background: linear-gradient(90deg, var(--brand, #4f46e5), var(--brand-2, #22d3ee)); border-color: transparent; color: #0b0f14; box-shadow: 0 8px 26px rgba(34,211,238,.18); }
+.btn-primary:hover, .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(34,211,238,.24); }
+.btn-ghost, .btn.ghost { background: transparent; border-color: rgba(148,163,184,.28); color: var(--text, #e5e7eb); }
+.btn-ghost:hover, .btn.ghost:hover { border-color: var(--brand-2, #22d3ee); background: rgba(255,255,255,.05); }
+.btn-outline { background: transparent; border-color: rgba(255,255,255,.35); }
+.btn-outline:hover { border-color: var(--brand-2, #22d3ee); background: rgba(255,255,255,.06); }
+.btn-link { background: transparent; border-color: transparent; color: var(--brand, #4f46e5); padding: 0; border-radius: 8px; }
+.btn-link:hover { text-decoration: underline; transform: none; }
+.btn-sm { padding: 8px 12px; border-radius: 10px; font-weight: 600; }
+.btn-lg { padding: 14px 22px; border-radius: 14px; font-weight: 700; }
+.btn-block, .btn.w-full { width: 100%; }
+.btn > svg, .btn > img { width: 18px; height: 18px; flex: 0 0 auto; }
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn:hover, .btn:active { transition: none !important; transform: none !important; box-shadow: none !important; }
+}
+
+/* === Normalize the "What is Ticket VeriGuard?" section === */
+:root{
+  --section-pt: 72px;   /* same top padding as neighbors */
+  --section-pb: 56px;   /* same bottom padding as neighbors */
+}
+
+/* global section rhythm (safe) */
+section { padding: var(--section-pt) 0 var(--section-pb); }
+
+/* match #what to neighbors exactly */
+#what{
+  padding: var(--section-pt) 0 var(--section-pb) !important;
+  background: transparent !important;
+}
+
+/* remove the soft seam overlay so it doesn't change perceived spacing */
+#what::before{ display: none !important; }
+
+/* use the same container width + side padding as everywhere else */
+#what .container{
+  max-width: 1100px;    /* your global .container width */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* title + lead text spacing to match surrounding sections */
+#what .section-title{ margin: 0 0 16px; }
+#what > .container > p{
+  margin: 0 0 20px;
+  max-width: 68ch;      /* same readable line length as others */
+}
+
+/* keep the two cards aligned with the WHY grid */
+#what .grid-2{
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 20px;
+}
+@media (max-width: 940px){
+  #what .grid-2{ grid-template-columns: 1fr; }
+}
+/* === Normalize the "What is Ticket VeriGuard?" block === */
+/* Win the cascade and match the global section/container rhythm */
+
+main #what{ 
+  padding:56px 0 !important;          /* same as your global section */
+  background: none !important;
+}
+main #what::before,
+main #what::after{ content:none !important; display:none !important; }
+
+main #what > .container{
+  max-width:1100px !important;        /* same as .container everywhere */
+  padding:0 20px !important;
+  margin:0 auto !important;
+}
+
+/* Title + lead copy spacing to match neighbors */
+main #what .section-title{ margin:0 0 16px !important; }
+main #what > .container > p{
+  margin:0 0 20px !important;
+  max-width:68ch !important;          /* same readable line length */
+}
+
+/* Grid + gap identical to your other 2-col sections */
+main #what .grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+@media (max-width:940px){
+  main #what .grid-2{ grid-template-columns:1fr; }
+}
+/* --- Broker-only buttons (scoped) --- */
+.tvb-broker-teaser .btn,
+.tvb-page .btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
   padding:10px 16px; border-radius:12px; font-weight:600; text-decoration:none;
   border:1px solid rgba(255,255,255,.10); background:var(--panel); color:var(--text);
-  transition:transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease; }
-.btn:hover{ transform: translateY(-1px); text-decoration:none; }
-.btn-primary{ background: linear-gradient(90deg, var(--brand), var(--brand-2)); border-color:transparent; color:#0b0f14; }
-.btn-ghost{ background: transparent; border-color: rgba(148,163,184,.28); color: var(--text); }
-.btn-ghost:hover{ border-color: var(--brand-2); }
+  transition:transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
+  cursor:pointer;
+}
+.tvb-broker-teaser .btn:hover,
+.tvb-page .btn:hover{ transform: translateY(-1px); text-decoration:none; }
 
-/* Homepage broker teaser */
+.tvb-broker-teaser .btn-primary,
+.tvb-page .btn-primary{
+  background:linear-gradient(90deg, var(--brand), var(--brand-2));
+  border-color:transparent; color:#0b0f14;
+}
+.tvb-broker-teaser .btn-ghost,
+.tvb-page .btn-ghost{
+  background:transparent; border-color:rgba(148,163,184,.28); color:var(--text);
+}
+.tvb-broker-teaser .btn-ghost:hover,
+.tvb-page .btn-ghost:hover{ border-color:var(--brand-2); }
+/* === Brokers page (scoped) === */
+.tvb-page { padding: clamp(36px, 6vw, 64px) 0 80px; }
+.tvb-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+.tvb-hero h1 { font-size: clamp(28px, 3vw, 42px); margin: 0; }
+.tvb-hero p { color: var(--muted); font-size: clamp(16px, 1.6vw, 20px); margin: 6px 0 0; }
+
+.tvb-panels { display: grid; gap: 16px; margin: 28px 0; }
+.tvb-card { background: rgba(16,24,39,.55); border: 1px solid rgba(148,163,184,.18); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+.tvb-card h3 { margin: 0 0 8px; font-size: clamp(18px, 1.8vw, 22px); }
+.tvb-card p { margin: 0; color: var(--muted); }
+
+.tvb-grid-2 { display: grid; gap: 16px; }
+@media (min-width: 900px) { .tvb-grid-2 { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1100px) { .tvb-panels { grid-template-columns: 1.2fr .8fr; } }
+
+.tvb-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.tvb-list li { display: grid; grid-template-columns: 22px 1fr; align-items: start; gap: 10px; }
+.tvb-list svg { width: 20px; height: 20px; display: block; stroke: currentColor; }
+
+.tvb-cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.tvb-note { font-size: 13.5px; color: var(--muted); margin-top: 10px; }
+
+/* Make sure no oversized page ornament shows on brokers page */
+.tvb-page::before { content: none !important; }
+/* ===== Brokers page ===== */
+.tvb-page { padding: clamp(36px, 6vw, 64px) 0 80px; }
+.tvb-wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/* Hero panel */
+.tvb-hero { margin: 0 0 18px; }
+.tvb-hero h1 { font-size: clamp(28px, 3vw, 42px); line-height: 1.2; margin: 0 0 8px; }
+.tvb-hero p  { color: var(--muted); font-size: clamp(16px, 1.6vw, 20px); margin: 0 0 14px; }
+.tvb-hero .panel {
+  background: rgba(16,24,39,.55);
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+/* Card rows */
+.tvb-row { display: grid; gap: 22px; margin: 24px 0 0; }
+@media (min-width: 1000px){ .tvb-row { grid-template-columns: 1.1fr .9fr; } }
+
+.tvb-card {
+  background: rgba(16,24,39,.55);
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.tvb-card h3 { margin: 0 0 8px; font-size: clamp(18px, 1.8vw, 22px); }
+.tvb-card p  { margin: 0; color: var(--muted); }
+
+/* Lists inside cards */
+.tvb-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+.tvb-list li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; }
+.tvb-list svg { width: 20px; height: 20px; stroke: currentColor; display: block; }
+
+/* Buttons (reuse your site’s .btn but ensure spacing here) */
+.tvb-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+.tvb-card .btn { margin-top: 10px; }
+
+/* Subtle section gutters between rows (like your screenshots) */
+.tvb-section-gap { margin-top: 34px; }
+
+/* Optional: soften the large shield SVG if present so it doesn’t dominate */
+.tvb-hero .shield-bg {
+  position: absolute; inset: auto 0 -80px 0; height: 340px; opacity: .06; pointer-events: none;
+}
+/* Brokers hero = panel */
+.tvb-hero{
+  margin: 0 0 18px;
+  background: rgba(16,24,39,.55);
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.tvb-hero h1{ font-size: clamp(28px,3vw,42px); line-height:1.2; margin:0 0 8px; }
+.tvb-hero p{ color: var(--muted); font-size: clamp(16px,1.6vw,20px); margin:0 0 14px; }
+.tvb-cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top: 12px; }
+.tvb-note{ font-size:13.5px; color:var(--muted); margin-top:10px; }
+
+/* Panels + two-column rows as in your shot */
+.tvb-page{ padding: clamp(36px,6vw,64px) 0 80px; }
+.tvb-container{ max-width:1100px; margin:0 auto; padding:0 20px; }
+.tvb-panels{ display:grid; gap:16px; margin: 28px 0; }
+.tvb-card{
+  background: rgba(16,24,39,.55);
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:16px;
+  padding:18px;
+  box-shadow: var(--shadow);
+}
+.tvb-card h3{ margin:0 0 8px; font-size: clamp(18px,1.8vw,22px); }
+.tvb-card p{ margin:0; color: var(--muted); }
+
+.tvb-grid-2{ display:grid; gap:16px; }
+@media(min-width:900px){ .tvb-grid-2{ grid-template-columns:1fr 1fr; } }
+@media(min-width:1100px){ .tvb-panels{ grid-template-columns:1.2fr .8fr; } }
+
+.tvb-list{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.tvb-list li{ display:grid; grid-template-columns:22px 1fr; align-items:start; gap:10px; }
+.tvb-list svg{ width:20px; height:20px; display:block; stroke:currentColor; }
+/* Brokers page */
+.tvb-page{ padding:clamp(36px,6vw,64px) 0 80px; }
+.tvb-container{ max-width:1100px; margin:0 auto; padding:0 20px; }
+
+/* Hero panel */
+.tvb-hero{
+  margin:0 0 18px;
+  background: rgba(16,24,39,.55);
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:16px;
+  padding:18px;
+  box-shadow: var(--shadow);
+}
+.tvb-hero h1{ font-size: clamp(28px,3vw,42px); margin:0 0 8px; }
+.tvb-hero p{ color:var(--muted); font-size: clamp(16px,1.6vw,20px); margin:0 0 14px; }
+.tvb-cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; }
+.tvb-note{ font-size:13.5px; color:var(--muted); margin-top:10px; }
+
+/* Panels / grids */
+.tvb-panels{ display:grid; gap:16px; margin:28px 0; }
+.tvb-card{ background: rgba(16,24,39,.55); border:1px solid rgba(148,163,184,.18); border-radius:16px; padding:18px; box-shadow: var(--shadow); }
+.tvb-card h3{ margin:0 0 8px; font-size: clamp(18px,1.8vw,22px); }
+.tvb-card p{ margin:0; color: var(--muted); }
+.tvb-grid-2{ display:grid; gap:16px; }
+@media (min-width:900px){ .tvb-grid-2{ grid-template-columns:1fr 1fr; } }
+@media (min-width:1100px){ .tvb-panels{ grid-template-columns:1.2fr .8fr; } }
+.tvb-list{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.tvb-list li{ display:grid; grid-template-columns:22px 1fr; align-items:start; gap:10px; }
+.tvb-list svg{ width:20px; height:20px; display:block; stroke:currentColor; }
+
+/* Buttons already shared with index */
+a.btn, button.btn, .btn{ display:inline-flex; align-items:center; justify-content:center; padding:10px 16px; border-radius:12px; font-weight:600; text-decoration:none; border:1px solid rgba(255,255,255,.10); background:var(--panel); color:var(--text); transition:transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease; cursor:pointer; }
+a.btn:hover, button.btn:hover, .btn:hover{ transform: translateY(-1px); text-decoration:none; }
+/* Brokers page */
+.tvb-page{ padding:clamp(36px,6vw,64px) 0 80px; }
+.tvb-container{ max-width:1100px; margin:0 auto; padding:0 20px; }
+.tvb-hero h1{ font-size: clamp(28px,3vw,42px); margin:0; }
+.tvb-hero p{ color:var(--muted); font-size: clamp(16px,1.6vw,20px); margin: 6px 0 0; }
+.tvb-panels{ display:grid; gap:16px; margin: 28px 0; }
+.tvb-card{ background: rgba(16,24,39,.55); border:1px solid rgba(148,163,184,.18); border-radius:16px; padding:18px; box-shadow: var(--shadow); }
+.tvb-card h3{ margin:0 0 8px; font-size: clamp(18px,1.8vw,22px); }
+.tvb-card p{ margin:0; color: var(--muted); }
+.tvb-grid-2{ display:grid; gap:16px; }
+@media(min-width:900px){ .tvb-grid-2{ grid-template-columns:1fr 1fr; } }
+@media(min-width:1100px){ .tvb-panels{ grid-template-columns:1.2fr .8fr; } }
+.tvb-list{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.tvb-list li{ display:grid; grid-template-columns:22px 1fr; align-items:start; gap:10px; }
+.tvb-list svg{ width:20px; height:20px; display:block; stroke:currentColor; }
+.tvb-cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+.tvb-note{ font-size:13.5px; color:var(--muted); margin-top:10px; }
+/* --- Button system (robust aliases) --- */
+a.btn, button.btn, .btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 16px; border-radius:12px; font-weight:600; text-decoration:none;
+  border:1px solid rgba(255,255,255,.10); background:var(--panel); color:var(--text);
+  transition:transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
+  cursor:pointer;
+}
+a.btn:hover, button.btn:hover, .btn:hover { transform: translateY(-1px); text-decoration:none; }
+
+/* Primary variant: supports both 'btn-primary' and 'btn primary' */
+.btn-primary, .btn.primary {
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  border-color: transparent;
+  color: #0b0f14;
+}
+
+/* Ghost variant: supports 'btn-ghost' and 'btn ghost' */
+.btn-ghost, .btn.ghost {
+  background: transparent;
+  border-color: rgba(148,163,184,.28);
+  color: var(--text);
+}
+.btn-ghost:hover, .btn.ghost:hover { border-color: var(--brand-2); }/* Homepage broker teaser */
 .tvb-broker-teaser{
   position:relative; padding:clamp(40px,6vw,72px) 0;
   background:
@@ -609,4 +577,103 @@ a.btn:hover, button.btn:hover, .btn:hover { transform: translateY(-1px); text-de
   border-color: rgba(148,163,184,.28);
   color: var(--text);
 }
-.btn-ghost:hover, .btn.ghost:hover { border-color: var(--brand-2); }
+.btn-ghost:hover, .btn.ghost:hover { border-color: var(--brand-2); }/* === Base Button === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 14px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(17, 24, 38, 0.6);
+  color: #e5e7eb;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(79, 70, 229, 0.35);
+  color: #fff;
+}
+
+/* === Primary Gradient Button === */
+.btn-primary {
+  background: linear-gradient(90deg, #22d3ee, #4f46e5);
+  border: none;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.45),
+              0 0 30px rgba(34, 211, 238, 0.25);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(79, 70, 229, 0.6),
+              0 0 40px rgba(34, 211, 238, 0.35);
+}
+
+/* === Ghost Button (used in nav & secondary actions) === */
+.btn-ghost {
+  background: rgba(17, 24, 38, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e5e7eb;
+}
+
+.btn-ghost:hover {
+  background: linear-gradient(90deg, rgba(34, 211, 238, 0.15), rgba(79, 70, 229, 0.15));
+  border-color: rgba(79, 70, 229, 0.35);
+  color: #fff;
+}
+
+/* === Outline Button (optional) === */
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid rgba(34, 211, 238, 0.8);
+  color: #22d3ee;
+}
+
+.btn-outline:hover {
+  background: rgba(34, 211, 238, 0.1);
+  color: #fff;
+}
+
+/* === Disabled (optional) === */
+.btn[disabled],
+.btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+/* === Glowing Button === */
+.btn-glow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 10px 20px;
+  color: #fff;
+  background: rgba(17, 24, 38, 0.85);
+  border: none;
+  box-shadow:
+    0 0 12px rgba(79, 70, 229, 0.45),
+    0 0 25px rgba(34, 211, 238, 0.25),
+    inset 0 0 0 1px rgba(255,255,255,0.06);
+  transition: all 0.25s ease;
+}
+
+.btn-glow:hover {
+  box-shadow:
+    0 0 20px rgba(79, 70, 229, 0.65),
+    0 0 40px rgba(34, 211, 238, 0.4),
+    inset 0 0 0 1px rgba(255,255,255,0.08);
+  transform: translateY(-1px);
+  background: rgba(17, 24, 38, 0.95);
+}
