@@ -137,6 +137,17 @@
           <a class="btn btn-ghost" href="/verify.html">Upload CSV</a>
         </div>
       </section>
+      <section class="tvg-embed-preview">
+        <h2>Live Ticket Verification Demo</h2>
+        <div id="tvg-widget"></div>
+        <script src="https://amysikora.github.io/ticket-warehouse-landing/widget.js" async></script>
+        <script>
+          window.TVGWidget.mount('#tvg-widget', {
+            whiteLabel: true,
+            accent: '#22d3ee'
+          });
+        </script>
+      </section>
     </div>
   </main>
 

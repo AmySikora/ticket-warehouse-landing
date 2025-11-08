@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Ticket VeriGuard — Embedded Checker</title>
+  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
+  <style>
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
+        var(--bg);
+    }
+    .tvg-embed-shell{
+      max-width:1100px;
+      margin:12px auto 32px;
+      padding:14px 20px 20px;
+      border-radius:18px;
+      background:rgba(11,15,20,.96);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(148,163,184,.18);
+    }
+    .tvg-embed-header{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;
+    }
+    .tvg-embed-title{font-size:18px;font-weight:600;}
+    .tvg-embed-sub{font-size:13px;color:var(--muted);}
+    .tvg-embed-brand{font-size:11px;color:var(--muted);}
+    .tvg-embed-brand a{color:var(--brand-2);text-decoration:none;}
+  </style>
+</head>
+<body>
+  <div class="tvg-embed-shell">
+    <div class="tvg-embed-header">
+      <div>
+        <div class="tvg-embed-title">Ticket listing conflict check</div>
+        <div class="tvg-embed-sub">Upload a CSV. We’ll highlight seats that appear more than once.</div>
+      </div>
+      <div class="tvg-embed-brand" id="tvg-embed-brand">
+        Powered by <a href="https://ticketveriguard.com" target="_blank" rel="noopener">Ticket VeriGuard</a>
+      </div>
+    </div>
+
+    <!-- Reuse core widget markup -->
+    <section class="tvb-card">
+      <div class="tvg-upload-row" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+        <label class="btn btn-ghost" style="cursor:pointer; margin:0;">
+          <input id="tvg-file-input" type="file" accept=".csv" style="display:none;">
+          Choose CSV file
+        </label>
+        <button id="tvg-analyze-btn" class="btn btn-primary" disabled>Analyze CSV</button>
+        <div id="tvg-file-label" class="tvb-note">No file selected.</div>
+      </div>
+      <div class="tvg-stats" style="display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;">
+        <div class="tvb-note">Uploads analyzed: <strong id="tvg-upload-count">0</strong></div>
+        <div class="tvb-note">Potential conflicts: <strong id="tvg-conflict-count">0</strong></div>
+      </div>
+    </section>
+
+    <section class="tvb-card" style="margin-top:10px;">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+        <select id="tvg-filter-decision" class="btn btn-ghost" style="padding-inline:10px; min-width:140px;">
+          <option value="all">All decisions</option>
+          <option value="Approved">Approved</option>
+          <option value="Blocked">Blocked</option>
+        </select>
+        <select id="tvg-filter-marketplace" class="btn btn-ghost" style="padding-inline:10px; min-width:140px;">
+          <option value="all">All marketplaces</option>
+        </select>
+        <button id="tvg-reset-filters" class="btn btn-ghost">Reset</button>
+      </div>
+    </section>
+
+    <section class="tvb-card" style="margin-top:10px;">
+      <div class="tvg-table-wrap" style="overflow:auto; max-height:480px; border-radius:16px;">
+        <table id="tvg-results-table" style="width:100%; border-collapse:collapse; min-width:720px;">
+          <thead>
+            <tr>
+              <th data-key="id">ID</th>
+              <th data-key="decision">Decision</th>
+              <th data-key="marketplace">Marketplace</th>
+              <th data-key="event">Event</th>
+              <th data-key="section">Section</th>
+              <th data-key="row">Row</th>
+              <th data-key="seat">Seat</th>
+              <th data-key="when">When</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // White-label + accent via URL params
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const wl = params.get('whiteLabel');
+      const accent = params.get('accent');
+      if (wl === 'true') {
+        const brand = document.getElementById('tvg-embed-brand');
+        if (brand) brand.style.display = 'none';
+      }
+      if (accent) {
+        document.documentElement.style.setProperty('--brand-2', accent);
+      }
+    })();
+  </script>
+
+  <!-- Reuse the same verify logic (slightly trimmed, no download/feedback) -->
+  <script>
+    (function(){
+      const fileInput = document.getElementById('tvg-file-input');
+      const analyzeBtn = document.getElementById('tvg-analyze-btn');
+      const fileLabel = document.getElementById('tvg-file-label');
+      const uploadCountEl = document.getElementById('tvg-upload-count');
+      const conflictCountEl = document.getElementById('tvg-conflict-count');
+      const tableBody = document.querySelector('#tvg-results-table tbody');
+      const filterDecision = document.getElementById('tvg-filter-decision');
+      const filterMarketplace = document.getElementById('tvg-filter-marketplace');
+      const resetFiltersBtn = document.getElementById('tvg-reset-filters');
+
+      let allRows = [];
+      let sortState = { key: null, dir: 1 };
+      let uploadCount = 0;
+
+      function normalizeHeader(h){ return (h || '').toString().trim().toLowerCase(); }
+      function onFileChange(){
+        if (fileInput.files && fileInput.files[0]) {
+          fileLabel.textContent = fileInput.files[0].name;
+          analyzeBtn.disabled = false;
+        } else {
+          fileLabel.textContent = 'No file selected.';
+          analyzeBtn.disabled = true;
+        }
+      }
+
+      function parseAndAnalyze(){
+        const file = fileInput.files[0];
+        if (!file || !window.Papa) return;
+        analyzeBtn.disabled = true;
+        analyzeBtn.textContent = 'Analyzing...';
+
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            uploadCount++; uploadCountEl.textContent = uploadCount.toString();
+            const data = results.data || [];
+            const mapped = data.map((row, idx) => {
+              const headers = Object.keys(row).reduce((acc, key) => {
+                acc[normalizeHeader(key)] = row[key]; return acc;
+              }, {});
+              function pick(){ for (const n of arguments){ const v = headers[normalizeHeader(n)]; if (v) return v; } return ''; }
+              const event = pick('event','event_id');
+              const section = pick('section');
+              const r = pick('row');
+              const seat = pick('seat');
+              const mp = pick('marketplace','source','channel');
+              const id = pick('id','listing_id') || (idx + 1);
+              const when = pick('when','timestamp','time','created_at');
+              return {
+                id: id.toString(),
+                event,
+                marketplace: mp,
+                section,
+                row: r,
+                seat,
+                when,
+                decision: 'Approved',
+                _key: [event,section,r,seat].join('|')
+              };
+            });
+
+            const byKey = {};
+            mapped.forEach(row => {
+              if (!row._key || row._key === '|||') return;
+              if (!byKey[row._key]) byKey[row._key] = [];
+              byKey[row._key].push(row);
+            });
+
+            let conflicts = 0;
+            Object.values(byKey).forEach(list => {
+              if (list.length > 1) {
+                list.forEach((row, i) => {
+                  if (i === 0) row.decision = 'Approved';
+                  else { row.decision = 'Blocked'; conflicts++; }
+                });
+              }
+            });
+
+            conflictCountEl.textContent = conflicts.toString();
+            allRows = mapped;
+            populateMarketplaceFilter();
+            renderTable();
+
+            analyzeBtn.textContent = 'Analyze CSV';
+            analyzeBtn.disabled = false;
+          },
+          error: () => {
+            analyzeBtn.textContent = 'Analyze CSV';
+            analyzeBtn.disabled = false;
+            alert('Sorry, there was a problem reading that file.');
+          }
+        });
+      }
+
+      function populateMarketplaceFilter(){
+        const seen = new Set();
+        allRows.forEach(r => { if (r.marketplace) seen.add(r.marketplace); });
+        filterMarketplace.innerHTML = '<option value="all">All marketplaces</option>';
+        Array.from(seen).sort().forEach(mp => {
+          const opt = document.createElement('option');
+          opt.value = mp; opt.textContent = mp;
+          filterMarketplace.appendChild(opt);
+        });
+      }
+
+      function getFilteredRows(){
+        const d = filterDecision.value;
+        const mp = filterMarketplace.value;
+        return allRows.filter(r => {
+          if (d !== 'all' && r.decision !== d) return false;
+          if (mp !== 'all' && r.marketplace !== mp) return false;
+          return true;
+        });
+      }
+
+      function renderTable(){
+        const rows = getFilteredRows().slice();
+        if (sortState.key) {
+          rows.sort((a,b)=>{
+            const va=(a[sortState.key]||'').toString().toLowerCase();
+            const vb=(b[sortState.key]||'').toString().toLowerCase();
+            if(va<vb) return -1*sortState.dir;
+            if(va>vb) return 1*sortState.dir;
+            return 0;
+          });
+        }
+        tableBody.innerHTML='';
+        rows.forEach(r=>{
+          const tr=document.createElement('tr');
+          if (r.decision==='Blocked'){
+            tr.style.background='rgba(127,29,29,.92)'; tr.style.color='#e5e7eb';
+          } else if (r.decision==='Approved'){
+            tr.style.background='rgba(6,95,70,.96)'; tr.style.color='#e5e7eb';
+          } else {
+            tr.style.background='rgba(17,24,39,.96)'; tr.style.color='#e5e7eb';
+          }
+          tr.innerHTML=`
+            <td>${r.id||''}</td>
+            <td>${r.decision||''}</td>
+            <td>${r.marketplace||''}</td>
+            <td>${r.event||''}</td>
+            <td>${r.section||''}</td>
+            <td>${r.row||''}</td>
+            <td>${r.seat||''}</td>
+            <td>${r.when||''}</td>
+          `;
+          tableBody.appendChild(tr);
+        });
+      }
+
+      function onHeaderClick(e){
+        const th=e.target.closest('th[data-key]'); if(!th) return;
+        const key=th.getAttribute('data-key');
+        if(sortState.key===key) sortState.dir=-sortState.dir;
+        else { sortState.key=key; sortState.dir=1; }
+        renderTable();
+      }
+
+      function resetFilters(){
+        filterDecision.value='all';
+        filterMarketplace.value='all';
+        renderTable();
+      }
+
+      fileInput.addEventListener('change', onFileChange);
+      analyzeBtn.addEventListener('click', parseAndAnalyze);
+      document.querySelector('#tvg-results-table thead').addEventListener('click', onHeaderClick);
+      filterDecision.addEventListener('change', renderTable);
+      filterMarketplace.addEventListener('change', renderTable);
+      resetFiltersBtn.addEventListener('click', resetFilters);
+    })();
+  </script>
+</body>
+</html>
