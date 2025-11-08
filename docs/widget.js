@@ -13,9 +13,10 @@
           return;
         }
   
-        var srcBase = options.src || 'https://YOUR_DOMAIN/embed.html';
-        var params = [];
+        // Always load the local embed.html
+        var srcBase = options.src || 'embed.html';
   
+        var params = [];
         if (options.whiteLabel === true) params.push('whiteLabel=true');
         if (options.accent) params.push('accent=' + encodeURIComponent(options.accent));
   
