@@ -859,3 +859,188 @@ a.btn:hover, button.btn:hover, .btn:hover { transform: translateY(-1px); text-de
 body {
   overflow-x: hidden;
 }
+/* === Nav links (shared) === */
+
+.topnav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(229,231,235,0.92);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255,255,255,0.06);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.nav-active {
+  background: linear-gradient(90deg, #4f46e5, #22d3ee);
+  color: #0b0f14;
+  border-color: transparent;
+}
+
+/* === Buttons (shared) === */
+
+a.btn, button.btn, .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: #111826;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+              background 0.2s ease, border-color 0.2s ease;
+}
+
+a.btn:hover, button.btn:hover, .btn:hover {
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.btn-primary, .btn.primary {
+  background: linear-gradient(90deg, #4f46e5, #22d3ee);
+  border-color: transparent;
+  color: #0b0f14;
+}
+
+.btn-ghost, .btn.ghost {
+  background: transparent;
+  border-color: rgba(148,163,184,0.28);
+  color: #e5e7eb;
+}
+
+.btn-ghost:hover, .btn.ghost:hover {
+  border-color: #22d3ee;
+}
+
+/* === Brokers / verify layout (tvb-*) === */
+
+.tvb-page {
+  padding: clamp(40px, 6vw, 70px) 0 72px;
+}
+
+.tvb-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.tvb-hero h1 {
+  font-size: clamp(26px, 3vw, 40px);
+  margin: 0 0 8px;
+}
+
+.tvb-hero p {
+  margin: 0 0 10px;
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+.tvb-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tvb-note {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 6px;
+}
+
+.tvb-panels {
+  display: grid;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.tvb-grid-2 {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.tvb-card {
+  background: rgba(15,23,42,0.92);
+  border: 1px solid rgba(148,163,184,0.25);
+  border-radius: 16px;
+  padding: 18px 16px;
+  box-shadow: 0 14px 36px rgba(0,0,0,0.45);
+}
+
+.tvb-card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+.tvb-card p {
+  margin: 0;
+  color: #94a3b8;
+}
+
+.tvb-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.tvb-list li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 8px;
+  align-items: flex-start;
+  color: #e5e7eb;
+}
+
+.tvb-list svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+/* Responsive grid for panels */
+@media (min-width: 900px) {
+  .tvb-panels {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+  .tvb-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* === Embed preview on brokers page === */
+
+.tvg-embed-preview {
+  margin-top: 22px;
+}
+
+.tvg-embed-preview h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: #e5e7eb;
+}
+
