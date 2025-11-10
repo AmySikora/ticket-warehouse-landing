@@ -15,13 +15,13 @@
       <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
-  
+
       <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
-  
+
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
         <a href="brokers.html" class="nav-link nav-active">Brokers</a>
@@ -31,9 +31,8 @@
            class="nav-link" target="_blank" rel="noopener">Try Live Demo</a>
         <a href="index.html#contact" class="nav-link">Contact Us</a>
       </nav>
-      
     </div>
-  </header>  
+  </header>
 
   <main class="tvb-page">
     <div class="tvb-container">
@@ -43,7 +42,6 @@
         <div class="tvb-cta-row">
           <a class="btn btn-primary" href="mailto:hello@ticketveriguard.com?subject=Free%20Pilot%20Request%20(Ticket%20VeriGuard)">Start Free Pilot</a>
           <a class="btn btn-ghost" href="verify.html">Try the CSV Check</a>
-
         </div>
         <div class="tvb-note">No IT team required • Works alongside your current tools</div>
       </section>
@@ -140,21 +138,11 @@
           <a class="btn btn-ghost" href="verify.html">Try the CSV Check</a>
         </div>
       </section>
+
       <section class="tvg-embed-preview">
         <h2>Live Ticket Verification Demo</h2>
         <div id="tvg-widget"></div>
-        <script src="widget.js?v=3"></script>
-        <script>
-          if (window.TVGWidget) {
-            window.TVGWidget.mount('#tvg-widget', {
-              whiteLabel: true,
-              accent: '#22d3ee'
-            });
-          } else {
-            console.error('TVGWidget not loaded');
-          }
-        </script>
-      </section>      
+      </section>
     </div>
   </main>
 
@@ -169,51 +157,8 @@
     </div>
   </footer>
 
-  <script>
-    // Set year in footer if #y exists
-    (function () {
-      const y = document.getElementById('y');
-      if (y) y.textContent = new Date().getFullYear();
-    })();
-  
-    // Mobile nav toggle (shared across all pages)
-    (function () {
-      const header = document.querySelector('header.nav');
-      const toggle = document.getElementById('navToggle');
-      const nav = document.getElementById('primary-nav');
-      if (!header || !toggle || !nav) return;
-  
-      function openMenu() {
-        toggle.setAttribute('aria-expanded', 'true');
-        header.classList.add('nav-open');
-        nav.classList.add('is-open');
-        document.body.classList.add('menu-open');
-      }
-  
-      function closeMenu() {
-        toggle.setAttribute('aria-expanded', 'false');
-        header.classList.remove('nav-open');
-        nav.classList.remove('is-open');
-        document.body.classList.remove('menu-open');
-      }
-  
-      toggle.addEventListener('click', () => {
-        const isOpen = header.classList.contains('nav-open');
-        isOpen ? closeMenu() : openMenu();
-      });
-  
-      nav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', closeMenu);
-      });
-  
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 900) closeMenu();
-      });
-  
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeMenu();
-      });
-    })();
-  </script>
+  <!-- Load widget + shared JS -->
+  <script src="widget.js?v=3" defer></script>
+  <script src="./js/main.js" defer></script>
 </body>
 </html>

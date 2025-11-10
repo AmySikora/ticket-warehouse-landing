@@ -240,6 +240,67 @@ a.btn, button.btn, .btn {
 @media (prefers-reduced-motion: reduce) {
   .btn, .btn:hover, .btn:active { transition: none !important; transform: none !important; box-shadow: none !important; }
 }
+/* === Broker Pilot CTA (shared) === */
+
+.tvg-pilot-card {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.tvg-pilot-label h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+.tvg-pilot-label p {
+  margin: 0;
+}
+
+.tvg-pilot-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  color: #cbd5f5;
+}
+
+.tvg-pilot-list li::before {
+  content: "•";
+  margin-right: 6px;
+  color: #22d3ee;
+}
+
+.tvg-pilot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.tvg-pilot-btn {
+  font-weight: 600;
+}
+
+.tvg-pilot-secondary {
+  font-size: 12px;
+}
+
+/* Slight visual boost on Brokers page hero CTA */
+.tvg-pilot-highlight {
+  border-color: rgba(34,211,238,0.5);
+  box-shadow: 0 18px 40px rgba(15,23,42,0.7);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tvg-pilot-card {
+    gap: 8px;
+  }
+}
 
 /* === Normalize the "What is Ticket VeriGuard?" section === */
 :root{
@@ -939,6 +1000,248 @@ a.btn:hover, button.btn:hover, .btn:hover {
   font-size: 20px;
   color: #e5e7eb;
 }
+/* === Verify page enhancements (tvg-*) === */
+
+.tvg-upload-card { margin-top: 18px; }
+
+.tvg-upload-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.tvg-file-label input[type="file"] {
+  display: none;
+}
+
+.tvg-file-label {
+  cursor: pointer;
+}
+
+.tvg-file-name {
+  min-width: 140px;
+}
+
+.tvg-microcopy {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.tvg-summary-strip {
+  margin-top: 10px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(15,23,42,0.98);
+  border: 1px solid rgba(75,85,99,0.6);
+  color: #9ca3af;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.tvg-summary-strip.is-visible {
+  display: flex;
+}
+
+.tvg-summary-strip strong {
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+.tvg-summary-pill {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(17,24,39,1);
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* Filters */
+
+.tvg-filter-card { margin-top: 14px; }
+
+.tvg-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.tvg-filter-select {
+  padding-inline: 10px;
+  min-width: 150px;
+}
+
+.tvg-filter-spacer {
+  flex: 1;
+}
+
+/* Table */
+
+.tvg-table-card { margin-top: 14px; }
+
+.tvg-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.tvg-table-wrap {
+  overflow: auto;
+  max-height: 540px;
+  border-radius: 16px;
+}
+
+#tvg-results-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+  font-size: 13px;
+}
+
+#tvg-results-table thead {
+  background: rgba(15,23,42,1);
+}
+
+#tvg-results-table th,
+#tvg-results-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid rgba(15,23,42,1);
+  text-align: left;
+  color: #9ca3af;
+}
+
+#tvg-results-table th {
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.tvg-empty-row td {
+  padding: 14px 10px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* Conflict groups */
+
+.tvg-group-label-row td {
+  background:
+    radial-gradient(circle at left, rgba(79,70,229,0.18), transparent),
+    rgba(9,9,16,1);
+  color: #22d3ee;
+  font-weight: 500;
+  font-size: 12px;
+  border-bottom-color: rgba(31,41,55,1);
+}
+
+.tvg-row {
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.18s ease;
+  animation: tvg-fade-in 0.22s ease-out;
+}
+
+.tvg-conflict-row {
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    rgba(79,70,229,0.16),
+    rgba(15,23,42,1)
+  );
+  color: #e5e7eb;
+}
+
+.tvg-conflict-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #22d3ee;
+}
+
+.tvg-clean-row {
+  background: rgba(9,9,16,0.96);
+  color: #e5e7eb;
+}
+
+.tvg-row:hover {
+  transform: translateY(-1px);
+}
+
+/* Status pills */
+
+.tvg-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  gap: 4px;
+}
+
+.tvg-status-risk {
+  background: rgba(127,29,29,0.95);
+  color: #fecaca;
+}
+
+.tvg-status-ok {
+  background: rgba(22,101,52,0.98);
+  color: #bbf7d0;
+}
+
+/* Feedback */
+
+.tvg-feedback-card { margin-top: 14px; }
+
+.tvg-feedback-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Footer */
+
+.tvg-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Animations */
+
+@keyframes tvg-fade-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive tweaks */
+
+@media (max-width: 768px) {
+  #tvg-results-table {
+    min-width: 0;
+    font-size: 12px;
+  }
+
+  #tvg-results-table th,
+  #tvg-results-table td {
+    padding: 6px;
+  }
+
+  .tvg-table-wrap {
+    max-height: 420px;
+  }
+}
 
 /* === What is Ticket VeriGuard (match Why section) === */
 
@@ -1205,4 +1508,35 @@ a.btn:hover, button.btn:hover, .btn:hover {
     flex-wrap: wrap;
     gap: 10px;
   }
+}
+
+
+/* Ensure main content never overlaps or “eats” the nav */
+.tvb-page {
+  padding: clamp(40px, 6vw, 70px) 0 72px;
+}
+
+/* Standard container for brokers/verify pages */
+.tvb-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Shared page layout for brokers/verify */
+.brokers-page .tvb-page,
+.verify-page .tvb-page {
+  padding: 40px 0 72px;   /* creates breathing room below sticky nav */
+}
+
+.tvb-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Tiny nudge so hero cards don't glue to nav */
+.brokers-page .tvb-hero,
+.verify-page .tvb-hero {
+  margin-top: 0;
 }

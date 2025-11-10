@@ -10,16 +10,20 @@
   <!-- PapaParse for CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
 </head>
-<body>
-  <!-- Reuse same header/nav as index -->
+<body class="verify-page">
+  <!-- Header -->
   <header class="nav">
-    <div class="container nav--brand">
-      <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
+    <div class="nav--brand">
+      <a href="index.html" class="logo-bay" aria-label="Ticket VeriGuard">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
+
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
       </button>
+
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
         <a href="brokers.html" class="nav-link">Brokers</a>
@@ -29,62 +33,73 @@
            class="nav-link" target="_blank" rel="noopener">Try Live Demo</a>
         <a href="index.html#contact" class="nav-link">Contact Us</a>
       </nav>
-      
     </div>
   </header>
 
   <main class="tvb-page">
     <div class="tvb-container">
-      <header class="tvb-hero">
+    <section class="tvb-hero">
+      <!-- Hero -->
         <h1>Upload your listings. We’ll flag the risky duplicates.</h1>
-        <p>Drop in a CSV from any marketplace export. Ticket VeriGuard finds seats listed more than once across your data and marks what should be blocked.</p>
+        <p>
+          Upload a CSV file with your ticket listings from any site you use.
+          Ticket VeriGuard looks for the same seat showing up more than once
+          and shows you which listings are safe and which ones you should block.
+        </p>
         <div class="tvg-verify-meta tvb-note">
-          Works entirely in your browser for this demo • No data stored
+          In this demo, a “conflict” means the exact same
+          <strong>event, section, row, and seat</strong> appears on more than one row.
+          This check runs only in your browser — we don’t save your file.
         </div>
-      </header>
+    </section>
 
-      <!-- Upload + stats -->
-      <section class="tvb-card" style="margin-top:18px;">
-        <div class="tvg-upload-row" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
-          <label class="btn btn-ghost" style="cursor:pointer; margin:0;">
-            <input id="tvg-file-input" type="file" accept=".csv" style="display:none;">
+      <!-- Upload + summary -->
+      <section class="tvb-card tvg-upload-card">
+        <div class="tvg-upload-row">
+          <label class="btn btn-ghost tvg-file-label">
+            <input id="tvg-file-input" type="file" accept=".csv">
             Choose CSV file
           </label>
           <button id="tvg-analyze-btn" class="btn btn-primary" disabled>Analyze CSV</button>
-          <div id="tvg-file-label" class="tvb-note">No file selected.</div>
+          <button id="tvg-sample-btn" class="btn btn-ghost">Try sample CSV</button>
+          <div id="tvg-file-label" class="tvb-note tvg-file-name">No file selected.</div>
         </div>
-        <div class="tvg-stats" style="display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;">
-          <div class="tvb-note">Uploads analyzed: <strong id="tvg-upload-count">0</strong></div>
-          <div class="tvb-note">Potential conflicts found: <strong id="tvg-conflict-count">0</strong></div>
+
+        <div class="tvg-microcopy">
+          All checks in this demo run locally in your browser. No files are uploaded or stored.
+        </div>
+
+        <div id="tvg-summary" class="tvg-summary-strip" aria-live="polite">
+          <!-- Filled by JS -->
         </div>
       </section>
 
       <!-- Filters -->
-      <section class="tvb-card" style="margin-top:14px;">
-        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+      <section class="tvb-card tvg-filter-card">
+        <div class="tvg-filter-row">
           <div class="tvb-note">Filter:</div>
-          <select id="tvg-filter-decision" class="btn btn-ghost" style="padding-inline:10px; min-width:150px;">
+          <select id="tvg-filter-decision" class="btn btn-ghost tvg-filter-select">
             <option value="all">All decisions</option>
             <option value="Approved">Approved only</option>
             <option value="Blocked">Blocked only</option>
           </select>
-          <select id="tvg-filter-marketplace" class="btn btn-ghost" style="padding-inline:10px; min-width:150px;">
+          <select id="tvg-filter-marketplace" class="btn btn-ghost tvg-filter-select">
             <option value="all">All marketplaces</option>
           </select>
           <button id="tvg-reset-filters" class="btn btn-ghost">Reset</button>
-          <div style="flex:1;"></div>
+          <div class="tvg-filter-spacer"></div>
           <button id="tvg-download-clean" class="btn btn-ghost" disabled>Download cleaned CSV</button>
         </div>
       </section>
 
       <!-- Table -->
-      <section class="tvb-card" style="margin-top:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px;">
-          <h3 style="margin:0;">Listing decisions</h3>
-          <div class="tvb-note">Click a column header to sort.</div>
+      <section class="tvb-card tvg-table-card">
+        <div class="tvg-table-header">
+          <h3>Listing decisions</h3>
+          <div class="tvb-note">Click a column header to sort. Conflict groups are labeled.</div>
         </div>
-        <div class="tvg-table-wrap" style="overflow:auto; max-height:540px; border-radius:16px;">
-          <table id="tvg-results-table" style="width:100%; border-collapse:collapse; min-width:720px;">
+        <div class="tvg-table-wrap">
+          <table id="tvg-results-table">
             <thead>
               <tr>
                 <th data-key="id">ID</th>
@@ -98,15 +113,19 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Filled dynamically -->
+              <tr class="tvg-empty-row">
+                <td colspan="8">
+                  Upload a CSV above or try the sample file to see duplicate seat checks here.
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
       </section>
 
       <!-- Feedback -->
-      <section class="tvb-card" style="margin-top:14px;">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <section class="tvb-card tvg-feedback-card">
+        <div class="tvg-feedback-row">
           <span class="tvb-note">Was this conflict check helpful?</span>
           <button id="tvg-thumb-up" class="btn btn-ghost">👍 Yes</button>
           <button id="tvg-thumb-down" class="btn btn-ghost">👎 Not really</button>
@@ -114,11 +133,32 @@
         </div>
       </section>
 
+      <!-- Broker Pilot CTA (your new section) -->
+      <section class="tvb-card tvg-pilot-card">
+        <div class="tvg-pilot-label">
+          <h3>Ready to see this on your real inventory?</h3>
+          <p class="tvb-note">
+            Send a recent CSV export (or let us pull a sample). We’ll run this exact conflict logic,
+            share a summary of risky seats, and walk through it with you in a short call.
+          </p>
+        </div>
+        <ul class="tvg-pilot-list">
+          <li>No engineering work required on your side.</li>
+          <li>We only use your file to generate conflict insights for you.</li>
+          <li>If we catch &ge; 1 real duplicate, we’ll map out next steps.</li>
+        </ul>
+        <a
+          class="btn btn-primary tvg-pilot-btn"
+          href="mailto:amy@ticketveriguard.com?subject=Ticket%20VeriGuard%20Broker%20Pilot&body=Name:%0DCompany:%0DMarketplaces%20used:%0DOk%20to%20send%20sample%20CSV:%20Yes/No%0DNotes:"
+        >
+          Start Free Broker Pilot
+        </a>
+      </section>
     </div>
   </main>
 
   <footer>
-    <div class="container" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap">
+    <div class="container tvg-footer">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> ·
@@ -128,275 +168,6 @@
     </div>
   </footer>
 
-  <script>
-    // year
-    const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
-
-    // nav toggle (same as index)
-    (function(){
-      const hdr = document.querySelector('header.nav');
-      const btn = document.querySelector('.nav-toggle');
-      const nav = document.getElementById('primary-nav');
-      if(!btn || !hdr || !nav) return;
-      const toggle = () => {
-        const isOpen = nav.classList.toggle('is-open');
-        btn.setAttribute('aria-expanded', String(isOpen));
-        hdr.classList.toggle('nav-open', isOpen);
-        document.body.classList.toggle('menu-open', isOpen);
-      };
-      btn.addEventListener('click', toggle);
-      nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-        nav.classList.remove('is-open'); btn.setAttribute('aria-expanded','false');
-        hdr.classList.remove('nav-open'); document.body.classList.remove('menu-open');
-      }));
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { nav.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); hdr.classList.remove('nav-open'); document.body.classList.remove('menu-open'); } });
-    })();
-
-    // VERIFY LOGIC
-    (function(){
-      const fileInput = document.getElementById('tvg-file-input');
-      const analyzeBtn = document.getElementById('tvg-analyze-btn');
-      const fileLabel = document.getElementById('tvg-file-label');
-      const uploadCountEl = document.getElementById('tvg-upload-count');
-      const conflictCountEl = document.getElementById('tvg-conflict-count');
-      const tableBody = document.querySelector('#tvg-results-table tbody');
-      const filterDecision = document.getElementById('tvg-filter-decision');
-      const filterMarketplace = document.getElementById('tvg-filter-marketplace');
-      const resetFiltersBtn = document.getElementById('tvg-reset-filters');
-      const downloadBtn = document.getElementById('tvg-download-clean');
-      const thumbUp = document.getElementById('tvg-thumb-up');
-      const thumbDown = document.getElementById('tvg-thumb-down');
-      const feedbackLabel = document.getElementById('tvg-feedback-label');
-
-      let allRows = [];
-      let sortState = { key: null, dir: 1 };
-      let uploadCount = 0;
-
-      function normalizeHeader(h){
-        return (h || '').toString().trim().toLowerCase();
-      }
-
-      function onFileChange(){
-        if (fileInput.files && fileInput.files[0]) {
-          fileLabel.textContent = fileInput.files[0].name;
-          analyzeBtn.disabled = false;
-        } else {
-          fileLabel.textContent = 'No file selected.';
-          analyzeBtn.disabled = true;
-        }
-      }
-
-      function parseAndAnalyze(){
-        const file = fileInput.files[0];
-        if (!file || !window.Papa) return;
-        analyzeBtn.disabled = true;
-        analyzeBtn.textContent = 'Analyzing...';
-
-        Papa.parse(file, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => {
-            uploadCount++;
-            uploadCountEl.textContent = uploadCount.toString();
-
-            const data = results.data || [];
-            const mapped = data.map((row, idx) => {
-              // flexible headers (id/listing_id, etc)
-              const headers = Object.keys(row).reduce((acc, key) => {
-                acc[normalizeHeader(key)] = row[key];
-                return acc;
-              }, {});
-              function pick(...names){
-                for (const n of names) {
-                  const v = headers[normalizeHeader(n)];
-                  if (v !== undefined && v !== '') return v;
-                }
-                return '';
-              }
-
-              const event = pick('event', 'event_id', 'eventname');
-              const section = pick('section');
-              const r = pick('row');
-              const seat = pick('seat');
-              const mp = pick('marketplace', 'source', 'channel');
-              const id = pick('id', 'listing_id', 'external_id') || (idx + 1);
-              const when = pick('when', 'timestamp', 'time', 'created_at');
-
-              return {
-                id: id.toString(),
-                event,
-                marketplace: mp,
-                section,
-                row: r,
-                seat,
-                when,
-                // decision filled later
-                decision: 'Approved',
-                _key: [event, section, r, seat].join('|')
-              };
-            });
-
-            // detect duplicates by event+section+row+seat
-            const byKey = {};
-            mapped.forEach((row) => {
-              if (!row._key || row._key === '|||') return;
-              if (!byKey[row._key]) byKey[row._key] = [];
-              byKey[row._key].push(row);
-            });
-
-            let conflictCount = 0;
-            Object.values(byKey).forEach(list => {
-              if (list.length > 1) {
-                // mark first as Approved, others Blocked (demo logic)
-                list.forEach((row, i) => {
-                  if (i === 0) {
-                    row.decision = 'Approved';
-                  } else {
-                    row.decision = 'Blocked';
-                    conflictCount++;
-                  }
-                });
-              }
-            });
-
-            conflictCountEl.textContent = conflictCount.toString();
-            allRows = mapped;
-            populateMarketplaceFilter();
-            renderTable();
-            downloadBtn.disabled = allRows.length === 0;
-
-            analyzeBtn.textContent = 'Analyze CSV';
-            analyzeBtn.disabled = false;
-          },
-          error: () => {
-            analyzeBtn.textContent = 'Analyze CSV';
-            analyzeBtn.disabled = false;
-            alert('Sorry, there was a problem reading that file.');
-          }
-        });
-      }
-
-      function populateMarketplaceFilter(){
-        const seen = new Set();
-        allRows.forEach(r => { if (r.marketplace) seen.add(r.marketplace); });
-        filterMarketplace.innerHTML = '<option value="all">All marketplaces</option>';
-        Array.from(seen).sort().forEach(mp => {
-          const opt = document.createElement('option');
-          opt.value = mp;
-          opt.textContent = mp;
-          filterMarketplace.appendChild(opt);
-        });
-      }
-
-      function getFilteredRows(){
-        const d = filterDecision.value;
-        const mp = filterMarketplace.value;
-        return allRows.filter(r => {
-          if (d !== 'all' && r.decision !== d) return false;
-          if (mp !== 'all' && r.marketplace !== mp) return false;
-          return true;
-        });
-      }
-
-      function renderTable(){
-        const rows = getFilteredRows().slice();
-
-        if (sortState.key) {
-          rows.sort((a,b) => {
-            const va = (a[sortState.key] || '').toString().toLowerCase();
-            const vb = (b[sortState.key] || '').toString().toLowerCase();
-            if (va < vb) return -1 * sortState.dir;
-            if (va > vb) return 1 * sortState.dir;
-            return 0;
-          });
-        }
-
-        tableBody.innerHTML = '';
-        rows.forEach(r => {
-          const tr = document.createElement('tr');
-          tr.className = 'tvg-row';
-
-          if (r.decision === 'Blocked') {
-            tr.style.background = 'rgba(127,29,29,.92)';
-            tr.style.color = '#e5e7eb';
-          } else if (r.decision === 'Approved') {
-            tr.style.background = 'rgba(6,95,70,.96)';
-            tr.style.color = '#e5e7eb';
-          } else {
-            tr.style.background = 'rgba(17,24,39,.96)';
-            tr.style.color = '#e5e7eb';
-          }
-
-          tr.innerHTML = `
-            <td>${r.id || ''}</td>
-            <td>${r.decision || ''}</td>
-            <td>${r.marketplace || ''}</td>
-            <td>${r.event || ''}</td>
-            <td>${r.section || ''}</td>
-            <td>${r.row || ''}</td>
-            <td>${r.seat || ''}</td>
-            <td>${r.when || ''}</td>
-          `;
-          tableBody.appendChild(tr);
-        });
-      }
-
-      function onHeaderClick(e){
-        const th = e.target.closest('th[data-key]');
-        if (!th) return;
-        const key = th.getAttribute('data-key');
-        if (!key) return;
-        if (sortState.key === key) {
-          sortState.dir = -sortState.dir;
-        } else {
-          sortState.key = key;
-          sortState.dir = 1;
-        }
-        renderTable();
-      }
-
-      function resetFilters(){
-        filterDecision.value = 'all';
-        filterMarketplace.value = 'all';
-        renderTable();
-      }
-
-      function downloadCleanedCSV(){
-        if (!allRows.length) return;
-        const headers = ['id','decision','marketplace','event','section','row','seat','when'];
-        const lines = [headers.join(',')];
-        allRows.forEach(r => {
-          const vals = headers.map(h => `"${(r[h] || '').toString().replace(/"/g,'""')}"`);
-          lines.push(vals.join(','));
-        });
-        const blob = new Blob([lines.join('\n')], {type:'text/csv;charset=utf-8;'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'ticket-veriguard-cleaned.csv';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-      }
-
-      function handleThumb(up){
-        feedbackLabel.textContent = up
-          ? 'Thanks — glad it helped!'
-          : 'Thanks — your feedback helps us improve.';
-      }
-
-      fileInput.addEventListener('change', onFileChange);
-      analyzeBtn.addEventListener('click', parseAndAnalyze);
-      document.querySelector('#tvg-results-table thead')
-        .addEventListener('click', onHeaderClick);
-      filterDecision.addEventListener('change', renderTable);
-      filterMarketplace.addEventListener('change', renderTable);
-      resetFiltersBtn.addEventListener('click', resetFilters);
-      downloadBtn.addEventListener('click', downloadCleanedCSV);
-      thumbUp.addEventListener('click', () => handleThumb(true));
-      thumbDown.addEventListener('click', () => handleThumb(false));
-    })();
-  </script>
+  <script src="./js/main.js" defer></script>
 </body>
 </html>

@@ -9,36 +9,38 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="page-prototype">
- 
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
-  
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav">
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
-  
+
       <nav class="topnav" id="primary-nav">
-        <a href="index.html"      class="nav-link">Home</a>
-        <a href="brokers.html"    class="nav-link">Brokers</a>
-        <a href="prototype.html"  class="nav-link nav-active btn-primary">How it works</a>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="brokers.html" class="nav-link">Brokers</a>
+        <a href="verify.html" class="nav-link">CSV Check</a>
+        <a href="prototype.html" class="nav-link nav-active">How it works</a>
         <a href="https://amysikora.github.io/tvg-demo/index.html"
            class="nav-link" target="_blank" rel="noopener">Try Live Demo</a>
-           <a href="./index.html#contact" class="nav-link">Contact Us</a>
+        <a href="./index.html#contact" class="nav-link">Contact Us</a>
+      </nav>
     </div>
   </header>
-  
-  
 
   <main>
     <section class="section">
       <div class="container">
         <h1>How Ticket VeriGuard works</h1>
-        <p class="lead">Connect where you sell, register your tickets once, and let instant updates keep every listing accurate. This page shows the nuts and bolts.</p>
+        <p class="lead">
+          Connect where you sell, register your tickets once, and let instant updates keep every listing accurate.
+          This page shows the nuts and bolts.
+        </p>
         <div class="cta-row">
           <a class="btn btn-primary" href="./index.html#contact">Contact us</a>
         </div>
@@ -128,7 +130,11 @@
       <div class="container">
         <h2>“Two people tried to buy the same ticket,” what happens?</h2>
         <div class="card">
-          <p>Without coordination, both checkouts might succeed. With Ticket VeriGuard, the first confirmed buyer wins. The moment that happens, we send a webhook <span class="kbd">POST</span> to the other marketplaces saying the ticket is sold. Their pages update, and the second buyer sees it before paying. No refund and no angry emails.</p>
+          <p>
+            Without coordination, both checkouts might succeed. With Ticket VeriGuard, the first confirmed buyer wins.
+            The moment that happens, we send a webhook <span class="kbd">POST</span> to the other marketplaces saying the ticket is sold.
+            Their pages update, and the second buyer sees it before paying. No refund and no angry emails.
+          </p>
         </div>
       </div>
     </section>
@@ -158,7 +164,10 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
   "marketplace": "ExampleMarket",
   "order_id": "ORD-983221"
 }</code></pre>
-          <p class="muted mt-6">We send a webhook (POST to <span class="kbd">/webhooks/tickets</span>) with <span class="kbd">{"ticket_id":"A1-ROW3-12","status":"sold"}</span>.</p>
+          <p class="muted mt-6">
+            We send a webhook (POST to <span class="kbd">/webhooks/tickets</span>) with
+            <span class="kbd">{"ticket_id":"A1-ROW3-12","status":"sold"}</span>.
+          </p>
         </div>
       </div>
     </section>
@@ -180,125 +189,13 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
     <div class="container footer-bar">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
       <div class="muted">
-        <a class="muted" href="#">Terms</a> · <a class="muted" href="#">Privacy</a> · <a class="muted" href="#">Status</a>
+        <a class="muted" href="#">Terms</a> ·
+        <a class="muted" href="#">Privacy</a> ·
+        <a class="muted" href="#">Status</a>
       </div>
     </div>
   </footer>
-  <script>
-    const y = document.getElementById('y');
-    if (y) y.textContent = new Date().getFullYear();
 
-    // mobile nav toggle
-    (function(){
-      const hdr = document.querySelector('header');
-      const btn = document.querySelector('.nav-toggle');
-      const nav = document.getElementById('primary-nav');
-      if(!btn || !hdr || !nav) return;
-      const toggle = () => {
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!isOpen));
-        hdr.classList.toggle('nav-open', !isOpen);
-      };
-      btn.addEventListener('click', toggle);
-      nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-        btn.setAttribute('aria-expanded','false'); hdr.classList.remove('nav-open');
-      }));
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          btn.setAttribute('aria-expanded','false');
-          hdr.classList.remove('nav-open');
-        }
-      });
-    })();
-
-    // MetaSearch logic (unchanged)
-    (function(){
-      const $ = (s, r=document) => r.querySelector(s);
-      const $$ = (s, r=document) => [...r.querySelectorAll(s)];
-
-      const f = $('#metaSearch'); if(!f) return;
-
-      const iEvent = $('#ms-event'), iCity = $('#ms-city'), iSRS = $('#ms-srs');
-      const linksWrap = $('#ms-links');
-
-      const sites = {
-        google:       $('#site-google'),
-        seatgeek:     $('#site-seatgeek'),
-        vivid:        $('#site-vivid'),
-        stubhub:      $('#site-stubhub'),
-        ticketmaster: $('#site-ticketmaster'),
-      };
-
-      const buildQuery = () => [iEvent.value.trim(), iCity.value.trim(), iSRS.value.trim()].filter(Boolean).join(' ').replace(/\s+/g,' ').trim();
-      const enc = (s) => encodeURIComponent(s);
-
-      function urlMap(q){
-        const e = enc(q);
-        return {
-          google:       `https://www.google.com/search?q="%22${e}%22"+site%3Aviagogo.com+OR+site%3Astubhub.com+OR+site%3Avividseats.com+OR+site%3Aseatgeek.com`,
-          seatgeek:     `https://seatgeek.com/search?search=${e}`,
-          vivid:        `https://www.vividseats.com/concerts/${e}`,
-          stubhub:      `https://www.stubhub.com/find?q=${e}`,
-          ticketmaster: `https://www.ticketmaster.com/search?q=${e}`,
-        };
-      }
-
-      function renderPreview(){
-        const q = buildQuery();
-        linksWrap.innerHTML = '';
-        if(!q){ return; }
-        const urls = urlMap(q);
-        for(const [key, el] of Object.entries(sites)){
-          if(!el.checked) continue;
-          const a = document.createElement('a');
-          a.className = 'btn'; a.target = '_blank'; a.rel = 'noopener';
-          a.href = urls[key];
-          a.textContent = ({google:'Google',seatgeek:'SeatGeek',vivid:'Vivid Seats',stubhub:'StubHub',ticketmaster:'Ticketmaster'})[key] || key;
-          linksWrap.appendChild(a);
-        }
-      }
-
-      let t=null; const debounced = (fn)=>{ clearTimeout(t); t=setTimeout(fn,200); };
-
-      const KEY='tvg.metaSearch';
-      function loadSaved(){
-        try{
-          const raw = localStorage.getItem(KEY); if(!raw) return;
-          const s = JSON.parse(raw);
-          iEvent.value = s.event || ''; iCity.value = s.city || ''; iSRS.value = s.srs || '';
-          for(const k of Object.keys(sites)){ if(typeof s.sites?.[k] === 'boolean') sites[k].checked = s.sites[k]; }
-        }catch{}
-      }
-      function saveNow(){
-        try{
-          const data = { event:iEvent.value, city:iCity.value, srs:iSRS.value, sites:Object.fromEntries(Object.entries(sites).map(([k,el])=>[k,el.checked])) };
-          localStorage.setItem(KEY, JSON.stringify(data));
-        }catch{}
-      }
-
-      f.addEventListener('input', ()=>{ debounced(()=>{ saveNow(); renderPreview(); }); });
-      Object.values(sites).forEach(el => el.addEventListener('change', ()=>{ saveNow(); renderPreview(); }));
-
-      f.addEventListener('submit', (e)=>{
-        e.preventDefault();
-        const q = buildQuery(); if(!q){ iEvent.focus(); return; }
-        const urls = urlMap(q);
-        Object.entries(sites).filter(([_,el])=>el.checked).forEach(([k])=> window.open(urls[k], '_blank', 'noopener'));
-      });
-
-      $('#ms-copy').addEventListener('click', async ()=>{
-        const q = buildQuery(); if(!q) return;
-        try{ await navigator.clipboard.writeText(q); }catch{}
-      });
-
-      $('#ms-reset').addEventListener('click', ()=>{
-        iEvent.value=''; iCity.value=''; iSRS.value='';
-        Object.values(sites).forEach(el => el.checked = true);
-        saveNow(); renderPreview(); iEvent.focus();
-      });
-
-      loadSaved(); renderPreview();
-    })();
-  </script>
+  <script src="./js/main.js" defer></script>
 </body>
 </html>
