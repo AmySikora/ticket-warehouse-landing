@@ -1,0 +1,7 @@
+id,marketplace,event,section,row,seat,when
+1,StubHub,Concert A (Aug 1 2025),112,H,H,2025-07-20T10:15:00Z
+2,Vivid Seats,Concert A (Aug 1 2025),112,H,H,2025-07-20T10:16:00Z
+3,SeatGeek,Concert A (Aug 1 2025),112,H,H,2025-07-20T10:17:00Z
+4,StubHub,Game B (Sep 10 2025),210,B,B,2025-07-21T09:00:00Z
+5,SeatGeek,Game B (Sep 10 2025),210,B,B,2025-07-21T09:02:00Z
+6,Ticketmaster,Festival C (Jul 4 2025),14,A,A,2025-06-15T11:00:00Z
