@@ -251,69 +251,6 @@ a.btn, button.btn, .btn {
 section { padding: var(--section-pt) 0 var(--section-pb); }
 
 /* match #what to neighbors exactly */
-#what{
-  padding: var(--section-pt) 0 var(--section-pb) !important;
-  background: transparent !important;
-}
-
-/* remove the soft seam overlay so it doesn't change perceived spacing */
-#what::before{ display: none !important; }
-
-/* use the same container width + side padding as everywhere else */
-#what .container{
-  max-width: 1100px;    /* your global .container width */
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* title + lead text spacing to match surrounding sections */
-#what .section-title{ margin: 0 0 16px; }
-#what > .container > p{
-  margin: 0 0 20px;
-  max-width: 68ch;      /* same readable line length as others */
-}
-
-/* keep the two cards aligned with the WHY grid */
-#what .grid-2{
-  display: grid;
-  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-  gap: 20px;
-}
-@media (max-width: 940px){
-  #what .grid-2{ grid-template-columns: 1fr; }
-}
-/* === Normalize the "What is Ticket VeriGuard?" block === */
-/* Win the cascade and match the global section/container rhythm */
-
-main #what{ 
-  padding:56px 0 !important;          /* same as your global section */
-  background: none !important;
-}
-main #what::before,
-main #what::after{ content:none !important; display:none !important; }
-
-main #what > .container{
-  max-width:1100px !important;        /* same as .container everywhere */
-  padding:0 20px !important;
-  margin:0 auto !important;
-}
-
-/* Title + lead copy spacing to match neighbors */
-main #what .section-title{ margin:0 0 16px !important; }
-main #what > .container > p{
-  margin:0 0 20px !important;
-  max-width:68ch !important;          /* same readable line length */
-}
-
-/* Grid + gap identical to your other 2-col sections */
-main #what .grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-@media (max-width:940px){
-  main #what .grid-2{ grid-template-columns:1fr; }
-}
 /* --- Broker-only buttons (scoped) --- */
 .tvb-broker-teaser .btn,
 .tvb-page .btn{
@@ -774,26 +711,6 @@ a.btn:hover, button.btn:hover, .btn:hover { transform: translateY(-1px); text-de
 }
 /* ==== Responsive hero stacking (fix rough tablet/mobile layout) ==== */
 
-@media (max-width: 1100px) {
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1fr;      /* stack */
-    gap: 24px;
-    align-items: flex-start;
-  }
-
-  .hero-copy {
-    order: 1;
-  }
-
-  .hero-card {
-    order: 2;
-    width: 100%;
-    max-width: 460px;
-    margin: 0 auto 4px;              /* centered, not jammed right */
-  }
-}
-
 @media (max-width: 640px) {
   .hero {
     padding: 56px 0 32px;
@@ -812,27 +729,6 @@ a.btn:hover, button.btn:hover, .btn:hover { transform: translateY(-1px); text-de
   .hero .cta .btn {
     width: auto;
     min-width: 60%;
-  }
-}
-/* === Final hero responsiveness overrides === */
-
-/* Tablet & down: stack the hero columns */
-@media (max-width: 1100px) {
-  body.page-index .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    align-items: flex-start;
-  }
-
-  body.page-index .hero-copy {
-    order: 1;
-  }
-
-  body.page-index .hero-card {
-    order: 2;
-    max-width: 480px;
-    width: 100%;
-    margin: 0 auto 4px;
   }
 }
 
@@ -1042,4 +938,271 @@ a.btn:hover, button.btn:hover, .btn:hover {
   margin: 0 0 10px;
   font-size: 20px;
   color: #e5e7eb;
+}
+
+/* === What is Ticket VeriGuard (match Why section) === */
+
+#what {
+  padding: 72px 0 56px;
+  background: transparent;
+}
+
+#what .container {
+  max-width: 1100px;      /* same as global .container */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Heading & intro align with Why */
+#what .section-title,
+#what > .container > h2 {
+  margin: 0 0 16px;
+}
+
+#what > .container > p {
+  margin: 0 0 24px;
+  max-width: 68ch;
+  color: var(--muted);
+}
+
+/* Cards layout: same grid + card style as Why */
+#what .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+#what .card.item {
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+@media (max-width: 940px) {
+  #what .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+/* === Hero layout: side-by-side on desktop, stack only on small screens === */
+
+/* Desktop / tablet: two columns */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr);
+  gap: 32px;
+  align-items: center;
+}
+
+/* Stack only under 900px */
+@media (max-width: 900px) {
+  .hero-grid,
+  body.page-index .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .hero-copy {
+    order: 1;
+  }
+
+  .hero-card[aria-label="Key stats"] {
+    order: 2;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto 4px;
+  }
+}
+/* === What & Why: align with each other and remove hard background seam === */
+
+/* Turn off the global gradient background just for these two sections */
+#what,
+#why {
+  padding: 72px 0 56px;
+  background: transparent !important;
+}
+
+/* Kill any leftover decorative overlays */
+#what::before,
+#what::after,
+#why::before,
+#why::after {
+  content: none !important;
+}
+
+/* Use the same container as the hero + why cards */
+#what .container,
+#why .container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Headings: same left indent & spacing */
+#what h2,
+#why h2 {
+  margin: 0 0 16px;
+}
+
+/* Intro text under "What is" */
+#what > .container > p {
+  margin: 0 0 24px;
+  max-width: 68ch;
+  color: var(--muted);
+}
+
+/* "What is" cards: same grid rhythm as Why section */
+#what .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+#what .card.item {
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+@media (max-width: 940px) {
+  #what .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+/* === Hero: side-by-side on desktop, matching full-width cards when stacked === */
+
+/* Desktop / tablet: two columns */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr);
+  gap: 32px;
+  align-items: center;
+}
+
+/* Stack only under 900px, and make both cards full container width */
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .hero-copy {
+    order: 1;
+  }
+
+  .hero-card {
+    order: 2;
+  }
+
+  /* Both hero blocks = full-width cards like the sections below */
+  .hero-copy.card.hero-card,
+  .hero > .container > .hero-grid > .hero-card[aria-label="Key stats"] {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 16px;
+  }
+}
+/* === Hero fixes === */
+
+/* Side-by-side on large screens */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr);
+  gap: 32px;
+  align-items: stretch;
+}
+
+/* Match both cards visually */
+.hero-copy.card.hero-card,
+.hero-card[aria-label="Key stats"] {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Center buttons horizontally */
+.hero .cta {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* Stack on smaller screens, but same width cards */
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .hero-copy.card.hero-card,
+  .hero-card[aria-label="Key stats"] {
+    max-width: none;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero .cta {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero .cta .btn {
+    width: 80%;
+    max-width: 320px;
+  }
+}
+/* === Hero: when stacked, make both cards full-width === */
+
+@media (max-width: 900px) {
+  /* Stack the hero */
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* Both hero cards take full container width */
+  .hero-copy.card.hero-card,
+  .hero-card[aria-label="Key stats"] {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 16px;      /* remove narrow centered look */
+  }
+
+  /* Optional: keep the stats card snug under the main card */
+  .hero-card[aria-label="Key stats"] {
+    margin-top: 0;
+  }
+}
+
+/* === Hero: make both cards full-width only when stacked === */
+
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;      /* stack the two cards */
+    gap: 24px;
+  }
+
+  /* both hero cards use the full container width */
+  .hero-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;                       /* no centered/narrow look */
+  }
+
+  /* optional: nicer CTA when stacked */
+  .hero .cta {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }
