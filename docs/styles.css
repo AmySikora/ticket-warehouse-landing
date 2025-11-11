@@ -91,7 +91,6 @@ header.nav, header{
     overflow:hidden; transform:translateY(-6px); opacity:0; transition: transform .2s ease, opacity .2s ease; z-index:60;
   }
   .topnav a{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06); }
-  .topnav a:last-child{ border-bottom:none; }
   header.nav-open .topnav{ display:flex; transform:translateY(0); opacity:1; }
   body.menu-open::after{ content:""; position:fixed; inset:0; background:rgba(0,0,0,.35); backdrop-filter:blur(2px); z-index:40; }
   .nav--brand{ grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important; }
@@ -294,6 +293,139 @@ a.btn, button.btn, .btn {
   border-color: rgba(34,211,238,0.5);
   box-shadow: 0 18px 40px rgba(15,23,42,0.7);
 }
+
+/* ========== Verify Table Layout ========== */
+/* ============================
+   Ticket VeriGuard - Verify Table
+   ============================ */
+
+   .tvg-table-wrap {
+    margin-top: 8px;
+    max-height: 360px;            /* scroll area */
+    overflow-y: auto;
+    overflow-x: auto;
+    position: relative;
+    border-radius: 16px;
+  }
+  
+  /* Base table */
+  #tvg-results-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;          /* keeps columns aligned */
+    font-size: 0.9rem;
+  }
+  
+  /* Sticky header */
+  #tvg-results-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  
+    background: #020817;          /* match card bg */
+    color: rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
+  }
+  
+  /* Generic body cells */
+  #tvg-results-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.9);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  
+  /* All data rows (any row that is NOT a group label) */
+  #tvg-results-table tbody tr:not(.tvg-group-label-row) {
+    background-color: rgba(0, 0, 0, 0.18);
+    transition: background-color 0.15s ease;
+  }
+  
+  #tvg-results-table tbody tr:not(.tvg-group-label-row):hover {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+  
+  /* Conflict rows: subtle tint */
+  #tvg-results-table tbody tr.tvg-conflict-row {
+    background-color: rgba(255, 0, 0, 0.04);
+  }
+  
+  /* Conflict group label rows */
+  #tvg-results-table tbody tr.tvg-group-label-row td {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.78);
+    background: #050816;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    white-space: normal;
+  }
+  /* Table row hover: soft accent glow */
+#tvg-results-table tbody tr:not(.tvg-group-label-row):hover {
+  background-color: rgba(34, 211, 238, 0.06); /* accent tint */
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12) inset;
+}
+/* Download cleaned CSV button */
+#tvg-download-clean.btn,
+#tvg-download-clean.btn-ghost {
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  border: 1px solid rgba(148, 163, 253, 0.35);
+  color: rgba(226, 232, 240, 0.9);
+  background: radial-gradient(
+    circle at top left,
+    rgba(148, 163, 253, 0.16),
+    rgba(15, 23, 42, 1)
+  );
+  transition: all 0.16s ease;
+}
+
+#tvg-download-clean:hover:not(:disabled) {
+  border-color: rgba(34, 211, 238, 0.7);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.25);
+  transform: translateY(-1px);
+}
+
+#tvg-download-clean:disabled {
+  opacity: 0.35;
+  cursor: default;
+  box-shadow: none;
+  transform: none;
+}
+
+  /* Ensure no rogue borders from old styles */
+  #tvg-results-table th:first-child,
+  #tvg-results-table td:first-child {
+    border-left: none;
+  }
+  
+  /* Column widths driven by header only (table-layout: fixed uses this) */
+  #tvg-results-table thead th:nth-child(1) { width: 40px; }   /* ID */
+  #tvg-results-table thead th:nth-child(2) { width: 110px; }  /* Decision */
+  #tvg-results-table thead th:nth-child(3) { width: 130px; }  /* Marketplace */
+  #tvg-results-table thead th:nth-child(4) { width: 260px; }  /* Event */
+  #tvg-results-table thead th:nth-child(5) { width: 70px; }   /* Section */
+  #tvg-results-table thead th:nth-child(6) { width: 70px; }   /* Row */
+  #tvg-results-table thead th:nth-child(7) { width: 70px; }   /* Seat */
+  #tvg-results-table thead th:nth-child(8) { width: 140px; }  /* When */
+  
+  /* Empty state row */
+  .tvg-empty-row td {
+    padding: 14px 12px;
+    color: rgba(255, 255, 255, 0.6);
+    background: transparent;
+  }
+  
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -1098,85 +1230,6 @@ a.btn:hover, button.btn:hover, .btn:hover {
   border-radius: 16px;
 }
 
-#tvg-results-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 720px;
-  font-size: 13px;
-}
-
-#tvg-results-table thead {
-  background: rgba(15,23,42,1);
-}
-
-#tvg-results-table th,
-#tvg-results-table td {
-  padding: 7px 8px;
-  border-bottom: 1px solid rgba(15,23,42,1);
-  text-align: left;
-  color: #9ca3af;
-}
-
-#tvg-results-table th {
-  font-weight: 500;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-}
-
-.tvg-empty-row td {
-  padding: 14px 10px;
-  font-size: 13px;
-  color: #94a3b8;
-}
-
-/* Conflict groups */
-
-.tvg-group-label-row td {
-  background:
-    radial-gradient(circle at left, rgba(79,70,229,0.18), transparent),
-    rgba(9,9,16,1);
-  color: #22d3ee;
-  font-weight: 500;
-  font-size: 12px;
-  border-bottom-color: rgba(31,41,55,1);
-}
-
-.tvg-row {
-  transition: background-color 0.25s ease, color 0.25s ease, transform 0.18s ease;
-  animation: tvg-fade-in 0.22s ease-out;
-}
-
-.tvg-conflict-row {
-  position: relative;
-  background: linear-gradient(
-    90deg,
-    rgba(79,70,229,0.16),
-    rgba(15,23,42,1)
-  );
-  color: #e5e7eb;
-}
-
-.tvg-conflict-row::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: #22d3ee;
-}
-
-.tvg-clean-row {
-  background: rgba(9,9,16,0.96);
-  color: #e5e7eb;
-}
-
-.tvg-row:hover {
-  transform: translateY(-1px);
-}
-
 /* Status pills */
 
 .tvg-status-pill {
@@ -1225,23 +1278,7 @@ a.btn:hover, button.btn:hover, .btn:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive tweaks */
 
-@media (max-width: 768px) {
-  #tvg-results-table {
-    min-width: 0;
-    font-size: 12px;
-  }
-
-  #tvg-results-table th,
-  #tvg-results-table td {
-    padding: 6px;
-  }
-
-  .tvg-table-wrap {
-    max-height: 420px;
-  }
-}
 
 /* === What is Ticket VeriGuard (match Why section) === */
 
@@ -1540,3 +1577,63 @@ a.btn:hover, button.btn:hover, .btn:hover {
 .verify-page .tvb-hero {
   margin-top: 0;
 }
+
+/* === Sort indicators for table headers === */
+#tvg-results-table thead th {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  padding-right: 20px; /* space for arrow */
+}
+
+#tvg-results-table thead th::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  opacity: 0.3;
+}
+.tvg-table-wrap {
+  margin-top: 8px;
+  max-height: 360px;       /* controls vertical scroll region */
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  border-radius: 16px;
+}
+
+/* Table */
+#tvg-results-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* Sticky header */
+#tvg-results-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #020817;     /* solid bg so text stays readable when stuck */
+}
+
+/* Active column (ascending / descending) */
+#tvg-results-table thead th.sort-asc::after {
+  content: "▲";
+  opacity: 0.8;
+  color: var(--brand-2);
+}
+
+#tvg-results-table thead th.sort-desc::after {
+  content: "▼";
+  opacity: 0.8;
+  color: var(--brand-2);
+}
+
+/* Hover effect for clarity */
+#tvg-results-table thead th:hover {
+  color: var(--brand-2);
+}
+

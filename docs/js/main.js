@@ -529,18 +529,30 @@ tvgSafe("verify-csv", () => {
   }
 
   function onHeaderClick(e) {
-    const th = e.target.closest("th[data-key]");
+    const th = e.target.closest('th[data-key]');
     if (!th) return;
-    const key = th.getAttribute("data-key");
+    const key = th.getAttribute('data-key');
     if (!key) return;
+  
+    // Update sort direction
     if (sortState.key === key) {
       sortState.dir = -sortState.dir;
     } else {
       sortState.key = key;
       sortState.dir = 1;
     }
+  
+    // Remove sort indicators from all headers
+    table.querySelectorAll('thead th').forEach(th => {
+      th.classList.remove('sort-asc', 'sort-desc');
+    });
+  
+    // Add new indicator
+    th.classList.add(sortState.dir === 1 ? 'sort-asc' : 'sort-desc');
+  
     renderTable();
   }
+  
 
   function resetFilters() {
     if (filterDecision) filterDecision.value = "all";
