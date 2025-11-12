@@ -794,3 +794,330 @@ tvgSafe("prototype-metaSearch", () => {
   loadSaved();
   renderPreview();
 });
+// ====== Shared footer year ======
+(function(){
+    const y = document.getElementById('y');
+    if (y) y.textContent = new Date().getFullYear();
+  })();
+  
+  // ====== Mobile nav toggle (works if markup exists) ======
+  (function(){
+    const header = document.querySelector('header.nav, header');
+    const btn = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('primary-nav');
+    if(!header || !btn || !nav) return;
+    const toggle = () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      header.classList.toggle('nav-open', !isOpen);
+    };
+    btn.addEventListener('click', toggle);
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      btn.setAttribute('aria-expanded','false'); header.classList.remove('nav-open');
+    }));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        btn.setAttribute('aria-expanded','false');
+        header.classList.remove('nav-open');
+      }
+    });
+  })();
+  
+  // ====== Search/Embed page behavior (runs only if elements exist) ======
+  (function(){
+    const fileInput = document.getElementById('tvg-file-input');
+    const analyzeBtn = document.getElementById('tvg-analyze-btn');
+    const fileLabel = document.getElementById('tvg-file-label');
+    const uploadCountEl = document.getElementById('tvg-upload-count');
+    const conflictCountEl = document.getElementById('tvg-conflict-count');
+    const tableBody = document.querySelector('#tvg-results-table tbody');
+    const filterDecision = document.getElementById('tvg-filter-decision');
+    const filterMarketplace = document.getElementById('tvg-filter-marketplace');
+    const resetFiltersBtn = document.getElementById('tvg-reset-filters');
+    const brandSlot = document.getElementById('tvg-embed-brand');
+  
+    if (!fileInput || !analyzeBtn || !tableBody) return; // Not on search.html
+  
+    // White-label + accent via URL params
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const wl = params.get('whiteLabel');
+      const accent = params.get('accent');
+      if (wl === 'true' && brandSlot) brandSlot.style.display = 'none';
+      if (accent) document.documentElement.style.setProperty('--brand-2', accent);
+    })();
+  
+    let allRows = [];
+    let sortState = { key: null, dir: 1 };
+    let uploadCount = 0;
+  
+    function normalizeHeader(h){ return (h || '').toString().trim().toLowerCase(); }
+  
+    function onFileChange(){
+      if (fileInput.files && fileInput.files[0]) {
+        fileLabel.textContent = fileInput.files[0].name;
+        analyzeBtn.disabled = false;
+      } else {
+        fileLabel.textContent = 'No file selected.';
+        analyzeBtn.disabled = true;
+      }
+    }
+  
+    function parseAndAnalyze(){
+      const file = fileInput.files[0];
+      if (!file || !window.Papa) return;
+      analyzeBtn.disabled = true;
+      analyzeBtn.textContent = 'Analyzing...';
+  
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          uploadCount++; uploadCountEl.textContent = String(uploadCount);
+          const data = results.data || [];
+          const mapped = data.map((row, idx) => {
+            const headers = Object.keys(row).reduce((acc, key) => {
+              acc[normalizeHeader(key)] = row[key]; return acc;
+            }, {});
+            const pick = (...names) => {
+              for (const n of names){ const v = headers[normalizeHeader(n)]; if (v) return v; }
+              return '';
+            };
+            const event = pick('event','event_id');
+            const section = pick('section');
+            const r = pick('row');
+            const seat = pick('seat');
+            const mp = pick('marketplace','source','channel');
+            const id = pick('id','listing_id') || (idx + 1);
+            const when = pick('when','timestamp','time','created_at');
+            return {
+              id: id.toString(),
+              event,
+              marketplace: mp,
+              section,
+              row: r,
+              seat,
+              when,
+              decision: 'Approved',
+              _key: [event,section,r,seat].join('|')
+            };
+          });
+  
+          const byKey = {};
+          mapped.forEach(row => {
+            if (!row._key || row._key === '|||') return;
+            if (!byKey[row._key]) byKey[row._key] = [];
+            byKey[row._key].push(row);
+          });
+  
+          let conflicts = 0;
+          Object.values(byKey).forEach(list => {
+            if (list.length > 1) {
+              list.forEach((row, i) => {
+                if (i === 0) row.decision = 'Approved';
+                else { row.decision = 'Blocked'; conflicts++; }
+              });
+            }
+          });
+  
+          conflictCountEl.textContent = String(conflicts);
+          allRows = mapped;
+          populateMarketplaceFilter();
+          renderTable();
+  
+          analyzeBtn.textContent = 'Analyze CSV';
+          analyzeBtn.disabled = false;
+        },
+        error: () => {
+          analyzeBtn.textContent = 'Analyze CSV';
+          analyzeBtn.disabled = false;
+          alert('Sorry, there was a problem reading that file.');
+        }
+      });
+    }
+  
+    function populateMarketplaceFilter(){
+      const seen = new Set();
+      allRows.forEach(r => { if (r.marketplace) seen.add(r.marketplace); });
+      filterMarketplace.innerHTML = '<option value="all">All marketplaces</option>';
+      Array.from(seen).sort().forEach(mp => {
+        const opt = document.createElement('option');
+        opt.value = mp; opt.textContent = mp;
+        filterMarketplace.appendChild(opt);
+      });
+    }
+  
+    function getFilteredRows(){
+      const d = filterDecision.value;
+      const mp = filterMarketplace.value;
+      return allRows.filter(r => {
+        if (d !== 'all' && r.decision !== d) return false;
+        if (mp !== 'all' && r.marketplace !== mp) return false;
+        return true;
+      });
+    }
+  
+    function renderTable(){
+      const rows = getFilteredRows().slice();
+      if (sortState.key) {
+        rows.sort((a,b)=>{
+          const va=(a[sortState.key]||'').toString().toLowerCase();
+          const vb=(b[sortState.key]||'').toString().toLowerCase();
+          if(va<vb) return -1*sortState.dir;
+          if(va>vb) return 1*sortState.dir;
+          return 0;
+        });
+      }
+      tableBody.innerHTML='';
+      rows.forEach(r=>{
+        const tr=document.createElement('tr');
+        if (r.decision==='Blocked') tr.className='tvg-row--blocked';
+        else if (r.decision==='Approved') tr.className='tvg-row--approved';
+        else tr.className='tvg-row--default';
+        tr.innerHTML=`
+          <td>${r.id||''}</td>
+          <td>${r.decision||''}</td>
+          <td>${r.marketplace||''}</td>
+          <td>${r.event||''}</td>
+          <td>${r.section||''}</td>
+          <td>${r.row||''}</td>
+          <td>${r.seat||''}</td>
+          <td>${r.when||''}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+  
+    function onHeaderClick(e){
+      const th=e.target.closest('th[data-key]'); if(!th) return;
+      const key=th.getAttribute('data-key');
+      if(sortState.key===key) sortState.dir=-sortState.dir;
+      else { sortState.key=key; sortState.dir=1; }
+      renderTable();
+    }
+  
+    function resetFilters(){
+      filterDecision.value='all';
+      filterMarketplace.value='all';
+      renderTable();
+    }
+  
+    document.getElementById('tvg-results-table').querySelector('thead')
+      .addEventListener('click', onHeaderClick);
+    fileInput.addEventListener('change', onFileChange);
+    analyzeBtn.addEventListener('click', parseAndAnalyze);
+    filterDecision.addEventListener('change', renderTable);
+    filterMarketplace.addEventListener('change', renderTable);
+    resetFiltersBtn.addEventListener('click', resetFilters);
+  })();
+// ----- TixMarketSearch: cleaned-up builder -----
+(function(){
+    const form = document.getElementById('metaSearch');
+    if (!form) return;
+  
+    const eventEl = document.getElementById('ms-event');
+    const cityEl  = document.getElementById('ms-city');
+    const srsEl   = document.getElementById('ms-srs');
+  
+    const linksWrap = document.getElementById('ms-links');
+    const btnCopy = document.getElementById('ms-copy');
+    const btnReset = document.getElementById('ms-reset');
+    const btnOpen = document.getElementById('ms-open');
+  
+    const sites = {
+      SeatGeek: { id: 'site-seatgeek', base: 'https://seatgeek.com/search?search=' },
+      Vivid: { id: 'site-vivid', base: 'https://www.vividseats.com/concerts/?q=' },
+      StubHub: { id: 'site-stubhub', base: 'https://www.stubhub.com/find/?q=' },
+      Ticketmaster: { id: 'site-ticketmaster', base: 'https://www.ticketmaster.com/search?q=' },
+      Viagogo: { id: 'site-viagogo', base: 'https://www.viagogo.com/Search/SearchResults.aspx?SearchTerm=' },
+      Google: { id: 'site-google', base: 'https://www.google.com/search?q=' }
+    };
+  
+    function clean(str){
+      return (str || '')
+        .replace(/[\/:"]/g,' ')   // remove slashes and quotes
+        .replace(/\s+/g,' ')      // collapse spaces
+        .trim();
+    }
+  
+    function buildQuery(){
+      const parts = [clean(eventEl.value), clean(cityEl.value), clean(srsEl.value)]
+        .filter(Boolean);
+      return encodeURIComponent(parts.join(' '));
+    }
+  
+    function buildUrls(){
+      const q = buildQuery();
+      const urls = [];
+      if (!q) return urls;
+  
+      for (const [label, info] of Object.entries(sites)){
+        const cb = document.getElementById(info.id);
+        if (!cb || !cb.checked) continue;
+  
+        // Google: OR query for all marketplaces
+        if (label === 'Google'){
+          const domainList = ['site:stubhub.com','site:seatgeek.com','site:vividseats.com','site:ticketmaster.com','site:viagogo.com'];
+          const query = encodeURIComponent(`${decodeURIComponent(q)} ${domainList.join(' OR ')}`);
+          urls.push({ label, href: info.base + query });
+        } else {
+          urls.push({ label, href: info.base + q });
+        }
+      }
+      return urls;
+    }
+  
+    function renderPreview(){
+      const urls = buildUrls();
+      linksWrap.innerHTML = '';
+      if (!urls.length) return;
+      urls.forEach(u=>{
+        const a=document.createElement('a');
+        a.href=u.href; a.target='_blank'; a.rel='noopener';
+        a.textContent=`${u.label}: ${u.href}`;
+        linksWrap.appendChild(a);
+      });
+    }
+  
+    function openAll(e){
+      e.preventDefault();
+      if (!eventEl.checkValidity()){ eventEl.reportValidity(); return; }
+      const urls=buildUrls(); if(!urls.length) return;
+      const first=window.open(urls[0].href,'_blank','noopener');
+      let blocked=!first||first.closed;
+      for(let i=1;i<urls.length;i++){
+        const w=window.open(urls[i].href,'_blank','noopener');
+        if(!w||w.closed) blocked=true;
+      }
+      if(blocked){
+        const n=document.createElement('div');
+        n.className='muted'; n.style.marginTop='8px';
+        n.textContent='If only one tab opened, allow pop-ups for this site to open all results.';
+        linksWrap.appendChild(n);
+      }
+    }
+  
+    function copyAll(){
+      const urls=buildUrls();
+      if(!urls.length) return;
+      const text=urls.map(u=>u.href).join('\n');
+      navigator.clipboard.writeText(text).then(()=>{
+        btnCopy.textContent='Copied!';
+        setTimeout(()=>btnCopy.textContent='Copy search',1000);
+      });
+    }
+  
+    function resetForm(){ form.reset(); renderPreview(); }
+  
+    form.addEventListener('submit', openAll);
+    [eventEl, cityEl, srsEl].forEach(el=>el.addEventListener('input', renderPreview));
+    Object.values(sites).forEach(info=>{
+      const cb=document.getElementById(info.id);
+      if(cb) cb.addEventListener('change', renderPreview);
+    });
+    btnCopy.addEventListener('click', copyAll);
+    btnReset.addEventListener('click', resetForm);
+  
+    renderPreview();
+  })();
+  

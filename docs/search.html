@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Ticket VeriGuard — TixMarketSearch</title>
+  <meta name="description" content="TixMarketSearch helps you search across ticket marketplaces like StubHub, SeatGeek, and Vivid Seats all at once."/>
+  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="stylesheet" href="./styles.css"/>
+  <script src="./js/main.js" defer></script>
+</head>
+<body class="page-search">
+  <!-- Shared header -->
+  <header class="nav">
+    <div class="nav--brand">
+      <a href="index.html" class="logo-bay">
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+
+      <nav id="primary-nav" class="topnav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="brokers.html" class="nav-link">Brokers</a>
+        <a href="verify.html" class="nav-link">CSV Check</a>
+        <a href="prototype.html" class="nav-link">How it works</a>
+        <a href="tixmarketsearch.html" class="nav-link nav-active" aria-current="page">TixMarketSearch</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link" target="_blank" rel="noopener">Try Live Demo</a>
+        <a href="index.html#contact" class="nav-link">Contact Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <h2>TixMarketSearch</h2>
+      <p class="muted">Search multiple ticket marketplaces at once — SeatGeek, StubHub, Vivid Seats, and more.</p>
+
+      <div class="card search-card">
+        <!-- same form as before -->
+        <form id="metaSearch" class="ms-form" novalidate>
+          <label class="ms-label">
+            <span class="ms-label-text">Event (required)</span>
+            <div class="ms-input-wrap">
+              <span aria-hidden="true">🎟️</span>
+              <input type="text" id="ms-event" name="event" placeholder="Taylor Swift 12/14/2025" autocomplete="off" required class="ms-input"/>
+            </div>
+          </label>
+
+          <div class="ms-two">
+            <label class="ms-label">
+              <span class="ms-label-text">City (optional)</span>
+              <div class="ms-input-wrap">
+                <span aria-hidden="true">📍</span>
+                <input type="text" id="ms-city" name="city" placeholder="Nashville" autocomplete="off" class="ms-input"/>
+              </div>
+            </label>
+
+            <label class="ms-label">
+              <span class="ms-label-text">Section/Row/Seat (optional)</span>
+              <div class="ms-input-wrap">
+                <span aria-hidden="true">🪑</span>
+                <input type="text" id="ms-srs" name="srs" placeholder="Section 110 Row F Seat 12" autocomplete="off" class="ms-input"/>
+              </div>
+            </label>
+          </div>
+
+          <fieldset class="ms-sites">
+            <legend class="ms-legend">Search these sites</legend>
+            <div class="ms-site-grid">
+              <label class="pill-check"><input type="checkbox" id="site-google" checked><span>Google (exact + filters)</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-seatgeek" checked><span>SeatGeek</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid Seats</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-stubhub" checked><span>StubHub</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-ticketmaster" checked><span>Ticketmaster</span></label>
+            </div>
+          </fieldset>
+
+          <div class="ms-actions">
+            <button type="submit" class="btn btn--primary" id="ms-open">Open results</button>
+            <button type="button" id="ms-copy" class="btn">Copy search</button>
+            <button type="button" id="ms-reset" class="btn">Reset</button>
+            <span class="ms-hint muted">Tip: press Enter to open all selected.</span>
+          </div>
+        </form>
+
+        <div id="ms-preview">
+          <div class="muted mt-6">Preview links:</div>
+          <div id="ms-links" class="ms-links"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-bar">
+      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
+      <div class="muted">
+        <a class="muted" href="#">Terms</a> ·
+        <a class="muted" href="#">Privacy</a> ·
+        <a class="muted" href="#">Status</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

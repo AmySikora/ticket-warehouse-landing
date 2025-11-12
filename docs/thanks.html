@@ -7,188 +7,54 @@
   <meta name="description" content="Confirmation page after contacting Ticket VeriGuard."/>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css"/>
-
-  <style>
-    :root{
-      --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
-      --text:#e5e7eb; --muted:#94a3b8; --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:16px; --banner-h: 32px;
-      --nav-h: 110px; --logo-w: 300px; --nav-h-sm: 72px; --logo-w-sm: 200px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif;
-      background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.15), transparent),
-        radial-gradient(900px 500px at -10% 20%, rgba(34,211,238,.15), transparent),
-        var(--bg);
-      color:var(--text); line-height:1.6;
-    }
-    a{color:var(--brand); text-decoration:none}
-    a:hover{text-decoration:underline}
-    .container{max-width:1000px; margin:0 auto; padding:0 20px}
-
-    /* Sticky proto banner */
-    .proto-banner{
-      position:sticky; top:0; z-index:60; height:var(--banner-h);
-      display:flex; align-items:center; justify-content:center;
-      background:linear-gradient(90deg, rgba(79,70,229,.9), rgba(34,211,238,.9));
-      color:#fff; font-size:14px; border-bottom:1px solid rgba(255,255,255,.2);
-      pointer-events:auto;
-    }
-
-    /* Header (same as other pages) */
-    header{
-      position: sticky; top: var(--banner-h); z-index: 50;
-      background: rgba(11,15,20,.65); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 18px; margin: 12px 16px 0 16px; overflow: visible;
-      box-shadow: 0 0 25px rgba(79,70,229,.45), 0 0 45px rgba(34,211,238,.2);
-    }
-    .nav--brand{ display:grid; grid-template-columns: var(--logo-w) 1fr; align-items:center; height: var(--nav-h); column-gap:22px; padding:0 18px; position:relative}
-    .logo-bay{ height: calc(var(--nav-h) - 12px); padding-left:10px; display:flex; align-items:center}
-    .logo-img{ height:100%; width:auto; object-fit:contain; display:block }
-    .topnav{ display:flex; align-items:center; justify-content:flex-end; gap:24px; flex-wrap:wrap }
-    .topnav a{ color:rgba(229,231,235,.92); font-weight:600; line-height:1; padding:8px 10px; border-radius:999px; text-decoration:none; transition: background-color .18s ease, color .18s ease, transform .18s ease }
-    .topnav a:hover{ background:rgba(255,255,255,.06); color:#fff; transform:translateY(-1px) }
-    .topnav .btn{ padding:10px 16px; background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff; box-shadow: var(--shadow) }
-    .nav-toggle{ display:none; position:relative; justify-self:end; width:42px; height:36px; border:1px solid rgba(255,255,255,.18); border-radius:10px; background:rgba(17,24,38,.65); cursor:pointer }
-    .nav-toggle .bar{ position:absolute; left:8px; right:8px; height:2px; background:#e5e7eb; border-radius:1px; transition:transform .2s ease, opacity .2s ease, top .2s ease }
-    .nav-toggle .bar:nth-child(1){ top:10px } .nav-toggle .bar:nth-child(2){ top:17px } .nav-toggle .bar:nth-child(3){ top:24px }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top:17px; transform:rotate(45deg) }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity:0 }
-    .nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top:17px; transform:rotate(-45deg) }
-
-    @media(max-width:900px){
-      .nav--brand{ grid-template-columns: var(--logo-w-sm) auto; height: var(--nav-h-sm); column-gap:12px }
-      .nav-toggle{ display:flex; align-items:center; justify-content:center }
-      .topnav{
-        position: fixed; left:16px; right:16px;
-        top: calc(var(--banner-h) + var(--nav-h-sm) + 12px);
-        display:none; flex-direction:column; align-items:stretch; gap:0;
-        background:rgba(11,15,20,.95); border:1px solid rgba(255,255,255,.06); border-top:none;
-        border-radius:0 0 18px 18px; overflow:hidden; transform:translateY(-6px); opacity:0; transition:transform .2s ease, opacity .2s ease; z-index:60;
-      }
-      .topnav a{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06) }
-      .topnav a:last-child{ border-bottom:none }
-      header.nav-open .topnav{ display:flex; transform:translateY(0); opacity:1 }
-    }
-
-    /* Page content */
-    main{ padding:56px 0 }
-    .center-card{
-      margin: 60px auto 80px; max-width: 640px;
-      background: rgba(17,24,38,.6);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:16px; box-shadow: var(--shadow);
-      padding: 34px 24px; text-align:center;
-    }
-    h1{margin:0 0 8px; font-size:32px}
-    p.muted{color:var(--muted)}
-    .btn{ display:inline-block; padding:12px 18px; border-radius:12px; font-weight:600; border:1px solid rgba(255,255,255,.1); background:#111826; color:#e5e7eb }
-    .btn.primary{ background:linear-gradient(45deg,var(--brand),var(--brand-2)); color:#fff }
-    footer{padding:32px 0; border-top:1px solid rgba(255,255,255,.08); color:#94a3b8}
-
-    /* --- Mobile logo overrides --- */
-    @media (max-width: 900px){
-      .logo-bay{
-        height: calc(var(--nav-h-sm) - 8px) !important;
-        padding-left: 6px;
-        overflow: hidden;
-      }
-      .logo-img{
-        height: auto !important;
-        max-height: 100% !important;
-        width: auto;
-        max-width: 100%;
-        display: block;
-        object-fit: contain;
-        object-position: left center;
-      }
-      .nav--brand{
-        grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important;
-      }
-    }
-  </style>
+  <script src="./js/main.js" defer></script>
 </head>
-<body>
+<body class="page-thanks">
 
-  <div class="proto-banner" role="note">
-    <strong>Early-stage demo:</strong> Not for production use.
-  </div>
-
-  <header>
-    <div class="container nav nav--brand">
-      <a class="logo-bay" href="./index.html" aria-label="Ticket VeriGuard">
-        <!-- Using existing favicon file to avoid 404 -->
+  <header class="nav">
+    <div class="nav--brand">
+      <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
+
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
+
       <nav id="primary-nav" class="topnav">
-        <a href="./index.html" class="muted">Home</a>
-        <a href="./prototype.html" class="muted">How it works</a>
-        <a href="./marketing.html" class="muted">Marketing Plan</a>
-        <a href="./business.html" class="muted">Business Plan</a>
-        <a href="./index.html#contact" class="btn">Get a demo</a>
+        <a href="./index.html" class="nav-link">Home</a>
+        <a href="./brokers.html" class="nav-link">Brokers</a>
+        <a href="./verify.html" class="nav-link">CSV Check</a>
+        <a href="./prototype.html" class="nav-link">How it works</a>
+        <a href="tixmarketsearch.html" class="nav-link">TixMarketSearch</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link" target="_blank" rel="noopener">Try Live Demo</a>
+        <a href="./index.html#contact" class="nav-link">Contact Us</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <div class="container">
-      <div class="center-card" role="status" aria-live="polite">
-        <h1>Thanks for reaching out!</h1>
-        <p class="muted">We’ve received your message and will get back to you soon.</p>
-        <p class="muted" style="margin-top:6px">
-          If you don’t hear from us within a day, email
-          <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>.
-        </p>
-        <div style="margin-top:16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
-          <a class="btn primary" href="./index.html#contact">Send another message</a>
-          <a class="btn" href="./index.html">Return to Home</a>
-        </div>
+  <main class="container">
+    <div class="center-card" role="status" aria-live="polite">
+      <h1>Thanks for reaching out!</h1>
+      <p class="muted">We’ve received your message and will get back to you soon.</p>
+      <p class="muted" style="margin-top:6px">
+        If you don’t hear from us within a day, email
+        <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>.
+      </p>
+      <div style="margin-top:16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+        <a class="btn btn--primary" href="./index.html#contact">Send another message</a>
+        <a class="btn" href="./index.html">Return to Home</a>
       </div>
     </div>
   </main>
 
   <footer>
-    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
+    <div class="container footer-bar">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> · <a class="muted" href="#">Privacy</a> · <a class="muted" href="#">Status</a>
       </div>
     </div>
   </footer>
-
-  <script>
-    // Year
-    const y = document.getElementById('y');
-    if (y) y.textContent = new Date().getFullYear();
-
-    // Mobile nav toggle (same pattern as other pages)
-    (function(){
-      const hdr = document.querySelector('header');
-      const btn = document.querySelector('.nav-toggle');
-      const nav = document.getElementById('primary-nav');
-      if(!btn || !hdr || !nav) return;
-      const toggle = () => {
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!isOpen));
-        hdr.classList.toggle('nav-open', !isOpen);
-      };
-      btn.addEventListener('click', toggle);
-      nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-        btn.setAttribute('aria-expanded','false'); hdr.classList.remove('nav-open');
-      }));
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          btn.setAttribute('aria-expanded','false');
-          hdr.classList.remove('nav-open');
-        }
-      });
-    })();
-  </script>
 </body>
 </html>

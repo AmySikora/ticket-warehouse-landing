@@ -26,6 +26,7 @@
         <a href="brokers.html" class="nav-link">Brokers</a>
         <a href="verify.html" class="nav-link">CSV Check</a>
         <a href="prototype.html" class="nav-link nav-active">How it works</a>
+        <a href="tixmarketsearch.html" class="nav-link">TixMarketSearch</a>
         <a href="https://amysikora.github.io/tvg-demo/index.html"
            class="nav-link" target="_blank" rel="noopener">Try Live Demo</a>
         <a href="./index.html#contact" class="nav-link">Contact Us</a>
@@ -42,7 +43,7 @@
           This page shows the nuts and bolts.
         </p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="./index.html#contact">Contact us</a>
+          <a class="btn btn-ghost" href="./index.html#contact">Contact us</a>
         </div>
       </div>
     </section>
@@ -62,69 +63,22 @@
             <p class="muted">When a seat sells on any connected site, we flag it and send updates to the rest in a blink.</p>
             <h3 class="mt-8">4) Clean checkouts</h3>
             <p class="muted">Fans see what is actually available. You skip double sales, refunds, and support churn.</p>
+            <p class="muted">Want to search multiple sites at once? Try the <a href="search.html">MetaSearch tool</a>.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- MetaSearch demo -->
-    <section class="section">
-      <div class="container">
-        <h2>Find your tickets across secondary markets</h2>
-        <div class="card search-card">
-          <form id="metaSearch" class="ms-form" novalidate>
-            <label class="ms-label">
-              <span class="ms-label-text">Event (required)</span>
-              <div class="ms-input-wrap">
-                <span aria-hidden="true">🎟️</span>
-                <input type="text" id="ms-event" name="event" placeholder="Taylor Swift 12/14/2025" autocomplete="off" required class="ms-input"/>
-              </div>
-            </label>
-
-            <div class="ms-two">
-              <label class="ms-label">
-                <span class="ms-label-text">City (optional)</span>
-                <div class="ms-input-wrap">
-                  <span aria-hidden="true">📍</span>
-                  <input type="text" id="ms-city" name="city" placeholder="Nashville" autocomplete="off" class="ms-input"/>
-                </div>
-              </label>
-
-              <label class="ms-label">
-                <span class="ms-label-text">Section/Row/Seat (optional)</span>
-                <div class="ms-input-wrap">
-                  <span aria-hidden="true">🪑</span>
-                  <input type="text" id="ms-srs" name="srs" placeholder="Section 110 Row F Seat 12" autocomplete="off" class="ms-input"/>
-                </div>
-              </label>
-            </div>
-
-            <fieldset class="ms-sites">
-              <legend class="ms-legend">Search these sites</legend>
-              <div class="ms-site-grid">
-                <label class="pill-check"><input type="checkbox" id="site-google" checked><span>Google (exact + filters)</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-seatgeek" checked><span>SeatGeek</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid Seats</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-stubhub" checked><span>StubHub</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-ticketmaster" checked><span>Ticketmaster</span></label>
-              </div>
-            </fieldset>
-
-            <div class="ms-actions">
-              <button type="submit" class="btn primary">Open results</button>
-              <button type="button" id="ms-copy" class="btn">Copy search</button>
-              <button type="button" id="ms-reset" class="btn">Reset</button>
-              <span class="ms-hint muted">Tip: press Enter to open all selected.</span>
-            </div>
-          </form>
-
-          <div id="ms-preview">
-            <div class="muted mt-6">Preview links:</div>
-            <div id="ms-links" class="ms-links"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- TixMarketSearch teaser -->
+<section class="section">
+  <div class="container">
+    <h2>Search your tickets across marketplaces</h2>
+    <p class="muted">
+      Want to find your listings across sites like StubHub, SeatGeek, and Vivid Seats?
+      Try our <a href="tixmarketsearch.html">TixMarketSearch tool</a> — it opens results from multiple marketplaces at once.
+    </p>
+  </div>
+</section>
 
     <section class="section">
       <div class="container">
@@ -178,7 +132,7 @@ Authorization: Bearer &lt;YOUR_API_KEY&gt;
         <div class="grid-2">
           <div class="card"><h3>Do I need to change all my systems?</h3><p class="muted">No. Start by registering tickets and listening for webhooks. Integrate deeper over time.</p></div>
           <div class="card"><h3>How fast are updates?</h3><p class="muted">Usually in milliseconds. Fast enough to catch near-simultaneous checkouts.</p></div>
-          <div class="card"><h3>What if a marketplace is offline?</h3><p class="muted">We queue notifications and retry. Your source of truth stays correct, and late systems catch up.</p></div>
+          <div class="card"><h3>What if a marketplace is offline?</h3><p class="muted">We queue notifications and retry. Your records stay correct, and late systems catch up.</p></div>
           <div class="card"><h3>Can I try a sandbox?</h3><p class="muted">Yes. Email <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a> and we’ll set you up.</p></div>
         </div>
       </div>
