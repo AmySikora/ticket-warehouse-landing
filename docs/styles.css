@@ -239,6 +239,104 @@ a.btn, button.btn, .btn {
 @media (prefers-reduced-motion: reduce) {
   .btn, .btn:hover, .btn:active { transition: none !important; transform: none !important; box-shadow: none !important; }
 }
+/* --- TixMarketSearch tweaks --- */
+
+.page-search .search-card {
+  margin-top: 24px;
+}
+
+.tms-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tms-info-pill {
+  border: 1px solid rgba(148, 163, 184, .6);
+  background: rgba(15, 23, 42, .8);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.tms-info-pill span:first-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, .7);
+  font-weight: 600;
+}
+
+.tms-info-pill:hover {
+  background: rgba(30, 64, 175, .72);
+  border-color: rgba(129, 140, 248, .9);
+  transform: translateY(-1px);
+}
+
+.ms-explainer {
+  margin-top: 18px;
+  font-size: 0.94rem;
+  transition: max-height .25s ease, opacity .22s ease, margin-top .22s ease, padding .22s ease;
+  overflow: hidden;
+}
+
+.ms-explainer.is-collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  border-width: 0;
+}
+
+.ms-explainer-title {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.ms-hint {
+  display: block;
+  margin-top: 8px;
+  max-width: 480px;
+}
+
+/* Compact layout on small screens */
+@media (max-width: 640px) {
+  .tms-header-row {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .tms-info-pill {
+    padding-inline: 8px;
+    font-size: 12px;
+  }
+}
+
+/* Visually-hidden helper class if you don't already have one */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+
 /* === Broker Pilot CTA (shared) === */
 
 .tvg-pilot-card {

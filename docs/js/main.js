@@ -1010,114 +1010,161 @@ tvgSafe("prototype-metaSearch", () => {
     filterMarketplace.addEventListener('change', renderTable);
     resetFiltersBtn.addEventListener('click', resetFilters);
   })();
-// ----- TixMarketSearch: cleaned-up builder -----
-(function(){
-    const form = document.getElementById('metaSearch');
-    if (!form) return;
-  
-    const eventEl = document.getElementById('ms-event');
-    const cityEl  = document.getElementById('ms-city');
-    const srsEl   = document.getElementById('ms-srs');
-  
-    const linksWrap = document.getElementById('ms-links');
-    const btnCopy = document.getElementById('ms-copy');
-    const btnReset = document.getElementById('ms-reset');
-    const btnOpen = document.getElementById('ms-open');
-  
-    const sites = {
-      SeatGeek: { id: 'site-seatgeek', base: 'https://seatgeek.com/search?search=' },
-      Vivid: { id: 'site-vivid', base: 'https://www.vividseats.com/concerts/?q=' },
-      StubHub: { id: 'site-stubhub', base: 'https://www.stubhub.com/find/?q=' },
-      Ticketmaster: { id: 'site-ticketmaster', base: 'https://www.ticketmaster.com/search?q=' },
-      Viagogo: { id: 'site-viagogo', base: 'https://www.viagogo.com/Search/SearchResults.aspx?SearchTerm=' },
-      Google: { id: 'site-google', base: 'https://www.google.com/search?q=' }
-    };
-  
-    function clean(str){
-      return (str || '')
-        .replace(/[\/:"]/g,' ')   // remove slashes and quotes
-        .replace(/\s+/g,' ')      // collapse spaces
-        .trim();
-    }
-  
-    function buildQuery(){
-      const parts = [clean(eventEl.value), clean(cityEl.value), clean(srsEl.value)]
-        .filter(Boolean);
-      return encodeURIComponent(parts.join(' '));
-    }
-  
-    function buildUrls(){
-      const q = buildQuery();
-      const urls = [];
-      if (!q) return urls;
-  
-      for (const [label, info] of Object.entries(sites)){
-        const cb = document.getElementById(info.id);
-        if (!cb || !cb.checked) continue;
-  
-        // Google: OR query for all marketplaces
-        if (label === 'Google'){
-          const domainList = ['site:stubhub.com','site:seatgeek.com','site:vividseats.com','site:ticketmaster.com','site:viagogo.com'];
-          const query = encodeURIComponent(`${decodeURIComponent(q)} ${domainList.join(' OR ')}`);
-          urls.push({ label, href: info.base + query });
-        } else {
-          urls.push({ label, href: info.base + q });
-        }
-      }
-      return urls;
-    }
-  
-    function renderPreview(){
-      const urls = buildUrls();
-      linksWrap.innerHTML = '';
-      if (!urls.length) return;
-      urls.forEach(u=>{
-        const a=document.createElement('a');
-        a.href=u.href; a.target='_blank'; a.rel='noopener';
-        a.textContent=`${u.label}: ${u.href}`;
-        linksWrap.appendChild(a);
-      });
-    }
-  
-    function openAll(e){
-      e.preventDefault();
-      if (!eventEl.checkValidity()){ eventEl.reportValidity(); return; }
-      const urls=buildUrls(); if(!urls.length) return;
-      const first=window.open(urls[0].href,'_blank','noopener');
-      let blocked=!first||first.closed;
-      for(let i=1;i<urls.length;i++){
-        const w=window.open(urls[i].href,'_blank','noopener');
-        if(!w||w.closed) blocked=true;
-      }
-      if(blocked){
-        const n=document.createElement('div');
-        n.className='muted'; n.style.marginTop='8px';
-        n.textContent='If only one tab opened, allow pop-ups for this site to open all results.';
-        linksWrap.appendChild(n);
-      }
-    }
-  
-    function copyAll(){
-      const urls=buildUrls();
-      if(!urls.length) return;
-      const text=urls.map(u=>u.href).join('\n');
-      navigator.clipboard.writeText(text).then(()=>{
-        btnCopy.textContent='Copied!';
-        setTimeout(()=>btnCopy.textContent='Copy search',1000);
-      });
-    }
-  
-    function resetForm(){ form.reset(); renderPreview(); }
-  
-    form.addEventListener('submit', openAll);
-    [eventEl, cityEl, srsEl].forEach(el=>el.addEventListener('input', renderPreview));
-    Object.values(sites).forEach(info=>{
-      const cb=document.getElementById(info.id);
-      if(cb) cb.addEventListener('change', renderPreview);
+
+  // ===== TixMarketSearch (search.html) =====
+(function () {
+  const form = document.getElementById('tixSearch');
+  if (!form) return; // only run on search.html
+
+  const queryEl    = document.getElementById('tms-query');
+  const linksWrap  = document.getElementById('tms-links');
+  const btnCopy    = document.getElementById('tms-copy');
+  const btnReset   = document.getElementById('tms-reset');
+  const infoToggle = document.getElementById('tms-info-toggle');
+  const explainer  = document.getElementById('tms-explainer');
+
+  const siteConfigs = [
+    { id: 'site-seatgeek',     label: 'SeatGeek',     domain: 'seatgeek.com' },
+    { id: 'site-vivid',        label: 'Vivid Seats',  domain: 'vividseats.com' },
+    { id: 'site-stubhub',      label: 'StubHub',      domain: 'stubhub.com' },
+    { id: 'site-ticketmaster', label: 'Ticketmaster', domain: 'ticketmaster.com' },
+    { id: 'site-tickpick',     label: 'TickPick',     domain: 'tickpick.com' },
+    { id: 'site-viagogo',      label: 'Viagogo',      domain: 'viagogo.com' }
+  ];
+  const googleCheckboxId = 'site-google';
+
+  function baseQuery(raw) {
+    return (raw || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function buildUrls() {
+    const raw = baseQuery(queryEl ? queryEl.value : '');
+    if (!raw) return [];
+
+    const urls = [];
+    const selectedDomains = [];
+
+    // Per-site Google searches: "<raw> site:domain"
+    siteConfigs.forEach(cfg => {
+      const cb = document.getElementById(cfg.id);
+      if (!cb || !cb.checked) return;
+
+      const g = new URL('https://www.google.com/search');
+      g.searchParams.set('q', `${raw} site:${cfg.domain}`);
+      urls.push({ label: cfg.label, href: g.toString() });
+      selectedDomains.push(`site:${cfg.domain}`);
     });
-    btnCopy.addEventListener('click', copyAll);
-    btnReset.addEventListener('click', resetForm);
-  
-    renderPreview();
-  })();
-  
+
+    // Combined Google tab: add "tickets" if not present
+    const googleCb = document.getElementById(googleCheckboxId);
+    if (googleCb && googleCb.checked && selectedDomains.length) {
+      let qTickets = raw;
+      if (!/ticket/i.test(qTickets)) {
+        qTickets += ' tickets';
+      }
+      const g = new URL('https://www.google.com/search');
+      g.searchParams.set('q', `${qTickets} ${selectedDomains.join(' OR ')}`);
+      urls.unshift({ label: 'Google (all selected)', href: g.toString() });
+    }
+
+    return urls;
+  }
+
+  function renderPreview() {
+    const urls = buildUrls();
+    linksWrap.innerHTML = '';
+    if (!urls.length) return;
+
+    urls.forEach(u => {
+      const a = document.createElement('a');
+      a.href = u.href;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = `${u.label}: ${u.href}`;
+      linksWrap.appendChild(a);
+    });
+  }
+
+  function openAll(event) {
+    event.preventDefault();
+    if (!queryEl.checkValidity()) {
+      queryEl.reportValidity();
+      return;
+    }
+
+    const urls = buildUrls();
+    if (!urls.length) return;
+
+    const first = window.open(urls[0].href, '_blank', 'noopener');
+    let blocked = !first || first.closed;
+
+    for (let i = 1; i < urls.length; i++) {
+      const w = window.open(urls[i].href, '_blank', 'noopener');
+      if (!w || w.closed) blocked = true;
+    }
+
+    if (blocked) {
+      const note = document.createElement('div');
+      note.className = 'muted';
+      note.style.marginTop = '8px';
+      note.textContent = 'If only one tab opened, allow pop-ups for this site so all markets can open.';
+      linksWrap.appendChild(note);
+    }
+  }
+
+  function copyAll() {
+    const urls = buildUrls();
+    if (!urls.length) return;
+
+    const text = urls.map(u => u.href).join('\n');
+    navigator.clipboard.writeText(text).then(() => {
+      const old = btnCopy.textContent;
+      btnCopy.textContent = 'Copied!';
+      setTimeout(() => { btnCopy.textContent = old; }, 900);
+    }).catch(() => {
+      // ignore clipboard failures
+    });
+  }
+
+  function resetForm() {
+    form.reset();
+    linksWrap.innerHTML = '';
+  }
+
+  // Info toggle for explainer card (for hover/tap)
+  function toggleExplainer() {
+    if (!explainer || !infoToggle) return;
+    const isOpen = infoToggle.getAttribute('aria-expanded') === 'true';
+    infoToggle.setAttribute('aria-expanded', String(!isOpen));
+    explainer.classList.toggle('is-collapsed', isOpen);
+    explainer.setAttribute('aria-hidden', String(isOpen));
+  }
+
+  // Wire up events
+  form.addEventListener('submit', openAll);
+  if (queryEl) queryEl.addEventListener('input', renderPreview);
+
+  siteConfigs.forEach(cfg => {
+    const cb = document.getElementById(cfg.id);
+    if (cb) cb.addEventListener('change', renderPreview);
+  });
+
+  const googleCb = document.getElementById(googleCheckboxId);
+  if (googleCb) googleCb.addEventListener('change', renderPreview);
+
+  if (btnCopy)  btnCopy.addEventListener('click', copyAll);
+  if (btnReset) btnReset.addEventListener('click', resetForm);
+  if (infoToggle) infoToggle.addEventListener('click', toggleExplainer);
+
+  // Optional: open explainer on desktop hover
+  if (infoToggle && explainer && window.matchMedia('(hover:hover)').matches) {
+    infoToggle.addEventListener('mouseenter', () => {
+      infoToggle.setAttribute('aria-expanded', 'true');
+      explainer.classList.remove('is-collapsed');
+      explainer.setAttribute('aria-hidden', 'false');
+    });
+  }
+
+  // Initial preview (empty)
+  renderPreview();
+})();
