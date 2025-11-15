@@ -1885,3 +1885,58 @@ a.btn:hover, button.btn:hover, .btn:hover {
   color: var(--text); text-decoration: none; word-break: break-all;
 }
 .ms-links a:hover { transform: translateY(-1px); transition: transform .15s ease; }
+/* Prevent closed mobile nav from blocking clicks */
+@media (max-width: 900px) {
+  .topnav {
+    pointer-events: none;   /* don't intercept taps when "closed" */
+  }
+
+  header.nav.nav-open .topnav,
+  #primary-nav.is-open {
+    pointer-events: auto;   /* only clickable when menu is actually open */
+  }
+}
+/* --- Mobile nav: don't block the page when closed --- */
+@media (max-width: 900px) {
+  /* By default, the nav should NOT receive taps */
+  .topnav {
+    pointer-events: none;
+  }
+
+  /* When the menu is open, re-enable interactions */
+  header.nav.nav-open .topnav,
+  #primary-nav.is-open {
+    pointer-events: auto;
+  }
+}
+@media (max-width:900px){
+  .nav--brand{ grid-template-columns: var(--logo-w-sm) auto; height: var(--nav-h-sm); column-gap:12px; }
+  .logo-bay{ height: calc(var(--nav-h-sm) - 8px) !important; padding-left:6px; }
+  .logo-img{ height:auto !important; max-height:100% !important; width:auto; max-width:100%; object-fit:contain; }
+  .nav-toggle{ display:flex; align-items:center; justify-content:center; }
+  .topnav{
+    position: fixed; left: 16px; right: 16px; top: calc(var(--banner-h) + var(--nav-h-sm) + 12px);
+    display:none; flex-direction:column; align-items:stretch; gap:0;
+    background: rgba(11,15,20,.95); border:1px solid rgba(255,255,255,.06); border-top:none; border-radius:0 0 18px 18px;
+    overflow:hidden; transform:translateY(-6px); opacity:0; transition: transform .2s ease, opacity .2s ease; z-index:60;
+  }
+  .topnav a{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06); }
+  header.nav-open .topnav{ display:flex; transform:translateY(0); opacity:1; }
+  body.menu-open::after{ content:""; position:fixed; inset:0; background:rgba(0,0,0,.35); backdrop-filter:blur(2px); z-index:40; }
+  .nav--brand{ grid-template-columns: minmax(140px, var(--logo-w-sm)) auto !important; }
+}
+/* Don’t let the mobile nav/overlay block clicks lower on the page */
+@media (max-width: 900px) {
+  /* Nav itself only clickable when open */
+  .topnav {
+    pointer-events: none;
+  }
+  header.nav-open .topnav {
+    pointer-events: auto;
+  }
+
+  /* Dim overlay is visual only, not click-blocking */
+  body.menu-open::after {
+    pointer-events: none;
+  }
+}
