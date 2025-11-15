@@ -13,41 +13,49 @@ tvgSafe("footer-year", () => {
   if (y) y.textContent = new Date().getFullYear();
 });
 
-// ===== Nav Toggle (all pages) =====
+// ===== Nav Toggle (all pages, single source of behavior) =====
 tvgSafe("nav-toggle", () => {
-  const hdr = document.querySelector("header.nav");
+  const header = document.querySelector("header.nav, header");
   const btn = document.querySelector(".nav-toggle");
   const nav = document.getElementById("primary-nav");
-  if (!btn || !hdr || !nav) return;
+  if (!header || !btn || !nav) return;
 
   function closeMenu() {
     nav.classList.remove("is-open");
-    hdr.classList.remove("nav-open");
+    header.classList.remove("nav-open");
     document.body.classList.remove("menu-open");
     btn.setAttribute("aria-expanded", "false");
   }
 
   function openMenu() {
     nav.classList.add("is-open");
-    hdr.classList.add("nav-open");
+    header.classList.add("nav-open");
     document.body.classList.add("menu-open");
     btn.setAttribute("aria-expanded", "true");
   }
 
   function toggleMenu() {
-    const isOpen = nav.classList.contains("is-open");
+    const isOpen =
+      header.classList.contains("nav-open") ||
+      nav.classList.contains("is-open");
     isOpen ? closeMenu() : openMenu();
   }
 
   btn.addEventListener("click", toggleMenu);
+
+  // Close menu when a nav link is tapped (mobile)
   nav.querySelectorAll("a").forEach((a) =>
     a.addEventListener("click", closeMenu)
   );
 
+  // Close menu if we resize up to desktop layout
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 900) closeMenu();
+    if (window.innerWidth > 900) {
+      closeMenu();
+    }
   });
 
+  // Esc to close
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeMenu();
   });
@@ -161,7 +169,7 @@ tvgSafe("brokers-widget", () => {
   }
 });
 
-// ===== Verify: CSV Checking =====
+// ===== Verify: CSV Checking (verify.html) =====
 tvgSafe("verify-csv", () => {
   const fileInput = document.getElementById("tvg-file-input");
   const analyzeBtn = document.getElementById("tvg-analyze-btn");
@@ -379,7 +387,12 @@ tvgSafe("verify-csv", () => {
       .replace(/'/g, "&#039;");
   }
 
-  function renderSummary({ scannedCount, conflictGroupCount, riskyCount, source }) {
+  function renderSummary({
+    scannedCount,
+    conflictGroupCount,
+    riskyCount,
+    source,
+  }) {
     if (!summaryStrip) return;
     summaryStrip.innerHTML = "";
     summaryStrip.classList.add("is-visible");
@@ -403,9 +416,7 @@ tvgSafe("verify-csv", () => {
     );
     summaryStrip.appendChild(
       pill(
-        `${riskyCount} risky listing${
-          riskyCount === 1 ? "" : "s"
-        }`
+        `${riskyCount} risky listing${riskyCount === 1 ? "" : "s"}`
       )
     );
     summaryStrip.appendChild(pill(`Source: ${source}`));
@@ -459,8 +470,8 @@ tvgSafe("verify-csv", () => {
           <td colspan="8">
             Conflict group #${g.id} — ${g.size} listings share the same seat
             (${escapeHTML(g.event)} • Sec ${escapeHTML(
-              g.section
-            )} • Row ${escapeHTML(g.row)} • Seat ${escapeHTML(g.seat)})
+          g.section
+        )} • Row ${escapeHTML(g.row)} • Seat ${escapeHTML(g.seat)})
           </td>`;
         tableBody.appendChild(labelTr);
       }
@@ -468,8 +479,7 @@ tvgSafe("verify-csv", () => {
       const tr = document.createElement("tr");
       const isBlocked = r.decision === "Blocked";
       tr.className =
-        "tvg-row " +
-        (gid ? "tvg-conflict-row" : "tvg-clean-row");
+        "tvg-row " + (gid ? "tvg-conflict-row" : "tvg-clean-row");
 
       tr.innerHTML = `
         <td>${escapeHTML(r.id)}</td>
@@ -529,30 +539,26 @@ tvgSafe("verify-csv", () => {
   }
 
   function onHeaderClick(e) {
-    const th = e.target.closest('th[data-key]');
+    const th = e.target.closest("th[data-key]");
     if (!th) return;
-    const key = th.getAttribute('data-key');
+    const key = th.getAttribute("data-key");
     if (!key) return;
-  
-    // Update sort direction
+
     if (sortState.key === key) {
       sortState.dir = -sortState.dir;
     } else {
       sortState.key = key;
       sortState.dir = 1;
     }
-  
-    // Remove sort indicators from all headers
-    table.querySelectorAll('thead th').forEach(th => {
-      th.classList.remove('sort-asc', 'sort-desc');
+
+    table.querySelectorAll("thead th").forEach((thEl) => {
+      thEl.classList.remove("sort-asc", "sort-desc");
     });
-  
-    // Add new indicator
-    th.classList.add(sortState.dir === 1 ? 'sort-asc' : 'sort-desc');
-  
+
+    th.classList.add(sortState.dir === 1 ? "sort-asc" : "sort-desc");
+
     renderTable();
   }
-  
 
   function resetFilters() {
     if (filterDecision) filterDecision.value = "all";
@@ -603,9 +609,7 @@ tvgSafe("verify-csv", () => {
   fileInput.addEventListener("change", onFileChange);
   analyzeBtn.addEventListener("click", parseAndAnalyze);
   sampleBtn.addEventListener("click", handleSampleClick);
-  table
-    .querySelector("thead")
-    .addEventListener("click", onHeaderClick);
+  table.querySelector("thead").addEventListener("click", onHeaderClick);
   if (filterDecision)
     filterDecision.addEventListener("change", renderTable);
   if (filterMarketplace)
@@ -614,443 +618,51 @@ tvgSafe("verify-csv", () => {
     resetFiltersBtn.addEventListener("click", resetFilters);
   if (downloadBtn)
     downloadBtn.addEventListener("click", downloadCleanedCSV);
-  if (thumbUp)
-    thumbUp.addEventListener("click", () => handleThumb(true));
+  if (thumbUp) thumbUp.addEventListener("click", () => handleThumb(true));
   if (thumbDown)
     thumbDown.addEventListener("click", () => handleThumb(false));
 });
 
-// ===== Prototype: MetaSearch =====
-tvgSafe("prototype-metaSearch", () => {
-  const form = document.getElementById("metaSearch");
-  if (!form) return;
-
-  const $ = (s, r = document) => r.querySelector(s);
-
-  const iEvent = $("#ms-event");
-  const iCity = $("#ms-city");
-  const iSRS = $("#ms-srs");
-  const linksWrap = $("#ms-links");
-
-  if (!iEvent || !linksWrap) return;
-
-  const sites = {
-    google: $("#site-google"),
-    seatgeek: $("#site-seatgeek"),
-    vivid: $("#site-vivid"),
-    stubhub: $("#site-stubhub"),
-    ticketmaster: $("#site-ticketmaster"),
-  };
-
-  const buildQuery = () =>
-    [iEvent.value.trim(), iCity.value.trim(), iSRS.value.trim()]
-      .filter(Boolean)
-      .join(" ")
-      .replace(/\s+/g, " ")
-      .trim();
-
-  const enc = (s) => encodeURIComponent(s);
-
-  function urlMap(q) {
-    const e = enc(q);
-    return {
-      google:
-        `https://www.google.com/search?q="%22${e}%22"+site%3Aviagogo.com+OR+site%3Astubhub.com+OR+site%3Avividseats.com+OR+site%3Aseatgeek.com`,
-      seatgeek: `https://seatgeek.com/search?search=${e}`,
-      vivid: `https://www.vividseats.com/concerts/${e}`,
-      stubhub: `https://www.stubhub.com/find?q=${e}`,
-      ticketmaster: `https://www.ticketmaster.com/search?q=${e}`,
-    };
-  }
-
-  function renderPreview() {
-    const q = buildQuery();
-    linksWrap.innerHTML = "";
-    if (!q) return;
-    const urls = urlMap(q);
-    for (const [key, el] of Object.entries(sites)) {
-      if (!el || !el.checked) continue;
-      const a = document.createElement("a");
-      a.className = "btn";
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.href = urls[key];
-      a.textContent =
-        {
-          google: "Google",
-          seatgeek: "SeatGeek",
-          vivid: "Vivid Seats",
-          stubhub: "StubHub",
-          ticketmaster: "Ticketmaster",
-        }[key] || key;
-      linksWrap.appendChild(a);
-    }
-  }
-
-  let t = null;
-  const debounce = (fn) => {
-    clearTimeout(t);
-    t = setTimeout(fn, 200);
-  };
-
-  const KEY = "tvg.metaSearch";
-
-  function loadSaved() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (!raw) return;
-      const s = JSON.parse(raw);
-      iEvent.value = s.event || "";
-      if (iCity) iCity.value = s.city || "";
-      if (iSRS) iSRS.value = s.srs || "";
-      for (const k of Object.keys(sites)) {
-        if (s.sites && typeof s.sites[k] === "boolean" && sites[k]) {
-          sites[k].checked = s.sites[k];
-        }
-      }
-    } catch {
-      // ignore
-    }
-  }
-
-  function saveNow() {
-    try {
-      const data = {
-        event: iEvent.value,
-        city: iCity ? iCity.value : "",
-        srs: iSRS ? iSRS.value : "",
-        sites: Object.fromEntries(
-          Object.entries(sites)
-            .filter(([, el]) => !!el)
-            .map(([k, el]) => [k, el.checked])
-        ),
-      };
-      localStorage.setItem(KEY, JSON.stringify(data));
-    } catch {
-      // ignore
-    }
-  }
-
-  form.addEventListener("input", () => {
-    debounce(() => {
-      saveNow();
-      renderPreview();
-    });
-  });
-
-  Object.values(sites)
-    .filter(Boolean)
-    .forEach((el) =>
-      el.addEventListener("change", () => {
-        saveNow();
-        renderPreview();
-      })
-    );
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const q = buildQuery();
-    if (!q) {
-      iEvent.focus();
-      return;
-    }
-    const urls = urlMap(q);
-    Object.entries(sites)
-      .filter(([, el]) => el && el.checked)
-      .forEach(([k]) => {
-        window.open(urls[k], "_blank", "noopener");
-      });
-  });
-
-  const copyBtn = $("#ms-copy");
-  const resetBtn = $("#ms-reset");
-
-  if (copyBtn) {
-    copyBtn.addEventListener("click", async () => {
-      const q = buildQuery();
-      if (!q) return;
-      try {
-        await navigator.clipboard.writeText(q);
-      } catch {
-        // ignore
-      }
-    });
-  }
-
-  if (resetBtn) {
-    resetBtn.addEventListener("click", () => {
-      iEvent.value = "";
-      if (iCity) iCity.value = "";
-      if (iSRS) iSRS.value = "";
-      Object.values(sites)
-        .filter(Boolean)
-        .forEach((el) => (el.checked = true));
-      saveNow();
-      renderPreview();
-      iEvent.focus();
-    });
-  }
-
-  loadSaved();
-  renderPreview();
-});
-// ====== Shared footer year ======
-(function(){
-    const y = document.getElementById('y');
-    if (y) y.textContent = new Date().getFullYear();
-  })();
-  
-  // ====== Mobile nav toggle (works if markup exists) ======
-  (function(){
-    const header = document.querySelector('header.nav, header');
-    const btn = document.querySelector('.nav-toggle');
-    const nav = document.getElementById('primary-nav');
-    if(!header || !btn || !nav) return;
-    const toggle = () => {
-      const isOpen = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!isOpen));
-      header.classList.toggle('nav-open', !isOpen);
-    };
-    btn.addEventListener('click', toggle);
-    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      btn.setAttribute('aria-expanded','false'); header.classList.remove('nav-open');
-    }));
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        btn.setAttribute('aria-expanded','false');
-        header.classList.remove('nav-open');
-      }
-    });
-  })();
-  
-  // ====== Search/Embed page behavior (runs only if elements exist) ======
-  (function(){
-    const fileInput = document.getElementById('tvg-file-input');
-    const analyzeBtn = document.getElementById('tvg-analyze-btn');
-    const fileLabel = document.getElementById('tvg-file-label');
-    const uploadCountEl = document.getElementById('tvg-upload-count');
-    const conflictCountEl = document.getElementById('tvg-conflict-count');
-    const tableBody = document.querySelector('#tvg-results-table tbody');
-    const filterDecision = document.getElementById('tvg-filter-decision');
-    const filterMarketplace = document.getElementById('tvg-filter-marketplace');
-    const resetFiltersBtn = document.getElementById('tvg-reset-filters');
-    const brandSlot = document.getElementById('tvg-embed-brand');
-  
-    if (!fileInput || !analyzeBtn || !tableBody) return; // Not on search.html
-  
-    // White-label + accent via URL params
-    (function(){
-      const params = new URLSearchParams(window.location.search);
-      const wl = params.get('whiteLabel');
-      const accent = params.get('accent');
-      if (wl === 'true' && brandSlot) brandSlot.style.display = 'none';
-      if (accent) document.documentElement.style.setProperty('--brand-2', accent);
-    })();
-  
-    let allRows = [];
-    let sortState = { key: null, dir: 1 };
-    let uploadCount = 0;
-  
-    function normalizeHeader(h){ return (h || '').toString().trim().toLowerCase(); }
-  
-    function onFileChange(){
-      if (fileInput.files && fileInput.files[0]) {
-        fileLabel.textContent = fileInput.files[0].name;
-        analyzeBtn.disabled = false;
-      } else {
-        fileLabel.textContent = 'No file selected.';
-        analyzeBtn.disabled = true;
-      }
-    }
-  
-    function parseAndAnalyze(){
-      const file = fileInput.files[0];
-      if (!file || !window.Papa) return;
-      analyzeBtn.disabled = true;
-      analyzeBtn.textContent = 'Analyzing...';
-  
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          uploadCount++; uploadCountEl.textContent = String(uploadCount);
-          const data = results.data || [];
-          const mapped = data.map((row, idx) => {
-            const headers = Object.keys(row).reduce((acc, key) => {
-              acc[normalizeHeader(key)] = row[key]; return acc;
-            }, {});
-            const pick = (...names) => {
-              for (const n of names){ const v = headers[normalizeHeader(n)]; if (v) return v; }
-              return '';
-            };
-            const event = pick('event','event_id');
-            const section = pick('section');
-            const r = pick('row');
-            const seat = pick('seat');
-            const mp = pick('marketplace','source','channel');
-            const id = pick('id','listing_id') || (idx + 1);
-            const when = pick('when','timestamp','time','created_at');
-            return {
-              id: id.toString(),
-              event,
-              marketplace: mp,
-              section,
-              row: r,
-              seat,
-              when,
-              decision: 'Approved',
-              _key: [event,section,r,seat].join('|')
-            };
-          });
-  
-          const byKey = {};
-          mapped.forEach(row => {
-            if (!row._key || row._key === '|||') return;
-            if (!byKey[row._key]) byKey[row._key] = [];
-            byKey[row._key].push(row);
-          });
-  
-          let conflicts = 0;
-          Object.values(byKey).forEach(list => {
-            if (list.length > 1) {
-              list.forEach((row, i) => {
-                if (i === 0) row.decision = 'Approved';
-                else { row.decision = 'Blocked'; conflicts++; }
-              });
-            }
-          });
-  
-          conflictCountEl.textContent = String(conflicts);
-          allRows = mapped;
-          populateMarketplaceFilter();
-          renderTable();
-  
-          analyzeBtn.textContent = 'Analyze CSV';
-          analyzeBtn.disabled = false;
-        },
-        error: () => {
-          analyzeBtn.textContent = 'Analyze CSV';
-          analyzeBtn.disabled = false;
-          alert('Sorry, there was a problem reading that file.');
-        }
-      });
-    }
-  
-    function populateMarketplaceFilter(){
-      const seen = new Set();
-      allRows.forEach(r => { if (r.marketplace) seen.add(r.marketplace); });
-      filterMarketplace.innerHTML = '<option value="all">All marketplaces</option>';
-      Array.from(seen).sort().forEach(mp => {
-        const opt = document.createElement('option');
-        opt.value = mp; opt.textContent = mp;
-        filterMarketplace.appendChild(opt);
-      });
-    }
-  
-    function getFilteredRows(){
-      const d = filterDecision.value;
-      const mp = filterMarketplace.value;
-      return allRows.filter(r => {
-        if (d !== 'all' && r.decision !== d) return false;
-        if (mp !== 'all' && r.marketplace !== mp) return false;
-        return true;
-      });
-    }
-  
-    function renderTable(){
-      const rows = getFilteredRows().slice();
-      if (sortState.key) {
-        rows.sort((a,b)=>{
-          const va=(a[sortState.key]||'').toString().toLowerCase();
-          const vb=(b[sortState.key]||'').toString().toLowerCase();
-          if(va<vb) return -1*sortState.dir;
-          if(va>vb) return 1*sortState.dir;
-          return 0;
-        });
-      }
-      tableBody.innerHTML='';
-      rows.forEach(r=>{
-        const tr=document.createElement('tr');
-        if (r.decision==='Blocked') tr.className='tvg-row--blocked';
-        else if (r.decision==='Approved') tr.className='tvg-row--approved';
-        else tr.className='tvg-row--default';
-        tr.innerHTML=`
-          <td>${r.id||''}</td>
-          <td>${r.decision||''}</td>
-          <td>${r.marketplace||''}</td>
-          <td>${r.event||''}</td>
-          <td>${r.section||''}</td>
-          <td>${r.row||''}</td>
-          <td>${r.seat||''}</td>
-          <td>${r.when||''}</td>
-        `;
-        tableBody.appendChild(tr);
-      });
-    }
-  
-    function onHeaderClick(e){
-      const th=e.target.closest('th[data-key]'); if(!th) return;
-      const key=th.getAttribute('data-key');
-      if(sortState.key===key) sortState.dir=-sortState.dir;
-      else { sortState.key=key; sortState.dir=1; }
-      renderTable();
-    }
-  
-    function resetFilters(){
-      filterDecision.value='all';
-      filterMarketplace.value='all';
-      renderTable();
-    }
-  
-    document.getElementById('tvg-results-table').querySelector('thead')
-      .addEventListener('click', onHeaderClick);
-    fileInput.addEventListener('change', onFileChange);
-    analyzeBtn.addEventListener('click', parseAndAnalyze);
-    filterDecision.addEventListener('change', renderTable);
-    filterMarketplace.addEventListener('change', renderTable);
-    resetFiltersBtn.addEventListener('click', resetFilters);
-  })();
-
-  // ===== TixMarketSearch (search.html) =====
+// ===== TixMarketSearch (search.html) =====
 (function () {
-  const form = document.getElementById('tixSearch');
+  const form = document.getElementById("tixSearch");
   if (!form) return; // only run on search.html
 
-  const queryEl    = document.getElementById('tms-query');
-  const linksWrap  = document.getElementById('tms-links');
-  const btnCopy    = document.getElementById('tms-copy');
-  const btnReset   = document.getElementById('tms-reset');
-  const infoToggle = document.getElementById('tms-info-toggle');
-  const explainer  = document.getElementById('tms-explainer');
+  const queryEl = document.getElementById("tms-query");
+  const linksWrap = document.getElementById("tms-links");
+  const btnCopy = document.getElementById("tms-copy");
+  const btnReset = document.getElementById("tms-reset");
+  const infoToggle = document.getElementById("tms-info-toggle");
+  const explainer = document.getElementById("tms-explainer");
 
   const siteConfigs = [
-    { id: 'site-seatgeek',     label: 'SeatGeek',     domain: 'seatgeek.com' },
-    { id: 'site-vivid',        label: 'Vivid Seats',  domain: 'vividseats.com' },
-    { id: 'site-stubhub',      label: 'StubHub',      domain: 'stubhub.com' },
-    { id: 'site-ticketmaster', label: 'Ticketmaster', domain: 'ticketmaster.com' },
-    { id: 'site-tickpick',     label: 'TickPick',     domain: 'tickpick.com' },
-    { id: 'site-viagogo',      label: 'Viagogo',      domain: 'viagogo.com' }
+    { id: "site-seatgeek", label: "SeatGeek", domain: "seatgeek.com" },
+    { id: "site-vivid", label: "Vivid Seats", domain: "vividseats.com" },
+    { id: "site-stubhub", label: "StubHub", domain: "stubhub.com" },
+    { id: "site-ticketmaster", label: "Ticketmaster", domain: "ticketmaster.com" },
+    { id: "site-tickpick", label: "TickPick", domain: "tickpick.com" },
+    { id: "site-viagogo", label: "Viagogo", domain: "viagogo.com" },
   ];
-  const googleCheckboxId = 'site-google';
+  const googleCheckboxId = "site-google";
 
   function baseQuery(raw) {
-    return (raw || '').replace(/\s+/g, ' ').trim();
+    return (raw || "").replace(/\s+/g, " ").trim();
   }
 
   function buildUrls() {
-    const raw = baseQuery(queryEl ? queryEl.value : '');
+    const raw = baseQuery(queryEl ? queryEl.value : "");
     if (!raw) return [];
 
     const urls = [];
     const selectedDomains = [];
 
     // Per-site Google searches: "<raw> site:domain"
-    siteConfigs.forEach(cfg => {
+    siteConfigs.forEach((cfg) => {
       const cb = document.getElementById(cfg.id);
       if (!cb || !cb.checked) return;
 
-      const g = new URL('https://www.google.com/search');
-      g.searchParams.set('q', `${raw} site:${cfg.domain}`);
+      const g = new URL("https://www.google.com/search");
+      g.searchParams.set("q", `${raw} site:${cfg.domain}`);
       urls.push({ label: cfg.label, href: g.toString() });
       selectedDomains.push(`site:${cfg.domain}`);
     });
@@ -1060,11 +672,17 @@ tvgSafe("prototype-metaSearch", () => {
     if (googleCb && googleCb.checked && selectedDomains.length) {
       let qTickets = raw;
       if (!/ticket/i.test(qTickets)) {
-        qTickets += ' tickets';
+        qTickets += " tickets";
       }
-      const g = new URL('https://www.google.com/search');
-      g.searchParams.set('q', `${qTickets} ${selectedDomains.join(' OR ')}`);
-      urls.unshift({ label: 'Google (all selected)', href: g.toString() });
+      const g = new URL("https://www.google.com/search");
+      g.searchParams.set(
+        "q",
+        `${qTickets} ${selectedDomains.join(" OR ")}`
+      );
+      urls.unshift({
+        label: "Google (all selected)",
+        href: g.toString(),
+      });
     }
 
     return urls;
@@ -1072,14 +690,14 @@ tvgSafe("prototype-metaSearch", () => {
 
   function renderPreview() {
     const urls = buildUrls();
-    linksWrap.innerHTML = '';
+    linksWrap.innerHTML = "";
     if (!urls.length) return;
 
-    urls.forEach(u => {
-      const a = document.createElement('a');
+    urls.forEach((u) => {
+      const a = document.createElement("a");
       a.href = u.href;
-      a.target = '_blank';
-      a.rel = 'noopener';
+      a.target = "_blank";
+      a.rel = "noopener";
       a.textContent = `${u.label}: ${u.href}`;
       linksWrap.appendChild(a);
     });
@@ -1095,19 +713,20 @@ tvgSafe("prototype-metaSearch", () => {
     const urls = buildUrls();
     if (!urls.length) return;
 
-    const first = window.open(urls[0].href, '_blank', 'noopener');
+    const first = window.open(urls[0].href, "_blank", "noopener");
     let blocked = !first || first.closed;
 
     for (let i = 1; i < urls.length; i++) {
-      const w = window.open(urls[i].href, '_blank', 'noopener');
+      const w = window.open(urls[i].href, "_blank", "noopener");
       if (!w || w.closed) blocked = true;
     }
 
     if (blocked) {
-      const note = document.createElement('div');
-      note.className = 'muted';
-      note.style.marginTop = '8px';
-      note.textContent = 'If only one tab opened, allow pop-ups for this site so all markets can open.';
+      const note = document.createElement("div");
+      note.className = "muted";
+      note.style.marginTop = "8px";
+      note.textContent =
+        "If only one tab opened, allow pop-ups for this site so all markets can open.";
       linksWrap.appendChild(note);
     }
   }
@@ -1116,52 +735,57 @@ tvgSafe("prototype-metaSearch", () => {
     const urls = buildUrls();
     if (!urls.length) return;
 
-    const text = urls.map(u => u.href).join('\n');
-    navigator.clipboard.writeText(text).then(() => {
-      const old = btnCopy.textContent;
-      btnCopy.textContent = 'Copied!';
-      setTimeout(() => { btnCopy.textContent = old; }, 900);
-    }).catch(() => {
-      // ignore clipboard failures
-    });
+    const text = urls.map((u) => u.href).join("\n");
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        const old = btnCopy.textContent;
+        btnCopy.textContent = "Copied!";
+        setTimeout(() => {
+          btnCopy.textContent = old;
+        }, 900);
+      })
+      .catch(() => {
+        // ignore clipboard failures
+      });
   }
 
   function resetForm() {
     form.reset();
-    linksWrap.innerHTML = '';
+    linksWrap.innerHTML = "";
   }
 
   // Info toggle for explainer card (for hover/tap)
   function toggleExplainer() {
     if (!explainer || !infoToggle) return;
-    const isOpen = infoToggle.getAttribute('aria-expanded') === 'true';
-    infoToggle.setAttribute('aria-expanded', String(!isOpen));
-    explainer.classList.toggle('is-collapsed', isOpen);
-    explainer.setAttribute('aria-hidden', String(isOpen));
+    const isOpen = infoToggle.getAttribute("aria-expanded") === "true";
+    infoToggle.setAttribute("aria-expanded", String(!isOpen));
+    explainer.classList.toggle("is-collapsed", isOpen);
+    explainer.setAttribute("aria-hidden", String(isOpen));
   }
 
   // Wire up events
-  form.addEventListener('submit', openAll);
-  if (queryEl) queryEl.addEventListener('input', renderPreview);
+  form.addEventListener("submit", openAll);
+  if (queryEl) queryEl.addEventListener("input", renderPreview);
 
-  siteConfigs.forEach(cfg => {
+  siteConfigs.forEach((cfg) => {
     const cb = document.getElementById(cfg.id);
-    if (cb) cb.addEventListener('change', renderPreview);
+    if (cb) cb.addEventListener("change", renderPreview);
   });
 
   const googleCb = document.getElementById(googleCheckboxId);
-  if (googleCb) googleCb.addEventListener('change', renderPreview);
+  if (googleCb) googleCb.addEventListener("change", renderPreview);
 
-  if (btnCopy)  btnCopy.addEventListener('click', copyAll);
-  if (btnReset) btnReset.addEventListener('click', resetForm);
-  if (infoToggle) infoToggle.addEventListener('click', toggleExplainer);
+  if (btnCopy) btnCopy.addEventListener("click", copyAll);
+  if (btnReset) btnReset.addEventListener("click", resetForm);
+  if (infoToggle) infoToggle.addEventListener("click", toggleExplainer);
 
   // Optional: open explainer on desktop hover
-  if (infoToggle && explainer && window.matchMedia('(hover:hover)').matches) {
-    infoToggle.addEventListener('mouseenter', () => {
-      infoToggle.setAttribute('aria-expanded', 'true');
-      explainer.classList.remove('is-collapsed');
-      explainer.setAttribute('aria-hidden', 'false');
+  if (infoToggle && explainer && window.matchMedia("(hover:hover)").matches) {
+    infoToggle.addEventListener("mouseenter", () => {
+      infoToggle.setAttribute("aria-expanded", "true");
+      explainer.classList.remove("is-collapsed");
+      explainer.setAttribute("aria-hidden", "false");
     });
   }
 
