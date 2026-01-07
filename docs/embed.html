@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — Embedded Checker</title>
+  <title>Ticket VeriGuard — Embedded Exposure Scan</title>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
@@ -32,13 +32,17 @@
     .tvg-embed-brand a{color:var(--brand-2);text-decoration:none;}
   </style>
 </head>
+
 <body>
   <div class="tvg-embed-shell">
     <div class="tvg-embed-header">
       <div>
-        <div class="tvg-embed-title">Ticket listing conflict check</div>
-        <div class="tvg-embed-sub">Upload a CSV. We’ll highlight seats that appear more than once.</div>
+        <div class="tvg-embed-title">Ticket listing exposure scan</div>
+        <div class="tvg-embed-sub">
+          Upload a CSV. We’ll highlight seats that appear more than once and surface duplicate exposure signals.
+        </div>
       </div>
+
       <div class="tvg-embed-brand" id="tvg-embed-brand">
         Powered by <a href="https://ticketveriguard.com" target="_blank" rel="noopener">Ticket VeriGuard</a>
       </div>
@@ -51,25 +55,32 @@
           <input id="tvg-file-input" type="file" accept=".csv" style="display:none;">
           Choose CSV file
         </label>
-        <button id="tvg-analyze-btn" class="btn btn-ghost" disabled>Analyze CSV</button>
+        <button id="tvg-analyze-btn" class="btn btn-ghost" disabled>Run scan</button>
         <div id="tvg-file-label" class="tvb-note">No file selected.</div>
       </div>
+
       <div class="tvg-stats" style="display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;">
-        <div class="tvb-note">Uploads analyzed: <strong id="tvg-upload-count">0</strong></div>
-        <div class="tvb-note">Potential conflicts: <strong id="tvg-conflict-count">0</strong></div>
+        <div class="tvb-note">Scans run: <strong id="tvg-upload-count">0</strong></div>
+        <div class="tvb-note">Duplicate exposures flagged: <strong id="tvg-conflict-count">0</strong></div>
+      </div>
+
+      <div class="tvb-note" style="margin-top:10px;">
+        This checker surfaces visibility signals. It does not enforce marketplace rules or remove listings.
       </div>
     </section>
 
     <section class="tvb-card" style="margin-top:10px;">
       <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
         <select id="tvg-filter-decision" class="btn btn-ghost" style="padding-inline:10px; min-width:140px;">
-          <option value="all">All decisions</option>
-          <option value="Approved">Approved</option>
-          <option value="Blocked">Blocked</option>
+          <option value="all">All results</option>
+          <option value="Approved">Clear</option>
+          <option value="Blocked">Flagged</option>
         </select>
+
         <select id="tvg-filter-marketplace" class="btn btn-ghost" style="padding-inline:10px; min-width:140px;">
           <option value="all">All marketplaces</option>
         </select>
+
         <button id="tvg-reset-filters" class="btn btn-ghost">Reset</button>
       </div>
     </section>
@@ -80,7 +91,7 @@
           <thead>
             <tr>
               <th data-key="id">ID</th>
-              <th data-key="decision">Decision</th>
+              <th data-key="decision">Result</th>
               <th data-key="marketplace">Marketplace</th>
               <th data-key="event">Event</th>
               <th data-key="section">Section</th>
@@ -143,7 +154,7 @@
         const file = fileInput.files[0];
         if (!file || !window.Papa) return;
         analyzeBtn.disabled = true;
-        analyzeBtn.textContent = 'Analyzing...';
+        analyzeBtn.textContent = 'Scanning...';
 
         Papa.parse(file, {
           header: true,
@@ -198,11 +209,11 @@
             populateMarketplaceFilter();
             renderTable();
 
-            analyzeBtn.textContent = 'Analyze CSV';
+            analyzeBtn.textContent = 'Run scan';
             analyzeBtn.disabled = false;
           },
           error: () => {
-            analyzeBtn.textContent = 'Analyze CSV';
+            analyzeBtn.textContent = 'Run scan';
             analyzeBtn.disabled = false;
             alert('Sorry, there was a problem reading that file.');
           }
