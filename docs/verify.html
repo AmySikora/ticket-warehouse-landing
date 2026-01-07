@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — Verify Listings</title>
-  <meta name="description" content="Upload your ticket listings CSV and automatically detect duplicate seats across marketplaces."/>
+  <title>Ticket VeriGuard — CSV Risk Scan</title>
+  <meta name="description" content="Upload a ticket listings CSV and surface duplicate exposure signals across marketplaces to reduce disputes and chargebacks."/>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css" />
   <!-- PapaParse for CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
 </head>
+
 <body class="verify-page">
   <!-- Header -->
   <header class="nav">
@@ -30,8 +31,7 @@
         <a href="verify.html" class="nav-link nav-active">CSV Check</a>
         <a href="prototype.html" class="nav-link">How it works</a>
         <a href="search.html" class="nav-link">TixMarketSearch</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html"
-   class="nav-link">Try Live Demo</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Try Live Demo</a>
         <a href="index.html#contact" class="nav-link">Contact Us</a>
       </nav>
     </div>
@@ -39,20 +39,20 @@
 
   <main class="tvb-page">
     <div class="tvb-container">
-    <section class="tvb-hero">
-      <!-- Hero -->
-        <h1>Upload your listings. We’ll flag the risky duplicates.</h1>
+
+      <section class="tvb-hero">
+        <h1>Upload your listings. We’ll surface duplicate exposure signals.</h1>
         <p>
-          Upload a CSV file with your ticket listings from any site you use.
-          Ticket VeriGuard looks for the same seat showing up more than once
-          and shows you which listings are safe and which ones you should block.
+          Upload a CSV export from any marketplace or tool you use. Ticket VeriGuard scans for the same seat
+          appearing more than once and flags the listings most likely to create disputes, chargebacks, and buyer frustration.
         </p>
+
         <div class="tvg-verify-meta tvb-note">
           In this demo, a “conflict” means the exact same
           <strong>event, section, row, and seat</strong> appears on more than one row.
-          This check runs only in your browser — we don’t save your file.
+          This scan runs only in your browser — we don’t upload or store your file.
         </div>
-    </section>
+      </section>
 
       <!-- Upload + summary -->
       <section class="tvb-card tvg-upload-card">
@@ -61,13 +61,13 @@
             <input id="tvg-file-input" type="file" accept=".csv">
             Choose CSV file
           </label>
-          <button id="tvg-analyze-btn" class="btn btn-ghost" disabled>Analyze CSV</button>
+          <button id="tvg-analyze-btn" class="btn btn-ghost" disabled>Run scan</button>
           <button id="tvg-sample-btn" class="btn btn-ghost">Try sample CSV</button>
           <div id="tvg-file-label" class="tvb-note tvg-file-name">No file selected.</div>
         </div>
 
         <div class="tvg-microcopy">
-          All checks in this demo run locally in your browser. No files are uploaded or stored.
+          This demo runs locally in your browser. No files are uploaded or stored.
         </div>
 
         <div id="tvg-summary" class="tvg-summary-strip" aria-live="polite">
@@ -80,23 +80,23 @@
         <div class="tvg-filter-row">
           <div class="tvb-note">Filter:</div>
           <select id="tvg-filter-decision" class="btn btn-ghost tvg-filter-select">
-            <option value="all">All decisions</option>
-            <option value="Approved">Approved only</option>
-            <option value="Blocked">Blocked only</option>
+            <option value="all">All results</option>
+            <option value="Approved">Clear only</option>
+            <option value="Blocked">Flagged only</option>
           </select>
           <select id="tvg-filter-marketplace" class="btn btn-ghost tvg-filter-select">
             <option value="all">All marketplaces</option>
           </select>
           <button id="tvg-reset-filters" class="btn btn-ghost">Reset</button>
           <div class="tvg-filter-spacer"></div>
-          <button id="tvg-download-clean" class="btn btn-ghost" disabled>Download cleaned CSV</button>
+          <button id="tvg-download-clean" class="btn btn-ghost" disabled>Download filtered CSV</button>
         </div>
       </section>
 
       <!-- Table -->
       <section class="tvb-card tvg-table-card">
         <div class="tvg-table-header">
-          <h3>Listing decisions</h3>
+          <h3>Scan results</h3>
           <div class="tvb-note">Click a column header to sort. Conflict groups are labeled.</div>
         </div>
         <div class="tvg-table-wrap">
@@ -104,7 +104,7 @@
             <thead>
               <tr>
                 <th data-key="id">ID</th>
-                <th data-key="decision">Decision</th>
+                <th data-key="decision">Result</th>
                 <th data-key="marketplace">Marketplace</th>
                 <th data-key="event">Event</th>
                 <th data-key="section">Section</th>
@@ -116,7 +116,7 @@
             <tbody>
               <tr class="tvg-empty-row">
                 <td colspan="8">
-                  Upload a CSV above or try the sample file to see duplicate seat checks here.
+                  Upload a CSV above or try the sample file to see duplicate exposure checks here.
                 </td>
               </tr>
             </tbody>
@@ -127,34 +127,37 @@
       <!-- Feedback -->
       <section class="tvb-card tvg-feedback-card">
         <div class="tvg-feedback-row">
-          <span class="tvb-note">Was this conflict check helpful?</span>
+          <span class="tvb-note">Was this scan helpful?</span>
           <button id="tvg-thumb-up" class="btn btn-ghost">👍 Yes</button>
           <button id="tvg-thumb-down" class="btn btn-ghost">👎 Not really</button>
           <span id="tvg-feedback-label" class="tvb-note"></span>
         </div>
       </section>
 
-      <!-- Broker Pilot CTA (your new section) -->
+      <!-- Broker Pilot CTA -->
       <section class="tvb-card tvg-pilot-card">
         <div class="tvg-pilot-label">
-          <h3>Ready to see this on your real inventory?</h3>
+          <h3>Want to see the risk signals on your real inventory?</h3>
           <p class="tvb-note">
-            Send a recent CSV export (or let us pull a sample). We’ll run this exact conflict logic,
-            share a summary of risky seats, and walk through it with you in a short call.
+            Send a recent CSV export (or let us use a small sample). We’ll run this same scan,
+            share a clear summary of duplicate exposure, and walk through what it means in a short call.
           </p>
         </div>
+
         <ul class="tvg-pilot-list">
           <li>No engineering work required on your side.</li>
-          <li>We only use your file to generate conflict insights for you.</li>
-          <li>If we catch &ge; 1 real duplicate, we’ll map out next steps.</li>
+          <li>We use your file only to generate a results summary for you.</li>
+          <li>If we find real exposure, we’ll map out practical next steps.</li>
         </ul>
+
         <a
           class="btn btn-ghost tvg-pilot-btn"
-          href="mailto:amy@ticketveriguard.com?subject=Ticket%20VeriGuard%20Broker%20Pilot&body=Name:%0DCompany:%0DMarketplaces%20used:%0DOk%20to%20send%20sample%20CSV:%20Yes/No%0DNotes:"
+          href="mailto:amy@ticketveriguard.com?subject=Ticket%20VeriGuard%20Pilot%20Request&body=Name:%0DCompany:%0DMarketplaces%20used:%0DCan%20you%20share%20a%20sample%20CSV:%20Yes/No%0DNotes:"
         >
-          Start Free Broker Pilot
+          Request a Pilot Scan
         </a>
       </section>
+
     </div>
   </main>
 

@@ -4,10 +4,11 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Ticket VeriGuard — TixMarketSearch</title>
-  <meta name="description" content="TixMarketSearch opens ticket searches across multiple marketplaces using the same query you’d normally type into Google."/>
+  <meta name="description" content="TixMarketSearch helps you quickly locate listings across marketplaces so you can spot duplicate exposure and compare results side by side."/>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css"/>
 </head>
+
 <body class="page-search">
   <!-- Header -->
   <header class="nav">
@@ -28,8 +29,7 @@
         <a href="verify.html" class="nav-link">CSV Check</a>
         <a href="prototype.html" class="nav-link">How it works</a>
         <a href="search.html" class="nav-link nav-active" aria-current="page">TixMarketSearch</a>
-      <a href="https://amysikora.github.io/tvg-demo/index.html"
-   class="nav-link">Try Live Demo</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Try Live Demo</a>
         <a href="index.html#contact" class="nav-link">Contact Us</a>
       </nav>
     </div>
@@ -38,10 +38,10 @@
   <main>
     <section class="section">
       <div class="container">
-        <h1>Search tickets across marketplaces in one step</h1>
+        <h1>Search listings across marketplaces in one step</h1>
         <p class="lead">
-          Type the search you’d normally use on Google once.  
-          TixMarketSearch opens that query across the ticket sites you choose.
+          Type your search once and open results across the sites you choose.
+          This is a quick way to find where tickets appear and compare listings side by side.
         </p>
 
         <div class="card search-card">
@@ -97,8 +97,8 @@
               <button type="button" id="tms-copy" class="btn">Copy all links</button>
               <button type="button" id="tms-reset" class="btn">Reset</button>
               <span class="ms-hint muted">
-                Type an artist, team, or event — even if it’s misspelled.  
-                We’ll search the marketplaces you pick and add ticket context where it helps.
+                Tip: include the artist, team, event, and city when you can.
+                If you’re trying to spot duplicate exposure, keep the search terms consistent across sites.
               </span>
             </div>
           </form>
@@ -112,14 +112,16 @@
         <div id="tms-explainer" class="card ms-explainer is-collapsed" aria-hidden="true">
           <h3 class="ms-explainer-title">How this search works</h3>
           <ul class="feature-list">
-            <li>Type the same words you’d use in a normal Google search — misspellings are fine.</li>
-            <li>For each site you select, we open a Google search like
-              <code>chappel roan seattle site:stubhub.com</code>.
-            </li>
+            <li>Type the same words you’d use in a normal search — misspellings are fine.</li>
+            <li>For each site you select, we open a targeted search like <code>chappell roan seattle site:stubhub.com</code>.</li>
             <li>For the combined Google tab, we add “tickets” if it isn’t already in your search to strengthen results.</li>
             <li>If a site doesn’t have tickets yet, you’ll just see its normal “no results” page.</li>
-            <li>Nothing is scraped, stored, or connected to your accounts — this tool simply saves you from typing the same search over and over.</li>
+            <li>Nothing is scraped, stored, or connected to your accounts — this tool simply saves you from repeating the same search across multiple sites.</li>
           </ul>
+
+          <p class="muted" style="margin-top:10px;">
+            This tool is part of Ticket VeriGuard’s broader goal: making duplicate exposure easier to see.
+          </p>
         </div>
       </div>
     </section>

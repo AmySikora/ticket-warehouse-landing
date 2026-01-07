@@ -4,10 +4,11 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Ticket VeriGuard — How It Works</title>
-  <meta name="description" content="A plain-English walkthrough of what Ticket VeriGuard does and how the prototype works."/>
+  <meta name="description" content="A plain-English walkthrough of how Ticket VeriGuard monitors duplicate ticket exposure and surfaces risk signals across marketplaces."/>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css" />
 </head>
+
 <body class="page-prototype">
   <header class="nav">
     <div class="nav--brand">
@@ -27,113 +28,171 @@
         <a href="verify.html" class="nav-link">CSV Check</a>
         <a href="prototype.html" class="nav-link nav-active">How it works</a>
         <a href="search.html" class="nav-link">TixMarketSearch</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html"
-        class="nav-link">Try Live Demo</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Try Live Demo</a>
         <a href="./index.html#contact" class="nav-link">Contact Us</a>
       </nav>
     </div>
   </header>
 
   <main>
+    <!-- Intro -->
     <section class="section">
       <div class="container">
         <h1>How Ticket VeriGuard works</h1>
         <p class="lead">
-          Connect where you sell, register your tickets once, and let instant updates keep every listing accurate.
-          This page shows the nuts and bolts.
+          Ticket VeriGuard monitors ticket listings across marketplaces to detect
+          duplicate exposure and surface risk signals that often lead to disputes,
+          chargebacks, and consumer harm.
         </p>
         <div class="cta-row">
-          <a class="btn btn-ghost" href="./index.html#contact">Contact us</a>
+          <a class="btn btn-ghost" href="./index.html#contact">Talk to us</a>
         </div>
       </div>
     </section>
 
+    <!-- Flow -->
     <section class="section">
       <div class="container">
         <h2>The flow at a glance</h2>
         <div class="grid-2">
           <div class="card">
-            <h3>1) Link accounts</h3>
-            <p class="muted">Choose your marketplaces or point of sale and connect them. You control what gets shared.</p>
-            <h3 class="mt-8">2) Register tickets once</h3>
-            <p class="muted">Add seat details in one place. We keep them tidy and ready for fast updates.</p>
+            <h3>1) Connect or upload</h3>
+            <p class="muted">
+              Provide ticket data via CSV uploads or marketplace connections.
+              You control what data is shared and when.
+            </p>
+
+            <h3 class="mt-8">2) Normalize listings</h3>
+            <p class="muted">
+              Ticket details are parsed and normalized so seats, rows, and sections
+              can be compared accurately across sources.
+            </p>
           </div>
+
           <div class="card">
-            <h3>3) Real-time updates</h3>
-            <p class="muted">When a seat sells on any connected site, we flag it and send updates to the rest in a blink.</p>
-            <h3 class="mt-8">4) Clean checkouts</h3>
-            <p class="muted">Fans see what is actually available. You skip double sales, refunds, and support churn.</p>
-            <p class="muted">Want to search multiple sites at once? Try the <a href="search.html">MetaSearch tool</a>.</p>
+            <h3>3) Detect duplicate exposure</h3>
+            <p class="muted">
+              We scan for the same inventory appearing more than once across marketplaces
+              and identify patterns linked to higher risk.
+            </p>
+
+            <h3 class="mt-8">4) Surface risk signals</h3>
+            <p class="muted">
+              Results are presented clearly so teams can decide what to pause,
+              fix, monitor, or investigate further.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- TixMarketSearch teaser -->
-<section class="section">
-  <div class="container">
-    <h2>Search your tickets across marketplaces</h2>
-    <p class="muted">
-      Want to find your listings across sites like StubHub, SeatGeek, and Vivid Seats?
-      Try our <a href="search.html">TixMarketSearch tool</a> — it opens results from multiple marketplaces at once.
-    </p>
-  </div>
-</section>
-
     <section class="section">
       <div class="container">
-        <h2>“Two people tried to buy the same ticket,” what happens?</h2>
+        <h2>Search listings across marketplaces</h2>
+        <p class="muted">
+          Want to quickly locate where a ticket appears across sites like StubHub,
+          SeatGeek, and Vivid Seats? Try our
+          <a href="search.html">TixMarketSearch tool</a> to open marketplace results side by side.
+        </p>
+      </div>
+    </section>
+
+    <!-- Scenario -->
+    <section class="section">
+      <div class="container">
+        <h2>What happens when the same ticket appears twice?</h2>
         <div class="card">
           <p>
-            Without coordination, both checkouts might succeed. With Ticket VeriGuard, the first confirmed buyer wins.
-            The moment that happens, we send a webhook <span class="kbd">POST</span> to the other marketplaces saying the ticket is sold.
-            Their pages update, and the second buyer sees it before paying. No refund and no angry emails.
+            In many resale workflows, duplicate listings can exist at the same time.
+            When that exposure isn’t visible, it often leads to failed fulfillments,
+            refunds, and customer disputes.
+          </p>
+          <p class="muted">
+            Ticket VeriGuard does not block checkouts or enforce marketplace rules.
+            Instead, it highlights where duplicate exposure exists and where patterns
+            suggest elevated risk — giving teams the information needed to act early.
           </p>
         </div>
       </div>
     </section>
 
+    <!-- Prototype API -->
     <section class="section">
       <div class="container">
-        <h2>Prototype: what the requests look like</h2>
+        <h2>Prototype: what the signals look like</h2>
+
         <div class="card mb-10">
-          <h3>Add a ticket</h3>
+          <h3>Register a ticket listing</h3>
 <pre><code>POST /api/tickets
 Authorization: Bearer &lt;YOUR_API_KEY&gt;
 
 {
   "ticket_id": "A1-ROW3-12",
   "event": "RockFest 2025",
-  "face_value": 120.00,
-  "currency": "USD",
-  "status": "available"
+  "section": "A1",
+  "row": "3",
+  "seat": "12",
+  "marketplace": "ExampleMarket",
+  "status": "listed"
 }</code></pre>
         </div>
+
         <div class="card mb-10">
-          <h3>Mark as sold</h3>
-<pre><code>POST /api/tickets/A1-ROW3-12/sold
+          <h3>Flag duplicate exposure</h3>
+<pre><code>POST /api/exposure
 Authorization: Bearer &lt;YOUR_API_KEY&gt;
 
 {
-  "marketplace": "ExampleMarket",
-  "order_id": "ORD-983221"
+  "ticket_id": "A1-ROW3-12",
+  "exposure_count": 2,
+  "risk_level": "high"
 }</code></pre>
+
           <p class="muted mt-6">
-            We send a webhook (POST to <span class="kbd">/webhooks/tickets</span>) with
-            <span class="kbd">{"ticket_id":"A1-ROW3-12","status":"sold"}</span>.
+            These signals can be surfaced in dashboards, reports, or alerts —
+            depending on how teams want to consume them.
           </p>
         </div>
       </div>
     </section>
 
+    <!-- FAQ -->
     <section class="section">
       <div class="container">
         <h2>Quick FAQ</h2>
         <div class="grid-2">
-          <div class="card"><h3>Do I need to change all my systems?</h3><p class="muted">No. Start by registering tickets and listening for webhooks. Integrate deeper over time.</p></div>
-          <div class="card"><h3>How fast are updates?</h3><p class="muted">Usually in milliseconds. Fast enough to catch near-simultaneous checkouts.</p></div>
-          <div class="card"><h3>What if a marketplace is offline?</h3><p class="muted">We queue notifications and retry. Your records stay correct, and late systems catch up.</p></div>
-          <div class="card"><h3>Can I try a sandbox?</h3><p class="muted">Yes. Email <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a> and we’ll set you up.</p></div>
+          <div class="card">
+            <h3>Does Ticket VeriGuard block listings or sales?</h3>
+            <p class="muted">
+              No. Ticket VeriGuard provides visibility into duplicate exposure and risk.
+              Decisions and enforcement remain with your existing systems.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Do we need to replace our current tools?</h3>
+            <p class="muted">
+              No. Ticket VeriGuard is designed to work alongside existing aggregation
+              and inventory systems.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>How often are scans run?</h3>
+            <p class="muted">
+              Scans can be run on demand, scheduled, or triggered by updates,
+              depending on integration level.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Can we try this with sample data?</h3>
+            <p class="muted">
+              Yes. Email <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>
+              to run a pilot scan with your own listings.
+            </p>
+          </div>
         </div>
       </div>
     </section>
