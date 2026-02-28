@@ -336,7 +336,6 @@ a.btn, button.btn, .btn {
   border: 0;
 }
 
-
 /* === Broker Pilot CTA (shared) === */
 
 .tvg-pilot-card {
@@ -1939,4 +1938,115 @@ a.btn:hover, button.btn:hover, .btn:hover {
   body.menu-open::after {
     pointer-events: none;
   }
+}
+
+/* ================================
+   TTI Snapshot workflow (v0)
+   Fixes weird wrapping + adds clean numbered circles
+   ================================ */
+
+.tti-workflow {
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+/* Replace default <ol> styling with consistent layout */
+.tti-workflow .steps {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  counter-reset: ttiStep;
+}
+
+/* Two-column layout: number + text */
+.tti-workflow .steps li {
+  counter-increment: ttiStep;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: start;
+  line-height: 1.5;
+
+  /* Key: prevents “narrow column wrap” bugs in grid/flex descendants */
+  min-width: 0;
+}
+
+/* Number badge */
+.tti-workflow .steps li::before {
+  content: counter(ttiStep);
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+
+  background: linear-gradient(90deg, var(--brand, #4f46e5), var(--brand-2, #22d3ee));
+  box-shadow: 0 0 0 2px rgba(34,211,238,.18);
+}
+
+/* Keep bold phrases inline (prevents “lowest / listed / price” stacking) */
+.tti-workflow .steps strong {
+  display: inline;
+  white-space: normal;
+  word-break: normal;
+}
+
+/* Small screen sizing */
+@media (max-width: 520px) {
+  .tti-workflow .steps li {
+    grid-template-columns: 26px 1fr;
+    gap: 10px;
+  }
+
+  .tti-workflow .steps li::before {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ================================
+   TTI Snapshot workflow hard override
+   (fixes the weird narrow wrapping)
+   ================================ */
+
+.tti-workflow .steps {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin: 10px 0 0 !important;
+}
+
+/* Force a sane 2-column layout: badge + full-width text */
+.tti-workflow .steps li {
+  display: grid !important;
+  grid-template-columns: 28px minmax(0, 1fr) !important; /* minmax(0,1fr) is the fix */
+  column-gap: 12px !important;
+  align-items: start !important;
+  line-height: 1.5 !important;
+  min-width: 0 !important;
+}
+
+/* If your existing CSS creates the number circles, keep it.
+   If not, this will still behave fine. */
+.tti-workflow .steps li::before {
+  width: 28px !important;
+  height: 28px !important;
+  flex: 0 0 28px !important;
+}
+
+/* The main fix: stop bold text from becoming its own narrow block */
+.tti-workflow .steps li strong {
+  display: inline !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  max-width: none !important;
+}
+
+/* Also protect the text column from inheriting weird width constraints */
+.tti-workflow .steps li * {
+  min-width: 0 !important;
 }

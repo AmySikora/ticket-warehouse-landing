@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G4R61ZH08K');
+  </script>
 
-  gtag('config', 'G-G4R61ZH08K');
-</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — TixMarketSearch</title>
-  <meta name="description" content="TixMarketSearch helps you quickly locate listings across marketplaces so you can spot duplicate exposure and compare results side by side."/>
+  <title>Ticket Transparency Index — Market Search</title>
+  <meta name="description" content="Open consistent marketplace searches to capture repeatable price snapshots for weekly transparency reporting."/>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css"/>
 </head>
@@ -23,7 +23,7 @@
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
-        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
+        <img src="./favicon_logo.png" alt="Ticket Transparency Index" class="logo-img">
       </a>
 
       <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
         <a href="verify.html" class="nav-link">CSV Check</a>
         <a href="prototype.html" class="nav-link">How it works</a>
         <a href="search.html" class="nav-link nav-active" aria-current="page">TixMarketSearch</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Try Live Demo</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link" target="_blank" rel="noopener noreferrer">Try Live Demo</a>
         <a href="index.html#contact" class="nav-link">Contact Us</a>
       </nav>
     </div>
@@ -46,14 +46,30 @@
 
   <main>
     <section class="section">
-      <div class="container">
-        <h1>Search listings across marketplaces in one step</h1>
+      <div class="card tti-workflow" style="margin-top:16px;">
+        <h1>Capture consistent ticket price snapshots across marketplaces</h1>
         <p class="lead">
-          Type your search once and open results across the sites you choose.
-          This is a quick way to find where tickets appear and compare listings side by side.
+          Search once, open the same query across marketplaces, then record the lowest listed price.
+          This supports repeatable price snapshots for weekly transparency reporting.
         </p>
 
-        <div class="card search-card">
+        <!-- Snapshot workflow (v0) -->
+        <div class="card tti-workflow" style="margin-top:16px;">
+          <h3 style="margin-top:0;">Snapshot workflow (v0)</h3>
+          <ol class="steps">
+            <li>Open results for each marketplace.</li>
+            <li>c.</li>
+            <li>If the marketplace shows an all-in price, capture it (otherwise leave fees blank).</li>
+            <li>Paste the listing URL you used into your snapshot form.</li>
+            <li>Repeat weekly to track changes over time.</li>
+          </ol>
+          <p class="muted" style="margin-bottom:0;">
+            Manual entry is fine in v0. Consistency is the goal.
+          </p>
+        </div>
+
+        <!-- Search tool -->
+        <div class="card search-card" style="margin-top:16px;">
           <div class="tms-header-row">
             <h2 class="section-title" style="margin-bottom:0;">TixMarketSearch</h2>
             <button
@@ -104,10 +120,12 @@
             <div class="ms-actions">
               <button type="submit" class="btn btn-primary" id="tms-open">Open results</button>
               <button type="button" id="tms-copy" class="btn">Copy all links</button>
+              <button type="button" id="tms-copy-template" class="btn">Copy snapshot template</button>
               <button type="button" id="tms-reset" class="btn">Reset</button>
+
               <span class="ms-hint muted">
                 Tip: include the artist, team, event, and city when you can.
-                If you’re trying to spot duplicate exposure, keep the search terms consistent across sites.
+                If you’re capturing snapshots, keep search terms consistent across sites so weekly comparisons stay clean.
               </span>
             </div>
           </form>
@@ -118,7 +136,8 @@
           </div>
         </div>
 
-        <div id="tms-explainer" class="card ms-explainer is-collapsed" aria-hidden="true">
+        <!-- Explainer -->
+        <div id="tms-explainer" class="card ms-explainer is-collapsed" aria-hidden="true" style="margin-top:16px;">
           <h3 class="ms-explainer-title">How this search works</h3>
           <ul class="feature-list">
             <li>Type the same words you’d use in a normal search — misspellings are fine.</li>
@@ -129,7 +148,7 @@
           </ul>
 
           <p class="muted" style="margin-top:10px;">
-            This tool is part of Ticket VeriGuard’s broader goal: making duplicate exposure easier to see.
+            This tool supports Ticket Transparency Index by making repeatable snapshot capture faster.
           </p>
         </div>
       </div>
@@ -138,7 +157,7 @@
 
   <footer>
     <div class="container footer-bar">
-      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
+      <div class="muted">© <span id="y"></span> Ticket Transparency Index</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> ·
         <a class="muted" href="#">Privacy</a> ·
