@@ -58,7 +58,7 @@
           <h3 style="margin-top:0;">Snapshot workflow (v0)</h3>
           <ol class="steps">
             <li>Open results for each marketplace.</li>
-            <li>c.</li>
+            <li>Record the lowest listed price you see at that moment.</li>
             <li>If the marketplace shows an all-in price, capture it (otherwise leave fees blank).</li>
             <li>Paste the listing URL you used into your snapshot form.</li>
             <li>Repeat weekly to track changes over time.</li>
@@ -135,7 +135,85 @@
             <div id="tms-links" class="ms-links"></div>
           </div>
         </div>
+          <!-- Snapshot capture panel (v0) -->
+<div class="card tti-capture" style="margin-top:16px;">
+  <div class="tti-capture-head">
+    <h3 style="margin:0;">Capture snapshot (v0)</h3>
+    <div class="tti-capture-actions">
+      <button type="button" class="btn btn-sm" id="tti-export-csv">Export CSV</button>
+      <button type="button" class="btn btn-sm btn-ghost" id="tti-clear-session">Clear session</button>
+    </div>
+  </div>
 
+  <p class="muted" style="margin:8px 0 12px;">
+    Enter the lowest listed price you see on each marketplace right now. This saves to your browser (localStorage).
+  </p>
+
+  <form id="tti-snapshot-form" class="tti-form" novalidate>
+    <div class="tti-grid">
+      <label class="tti-field">
+        <span class="ms-label-text">Marketplace</span>
+        <select id="tti-marketplace" required class="tti-input">
+          <option value="" selected disabled>Select…</option>
+          <option value="stubhub">StubHub</option>
+          <option value="seatgeek">SeatGeek</option>
+          <option value="vivid">Vivid Seats</option>
+          <option value="ticketmaster">Ticketmaster</option>
+          <option value="tickpick">TickPick</option>
+          <option value="viagogo">Viagogo</option>
+        </select>
+      </label>
+
+      <label class="tti-field">
+        <span class="ms-label-text">Lowest listed price (USD)</span>
+        <input id="tti-price" type="number" inputmode="decimal" min="0" step="0.01" required
+               class="tti-input" placeholder="e.g., 79.00">
+      </label>
+
+      <label class="tti-field">
+        <span class="ms-label-text">All-in / fees (optional)</span>
+        <input id="tti-fees" type="number" inputmode="decimal" min="0" step="0.01"
+               class="tti-input" placeholder="e.g., 102.50">
+      </label>
+
+      <label class="tti-field tti-url">
+        <span class="ms-label-text">URL used</span>
+        <input id="tti-url" type="url" required
+               class="tti-input" placeholder="Paste the listing/results URL you used">
+      </label>
+    </div>
+
+    <div class="tti-row">
+      <label class="tti-field" style="flex:1;">
+        <span class="ms-label-text">Notes (optional)</span>
+        <input id="tti-notes" type="text" class="tti-input" placeholder="e.g., floor seats only, filtered by 2 tickets">
+      </label>
+
+      <button type="submit" class="btn btn-primary" id="tti-save-snapshot">Save snapshot</button>
+    </div>
+
+    <p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
+  </form>
+
+  <div class="tti-table-wrap" style="margin-top:14px;">
+    <div class="muted">Saved this session:</div>
+    <table class="tti-table" aria-label="Saved snapshots">
+      <thead>
+        <tr>
+          <th>Captured</th>
+          <th>Marketplace</th>
+          <th>Price</th>
+          <th>Fees</th>
+          <th>URL</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tti-snapshots-body">
+        <tr><td colspan="6" class="muted">No snapshots saved yet.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
         <!-- Explainer -->
         <div id="tms-explainer" class="card ms-explainer is-collapsed" aria-hidden="true" style="margin-top:16px;">
           <h3 class="ms-explainer-title">How this search works</h3>

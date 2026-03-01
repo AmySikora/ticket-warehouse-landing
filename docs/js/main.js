@@ -623,7 +623,7 @@ tvgSafe("verify-csv", () => {
     thumbDown.addEventListener("click", () => handleThumb(false));
 });
 
-// ===== TixMarketSearch (search.html) =====
+/// ===== TixMarketSearch (search.html) =====
 (function () {
   const form = document.getElementById("tixSearch");
   if (!form) return; // only run on search.html
@@ -631,6 +631,7 @@ tvgSafe("verify-csv", () => {
   const queryEl = document.getElementById("tms-query");
   const linksWrap = document.getElementById("tms-links");
   const btnCopy = document.getElementById("tms-copy");
+  const btnCopyTemplate = document.getElementById("tms-copy-template");
   const btnReset = document.getElementById("tms-reset");
   const infoToggle = document.getElementById("tms-info-toggle");
   const explainer = document.getElementById("tms-explainer");
@@ -675,10 +676,7 @@ tvgSafe("verify-csv", () => {
         qTickets += " tickets";
       }
       const g = new URL("https://www.google.com/search");
-      g.searchParams.set(
-        "q",
-        `${qTickets} ${selectedDomains.join(" OR ")}`
-      );
+      g.searchParams.set("q", `${qTickets} ${selectedDomains.join(" OR ")}`);
       urls.unshift({
         label: "Google (all selected)",
         href: g.toString(),
@@ -750,6 +748,57 @@ tvgSafe("verify-csv", () => {
       });
   }
 
+  function copySnapshotTemplate() {
+    if (!btnCopyTemplate) return;
+
+    const raw = baseQuery(queryEl ? queryEl.value : "");
+
+    const selected = siteConfigs
+      .filter((cfg) => {
+        const cb = document.getElementById(cfg.id);
+        return cb && cb.checked;
+      })
+      .map((cfg) => cfg.label);
+
+    const now = new Date();
+    const capturedAt = now.toISOString();
+    const markets = selected.length ? selected.join(", ") : "—";
+
+    const template = [
+      "Ticket Transparency Index — Snapshot (v0)",
+      "----------------------------------------",
+      `Search query: ${raw || "—"}`,
+      `Marketplaces selected: ${markets}`,
+      `Captured at (ISO): ${capturedAt}`,
+      "",
+      "Per-marketplace entries:",
+      "- Marketplace:",
+      "  Lowest listed price (USD):",
+      "  All-in / fees (USD, optional):",
+      "  URL used:",
+      "  Notes:",
+      "",
+      "- Marketplace:",
+      "  Lowest listed price (USD):",
+      "  All-in / fees (USD, optional):",
+      "  URL used:",
+      "  Notes:",
+      "",
+      "(Add/remove blocks as needed.)"
+    ].join("\n");
+
+    navigator.clipboard
+      .writeText(template)
+      .then(() => {
+        const old = btnCopyTemplate.textContent;
+        btnCopyTemplate.textContent = "Copied!";
+        setTimeout(() => (btnCopyTemplate.textContent = old), 900);
+      })
+      .catch(() => {
+        // ignore clipboard failures
+      });
+  }
+
   function resetForm() {
     form.reset();
     linksWrap.innerHTML = "";
@@ -777,6 +826,7 @@ tvgSafe("verify-csv", () => {
   if (googleCb) googleCb.addEventListener("change", renderPreview);
 
   if (btnCopy) btnCopy.addEventListener("click", copyAll);
+  if (btnCopyTemplate) btnCopyTemplate.addEventListener("click", copySnapshotTemplate);
   if (btnReset) btnReset.addEventListener("click", resetForm);
   if (infoToggle) infoToggle.addEventListener("click", toggleExplainer);
 
