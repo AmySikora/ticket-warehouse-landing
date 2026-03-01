@@ -2050,3 +2050,114 @@ a.btn:hover, button.btn:hover, .btn:hover {
 .tti-workflow .steps li * {
   min-width: 0 !important;
 }
+
+/* ================================
+   TTI Snapshot capture panel (v0)
+   ================================ */
+
+.tti-capture-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.tti-capture-actions {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.tti-form .tti-grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.tti-form .tti-field {
+  display:grid;
+  gap:6px;
+}
+
+.tti-form .tti-input {
+  width:100%;
+  background:#0e1420;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  padding:10px 12px;
+  color:var(--text);
+  font-size:16px;
+  line-height:1.4;
+}
+
+.tti-form .tti-input:focus {
+  outline:none;
+  box-shadow: var(--ring, 0 0 0 3px rgba(79,70,229,.35));
+}
+
+.tti-url {
+  grid-column: 1 / -1;
+}
+
+.tti-row {
+  display:flex;
+  gap:12px;
+  align-items:end;
+  flex-wrap:wrap;
+  margin-top: 12px;
+}
+
+.tti-table-wrap {
+  overflow:auto;
+}
+
+.tti-table {
+  width:100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.tti-table th,
+.tti-table td {
+  padding: 10px 10px;
+  border-top: 1px solid rgba(255,255,255,.10);
+  vertical-align: top;
+  color: var(--text);
+}
+
+.tti-table th {
+  text-align:left;
+  color:#c8d3f9;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.tti-table td a {
+  color: var(--brand-2, #22d3ee);
+  text-decoration: none;
+}
+
+.tti-table td a:hover {
+  text-decoration: underline;
+}
+
+.tti-mini {
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+@media (max-width: 900px) {
+  .tti-form .tti-grid {
+    grid-template-columns: 1fr;
+  }
+  .tti-row {
+    align-items: stretch;
+  }
+  .tti-row .btn {
+    width:100%;
+  }
+}
