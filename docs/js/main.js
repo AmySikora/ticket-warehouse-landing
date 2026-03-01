@@ -839,6 +839,242 @@ tvgSafe("verify-csv", () => {
     });
   }
 
+    // ================================
+  // TTI: Snapshot capture (v0) - localStorage + CSV export
+  // ================================
+  const snapForm = document.getElementById("tti-snapshot-form");
+  const snapBody = document.getElementById("tti-snapshots-body");
+  const snapStatus = document.getElementById("tti-status");
+
+  const mpEl = document.getElementById("tti-marketplace");
+  const priceEl = document.getElementById("tti-price");
+  const feesEl = document.getElementById("tti-fees");
+  const urlEl = document.getElementById("tti-url");
+  const notesEl = document.getElementById("tti-notes");
+
+  const btnExport = document.getElementById("tti-export-csv");
+  const btnClear = document.getElementById("tti-clear-session");
+
+  const STORAGE_KEY = "tti_snapshots_v0";
+
+  const mpLabel = {
+    stubhub: "StubHub",
+    seatgeek: "SeatGeek",
+    vivid: "Vivid Seats",
+    ticketmaster: "Ticketmaster",
+    tickpick: "TickPick",
+    viagogo: "Viagogo",
+  };
+
+  function loadSnapshots() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveSnapshots(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+
+  function formatMoney(n) {
+    if (n === null || n === undefined || n === "") return "";
+    const num = Number(n);
+    if (!Number.isFinite(num)) return "";
+    return num.toFixed(2);
+  }
+
+  function formatTime(iso) {
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString();
+    } catch {
+      return iso;
+    }
+  }
+
+  function setStatus(msg) {
+    if (!snapStatus) return;
+    snapStatus.textContent = msg || "";
+  }
+
+  function renderSnapshots() {
+    if (!snapBody) return;
+    const items = loadSnapshots();
+
+    snapBody.innerHTML = "";
+
+    if (!items.length) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="6" class="muted">No snapshots saved yet.</td>`;
+      snapBody.appendChild(tr);
+      return;
+    }
+
+    items
+      .slice()
+      .sort((a, b) => (a.captured_at < b.captured_at ? 1 : -1))
+      .forEach((s) => {
+        const tr = document.createElement("tr");
+
+        const urlSafe = (s.url || "").replace(/"/g, "&quot;");
+        const urlCell = s.url
+          ? `<a href="${urlSafe}" target="_blank" rel="noopener noreferrer">link</a>`
+          : "";
+
+        tr.innerHTML = `
+          <td>${formatTime(s.captured_at)}</td>
+          <td>${mpLabel[s.marketplace] || s.marketplace}</td>
+          <td>$${formatMoney(s.price)}</td>
+          <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
+          <td>${urlCell}</td>
+          <td><button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button></td>
+        `;
+
+        snapBody.appendChild(tr);
+      });
+
+    // wire remove buttons
+    snapBody.querySelectorAll("[data-del]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-del");
+        const items = loadSnapshots().filter((x) => x.id !== id);
+        saveSnapshots(items);
+        renderSnapshots();
+        setStatus("Removed snapshot.");
+      });
+    });
+  }
+
+  function suggestedUrlForMarketplace(marketplaceKey) {
+    // If preview links include this marketplace label, use it.
+    // This is optional convenience for the user.
+    const urls = buildUrls();
+    const cfg = siteConfigs.find((c) => c.id === `site-${marketplaceKey}`) || null;
+
+    // map marketplaceKey to label used in your configs
+    const wantLabel = mpLabel[marketplaceKey] || marketplaceKey;
+
+    const hit = urls.find((u) => u.label === wantLabel);
+    return hit ? hit.href : "";
+  }
+
+  if (mpEl && urlEl) {
+    mpEl.addEventListener("change", () => {
+      // If URL is empty, prefill with the search link for that marketplace (helps v0 speed)
+      if (!urlEl.value.trim()) {
+        const v = mpEl.value;
+        const guess = suggestedUrlForMarketplace(v);
+        if (guess) urlEl.value = guess;
+      }
+    });
+  }
+
+  if (snapForm) {
+    snapForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Basic validation
+      const marketplace = mpEl?.value || "";
+      const price = priceEl?.value;
+      const fees = feesEl?.value;
+      const url = (urlEl?.value || "").trim();
+      const notes = (notesEl?.value || "").trim();
+
+      if (!marketplace) return setStatus("Pick a marketplace.");
+      if (price === "" || !Number.isFinite(Number(price))) return setStatus("Enter a valid price.");
+      if (!url) return setStatus("Paste the URL you used.");
+
+      const entry = {
+        id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
+        captured_at: new Date().toISOString(),
+        search_query: baseQuery(queryEl ? queryEl.value : ""),
+        marketplace,
+        price: Number(price),
+        fees: fees === "" ? null : Number(fees),
+        currency: "USD",
+        url,
+        notes,
+      };
+
+      const items = loadSnapshots();
+      items.push(entry);
+      saveSnapshots(items);
+      renderSnapshots();
+
+      // Clear only the numeric fields; keep marketplace + URL for fast repetition
+      priceEl.value = "";
+      feesEl.value = "";
+      notesEl.value = "";
+
+      setStatus("Saved snapshot to this browser.");
+    });
+  }
+
+  function escapeCsv(val) {
+    const s = String(val ?? "");
+    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  }
+
+  function exportCsv() {
+    const items = loadSnapshots();
+    if (!items.length) {
+      setStatus("No snapshots to export yet.");
+      return;
+    }
+
+    const headers = [
+      "captured_at",
+      "search_query",
+      "marketplace",
+      "price",
+      "fees",
+      "currency",
+      "url",
+      "notes",
+    ];
+
+    const rows = [
+      headers.join(","),
+      ...items
+        .slice()
+        .sort((a, b) => (a.captured_at < b.captured_at ? -1 : 1))
+        .map((s) =>
+          headers
+            .map((h) => escapeCsv(s[h]))
+            .join(",")
+        ),
+    ];
+
+    const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    a.download = `tti-snapshots-${stamp}.csv`;
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setStatus("Exported CSV.");
+  }
+
+  function clearSession() {
+    localStorage.removeItem(STORAGE_KEY);
+    renderSnapshots();
+    setStatus("Cleared saved snapshots from this browser.");
+  }
+
+  if (btnExport) btnExport.addEventListener("click", exportCsv);
+  if (btnClear) btnClear.addEventListener("click", clearSession);
+
+  // Render saved snapshots on load
+  renderSnapshots();
+
   // Initial preview (empty)
   renderPreview();
 })();
