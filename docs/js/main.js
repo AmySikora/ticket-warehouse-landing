@@ -640,6 +640,7 @@ tvgSafe("verify-csv", () => {
     { id: "site-seatgeek", label: "SeatGeek", domain: "seatgeek.com" },
     { id: "site-vivid", label: "Vivid Seats", domain: "vividseats.com" },
     { id: "site-stubhub", label: "StubHub", domain: "stubhub.com" },
+    { id: "site-etix", label: "Etix", domain: "etix.com" },
     { id: "site-ticketmaster", label: "Ticketmaster", domain: "ticketmaster.com" },
     { id: "site-tickpick", label: "TickPick", domain: "tickpick.com" },
     { id: "site-viagogo", label: "Viagogo", domain: "viagogo.com" },
