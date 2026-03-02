@@ -856,6 +856,10 @@ tvgSafe("verify-csv", () => {
   const btnExport = document.getElementById("tti-export-csv");
   const btnClear = document.getElementById("tti-clear-session");
 
+  const eventNameEl = document.getElementById("tti-event-name");
+  const eventLocationEl = document.getElementById("tti-event-location");
+  const eventDatesEl = document.getElementById("tti-event-dates");
+
   const STORAGE_KEY = "tti_snapshots_v0";
 
   const mpLabel = {
@@ -984,14 +988,23 @@ tvgSafe("verify-csv", () => {
       const fees = feesEl?.value;
       const url = (urlEl?.value || "").trim();
       const notes = (notesEl?.value || "").trim();
+      const event_name = (eventNameEl?.value || "").trim();
+      const event_location = (eventLocationEl?.value || "").trim();
+      const event_dates = (eventDatesEl?.value || "").trim();
 
       if (!marketplace) return setStatus("Pick a marketplace.");
       if (price === "" || !Number.isFinite(Number(price))) return setStatus("Enter a valid price.");
       if (!url) return setStatus("Paste the URL you used.");
+      if (!event_name) return setStatus("Enter the event name.");
 
       const entry = {
         id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
         captured_at: new Date().toISOString(),
+
+        event_name,
+        event_location,
+        event_dates,
+
         search_query: baseQuery(queryEl ? queryEl.value : ""),
         marketplace,
         price: Number(price),

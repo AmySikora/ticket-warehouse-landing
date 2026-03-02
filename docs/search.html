@@ -153,6 +153,36 @@
   <form id="tti-snapshot-form" class="tti-form" novalidate>
     <div class="tti-grid">
       <label class="tti-field">
+        <label class="tti-field">
+          <span class="ms-label-text">Event name</span>
+          <input
+            id="tti-event-name"
+            type="text"
+            required
+            class="tti-input"
+            placeholder="e.g., Wet Leg"
+          />
+        </label>
+
+        <label class="tti-field">
+          <span class="ms-label-text">Event venue</span>
+          <input
+            id="tti-event-location"
+            type="text"
+            class="tti-input"
+            placeholder="e.g., Seattle Center, Seattle, WA"
+          />
+        </label>
+
+        <label class="tti-field">
+          <span class="ms-label-text">Event date(s)</span>
+          <input
+            id="tti-event-dates"
+            type="text"
+            class="tti-input"
+            placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
+          />
+        </label>
         <span class="ms-label-text">Marketplace</span>
         <select id="tti-marketplace" required class="tti-input">
           <option value="" selected disabled>Select…</option>
