@@ -2070,9 +2070,10 @@ a.btn:hover, button.btn:hover, .btn:hover {
 }
 
 .tti-form .tti-grid {
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
   gap: 12px;
+  align-items: start;
 }
 
 .tti-form .tti-field {
@@ -2098,6 +2099,10 @@ a.btn:hover, button.btn:hover, .btn:hover {
 
 .tti-url {
   grid-column: 1 / -1;
+}
+
+.tti-form .tti-field textarea {
+  min-height: 44px;
 }
 
 .tti-row {
@@ -2159,5 +2164,47 @@ a.btn:hover, button.btn:hover, .btn:hover {
   }
   .tti-row .btn {
     width:100%;
+  }
+}
+
+/* --- Snapshot layout: left stack + price/fees on right --- */
+.tti-form .tti-grid {
+  grid-template-columns: 1.2fr 1fr 1fr; /* left stack + two right columns */
+  align-items: start;
+}
+
+/* Price + fees live in columns 2 and 3, first row */
+.tti-form .tti-grid .tti-price {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.tti-form .tti-grid .tti-fees {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+/* Keep URL full width (you already have this) */
+.tti-form .tti-grid .tti-url {
+  grid-column: 1 / -1;
+}
+
+/* Optional: prevent the number input from looking like a giant textbox */
+.tti-form input[type="number"].tti-input {
+  height: 44px;
+}
+
+#tti-event-name {
+  font-weight: 500;
+}
+
+/* Mobile: stack everything */
+@media (max-width: 900px) {
+  .tti-form .tti-grid .tti-left,
+  .tti-form .tti-grid .tti-price,
+  .tti-form .tti-grid .tti-fees,
+  .tti-form .tti-grid .tti-url {
+    grid-column: 1;
+    grid-row: auto;
   }
 }

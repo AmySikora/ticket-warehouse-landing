@@ -152,68 +152,92 @@
   
   <form id="tti-snapshot-form" class="tti-form" novalidate>
     <div class="tti-grid">
-      <label class="tti-field tti-left">
-        <label class="tti-field tti-left">
-          <span class="ms-label-text">Event name</span>
-          <input
-            id="tti-event-name"
-            type="text"
-            required
-            class="tti-input"
-            placeholder="e.g., Wet Leg"
-          />
-        </label>
+  <!-- Row 1 -->
+  <label class="tti-field">
+    <span class="ms-label-text">Event name</span>
+    <input
+      id="tti-event-name"
+      type="text"
+      required
+      class="tti-input"
+      placeholder="e.g., Wet Leg"
+    />
+  </label>
 
-        <label class="tti-field tti-left">
-          <span class="ms-label-text">Event venue</span>
-          <input
-            id="tti-event-location"
-            type="text"
-            class="tti-input"
-            placeholder="e.g., Seattle Center, Seattle, WA"
-          />
-        </label>
+  <label class="tti-field tti-price">
+    <span class="ms-label-text">Lowest listed price (USD)</span>
+    <input
+      id="tti-price"
+      type="number"
+      inputmode="decimal"
+      min="0"
+      step="0.01"
+      required
+      class="tti-input"
+      placeholder="e.g., 79.00"
+    />
+  </label>
 
-        <label class="tti-field tti-left">
-          <span class="ms-label-text">Event date(s)</span>
-          <input
-            id="tti-event-dates"
-            type="text"
-            class="tti-input"
-            placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
-          />
-        </label>
-        <span class="ms-label-text">Marketplace</span>
-        <select id="tti-marketplace tti-left" required class="tti-input">
-          <option value="" selected disabled>Select…</option>
-          <option value="stubhub">StubHub</option>
-          <option value="etix">Etix</option>
-          <option value="seatgeek">SeatGeek</option>
-          <option value="vivid">Vivid Seats</option>
-          <option value="ticketmaster">Ticketmaster</option>
-          <option value="tickpick">TickPick</option>
-          <option value="viagogo">Viagogo</option>
-        </select>
-      </label>
+  <label class="tti-field tti-fees">
+    <span class="ms-label-text">All-in / fees (optional)</span>
+    <input
+      id="tti-fees"
+      type="number"
+      inputmode="decimal"
+      min="0"
+      step="0.01"
+      class="tti-input"
+      placeholder="e.g., 102.50"
+    />
+  </label>
 
-      <label class="tti-field tti-price">
-        <span class="ms-label-text">Lowest listed price (USD)</span>
-        <input id="tti-price" type="number" inputmode="decimal" min="0" step="0.01" required
-               class="tti-input" placeholder="e.g., 79.00">
-      </label>
+  <!-- Row 2 -->
+  <label class="tti-field">
+    <span class="ms-label-text">Event venue</span>
+    <input
+      id="tti-event-location"
+      type="text"
+      class="tti-input"
+      placeholder="e.g., Seattle Center, Seattle, WA"
+    />
+  </label>
 
-      <label class="tti-field tti-fees">
-        <span class="ms-label-text">All-in / fees (optional)</span>
-        <input id="tti-fees" type="number" inputmode="decimal" min="0" step="0.01"
-               class="tti-input" placeholder="e.g., 102.50">
-      </label>
+  <label class="tti-field">
+    <span class="ms-label-text">Event date(s)</span>
+    <input
+      id="tti-event-dates"
+      type="text"
+      class="tti-input"
+      placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
+    />
+  </label>
 
-      <label class="tti-field tti-url">
-        <span class="ms-label-text">URL used</span>
-        <input id="tti-url" type="url" required
-               class="tti-input" placeholder="Paste the listing/results URL you used">
-      </label>
-    </div>
+  <label class="tti-field">
+    <span class="ms-label-text">Marketplace</span>
+    <select id="tti-marketplace" required class="tti-input">
+      <option value="" selected disabled>Select…</option>
+      <option value="stubhub">StubHub</option>
+      <option value="etix">Etix</option>
+      <option value="seatgeek">SeatGeek</option>
+      <option value="vivid">Vivid Seats</option>
+      <option value="ticketmaster">Ticketmaster</option>
+      <option value="tickpick">TickPick</option>
+      <option value="viagogo">Viagogo</option>
+    </select>
+  </label>
+
+  <!-- Row 3 (full width) -->
+  <label class="tti-field tti-url">
+    <span class="ms-label-text">URL used</span>
+    <input
+      id="tti-url"
+      type="url"
+      required
+      class="tti-input"
+      placeholder="Paste the listing/results URL you used"
+    />
+  </label>
+</div>
 
     <div class="tti-row">
       <label class="tti-field" style="flex:1;">
