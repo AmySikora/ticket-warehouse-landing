@@ -2198,6 +2198,22 @@ a.btn:hover, button.btn:hover, .btn:hover {
   font-weight: 500;
 }
 
+.tti-form .tti-grid {
+  grid-template-columns: 1.2fr 1fr 1fr;
+}
+
+#tti-event-name {
+  font-weight: 500;
+}
+
+.tti-price input {
+  font-weight: 500;
+}
+
+#tti-marketplace {
+  height: 44px;
+}
+
 /* Mobile: stack everything */
 @media (max-width: 900px) {
   .tti-form .tti-grid .tti-left,
