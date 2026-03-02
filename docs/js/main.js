@@ -910,6 +910,17 @@ tvgSafe("verify-csv", () => {
     if (!snapBody) return;
     const items = loadSnapshots();
 
+    const summaryEl = document.getElementById("tti-event-summary");
+    if (summaryEl) {
+      const latest = items[items.length - 1];
+      if (latest?.event_name) {
+        const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
+        summaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
+      } else {
+        summaryEl.textContent = "";
+      }
+    }
+
     snapBody.innerHTML = "";
 
     if (!items.length) {
