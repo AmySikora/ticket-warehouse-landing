@@ -862,6 +862,7 @@ tvgSafe("verify-csv", () => {
     stubhub: "StubHub",
     seatgeek: "SeatGeek",
     vivid: "Vivid Seats",
+    etix: "Etix",
     ticketmaster: "Ticketmaster",
     tickpick: "TickPick",
     viagogo: "Viagogo",
