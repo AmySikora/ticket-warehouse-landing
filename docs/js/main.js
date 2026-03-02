@@ -855,10 +855,14 @@ tvgSafe("verify-csv", () => {
 
   const btnExport = document.getElementById("tti-export-csv");
   const btnClear = document.getElementById("tti-clear-session");
+  const btnSave = document.getElementById("tti-save-snapshot");
+  const btnCancelEdit = document.getElementById("tti-cancel-edit");
 
   const eventNameEl = document.getElementById("tti-event-name");
   const eventLocationEl = document.getElementById("tti-event-location");
   const eventDatesEl = document.getElementById("tti-event-dates");
+
+  let editingId = null;
 
   const STORAGE_KEY = "tti_snapshots_v0";
 
@@ -881,6 +885,43 @@ tvgSafe("verify-csv", () => {
     }
   }
 
+  function startEdit(snapshot) {
+  editingId = snapshot.id;
+
+  // Fill the form
+  if (eventNameEl) eventNameEl.value = snapshot.event_name || "";
+  if (eventLocationEl) eventLocationEl.value = snapshot.event_location || "";
+  if (eventDatesEl) eventDatesEl.value = snapshot.event_dates || "";
+
+  if (mpEl) mpEl.value = snapshot.marketplace || "";
+  if (priceEl) priceEl.value = snapshot.price ?? "";
+  if (feesEl) feesEl.value = snapshot.fees ?? "";
+  if (urlEl) urlEl.value = snapshot.url || "";
+  if (notesEl) notesEl.value = snapshot.notes || "";
+
+  // UI
+  if (btnSave) btnSave.textContent = "Update snapshot";
+  if (btnCancelEdit) btnCancelEdit.hidden = false;
+
+  setStatus("Editing snapshot. Update fields and click “Update snapshot”.");
+}
+
+function cancelEdit() {
+  editingId = null;
+
+  if (btnSave) btnSave.textContent = "Save snapshot";
+  if (btnCancelEdit) btnCancelEdit.hidden = true;
+
+  // Optional: clear only price/fees/notes like you already do, but keep event context
+  if (priceEl) priceEl.value = "";
+  if (feesEl) feesEl.value = "";
+  if (notesEl) notesEl.value = "";
+
+  setStatus("");
+}
+
+  if (btnCancelEdit) btnCancelEdit.addEventListener("click", cancelEdit);
+  
   function saveSnapshots(items) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }
@@ -947,10 +988,23 @@ tvgSafe("verify-csv", () => {
           <td>$${formatMoney(s.price)}</td>
           <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
           <td>${urlCell}</td>
-          <td><button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button></td>
+          <td>
+          <button type="button" class="btn tti-mini" data-edit="${s.id}">Edit</button>
+          <button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button>
+          </td> 
         `;
 
-        snapBody.appendChild(tr);
+        snapBody.querySelectorAll("[data-edit]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-edit");
+            const items = loadSnapshots();
+            const snap = items.find((x) => x.id === id);
+            if (!snap) return setStatus("Couldn’t find that snapshot.");
+            startEdit(snap);
+          });
+        });
+      
+      snapBody.appendChild(tr);
       });
 
     // wire remove buttons
@@ -991,31 +1045,40 @@ tvgSafe("verify-csv", () => {
 
   if (snapForm) {
     snapForm.addEventListener("submit", (e) => {
-      e.preventDefault();
+  e.preventDefault();
 
-      // Basic validation
-      const marketplace = mpEl?.value || "";
-      const price = priceEl?.value;
-      const fees = feesEl?.value;
-      const url = (urlEl?.value || "").trim();
-      const notes = (notesEl?.value || "").trim();
-      const event_name = (eventNameEl?.value || "").trim();
-      const event_location = (eventLocationEl?.value || "").trim();
-      const event_dates = (eventDatesEl?.value || "").trim();
+  const marketplace = mpEl?.value || "";
+  const price = priceEl?.value;
+  const fees = feesEl?.value;
+  const url = (urlEl?.value || "").trim();
+  const notes = (notesEl?.value || "").trim();
 
-      if (!marketplace) return setStatus("Pick a marketplace.");
-      if (price === "" || !Number.isFinite(Number(price))) return setStatus("Enter a valid price.");
-      if (!url) return setStatus("Paste the URL you used.");
-      if (!event_name) return setStatus("Enter the event name.");
+  const event_name = (eventNameEl?.value || "").trim();
+  const event_location = (eventLocationEl?.value || "").trim();
+  const event_dates = (eventDatesEl?.value || "").trim();
 
-      const entry = {
-        id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
-        captured_at: new Date().toISOString(),
+  if (!event_name) return setStatus("Enter the event name.");
+  if (!marketplace) return setStatus("Pick a marketplace.");
+  if (price === "" || !Number.isFinite(Number(price))) return setStatus("Enter a valid price.");
+  if (!url) return setStatus("Paste the URL you used.");
 
+  const items = loadSnapshots();
+
+  if (editingId) {
+    const idx = items.findIndex((x) => x.id === editingId);
+    if (idx === -1) {
+      // if it vanished somehow, just fall back to add
+      editingId = null;
+    } else {
+      const prev = items[idx];
+
+      items[idx] = {
+        ...prev,
+        // Keep captured_at by default so you're not rewriting history.
+        // If you *want* edits to update timestamp, set captured_at: new Date().toISOString()
         event_name,
         event_location,
         event_dates,
-
         search_query: baseQuery(queryEl ? queryEl.value : ""),
         marketplace,
         price: Number(price),
@@ -1025,18 +1088,42 @@ tvgSafe("verify-csv", () => {
         notes,
       };
 
-      const items = loadSnapshots();
-      items.push(entry);
       saveSnapshots(items);
       renderSnapshots();
+      cancelEdit();
+      return setStatus("Updated snapshot.");
+    }
+  }
 
-      // Clear only the numeric fields; keep marketplace + URL for fast repetition
-      priceEl.value = "";
-      feesEl.value = "";
-      notesEl.value = "";
+  // ADD NEW
+  const entry = {
+    id: crypto?.randomUUID
+      ? crypto.randomUUID()
+      : String(Date.now()) + Math.random().toString(16).slice(2),
+    captured_at: new Date().toISOString(),
+    event_name,
+    event_location,
+    event_dates,
+    search_query: baseQuery(queryEl ? queryEl.value : ""),
+    marketplace,
+    price: Number(price),
+    fees: fees === "" ? null : Number(fees),
+    currency: "USD",
+    url,
+    notes,
+  };
 
-      setStatus("Saved snapshot to this browser.");
-    });
+  items.push(entry);
+  saveSnapshots(items);
+  renderSnapshots();
+
+  // Keep event context + marketplace + URL for speed, clear only numeric + notes
+  priceEl.value = "";
+  feesEl.value = "";
+  notesEl.value = "";
+
+  setStatus("Saved snapshot to this browser.");
+});
   }
 
   function escapeCsv(val) {
