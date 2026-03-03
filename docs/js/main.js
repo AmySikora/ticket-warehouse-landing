@@ -911,7 +911,27 @@ if (!url) {
   if (btnCancelEdit) btnCancelEdit.hidden = false;
 
   setStatus("Editing snapshot. Update fields and click “Update snapshot”.");
+  }
+// Autofill Event name from the main search query (only if empty)
+  if (queryEl && eventNameEl) {
+    queryEl.addEventListener("blur", () => {
+      if (!eventNameEl.value.trim()) {
+        eventNameEl.value = baseQuery(queryEl.value);
+      }
+    });
+  }
+
+  function seedEventContextFromLastSnapshot() {
+  const items = loadSnapshots();
+  const last = items[items.length - 1];
+  if (!last) return;
+
+  if (eventNameEl && !eventNameEl.value.trim()) eventNameEl.value = last.event_name || "";
+  if (eventLocationEl && !eventLocationEl.value.trim()) eventLocationEl.value = last.event_location || "";
+  if (eventDatesEl && !eventDatesEl.value.trim()) eventDatesEl.value = last.event_dates || "";
 }
+
+seedEventContextFromLastSnapshot();
 
 function cancelEdit() {
   editingId = null;
