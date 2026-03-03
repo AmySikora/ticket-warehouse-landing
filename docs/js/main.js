@@ -1013,18 +1013,22 @@ function cancelEdit() {
     const eventParts = [s.event_name, s.event_location, s.event_dates].filter(Boolean);
     const eventCell = eventParts.join(" · ");
 
-    tr.innerHTML = `
-      <td>${formatTime(s.captured_at)}</td>
-      <td>${eventCell}</td>
-      <td>${mpLabel[s.marketplace] || s.marketplace}</td>
-      <td>$${formatMoney(s.price)}</td>
-      <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
-      <td>${urlCell}</td>
-      <td>
-        <button type="button" class="btn tti-mini" data-edit="${s.id}">Edit</button>
-        <button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button>
-      </td>
-    `;
+   const eventText = [s.event_name, s.event_location, s.event_dates]
+  .filter(Boolean)
+  .join(" · ");
+
+tr.innerHTML = `
+  <td>${formatTime(s.captured_at)}</td>
+  <td>${eventText}</td>
+  <td>${mpLabel[s.marketplace] || s.marketplace}</td>
+  <td>$${formatMoney(s.price)}</td>
+  <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
+  <td>${urlCell}</td>
+  <td>
+    <button type="button" class="btn tti-mini" data-edit="${s.id}">Edit</button>
+    <button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button>
+  </td>
+`;
 
     snapBody.appendChild(tr);
   });
