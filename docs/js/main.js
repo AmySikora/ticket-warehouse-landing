@@ -1191,4 +1191,18 @@ function cancelEdit() {
     setStatus("Exported CSV.");
   }
 
-  function c
+  function clearSession() {
+    localStorage.removeItem(STORAGE_KEY);
+    renderSnapshots();
+    setStatus("Cleared saved snapshots from this browser.");
+  }
+
+  if (btnExport) btnExport.addEventListener("click", exportCsv);
+  if (btnClear) btnClear.addEventListener("click", clearSession);
+
+  // Render saved snapshots on load
+  renderSnapshots();
+
+  // Initial preview (empty)
+  renderPreview();
+})();
