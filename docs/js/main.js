@@ -948,76 +948,81 @@ function cancelEdit() {
   }
 
   function renderSnapshots() {
-    if (!snapBody) return;
-    const items = loadSnapshots();
+  if (!snapBody) return;
+  const items = loadSnapshots();
 
-    const summaryEl = document.getElementById("tti-event-summary");
-    if (summaryEl) {
-      const latest = items[items.length - 1];
-      if (latest?.event_name) {
-        const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
-        summaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
-      } else {
-        summaryEl.textContent = "";
-      }
+  const summaryEl = document.getElementById("tti-event-summary");
+  if (summaryEl) {
+    const latest = items[items.length - 1];
+    if (latest?.event_name) {
+      const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
+      summaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
+    } else {
+      summaryEl.textContent = "";
     }
-
-    snapBody.innerHTML = "";
-
-    if (!items.length) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="6" class="muted">No snapshots saved yet.</td>`;
-      snapBody.appendChild(tr);
-      return;
-    }
-
-    items
-      .slice()
-      .sort((a, b) => (a.captured_at < b.captured_at ? 1 : -1))
-      .forEach((s) => {
-        const tr = document.createElement("tr");
-
-        const urlSafe = (s.url || "").replace(/"/g, "&quot;");
-        const urlCell = s.url
-          ? `<a href="${urlSafe}" target="_blank" rel="noopener noreferrer">link</a>`
-          : "";
-
-        tr.innerHTML = `
-          <td>${formatTime(s.captured_at)}</td>
-          <td>${mpLabel[s.marketplace] || s.marketplace}</td>
-          <td>$${formatMoney(s.price)}</td>
-          <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
-          <td>${urlCell}</td>
-          <td>
-          <button type="button" class="btn tti-mini" data-edit="${s.id}">Edit</button>
-          <button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button>
-          </td> 
-        `;
-
-        snapBody.querySelectorAll("[data-edit]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const id = btn.getAttribute("data-edit");
-            const items = loadSnapshots();
-            const snap = items.find((x) => x.id === id);
-            if (!snap) return setStatus("Couldn’t find that snapshot.");
-            startEdit(snap);
-          });
-        });
-      
-      snapBody.appendChild(tr);
-      });
-
-    // wire remove buttons
-    snapBody.querySelectorAll("[data-del]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-del");
-        const items = loadSnapshots().filter((x) => x.id !== id);
-        saveSnapshots(items);
-        renderSnapshots();
-        setStatus("Removed snapshot.");
-      });
-    });
   }
+
+  snapBody.innerHTML = "";
+
+  if (!items.length) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="7" class="muted">No snapshots saved yet.</td>`;
+    snapBody.appendChild(tr);
+    return;
+  }
+
+  const sorted = items
+    .slice()
+    .sort((a, b) => (a.captured_at < b.captured_at ? 1 : -1));
+
+  sorted.forEach((s) => {
+    const tr = document.createElement("tr");
+
+    const urlSafe = (s.url || "").replace(/"/g, "&quot;");
+    const urlCell = s.url
+      ? `<a href="${urlSafe}" target="_blank" rel="noopener noreferrer">link</a>`
+      : "";
+
+    const eventParts = [s.event_name, s.event_location, s.event_dates].filter(Boolean);
+    const eventCell = eventParts.join(" · ");
+
+    tr.innerHTML = `
+      <td>${formatTime(s.captured_at)}</td>
+      <td>${eventCell}</td>
+      <td>${mpLabel[s.marketplace] || s.marketplace}</td>
+      <td>$${formatMoney(s.price)}</td>
+      <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
+      <td>${urlCell}</td>
+      <td>
+        <button type="button" class="btn tti-mini" data-edit="${s.id}">Edit</button>
+        <button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button>
+      </td>
+    `;
+
+    snapBody.appendChild(tr);
+  });
+
+  // Wire edit buttons (once)
+  snapBody.querySelectorAll("[data-edit]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-edit");
+      const snap = loadSnapshots().find((x) => x.id === id);
+      if (!snap) return setStatus("Couldn’t find that snapshot.");
+      startEdit(snap);
+    });
+  });
+
+  // Wire remove buttons (once)
+  snapBody.querySelectorAll("[data-del]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-del");
+      const next = loadSnapshots().filter((x) => x.id !== id);
+      saveSnapshots(next);
+      renderSnapshots();
+      setStatus("Removed snapshot.");
+    });
+  });
+}
 
   function suggestedUrlForMarketplace(marketplaceKey) {
     // If preview links include this marketplace label, use it.
