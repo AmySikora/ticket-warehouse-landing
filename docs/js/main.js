@@ -1154,6 +1154,9 @@ function cancelEdit() {
 
     const headers = [
       "captured_at",
+      "event_name",
+      "event_location",
+      "event_dates",
       "search_query",
       "marketplace",
       "price",
