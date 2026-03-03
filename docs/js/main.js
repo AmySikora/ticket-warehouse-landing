@@ -838,6 +838,15 @@ tvgSafe("verify-csv", () => {
       explainer.classList.remove("is-collapsed");
       explainer.setAttribute("aria-hidden", "false");
     });
+
+    let url = (urlEl?.value || "").trim();
+
+// If user didn't paste a URL, fall back to the generated one (if present)
+if (!url) {
+  const generated = (document.querySelector("#tti-url-used")?.textContent || "").trim();
+  // OR if you store the per-market URL in a map, use that instead.
+  if (generated) url = generated.replace(/^[^:]+:\s*/, ""); // strips "SeatGeek: " prefix if needed
+}
   }
 
     // ================================
@@ -1099,6 +1108,7 @@ function cancelEdit() {
       return setStatus("Updated snapshot.");
     }
   }
+
 
   // ADD NEW
   const entry = {
