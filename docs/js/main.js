@@ -839,8 +839,6 @@ tvgSafe("verify-csv", () => {
       explainer.setAttribute("aria-hidden", "false");
     });
 
-    let url = (urlEl?.value || "").trim();
-
 // If user didn't paste a URL, fall back to the generated one (if present)
 if (!url) {
   const generated = (document.querySelector("#tti-url-used")?.textContent || "").trim();
