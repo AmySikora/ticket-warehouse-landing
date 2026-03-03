@@ -36,23 +36,18 @@ tvgSafe("nav-toggle", () => {
 
   function toggleMenu() {
     const isOpen =
-      header.classList.contains("nav-open") ||
-      nav.classList.contains("is-open");
+      header.classList.contains("nav-open") || nav.classList.contains("is-open");
     isOpen ? closeMenu() : openMenu();
   }
 
   btn.addEventListener("click", toggleMenu);
 
   // Close menu when a nav link is tapped (mobile)
-  nav.querySelectorAll("a").forEach((a) =>
-    a.addEventListener("click", closeMenu)
-  );
+  nav.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
 
   // Close menu if we resize up to desktop layout
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 900) {
-      closeMenu();
-    }
+    if (window.innerWidth > 900) closeMenu();
   });
 
   // Esc to close
@@ -100,9 +95,7 @@ tvgSafe("contact-form", () => {
   const withTimeout = (ms, promise) =>
     Promise.race([
       promise,
-      new Promise((_, rej) =>
-        setTimeout(() => rej(new Error("timeout")), ms)
-      ),
+      new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms)),
     ]);
 
   form.addEventListener("submit", async (e) => {
@@ -159,10 +152,7 @@ tvgSafe("brokers-widget", () => {
     target.dataset.mounted = "1";
   }
 
-  if (
-    document.readyState === "complete" ||
-    document.readyState === "interactive"
-  ) {
+  if (document.readyState === "complete" || document.readyState === "interactive") {
     mountWidget();
   } else {
     document.addEventListener("DOMContentLoaded", mountWidget);
@@ -194,8 +184,7 @@ tvgSafe("verify-csv", () => {
   let conflictGroups = [];
   let conflictLookup = {};
 
-  const normalizeHeader = (h) =>
-    (h || "").toString().trim().toLowerCase();
+  const normalizeHeader = (h) => (h || "").toString().trim().toLowerCase();
 
   function onFileChange() {
     if (fileInput.files && fileInput.files[0]) {
@@ -221,14 +210,11 @@ tvgSafe("verify-csv", () => {
         Papa.parse(text, {
           header: true,
           skipEmptyLines: true,
-          complete: (results) =>
-            runAnalysis(results.data || [], "Sample CSV"),
+          complete: (results) => runAnalysis(results.data || [], "Sample CSV"),
         });
       })
       .catch(() => {
-        alert(
-          "Could not load sample_listings.csv. Please add it or upload your own file."
-        );
+        alert("Could not load sample_listings.csv. Please add it or upload your own file.");
       });
   }
 
@@ -276,8 +262,7 @@ tvgSafe("verify-csv", () => {
         const r = pick("row");
         const seat = pick("seat", "seat number", "seat_no", "seat #");
         const mp = pick("marketplace", "source", "channel", "site");
-        const id =
-          pick("id", "listing_id", "external_id") || String(idx + 1);
+        const id = pick("id", "listing_id", "external_id") || String(idx + 1);
         const when = pick("when", "timestamp", "time", "created_at");
 
         const key = [event, section, r, seat]
@@ -297,11 +282,7 @@ tvgSafe("verify-csv", () => {
           _key: key,
         };
       })
-      .filter((r) =>
-        Object.values(r).some(
-          (v) => (v || "").toString().trim() !== ""
-        )
-      );
+      .filter((r) => Object.values(r).some((v) => (v || "").toString().trim() !== ""));
   }
 
   function hasRequiredColumns(rows) {
@@ -355,8 +336,7 @@ tvgSafe("verify-csv", () => {
     const seen = new Set();
     allRows.forEach((r) => r.marketplace && seen.add(r.marketplace));
     if (!filterMarketplace) return;
-    filterMarketplace.innerHTML =
-      '<option value="all">All marketplaces</option>';
+    filterMarketplace.innerHTML = '<option value="all">All marketplaces</option>';
     Array.from(seen)
       .sort()
       .forEach((mp) => {
@@ -387,12 +367,7 @@ tvgSafe("verify-csv", () => {
       .replace(/'/g, "&#039;");
   }
 
-  function renderSummary({
-    scannedCount,
-    conflictGroupCount,
-    riskyCount,
-    source,
-  }) {
+  function renderSummary({ scannedCount, conflictGroupCount, riskyCount, source }) {
     if (!summaryStrip) return;
     summaryStrip.innerHTML = "";
     summaryStrip.classList.add("is-visible");
@@ -408,17 +383,9 @@ tvgSafe("verify-csv", () => {
     strong.textContent = `${scannedCount.toLocaleString()} listings scanned`;
     summaryStrip.appendChild(strong);
     summaryStrip.appendChild(
-      pill(
-        `${conflictGroupCount} conflict group${
-          conflictGroupCount === 1 ? "" : "s"
-        }`
-      )
+      pill(`${conflictGroupCount} conflict group${conflictGroupCount === 1 ? "" : "s"}`)
     );
-    summaryStrip.appendChild(
-      pill(
-        `${riskyCount} risky listing${riskyCount === 1 ? "" : "s"}`
-      )
-    );
+    summaryStrip.appendChild(pill(`${riskyCount} risky listing${riskyCount === 1 ? "" : "s"}`));
     summaryStrip.appendChild(pill(`Source: ${source}`));
     summaryStrip.appendChild(
       pill(
@@ -469,17 +436,16 @@ tvgSafe("verify-csv", () => {
         labelTr.innerHTML = `
           <td colspan="8">
             Conflict group #${g.id} — ${g.size} listings share the same seat
-            (${escapeHTML(g.event)} • Sec ${escapeHTML(
-          g.section
-        )} • Row ${escapeHTML(g.row)} • Seat ${escapeHTML(g.seat)})
+            (${escapeHTML(g.event)} • Sec ${escapeHTML(g.section)} • Row ${escapeHTML(
+          g.row
+        )} • Seat ${escapeHTML(g.seat)})
           </td>`;
         tableBody.appendChild(labelTr);
       }
 
       const tr = document.createElement("tr");
       const isBlocked = r.decision === "Blocked";
-      tr.className =
-        "tvg-row " + (gid ? "tvg-conflict-row" : "tvg-clean-row");
+      tr.className = "tvg-row " + (gid ? "tvg-conflict-row" : "tvg-clean-row");
 
       tr.innerHTML = `
         <td>${escapeHTML(r.id)}</td>
@@ -502,9 +468,7 @@ tvgSafe("verify-csv", () => {
   function runAnalysis(data, sourceLabel) {
     const mapped = buildRows(data);
     if (!mapped.length) {
-      renderEmpty(
-        "We couldn’t find any listings in that file. Please check your CSV and try again."
-      );
+      renderEmpty("We couldn’t find any listings in that file. Please check your CSV and try again.");
       if (summaryStrip) {
         summaryStrip.innerHTML = "";
         summaryStrip.classList.remove("is-visible");
@@ -556,7 +520,6 @@ tvgSafe("verify-csv", () => {
     });
 
     th.classList.add(sortState.dir === 1 ? "sort-asc" : "sort-desc");
-
     renderTable();
   }
 
@@ -568,26 +531,13 @@ tvgSafe("verify-csv", () => {
 
   function downloadCleanedCSV() {
     if (!allRows.length) return;
-    const headers = [
-      "id",
-      "decision",
-      "marketplace",
-      "event",
-      "section",
-      "row",
-      "seat",
-      "when",
-    ];
+    const headers = ["id", "decision", "marketplace", "event", "section", "row", "seat", "when"];
     const lines = [headers.join(",")];
     allRows.forEach((r) => {
-      const vals = headers.map((h) =>
-        `"${(r[h] || "").toString().replace(/"/g, '""')}"`
-      );
+      const vals = headers.map((h) => `"${(r[h] || "").toString().replace(/"/g, '""')}"`);
       lines.push(vals.join(","));
     });
-    const blob = new Blob([lines.join("\n")], {
-      type: "text/csv;charset=utf-8;",
-    });
+    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -610,20 +560,15 @@ tvgSafe("verify-csv", () => {
   analyzeBtn.addEventListener("click", parseAndAnalyze);
   sampleBtn.addEventListener("click", handleSampleClick);
   table.querySelector("thead").addEventListener("click", onHeaderClick);
-  if (filterDecision)
-    filterDecision.addEventListener("change", renderTable);
-  if (filterMarketplace)
-    filterMarketplace.addEventListener("change", renderTable);
-  if (resetFiltersBtn)
-    resetFiltersBtn.addEventListener("click", resetFilters);
-  if (downloadBtn)
-    downloadBtn.addEventListener("click", downloadCleanedCSV);
+  if (filterDecision) filterDecision.addEventListener("change", renderTable);
+  if (filterMarketplace) filterMarketplace.addEventListener("change", renderTable);
+  if (resetFiltersBtn) resetFiltersBtn.addEventListener("click", resetFilters);
+  if (downloadBtn) downloadBtn.addEventListener("click", downloadCleanedCSV);
   if (thumbUp) thumbUp.addEventListener("click", () => handleThumb(true));
-  if (thumbDown)
-    thumbDown.addEventListener("click", () => handleThumb(false));
+  if (thumbDown) thumbDown.addEventListener("click", () => handleThumb(false));
 });
 
-/// ===== TixMarketSearch (search.html) =====
+/// ===== TixMarketSearch + TTI Snapshot Capture (search.html) =====
 (function () {
   const form = document.getElementById("tixSearch");
   if (!form) return; // only run on search.html
@@ -673,15 +618,10 @@ tvgSafe("verify-csv", () => {
     const googleCb = document.getElementById(googleCheckboxId);
     if (googleCb && googleCb.checked && selectedDomains.length) {
       let qTickets = raw;
-      if (!/ticket/i.test(qTickets)) {
-        qTickets += " tickets";
-      }
+      if (!/ticket/i.test(qTickets)) qTickets += " tickets";
       const g = new URL("https://www.google.com/search");
       g.searchParams.set("q", `${qTickets} ${selectedDomains.join(" OR ")}`);
-      urls.unshift({
-        label: "Google (all selected)",
-        href: g.toString(),
-      });
+      urls.unshift({ label: "Google (all selected)", href: g.toString() });
     }
 
     return urls;
@@ -740,13 +680,9 @@ tvgSafe("verify-csv", () => {
       .then(() => {
         const old = btnCopy.textContent;
         btnCopy.textContent = "Copied!";
-        setTimeout(() => {
-          btnCopy.textContent = old;
-        }, 900);
+        setTimeout(() => (btnCopy.textContent = old), 900);
       })
-      .catch(() => {
-        // ignore clipboard failures
-      });
+      .catch(() => {});
   }
 
   function copySnapshotTemplate() {
@@ -785,7 +721,7 @@ tvgSafe("verify-csv", () => {
       "  URL used:",
       "  Notes:",
       "",
-      "(Add/remove blocks as needed.)"
+      "(Add/remove blocks as needed.)",
     ].join("\n");
 
     navigator.clipboard
@@ -795,17 +731,16 @@ tvgSafe("verify-csv", () => {
         btnCopyTemplate.textContent = "Copied!";
         setTimeout(() => (btnCopyTemplate.textContent = old), 900);
       })
-      .catch(() => {
-        // ignore clipboard failures
-      });
+      .catch(() => {});
   }
 
   function resetForm() {
     form.reset();
     linksWrap.innerHTML = "";
+    renderPreview();
   }
 
-  // Info toggle for explainer card (for hover/tap)
+  // Info toggle for explainer card
   function toggleExplainer() {
     if (!explainer || !infoToggle) return;
     const isOpen = infoToggle.getAttribute("aria-expanded") === "true";
@@ -814,7 +749,7 @@ tvgSafe("verify-csv", () => {
     explainer.setAttribute("aria-hidden", String(isOpen));
   }
 
-  // Wire up events
+  // Wire up MarketSearch events
   form.addEventListener("submit", openAll);
   if (queryEl) queryEl.addEventListener("input", renderPreview);
 
@@ -839,15 +774,14 @@ tvgSafe("verify-csv", () => {
       explainer.setAttribute("aria-hidden", "false");
     });
 
-// If user didn't paste a URL, fall back to the generated one (if present)
-if (!url) {
-  const generated = (document.querySelector("#tti-url-used")?.textContent || "").trim();
-  // OR if you store the per-market URL in a map, use that instead.
-  if (generated) url = generated.replace(/^[^:]+:\s*/, ""); // strips "SeatGeek: " prefix if needed
-}
+    infoToggle.addEventListener("mouseleave", () => {
+      infoToggle.setAttribute("aria-expanded", "false");
+      explainer.classList.add("is-collapsed");
+      explainer.setAttribute("aria-hidden", "true");
+    });
   }
 
-    // ================================
+  // ================================
   // TTI: Snapshot capture (v0) - localStorage + CSV export
   // ================================
   const snapForm = document.getElementById("tti-snapshot-form");
@@ -870,7 +804,6 @@ if (!url) {
   const eventDatesEl = document.getElementById("tti-event-dates");
 
   let editingId = null;
-
   const STORAGE_KEY = "tti_snapshots_v0";
 
   const mpLabel = {
@@ -892,65 +825,13 @@ if (!url) {
     }
   }
 
-  function startEdit(snapshot) {
-  editingId = snapshot.id;
-
-  // Fill the form
-  if (eventNameEl) eventNameEl.value = snapshot.event_name || "";
-  if (eventLocationEl) eventLocationEl.value = snapshot.event_location || "";
-  if (eventDatesEl) eventDatesEl.value = snapshot.event_dates || "";
-
-  if (mpEl) mpEl.value = snapshot.marketplace || "";
-  if (priceEl) priceEl.value = snapshot.price ?? "";
-  if (feesEl) feesEl.value = snapshot.fees ?? "";
-  if (urlEl) urlEl.value = snapshot.url || "";
-  if (notesEl) notesEl.value = snapshot.notes || "";
-
-  // UI
-  if (btnSave) btnSave.textContent = "Update snapshot";
-  if (btnCancelEdit) btnCancelEdit.hidden = false;
-
-  setStatus("Editing snapshot. Update fields and click “Update snapshot”.");
-  }
-// Autofill Event name from the main search query (only if empty)
-  if (queryEl && eventNameEl) {
-    queryEl.addEventListener("blur", () => {
-      if (!eventNameEl.value.trim()) {
-        eventNameEl.value = baseQuery(queryEl.value);
-      }
-    });
-  }
-
-  function seedEventContextFromLastSnapshot() {
-  const items = loadSnapshots();
-  const last = items[items.length - 1];
-  if (!last) return;
-
-  if (eventNameEl && !eventNameEl.value.trim()) eventNameEl.value = last.event_name || "";
-  if (eventLocationEl && !eventLocationEl.value.trim()) eventLocationEl.value = last.event_location || "";
-  if (eventDatesEl && !eventDatesEl.value.trim()) eventDatesEl.value = last.event_dates || "";
-}
-
-seedEventContextFromLastSnapshot();
-
-function cancelEdit() {
-  editingId = null;
-
-  if (btnSave) btnSave.textContent = "Save snapshot";
-  if (btnCancelEdit) btnCancelEdit.hidden = true;
-
-  // Optional: clear only price/fees/notes like you already do, but keep event context
-  if (priceEl) priceEl.value = "";
-  if (feesEl) feesEl.value = "";
-  if (notesEl) notesEl.value = "";
-
-  setStatus("");
-}
-
-  if (btnCancelEdit) btnCancelEdit.addEventListener("click", cancelEdit);
-  
   function saveSnapshots(items) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+
+  function setStatus(msg) {
+    if (!snapStatus) return;
+    snapStatus.textContent = msg || "";
   }
 
   function formatMoney(n) {
@@ -969,111 +850,145 @@ function cancelEdit() {
     }
   }
 
-  function setStatus(msg) {
-    if (!snapStatus) return;
-    snapStatus.textContent = msg || "";
+  function startEdit(snapshot) {
+    editingId = snapshot.id;
+
+    if (eventNameEl) eventNameEl.value = snapshot.event_name || "";
+    if (eventLocationEl) eventLocationEl.value = snapshot.event_location || "";
+    if (eventDatesEl) eventDatesEl.value = snapshot.event_dates || "";
+
+    if (mpEl) mpEl.value = snapshot.marketplace || "";
+    if (priceEl) priceEl.value = snapshot.price ?? "";
+    if (feesEl) feesEl.value = snapshot.fees ?? "";
+    if (urlEl) urlEl.value = snapshot.url || "";
+    if (notesEl) notesEl.value = snapshot.notes || "";
+
+    if (btnSave) btnSave.textContent = "Update snapshot";
+    if (btnCancelEdit) btnCancelEdit.hidden = false;
+
+    setStatus("Editing snapshot. Update fields and click “Update snapshot”.");
   }
+
+  function cancelEdit() {
+    editingId = null;
+
+    if (btnSave) btnSave.textContent = "Save snapshot";
+    if (btnCancelEdit) btnCancelEdit.hidden = true;
+
+    if (priceEl) priceEl.value = "";
+    if (feesEl) feesEl.value = "";
+    if (notesEl) notesEl.value = "";
+
+    setStatus("");
+  }
+
+  if (btnCancelEdit) btnCancelEdit.addEventListener("click", cancelEdit);
+
+  // Autofill Event name from the main search query (only if empty)
+  if (queryEl && eventNameEl) {
+    queryEl.addEventListener("blur", () => {
+      if (!eventNameEl.value.trim()) {
+        eventNameEl.value = baseQuery(queryEl.value);
+      }
+    });
+  }
+
+  function seedEventContextFromLastSnapshot() {
+    const items = loadSnapshots();
+    const last = items[items.length - 1];
+    if (!last) return;
+
+    if (eventNameEl && !eventNameEl.value.trim()) eventNameEl.value = last.event_name || "";
+    if (eventLocationEl && !eventLocationEl.value.trim())
+      eventLocationEl.value = last.event_location || "";
+    if (eventDatesEl && !eventDatesEl.value.trim()) eventDatesEl.value = last.event_dates || "";
+  }
+
+  seedEventContextFromLastSnapshot();
 
   function renderSnapshots() {
-  if (!snapBody) return;
-  const items = loadSnapshots();
+    if (!snapBody) return;
+    const items = loadSnapshots();
 
-  const summaryEl = document.getElementById("tti-event-summary");
-  if (summaryEl) {
-    const latest = items[items.length - 1];
-    if (latest?.event_name) {
-      const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
-      summaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
-    } else {
-      summaryEl.textContent = "";
+    const summaryEl = document.getElementById("tti-event-summary");
+    if (summaryEl) {
+      const latest = items[items.length - 1];
+      if (latest?.event_name) {
+        const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
+        summaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
+      } else {
+        summaryEl.textContent = "";
+      }
     }
-  }
 
-  snapBody.innerHTML = "";
+    snapBody.innerHTML = "";
 
-  if (!items.length) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="7" class="muted">No snapshots saved yet.</td>`;
-    snapBody.appendChild(tr);
-    return;
-  }
+    if (!items.length) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="7" class="muted">No snapshots saved yet.</td>`;
+      snapBody.appendChild(tr);
+      return;
+    }
 
-  const sorted = items
-    .slice()
-    .sort((a, b) => (a.captured_at < b.captured_at ? 1 : -1));
+    const sorted = items.slice().sort((a, b) => (a.captured_at < b.captured_at ? 1 : -1));
 
-  sorted.forEach((s) => {
-    const tr = document.createElement("tr");
+    sorted.forEach((s) => {
+      const tr = document.createElement("tr");
+      const urlSafe = (s.url || "").replace(/"/g, "&quot;");
 
-    const urlSafe = (s.url || "").replace(/"/g, "&quot;");
-    const urlCell = s.url
-      ? `<a href="${urlSafe}" target="_blank" rel="noopener noreferrer">link</a>`
-      : "";
+      const urlCell = s.url
+        ? `<a href="${urlSafe}" target="_blank" rel="noopener noreferrer">link</a>`
+        : "";
 
-    const eventParts = [s.event_name, s.event_location, s.event_dates].filter(Boolean);
-    const eventCell = eventParts.join(" · ");
+      const eventText = [s.event_name, s.event_location, s.event_dates].filter(Boolean).join(" · ");
 
-   const eventText = [s.event_name, s.event_location, s.event_dates]
-  .filter(Boolean)
-  .join(" · ");
+      tr.innerHTML = `
+        <td>${formatTime(s.captured_at)}</td>
+        <td>${eventText}</td>
+        <td>${mpLabel[s.marketplace] || s.marketplace}</td>
+        <td>$${formatMoney(s.price)}</td>
+        <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
+        <td>${urlCell}</td>
+        <td>
+          <button type="button" class="btn tti-mini" data-edit="${s.id}">Edit</button>
+          <button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button>
+        </td>
+      `;
 
-tr.innerHTML = `
-  <td>${formatTime(s.captured_at)}</td>
-  <td>${eventText}</td>
-  <td>${mpLabel[s.marketplace] || s.marketplace}</td>
-  <td>$${formatMoney(s.price)}</td>
-  <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
-  <td>${urlCell}</td>
-  <td>
-    <button type="button" class="btn tti-mini" data-edit="${s.id}">Edit</button>
-    <button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button>
-  </td>
-`;
-
-    snapBody.appendChild(tr);
-  });
-
-  // Wire edit buttons (once)
-  snapBody.querySelectorAll("[data-edit]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-edit");
-      const snap = loadSnapshots().find((x) => x.id === id);
-      if (!snap) return setStatus("Couldn’t find that snapshot.");
-      startEdit(snap);
+      snapBody.appendChild(tr);
     });
-  });
 
-  // Wire remove buttons (once)
-  snapBody.querySelectorAll("[data-del]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-del");
-      const next = loadSnapshots().filter((x) => x.id !== id);
-      saveSnapshots(next);
-      renderSnapshots();
-      setStatus("Removed snapshot.");
+    snapBody.querySelectorAll("[data-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-edit");
+        const snap = loadSnapshots().find((x) => x.id === id);
+        if (!snap) return setStatus("Couldn’t find that snapshot.");
+        startEdit(snap);
+      });
     });
-  });
-}
+
+    snapBody.querySelectorAll("[data-del]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-del");
+        const next = loadSnapshots().filter((x) => x.id !== id);
+        saveSnapshots(next);
+        renderSnapshots();
+        setStatus("Removed snapshot.");
+      });
+    });
+  }
 
   function suggestedUrlForMarketplace(marketplaceKey) {
-    // If preview links include this marketplace label, use it.
-    // This is optional convenience for the user.
     const urls = buildUrls();
-    const cfg = siteConfigs.find((c) => c.id === `site-${marketplaceKey}`) || null;
-
-    // map marketplaceKey to label used in your configs
     const wantLabel = mpLabel[marketplaceKey] || marketplaceKey;
-
     const hit = urls.find((u) => u.label === wantLabel);
     return hit ? hit.href : "";
   }
 
   if (mpEl && urlEl) {
     mpEl.addEventListener("change", () => {
-      // If URL is empty, prefill with the search link for that marketplace (helps v0 speed)
       if (!urlEl.value.trim()) {
-        const v = mpEl.value;
-        const guess = suggestedUrlForMarketplace(v);
+        const guess = suggestedUrlForMarketplace(mpEl.value);
         if (guess) urlEl.value = guess;
       }
     });
@@ -1081,37 +996,57 @@ tr.innerHTML = `
 
   if (snapForm) {
     snapForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+      e.preventDefault();
 
-  const marketplace = mpEl?.value || "";
-  const price = priceEl?.value;
-  const fees = feesEl?.value;
-  const url = (urlEl?.value || "").trim();
-  const notes = (notesEl?.value || "").trim();
+      const marketplace = mpEl?.value || "";
+      const price = priceEl?.value;
+      const fees = feesEl?.value;
+      const url = (urlEl?.value || "").trim();
+      const notes = (notesEl?.value || "").trim();
 
-  const event_name = (eventNameEl?.value || "").trim();
-  const event_location = (eventLocationEl?.value || "").trim();
-  const event_dates = (eventDatesEl?.value || "").trim();
+      const event_name = (eventNameEl?.value || "").trim();
+      const event_location = (eventLocationEl?.value || "").trim();
+      const event_dates = (eventDatesEl?.value || "").trim();
 
-  if (!event_name) return setStatus("Enter the event name.");
-  if (!marketplace) return setStatus("Pick a marketplace.");
-  if (price === "" || !Number.isFinite(Number(price))) return setStatus("Enter a valid price.");
-  if (!url) return setStatus("Paste the URL you used.");
+      if (!event_name) return setStatus("Enter the event name.");
+      if (!marketplace) return setStatus("Pick a marketplace.");
+      if (price === "" || !Number.isFinite(Number(price))) return setStatus("Enter a valid price.");
+      if (!url) return setStatus("Paste the URL you used.");
 
-  const items = loadSnapshots();
+      const items = loadSnapshots();
 
-  if (editingId) {
-    const idx = items.findIndex((x) => x.id === editingId);
-    if (idx === -1) {
-      // if it vanished somehow, just fall back to add
-      editingId = null;
-    } else {
-      const prev = items[idx];
+      if (editingId) {
+        const idx = items.findIndex((x) => x.id === editingId);
+        if (idx !== -1) {
+          const prev = items[idx];
+          items[idx] = {
+            ...prev,
+            event_name,
+            event_location,
+            event_dates,
+            search_query: baseQuery(queryEl ? queryEl.value : ""),
+            marketplace,
+            price: Number(price),
+            fees: fees === "" ? null : Number(fees),
+            currency: "USD",
+            url,
+            notes,
+          };
 
-      items[idx] = {
-        ...prev,
-        // Keep captured_at by default so you're not rewriting history.
-        // If you *want* edits to update timestamp, set captured_at: new Date().toISOString()
+          saveSnapshots(items);
+          renderSnapshots();
+          cancelEdit();
+          return setStatus("Updated snapshot.");
+        }
+        // if it vanished, fall back to add
+        editingId = null;
+      }
+
+      const entry = {
+        id: crypto?.randomUUID
+          ? crypto.randomUUID()
+          : String(Date.now()) + Math.random().toString(16).slice(2),
+        captured_at: new Date().toISOString(),
         event_name,
         event_location,
         event_dates,
@@ -1124,43 +1059,17 @@ tr.innerHTML = `
         notes,
       };
 
+      items.push(entry);
       saveSnapshots(items);
       renderSnapshots();
-      cancelEdit();
-      return setStatus("Updated snapshot.");
-    }
-  }
 
+      // Keep event context; clear only numeric + notes
+      if (priceEl) priceEl.value = "";
+      if (feesEl) feesEl.value = "";
+      if (notesEl) notesEl.value = "";
 
-  // ADD NEW
-  const entry = {
-    id: crypto?.randomUUID
-      ? crypto.randomUUID()
-      : String(Date.now()) + Math.random().toString(16).slice(2),
-    captured_at: new Date().toISOString(),
-    event_name,
-    event_location,
-    event_dates,
-    search_query: baseQuery(queryEl ? queryEl.value : ""),
-    marketplace,
-    price: Number(price),
-    fees: fees === "" ? null : Number(fees),
-    currency: "USD",
-    url,
-    notes,
-  };
-
-  items.push(entry);
-  saveSnapshots(items);
-  renderSnapshots();
-
-  // Keep event context + marketplace + URL for speed, clear only numeric + notes
-  priceEl.value = "";
-  feesEl.value = "";
-  notesEl.value = "";
-
-  setStatus("Saved snapshot to this browser.");
-});
+      setStatus("Saved snapshot to this browser.");
+    });
   }
 
   function escapeCsv(val) {
@@ -1195,11 +1104,7 @@ tr.innerHTML = `
       ...items
         .slice()
         .sort((a, b) => (a.captured_at < b.captured_at ? -1 : 1))
-        .map((s) =>
-          headers
-            .map((h) => escapeCsv(s[h]))
-            .join(",")
-        ),
+        .map((s) => headers.map((h) => escapeCsv(s[h])).join(",")),
     ];
 
     const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8" });
@@ -1225,9 +1130,7 @@ tr.innerHTML = `
   if (btnExport) btnExport.addEventListener("click", exportCsv);
   if (btnClear) btnClear.addEventListener("click", clearSession);
 
-  // Render saved snapshots on load
+  // Initial paint
   renderSnapshots();
-
-  // Initial preview (empty)
   renderPreview();
 })();
