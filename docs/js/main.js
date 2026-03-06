@@ -794,6 +794,19 @@ tvgSafe("verify-csv", () => {
   const urlEl = document.getElementById("tti-url");
   const notesEl = document.getElementById("tti-notes");
 
+  // Track whether the URL was auto-filled or manually typed/pasted
+  if (urlEl) {
+    urlEl.addEventListener("input", () => {
+      urlEl.dataset.autofill = "0";
+    });
+  }
+
+  function setUrlAuto(value) {
+    if (!urlEl) return;
+    urlEl.value = value || "";
+    urlEl.dataset.autofill = "1";
+  }
+
   const btnExport = document.getElementById("tti-export-csv");
   const btnClear = document.getElementById("tti-clear-session");
   const btnSave = document.getElementById("tti-save-snapshot");
@@ -860,7 +873,10 @@ tvgSafe("verify-csv", () => {
     if (mpEl) mpEl.value = snapshot.marketplace || "";
     if (priceEl) priceEl.value = snapshot.price ?? "";
     if (feesEl) feesEl.value = snapshot.fees ?? "";
-    if (urlEl) urlEl.value = snapshot.url || "";
+    if (urlEl) {
+      urlEl.value = snapshot.url || "";
+      urlEl.dataset.autofill = "0";
+    }
     if (notesEl) notesEl.value = snapshot.notes || "";
 
     if (btnSave) btnSave.textContent = "Update snapshot";
@@ -899,9 +915,12 @@ tvgSafe("verify-csv", () => {
     if (!last) return;
 
     if (eventNameEl && !eventNameEl.value.trim()) eventNameEl.value = last.event_name || "";
-    if (eventLocationEl && !eventLocationEl.value.trim())
+    if (eventLocationEl && !eventLocationEl.value.trim()) {
       eventLocationEl.value = last.event_location || "";
-    if (eventDatesEl && !eventDatesEl.value.trim()) eventDatesEl.value = last.event_dates || "";
+    }
+    if (eventDatesEl && !eventDatesEl.value.trim()) {
+      eventDatesEl.value = last.event_dates || "";
+    }
   }
 
   seedEventContextFromLastSnapshot();
@@ -987,9 +1006,12 @@ tvgSafe("verify-csv", () => {
 
   if (mpEl && urlEl) {
     mpEl.addEventListener("change", () => {
-      if (!urlEl.value.trim()) {
+      const isEmpty = !urlEl.value.trim();
+      const wasAuto = urlEl.dataset.autofill !== "0";
+
+      if (isEmpty || wasAuto) {
         const guess = suggestedUrlForMarketplace(mpEl.value);
-        if (guess) urlEl.value = guess;
+        if (guess) setUrlAuto(guess);
       }
     });
   }
@@ -1038,7 +1060,7 @@ tvgSafe("verify-csv", () => {
           cancelEdit();
           return setStatus("Updated snapshot.");
         }
-        // if it vanished, fall back to add
+
         editingId = null;
       }
 
@@ -1063,7 +1085,6 @@ tvgSafe("verify-csv", () => {
       saveSnapshots(items);
       renderSnapshots();
 
-      // Keep event context; clear only numeric + notes
       if (priceEl) priceEl.value = "";
       if (feesEl) feesEl.value = "";
       if (notesEl) notesEl.value = "";
