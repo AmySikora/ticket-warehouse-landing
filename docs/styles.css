@@ -1,3 +1,4 @@
+
 /* ---- Tokens ---- */
 :root{
   --bg:#0b0f14; --panel:#111826; --brand:#4f46e5; --brand-2:#22d3ee;
@@ -2222,5 +2223,133 @@ a.btn:hover, button.btn:hover, .btn:hover {
   .tti-form .tti-grid .tti-url {
     grid-column: 1;
     grid-row: auto;
+  }
+}
+
+/* =========================
+   Brokers page alignment patch
+   Add at end of styles.css
+   ========================= */
+
+body.tvb-page main {
+  background:
+    radial-gradient(circle at top center, rgba(99,102,241,0.06), transparent 70%),
+    radial-gradient(1600px 800px at 70% 0%, rgba(34,211,238,0.08), transparent 60%),
+    linear-gradient(180deg, #0b0f14 0%, #111826 100%);
+}
+
+body.tvb-page .tvb-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 56px;
+}
+
+body.tvb-page section {
+  padding: 56px 0;
+  background: transparent;
+}
+
+body.tvb-page .tvb-hero,
+body.tvb-page .tvb-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+body.tvb-page .tvb-hero {
+  padding: 24px;
+  margin-bottom: 0;
+}
+
+body.tvb-page .tvb-hero h1 {
+  margin: 0 0 10px;
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.1;
+}
+
+body.tvb-page .tvb-hero p {
+  color: var(--muted);
+  font-size: clamp(15px, 1.7vw, 18px);
+  margin: 0 0 16px;
+  max-width: 48rem;
+}
+
+body.tvb-page .tvb-note {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+body.tvb-page .tvb-panels,
+body.tvb-page .tvb-row,
+body.tvb-page .tvb-grid-2 {
+  gap: 20px;
+}
+
+body.tvb-page .tvb-card {
+  padding: 20px;
+}
+
+body.tvb-page .tvb-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 22px;
+  color: var(--text);
+}
+
+body.tvb-page .tvb-card p {
+  color: var(--muted);
+}
+
+body.tvb-page .tvb-list,
+body.tvb-page .feature-list {
+  margin-top: 12px;
+}
+
+body.tvb-page .tvb-cta-row,
+body.tvb-page .tvb-cta,
+body.tvb-page .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+body.tvb-page .tvg-pilot-card {
+  margin-top: 16px;
+  padding-top: 4px;
+}
+
+body.tvb-page .tvg-pilot-highlight {
+  border-color: rgba(255,255,255,.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+body.tvb-page .contact-cta {
+  align-items: flex-start;
+}
+
+@media (max-width: 900px) {
+  body.tvb-page .tvb-hero {
+    padding: 20px;
+  }
+
+  body.tvb-page .tvb-hero h1 {
+    font-size: clamp(26px, 7vw, 34px);
+  }
+
+  body.tvb-page .tvb-cta-row,
+  body.tvb-page .tvb-cta,
+  body.tvb-page .actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  body.tvb-page .tvb-cta-row .btn,
+  body.tvb-page .tvb-cta .btn,
+  body.tvb-page .actions .btn {
+    width: auto;
+    min-width: 56%;
   }
 }
