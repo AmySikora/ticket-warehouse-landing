@@ -12,8 +12,11 @@
 
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket Transparency Index — Market Search</title>
-  <meta name="description" content="Open consistent marketplace searches to capture repeatable price snapshots for weekly transparency reporting."/>
+  <title>Ticket VeriGuard — Track Ticket Prices</title>
+  <meta
+    name="description"
+    content="Search ticket marketplaces once, capture consistent price snapshots, and track ticket market changes over time."
+  />
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles.css"/>
 </head>
@@ -23,10 +26,16 @@
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
-        <img src="./favicon_logo.png" alt="Ticket Transparency Index" class="logo-img">
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation">
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Toggle navigation"
+      >
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -34,12 +43,10 @@
 
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="brokers.html" class="nav-link">Brokers</a>
-        <a href="verify.html" class="nav-link">CSV Check</a>
-        <a href="prototype.html" class="nav-link">How it works</a>
-        <a href="search.html" class="nav-link nav-active" aria-current="page">TixMarketSearch</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link" target="_blank" rel="noopener noreferrer">Try Live Demo</a>
-        <a href="index.html#contact" class="nav-link">Contact Us</a>
+        <a href="search.html" class="nav-link nav-active" aria-current="page">Track Prices</a>
+        <a href="brokers.html" class="nav-link">For Brokers</a>
+        <a href="prototype.html" class="nav-link">How It Works</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
     </div>
   </header>
@@ -47,31 +54,36 @@
   <main>
     <section class="section">
       <div class="card tti-workflow" style="margin-top:16px;">
-        <h1>Capture consistent ticket price snapshots across marketplaces</h1>
+        <h1>Track ticket prices across marketplaces</h1>
+
         <p class="lead">
-          Search once, open the same query across marketplaces, then record the lowest listed price.
-          This supports repeatable price snapshots for weekly transparency reporting.
+          Search once and open results across major ticket marketplaces.
+          Capture consistent price snapshots, save the URLs you used, and build a repeatable record of how listings change over time.
+        </p>
+
+        <p class="muted" style="margin-top:8px;">
+          This workflow supports transparency tracking, weekly reporting, and market research without repeating the same search manually across every site.
         </p>
 
         <!-- Snapshot workflow (v0) -->
         <div class="card tti-workflow" style="margin-top:16px;">
-          <h3 style="margin-top:0;">Snapshot workflow (v0)</h3>
+          <h3 style="margin-top:0;">Snapshot workflow</h3>
           <ol class="steps">
             <li>Open results for each marketplace.</li>
             <li>Record the lowest listed price you see at that moment.</li>
-            <li>If the marketplace shows an all-in price, capture it (otherwise leave fees blank).</li>
-            <li>Paste the listing URL you used into your snapshot form.</li>
-            <li>Repeat weekly to track changes over time.</li>
+            <li>If the marketplace shows an all-in price, capture it. Otherwise leave fees blank.</li>
+            <li>Save the URL you used so future comparisons stay consistent.</li>
+            <li>Repeat on the same schedule to track price movement over time.</li>
           </ol>
           <p class="muted" style="margin-bottom:0;">
-            Manual entry is fine in v0. Consistency is the goal.
+            Manual entry is completely fine here. Consistency matters more than polish at this stage, because apparently software is allowed to grow up in public now.
           </p>
         </div>
 
         <!-- Search tool -->
         <div class="card search-card" style="margin-top:16px;">
           <div class="tms-header-row">
-            <h2 class="section-title" style="margin-bottom:0;">TixMarketSearch</h2>
+            <h2 class="section-title" style="margin-bottom:0;">Track Prices</h2>
             <button
               type="button"
               id="tms-info-toggle"
@@ -83,6 +95,10 @@
               <span class="sr-only">How this search works</span>
             </button>
           </div>
+
+          <p class="muted" style="margin-top:0;">
+            Search ticket marketplaces once and capture consistent price snapshots for transparency tracking and weekly reporting.
+          </p>
 
           <form id="tixSearch" class="ms-form" novalidate>
             <label class="ms-label">
@@ -126,7 +142,7 @@
 
               <span class="ms-hint muted">
                 Tip: include the artist, team, event, and city when you can.
-                If you’re capturing snapshots, keep search terms consistent across sites so weekly comparisons stay clean.
+                If you’re tracking snapshots over time, keep your search terms consistent so your comparisons stay clean.
               </span>
             </div>
           </form>
@@ -136,156 +152,158 @@
             <div id="tms-links" class="ms-links"></div>
           </div>
         </div>
-          <!-- Snapshot capture panel (v0) -->
-<div class="card tti-capture" style="margin-top:16px;">
-  <div class="tti-capture-head">
-    <h3 style="margin:0;">Capture snapshot (v0)</h3>
-    <div class="tti-capture-actions">
-      <button type="button" class="btn btn-sm" id="tti-export-csv">Export CSV</button>
-      <button type="button" class="btn btn-sm btn-ghost" id="tti-clear-session">Clear session</button>
-    </div>
-  </div>
 
-  <p class="muted" style="margin:8px 0 12px;">
-    Enter the lowest listed price you see on each marketplace right now. This saves to your browser (localStorage).
-  </p>
-  
-  <form id="tti-snapshot-form" class="tti-form" novalidate>
-    <div class="tti-grid">
-  <!-- Row 1 -->
-  <label class="tti-field">
-    <span class="ms-label-text">Event name</span>
-    <input
-      id="tti-event-name"
-      type="text"
-      required
-      class="tti-input"
-      placeholder="e.g., Wet Leg"
-    />
-  </label>
+        <!-- Snapshot capture panel (v0) -->
+        <div class="card tti-capture" style="margin-top:16px;">
+          <div class="tti-capture-head">
+            <h3 style="margin:0;">Capture snapshot</h3>
+            <div class="tti-capture-actions">
+              <button type="button" class="btn btn-sm" id="tti-export-csv">Export CSV</button>
+              <button type="button" class="btn btn-sm btn-ghost" id="tti-clear-session">Clear session</button>
+            </div>
+          </div>
 
-  <label class="tti-field tti-price">
-    <span class="ms-label-text">Lowest listed price (USD)</span>
-    <input
-      id="tti-price"
-      type="number"
-      inputmode="decimal"
-      min="0"
-      step="0.01"
-      required
-      class="tti-input"
-      placeholder="e.g., 79.00"
-    />
-  </label>
+          <p class="muted" style="margin:8px 0 12px;">
+            Enter the lowest listed price you see on each marketplace right now. This saves to your browser using localStorage.
+          </p>
 
-  <label class="tti-field tti-fees">
-    <span class="ms-label-text">All-in / fees (optional)</span>
-    <input
-      id="tti-fees"
-      type="number"
-      inputmode="decimal"
-      min="0"
-      step="0.01"
-      class="tti-input"
-      placeholder="e.g., 102.50"
-    />
-  </label>
+          <form id="tti-snapshot-form" class="tti-form" novalidate>
+            <div class="tti-grid">
+              <!-- Row 1 -->
+              <label class="tti-field">
+                <span class="ms-label-text">Event name</span>
+                <input
+                  id="tti-event-name"
+                  type="text"
+                  required
+                  class="tti-input"
+                  placeholder="e.g., Wet Leg"
+                />
+              </label>
 
-  <!-- Row 2 -->
-  <label class="tti-field">
-    <span class="ms-label-text">Event venue</span>
-    <input
-      id="tti-event-location"
-      type="text"
-      class="tti-input"
-      placeholder="e.g., Seattle Center, Seattle, WA"
-    />
-  </label>
+              <label class="tti-field tti-price">
+                <span class="ms-label-text">Lowest listed price (USD)</span>
+                <input
+                  id="tti-price"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="0.01"
+                  required
+                  class="tti-input"
+                  placeholder="e.g., 79.00"
+                />
+              </label>
 
-  <label class="tti-field">
-    <span class="ms-label-text">Event date(s)</span>
-    <input
-      id="tti-event-dates"
-      type="text"
-      class="tti-input"
-      placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
-    />
-  </label>
+              <label class="tti-field tti-fees">
+                <span class="ms-label-text">All-in / fees (optional)</span>
+                <input
+                  id="tti-fees"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="0.01"
+                  class="tti-input"
+                  placeholder="e.g., 102.50"
+                />
+              </label>
 
-  <label class="tti-field">
-    <span class="ms-label-text">Marketplace</span>
-    <select id="tti-marketplace" required class="tti-input">
-      <option value="" selected disabled>Select…</option>
-      <option value="stubhub">StubHub</option>
-      <option value="etix">Etix</option>
-      <option value="seatgeek">SeatGeek</option>
-      <option value="vivid">Vivid Seats</option>
-      <option value="ticketmaster">Ticketmaster</option>
-      <option value="tickpick">TickPick</option>
-      <option value="viagogo">Viagogo</option>
-    </select>
-  </label>
+              <!-- Row 2 -->
+              <label class="tti-field">
+                <span class="ms-label-text">Event venue</span>
+                <input
+                  id="tti-event-location"
+                  type="text"
+                  class="tti-input"
+                  placeholder="e.g., Seattle Center, Seattle, WA"
+                />
+              </label>
 
-  <!-- Row 3 (full width) -->
-  <label class="tti-field tti-url">
-    <span class="ms-label-text">URL used</span>
-    <input
-      id="tti-url"
-      type="url"
-      required
-      class="tti-input"
-      placeholder="Paste the listing/results URL you used"
-    />
-  </label>
-</div>
+              <label class="tti-field">
+                <span class="ms-label-text">Event date(s)</span>
+                <input
+                  id="tti-event-dates"
+                  type="text"
+                  class="tti-input"
+                  placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
+                />
+              </label>
 
-    <div class="tti-row">
-  <label class="tti-field" style="flex:1;">
-    <span class="ms-label-text">Notes (optional)</span>
-    <input id="tti-notes" type="text" class="tti-input" />
-  </label>
+              <label class="tti-field">
+                <span class="ms-label-text">Marketplace</span>
+                <select id="tti-marketplace" required class="tti-input">
+                  <option value="" selected disabled>Select…</option>
+                  <option value="stubhub">StubHub</option>
+                  <option value="etix">Etix</option>
+                  <option value="seatgeek">SeatGeek</option>
+                  <option value="vivid">Vivid Seats</option>
+                  <option value="ticketmaster">Ticketmaster</option>
+                  <option value="tickpick">TickPick</option>
+                  <option value="viagogo">Viagogo</option>
+                </select>
+              </label>
 
-  <button type="submit" class="btn btn-primary" id="tti-save-snapshot">Save snapshot</button>
-  <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
-</div>
+              <!-- Row 3 -->
+              <label class="tti-field tti-url">
+                <span class="ms-label-text">URL used</span>
+                <input
+                  id="tti-url"
+                  type="url"
+                  required
+                  class="tti-input"
+                  placeholder="Paste the listing or results URL you used"
+                />
+              </label>
+            </div>
 
-<p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
-  </form>
-    
-  <p class="muted" id="tti-event-summary" style="margin:8px 0 0;"></p>
-  <div class="tti-table-wrap" style="margin-top:14px;">
-    <div class="muted">Saved this session:</div>
-    <table class="tti-table" aria-label="Saved snapshots">
-      <thead>
-        <tr>
-          <th>Captured</th>
-          <th>Event</th>
-          <th>Marketplace</th>
-          <th>Price</th>
-          <th>Fees</th>
-          <th>URL</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="tti-snapshots-body">
-        <tr><td colspan="7" class="muted">No snapshots saved yet.</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+            <div class="tti-row">
+              <label class="tti-field" style="flex:1;">
+                <span class="ms-label-text">Notes (optional)</span>
+                <input id="tti-notes" type="text" class="tti-input" />
+              </label>
+
+              <button type="submit" class="btn btn-primary" id="tti-save-snapshot">Save snapshot</button>
+              <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
+            </div>
+
+            <p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
+          </form>
+
+          <p class="muted" id="tti-event-summary" style="margin:8px 0 0;"></p>
+          <div class="tti-table-wrap" style="margin-top:14px;">
+            <div class="muted">Saved this session:</div>
+            <table class="tti-table" aria-label="Saved snapshots">
+              <thead>
+                <tr>
+                  <th>Captured</th>
+                  <th>Event</th>
+                  <th>Marketplace</th>
+                  <th>Price</th>
+                  <th>Fees</th>
+                  <th>URL</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tti-snapshots-body">
+                <tr><td colspan="7" class="muted">No snapshots saved yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Explainer -->
         <div id="tms-explainer" class="card ms-explainer is-collapsed" aria-hidden="true" style="margin-top:16px;">
           <h3 class="ms-explainer-title">How this search works</h3>
           <ul class="feature-list">
-            <li>Type the same words you’d use in a normal search — misspellings are fine.</li>
-            <li>For each site you select, we open a targeted search like <code>chappell roan seattle site:stubhub.com</code>.</li>
-            <li>For the combined Google tab, we add “tickets” if it isn’t already in your search to strengthen results.</li>
-            <li>If a site doesn’t have tickets yet, you’ll just see its normal “no results” page.</li>
-            <li>Nothing is scraped, stored, or connected to your accounts — this tool simply saves you from repeating the same search across multiple sites.</li>
+            <li>Type the same words you’d use in a normal search. Misspellings are still, tragically, part of the human condition.</li>
+            <li>For each site you select, the tool opens a targeted search like <code>chappell roan seattle site:stubhub.com</code>.</li>
+            <li>For the combined Google tab, the tool adds “tickets” if it is not already in your search so the results are stronger.</li>
+            <li>If a site does not have tickets yet, you will just see its normal no-results page.</li>
+            <li>Nothing is scraped, stored remotely, or connected to your accounts. This simply saves you from repeating the same search across multiple sites.</li>
           </ul>
 
           <p class="muted" style="margin-top:10px;">
-            This tool supports Ticket Transparency Index by making repeatable snapshot capture faster.
+            Use this page to create repeatable searches first, then capture snapshots in a consistent way so your reporting is more useful later.
           </p>
         </div>
       </div>
@@ -294,7 +312,7 @@
 
   <footer>
     <div class="container footer-bar">
-      <div class="muted">© <span id="y"></span> Ticket Transparency Index</div>
+      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> ·
         <a class="muted" href="#">Privacy</a> ·
