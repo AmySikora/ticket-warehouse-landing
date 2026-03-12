@@ -194,28 +194,48 @@ tvgSafe("verify-csv", () => {
     analyzeBtn.disabled = !hasFile;
     analyzeBtn.classList.toggle("btn-active", hasFile);
   }
+  
+  function handleSampleClick(e) {
+  if (e) e.preventDefault();
 
-  function handleSampleClick() {
-    if (!window.Papa) {
-      alert("Parser not loaded yet. Please try again.");
-      return;
-    }
-    fetch("./sample_listings.csv")
-      .then((res) => {
-        if (!res.ok) throw new Error("Sample CSV not found");
-        return res.text();
-      })
-      .then((text) => {
-        Papa.parse(text, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => runAnalysis(results.data || [], "Sample CSV"),
-        });
-      })
-      .catch(() => {
-        alert("Could not load sample_listings.csv. Please add it or upload your own file.");
+  console.log("handleSampleClick running");
+
+  fetch("./sample_listings.csv")
+    .then((res) => {
+      console.log("fetch response:", res.status, res.ok, res.url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.text();
+    })
+    .then((text) => {
+      console.log("sample csv loaded, length:", text.length);
+
+      if (!window.Papa) {
+        throw new Error("PapaParse is not loaded");
+      }
+
+      Papa.parse(text, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          console.log("Papa parse complete:", results);
+
+          fileLabel.textContent = "sample_listings.csv";
+          analyzeBtn.disabled = false;
+          analyzeBtn.classList.add("btn-active");
+
+          runAnalysis(results.data || [], "sample_listings.csv");
+        },
+        error: (err) => {
+          console.error("Papa parse error:", err);
+          alert("There was a problem parsing sample_listings.csv.");
+        },
       });
-  }
+    })
+    .catch((err) => {
+      console.error("Sample CSV load failed:", err);
+      alert(`Could not load sample_listings.csv: ${err.message}`);
+    });
+}
 
   function parseAndAnalyze() {
     const file = fileInput.files[0];
@@ -560,7 +580,12 @@ tvgSafe("verify-csv", () => {
   // Wire up
   fileInput.addEventListener("change", onFileChange);
   analyzeBtn.addEventListener("click", parseAndAnalyze);
-  sampleBtn.addEventListener("click", handleSampleClick);
+  sampleBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("sample button clicked");
+  handleSampleClick(e);
+});
+
   table.querySelector("thead").addEventListener("click", onHeaderClick);
   if (filterDecision) filterDecision.addEventListener("change", renderTable);
   if (filterMarketplace) filterMarketplace.addEventListener("change", renderTable);
