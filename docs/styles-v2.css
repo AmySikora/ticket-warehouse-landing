@@ -2113,6 +2113,32 @@ footer {
 .verify-page .grid-3 .card.item:first-child {
   padding-left: 24px;
 }
+
+#tms-preview,
+.ms-links {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ms-links {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.ms-links a,
+.ms-links p,
+.ms-links span,
+.ms-links div {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 /*
   Retired verify.html / CSV page styles
   Old duplicate broker page experiments
