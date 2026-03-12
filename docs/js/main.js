@@ -186,14 +186,13 @@ tvgSafe("verify-csv", () => {
 
   const normalizeHeader = (h) => (h || "").toString().trim().toLowerCase();
 
-  function onFileChange() {
-    if (fileInput.files && fileInput.files[0]) {
-      fileLabel.textContent = fileInput.files[0].name;
-      analyzeBtn.disabled = false;
-    } else {
-      fileLabel.textContent = "No file selected.";
-      analyzeBtn.disabled = true;
-    }
+  function onFileChange(e) {
+    const file = e.target.files[0];
+    const hasFile = !!file;
+
+    fileLabel.textContent = hasFile ? file.name : "No file selected.";
+    analyzeBtn.disabled = !hasFile;
+    analyzeBtn.classList.toggle("btn-active", hasFile);
   }
 
   function handleSampleClick() {
@@ -223,7 +222,8 @@ tvgSafe("verify-csv", () => {
     if (!file || !window.Papa) return;
 
     analyzeBtn.disabled = true;
-    analyzeBtn.textContent = "Analyzing...";
+    analyzeBtn.textContent = "Run scan";
+
 
     Papa.parse(file, {
       header: true,
@@ -445,7 +445,8 @@ tvgSafe("verify-csv", () => {
 
       const tr = document.createElement("tr");
       const isBlocked = r.decision === "Blocked";
-      tr.className = "tvg-row " + (gid ? "tvg-conflict-row" : "tvg-clean-row");
+      tr.className = "tvg-row " + (isBlocked ? "tvg-conflict-row" : "tvg-clean-row");
+      tr.dataset.decision = isBlocked ? "Blocked" : "Approved";
 
       tr.innerHTML = `
         <td>${escapeHTML(r.id)}</td>
@@ -461,6 +462,7 @@ tvgSafe("verify-csv", () => {
         <td>${escapeHTML(r.seat)}</td>
         <td>${escapeHTML(r.when)}</td>
       `;
+
       tableBody.appendChild(tr);
     });
   }

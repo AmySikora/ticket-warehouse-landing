@@ -13,27 +13,20 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Ticket VeriGuard — Duplicate Exposure Check</title>
-
   <meta
     name="description"
-    content="Review ticket listing exports for duplicate exposure, listing overlap, and broker-side risk patterns before they turn into disputes or refunds."
+    content="Upload a ticket listings CSV and review duplicate exposure, listing overlap, and ticket conflict signals before they turn into disputes or refunds."
   />
-  <meta property="og:title" content="Ticket VeriGuard — Duplicate Exposure Check" />
-  <meta
-    property="og:description"
-    content="Check exported ticket listings for duplicate exposure, overlap, and records that deserve manual broker review."
-  />
-  <meta property="og:image" content="/favicon_logo.png" />
-
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
-  <link rel="stylesheet" href="./styles-v2.css"/>
+  <link rel="stylesheet" href="./styles-v2.css" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
 </head>
 
-<body class="page-duplicate-check">
+<body class="verify-page">
   <!-- Header -->
   <header class="nav">
     <div class="nav--brand">
-      <a href="index.html" class="logo-bay">
+      <a href="index.html" class="logo-bay" aria-label="Ticket VeriGuard">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
@@ -42,7 +35,7 @@
         id="navToggle"
         aria-expanded="false"
         aria-controls="primary-nav"
-        aria-label="Toggle navigation"
+        aria-label="Open menu"
       >
         <span class="bar"></span>
         <span class="bar"></span>
@@ -60,274 +53,195 @@
     </div>
   </header>
 
-  <main>
-    <!-- Hero -->
-    <section class="section">
-      <div class="container">
-        <div class="card">
-          <span class="badge">Broker tool</span>
-          <h1 class="grad-text">Check ticket listings for duplicate exposure and overlap.</h1>
-          <p class="lead">
-            Use this workflow to review exported listing data for duplicate seats, row and section overlap,
-            and records that may deserve manual broker follow-up before they turn into disputes, refunds,
-            or seller confusion.
-          </p>
+  <main class="tvb-page">
+    <div class="tvb-container">
 
-          <div class="cta-row">
-            <a href="#checker" class="btn primary">Start Duplicate Check</a>
-            <a href="brokers.html" class="btn btn-ghost">Back to Brokers</a>
-          </div>
+      <!-- Hero -->
+     <section class="tvb-card tvb-hero">
+        <span class="badge">Broker review tool</span>
+        <h1>Upload listings and check for duplicate exposure.</h1>
+        <p>
+          Upload a CSV export from your marketplace, broker tool, or internal listing set.
+          Ticket VeriGuard scans for repeated seats, row and section overlap, and records
+          that may deserve manual review before they create disputes, refunds, or seller confusion.
+        </p>
 
-          <p class="muted" style="margin-top:12px;">
-            This page is designed for practical review, not inflated software mythology.
-            The goal is to help you spot issues faster and make cleaner decisions.
-          </p>
+        <div class="tvb-note">
+          In this workflow, a conflict means the same
+          <strong>event, section, row, and seat</strong> appears more than once.
+          This scan runs in your browser. Your file is not uploaded or stored.
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Why it matters -->
-    <section class="section">
-      <div class="container">
-        <h2 class="section-title">Why duplicate exposure matters</h2>
-
+      <!-- Why this is useful -->
+      <section class="tvb-card" style="margin-top:20px;">
         <div class="grid-3">
-          <div class="card">
-            <h3>Seller confusion</h3>
-            <p>
-              The same seats appearing in more than one place can create uncertainty
-              about what is actually available and who is responsible for fulfillment.
+          <div class="card item">
+            <h3>Spot overlap faster</h3>
+            <p class="muted">
+              Review listing conflicts without comparing seat records by hand across exports.
             </p>
           </div>
 
-          <div class="card">
-            <h3>Customer risk</h3>
-            <p>
-              Listing overlap can lead to broken expectations, refunds, chargebacks,
-              and damaged trust when fulfillment breaks down.
+          <div class="card item">
+            <h3>Reduce downstream risk</h3>
+            <p class="muted">
+              Duplicate exposure can create fulfillment issues, disputes, refunds, and trust problems.
             </p>
           </div>
 
-          <div class="card">
-            <h3>Operational drag</h3>
-            <p>
-              Manual review across CSV exports and listing records takes time.
-              A cleaner duplicate check helps teams focus on the records that matter most.
+          <div class="card item">
+            <h3>Support broker review</h3>
+            <p class="muted">
+              Use the results to guide manual event-level follow-up and internal operations review.
             </p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Main checker area -->
-    <section class="section" id="checker">
-      <div class="container">
-        <div class="card">
-          <div class="contact-cta">
-            <div>
-              <h2 class="section-title" style="margin-bottom:8px;">Duplicate Exposure Checker</h2>
-              <p>
-                Upload a CSV export or use the connected review workflow to identify duplicate
-                seats, section and row conflicts, and patterns that deserve manual broker review.
-              </p>
-            </div>
-
-            <div class="actions">
-              <button type="button" class="btn primary">Upload CSV</button>
-              <button type="button" class="btn btn-ghost">Use Sample File</button>
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-top:20px;">
-            <div class="card item">
-              <h3>Expected fields</h3>
-              <ul class="feature-list">
-                <li>Event name</li>
-                <li>Marketplace or source</li>
-                <li>Section</li>
-                <li>Row</li>
-                <li>Seat or seat range</li>
-                <li>Optional notes or listing ID</li>
-              </ul>
-            </div>
-
-            <div class="card item">
-              <h3>What the check looks for</h3>
-              <ul class="feature-list">
-                <li>Matching seat-level listings across records</li>
-                <li>Potential overlap in row and section combinations</li>
-                <li>Patterns worth event-level manual review</li>
-                <li>Records that may create broker-side fulfillment risk</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card" style="margin-top:20px;">
-            <h3 style="margin-bottom:10px;">Checker workspace</h3>
-            <p class="muted" style="margin-bottom:16px;">
-              This is the space where your duplicate-check tool can live.
-              If you already have the working CSV checker logic on GitHub, this page is the right place
-              to bring that UI onto the main Ticket VeriGuard site.
+      <!-- Upload + summary -->
+      <section class="tvb-card tvg-upload-card" style="margin-top:20px;">
+        <div class="contact-cta" style="margin-bottom:16px;">
+          <div>
+            <h2 class="section-title" style="margin-bottom:8px;">Duplicate Exposure Checker</h2>
+            <p class="muted" style="margin-bottom:0;">
+              Upload a CSV file, run the scan, and review the records that may deserve follow-up.
             </p>
-
-            <div
-              style="
-                border: 1px dashed rgba(255,255,255,.18);
-                border-radius: 16px;
-                padding: 24px;
-                background: rgba(255,255,255,.02);
-              "
-            >
-              <h3 style="margin-bottom:8px;">Tool placeholder</h3>
-              <p class="muted" style="margin-bottom:12px;">
-                Replace this placeholder with your actual duplicate-check tool UI.
-              </p>
-
-              <div class="grid-2">
-                <div class="card item">
-                  <h3>Upload area</h3>
-                  <p class="muted">
-                    CSV upload, file validation, field mapping, or drag-and-drop area goes here.
-                  </p>
-                </div>
-
-                <div class="card item">
-                  <h3>Results area</h3>
-                  <p class="muted">
-                    Matching records, grouped duplicates, broker review notes, and export options go here.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
-
-          <p class="muted" style="margin-top:16px;">
-            Temporary reality: this page can launch with a placeholder or embedded tool while you move
-            the working checker fully onto the Ticket VeriGuard domain. That is still far better than punting people to GitHub.
-          </p>
         </div>
-      </div>
-    </section>
 
-    <!-- Workflow -->
-    <section class="section">
-      <div class="container">
-        <h2 class="section-title">How the review workflow works</h2>
+        <div class="tvg-upload-row">
+          <label class="btn btn-ghost tvg-file-label">
+            <input id="tvg-file-input" type="file" accept=".csv">
+            Choose CSV file
+          </label>
+          <button id="tvg-analyze-btn" class="btn btn-ghost" disabled>Run scan</button>
+          <button id="tvg-sample-btn" class="btn btn-ghost">Try sample CSV</button>
+          <div id="tvg-file-label" class="tvb-note tvg-file-name">No file selected.</div>
+        </div>
 
+        <div class="tvg-microcopy">
+          This checker runs locally in your browser. No files are uploaded or stored.
+        </div>
+
+        <div id="tvg-summary" class="tvg-summary-strip" aria-live="polite">
+          <!-- Filled by JS -->
+        </div>
+      </section>
+
+      <!-- Filters -->
+      <section class="tvb-card tvg-filter-card" style="margin-top:20px;">
+        <div class="tvg-filter-row">
+          <div class="tvb-note">Filter:</div>
+
+          <select id="tvg-filter-decision" class="btn btn-ghost tvg-filter-select">
+            <option value="all">All results</option>
+            <option value="Approved">Clear only</option>
+            <option value="Blocked">Flagged only</option>
+          </select>
+
+          <select id="tvg-filter-marketplace" class="btn btn-ghost tvg-filter-select">
+            <option value="all">All marketplaces</option>
+          </select>
+
+          <button id="tvg-reset-filters" class="btn btn-ghost">Reset</button>
+          <div class="tvg-filter-spacer"></div>
+          <button id="tvg-download-clean" class="btn btn-ghost" disabled>Download filtered CSV</button>
+        </div>
+      </section>
+
+      <!-- Table -->
+      <section class="tvb-card tvg-table-card" style="margin-top:20px;">
+        <div class="tvg-table-header">
+          <h3>Scan results</h3>
+          <div class="tvb-note">
+            Click a column header to sort. Conflict groups are labeled for easier review.
+          </div>
+        </div>
+
+        <div class="tvg-table-wrap">
+          <table id="tvg-results-table">
+            <thead>
+             <tr>
+                <th data-key="id">ID</th>
+                <th data-key="decision">Result</th>
+                <th data-key="marketplace">Marketplace</th>
+                <th data-key="event">Event</th>
+                <th data-key="section">Section</th>
+                <th data-key="row">Row</th>
+                <th data-key="seat">Seat</th>
+                <th data-key="when">When</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tvg-empty-row">
+                <td colspan="8">
+                  Upload a CSV above or try the sample file to see duplicate exposure checks here.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Guidance -->
+      <section class="tvb-card" style="margin-top:20px;">
         <div class="grid-2">
-          <div class="card">
-            <ol class="steps">
-              <li>Upload or open exported listing data</li>
-              <li>Compare sections, rows, and seats across records</li>
-              <li>Group likely duplicates or conflicts</li>
-              <li>Review flagged records manually</li>
-              <li>Use findings to support trust, operations, or seller review</li>
-            </ol>
+          <div class="card item">
+            <h3>What this checks</h3>
+            <ul class="feature-list">
+              <li>Duplicate seats across multiple rows</li>
+              <li>Repeated event, section, row, and seat combinations</li>
+              <li>Possible overlap between marketplace exports</li>
+              <li>Records that may deserve broker-side review</li>
+            </ul>
           </div>
 
-          <div class="card">
+          <div class="card item">
             <h3>Best uses right now</h3>
             <ul class="feature-list">
-              <li>Spot-checking one event before broader review</li>
-              <li>Testing listing exports for duplicate exposure</li>
-              <li>Supporting broker-side operations and trust workflows</li>
-              <li>Running pilot analyses before deeper automation</li>
+              <li>Spot-checking one event before deeper analysis</li>
+              <li>Reviewing exported listing sets for overlap</li>
+              <li>Supporting trust, operations, or seller workflows</li>
+              <li>Running pilot scans before deeper automation</li>
             </ul>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Honest framing -->
-    <section class="section">
-      <div class="container">
-        <div class="grid-2">
-          <div class="card">
-            <h3>What this is</h3>
-            <p>
-              A practical duplicate review workflow that helps surface listing overlap
-              and event-level issues sooner.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>What this is not</h3>
-            <p>
-              Not a magical enforcement engine that vaporizes every listing problem in existence.
-              It is a focused broker tool for identifying records that deserve attention.
-            </p>
-          </div>
+      <!-- Feedback -->
+      <section class="tvb-card tvg-feedback-card" style="margin-top:20px;">
+        <div class="tvg-feedback-row">
+          <span class="tvb-note">Was this scan helpful?</span>
+          <button id="tvg-thumb-up" class="btn btn-ghost">👍 Yes</button>
+          <button id="tvg-thumb-down" class="btn btn-ghost">👎 Not really</button>
+          <span id="tvg-feedback-label" class="tvb-note"></span>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Contact -->
-    <section class="section" id="contact">
-      <div class="container">
-        <h2 class="section-title">Questions about broker-side review?</h2>
-
-        <div class="card">
-          <div class="contact-cta">
-            <div>
-              <h3>Get in touch</h3>
-              <p>
-                Reach out if you want to discuss duplicate exposure review, broker workflows,
-                CSV analysis, or how this tool fits into Ticket VeriGuard.
-                Or email directly at
-                <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>.
-              </p>
-            </div>
-
-            <div class="actions">
-              <a class="btn primary" href="mailto:hello@ticketveriguard.com">Email Ticket VeriGuard</a>
-              <a class="btn btn-ghost" href="brokers.html">Back to Brokers</a>
-            </div>
-          </div>
-
-          <form
-            id="contact-form"
-            style="display:grid; gap:12px; max-width:520px; margin-top:14px"
-            novalidate
-          >
-            <input
-              type="text"
-              name="website"
-              autocomplete="off"
-              tabindex="-1"
-              aria-hidden="true"
-              style="position:absolute;left:-9999px;width:0;height:0;opacity:0"
-            />
-
-            <label>
-              <span>Email</span><br/>
-              <input
-                required
-                type="email"
-                name="email"
-                autocomplete="email"
-                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"
-              />
-            </label>
-
-            <label>
-              <span>Message</span><br/>
-              <textarea
-                required
-                name="message"
-                rows="4"
-                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"
-              ></textarea>
-            </label>
-
-            <button class="btn primary" type="submit" id="contact-submit">
-              Send message
-            </button>
-
-            <p id="contact-status" class="muted" style="margin:6px 0 0"></p>
-          </form>
+      <!-- CTA -->
+      <section class="tvb-card tvg-pilot-card" style="margin-top:20px;" id="contact">
+        <div class="tvg-pilot-label">
+          <h3>Need a closer look at a real event or export?</h3>
+          <p class="tvb-note">
+            Reach out if you want to discuss duplicate exposure, pilot review workflows,
+            or how Ticket VeriGuard could support broker-side event analysis.
+          </p>
         </div>
-      </div>
-    </section>
+
+        <ul class="tvg-pilot-list">
+          <li>Good fit for event-level broker review</li>
+          <li>Useful for pilot scans and exported listing checks</li>
+          <li>Focused on practical review, not fake software bravado</li>
+        </ul>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="mailto:hello@ticketveriguard.com">Email Ticket VeriGuard</a>
+          <a class="btn btn-ghost" href="brokers.html">Back to Brokers</a>
+        </div>
+      </section>
+
+    </div>
   </main>
 
   <footer>
