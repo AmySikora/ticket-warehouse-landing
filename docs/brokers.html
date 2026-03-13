@@ -59,9 +59,10 @@
   </header>
 
   <main>
+    <!-- Hero -->
     <section class="section">
       <div class="tvb-container">
-        <div class="tvb-hero">
+        <div class="tvb-hero card">
           <span class="badge">For brokers and ticket operations teams</span>
           <h1>Spot duplicate ticket exposure before it leads to disputes, refunds, and lost trust.</h1>
           <p>
@@ -71,18 +72,19 @@
           </p>
 
           <div class="tvb-cta-row">
-            <a href="duplicate-check.html" class="btn primary">Check Duplicate Exposure</a>
+            <a href="duplicate-check.html" class="btn primary">Open Duplicate Checker</a>
             <a href="#contact" class="btn btn-ghost">Contact</a>
           </div>
 
           <p class="tvb-note">
             Start with exported listing data, review flagged records, and catch issues
-            earlier without changing your existing workflow.
+            earlier without forcing a totally new workflow on your team.
           </p>
         </div>
       </div>
     </section>
 
+    <!-- Why it matters -->
     <section class="section">
       <div class="tvb-container">
         <h2 class="section-title">Why duplicate exposure matters</h2>
@@ -107,14 +109,15 @@
           <div class="tvb-card">
             <h3>Earlier visibility changes outcomes</h3>
             <p>
-              You do not need a giant platform to improve review. Better visibility into listing overlap
-              gives teams a practical way to catch risk sooner and act with more confidence.
+              Better visibility into listing overlap gives teams a practical way to catch risk sooner,
+              review events more confidently, and reduce downstream cleanup.
             </p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- What it helps you see -->
     <section class="section">
       <div class="tvb-container">
         <h2 class="section-title">What Ticket VeriGuard helps you see</h2>
@@ -123,9 +126,9 @@
           <div class="tvb-card">
             <h3>Duplicate exposure signals</h3>
             <ul class="feature-list">
-              <li>Repeated section, row, and seat combinations</li>
-              <li>Possible listing overlap across exports</li>
-              <li>Records worth closer broker review</li>
+              <li>Repeated event, section, row, and seat combinations</li>
+              <li>Possible overlap across exports or listing sets</li>
+              <li>Records worth closer broker-side review</li>
               <li>Patterns that may raise dispute or refund risk</li>
             </ul>
           </div>
@@ -143,50 +146,7 @@
       </div>
     </section>
 
-    <section class="section" id="duplicate-check">
-      <div class="tvb-container">
-        <div class="tvb-card">
-          <div class="contact-cta">
-            <div>
-              <h2 class="section-title">Duplicate Exposure Check</h2>
-              <p>
-                Upload exported ticket listing data and review flagged records that may indicate
-                duplicate exposure, listing conflicts, or other issues worth manual follow-up.
-              </p>
-            </div>
-
-            <div class="actions">
-              <a class="btn primary" href="duplicate-check.html">Open Duplicate Checker</a>
-            </div>
-          </div>
-
-          <p class="muted" style="margin-top:16px;">
-            Ticket VeriGuard is designed to surface risk and support review. It does not remove
-            listings or pretend to replace human judgment.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="tvb-container">
-        <div class="tvb-card">
-          <h2 class="section-title">Try the Duplicate Exposure Check</h2>
-          <p>
-            Upload exported ticket listing data or test the checker with sample CSV data.
-            Review flagged records that may indicate duplicate exposure, listing overlap,
-            or conflicts worth manual follow-up.
-          </p>
-
-          <div id="tvg-widget"></div>
-
-          <p class="muted" style="margin-top:16px;">
-            This embedded checker is designed to surface risk signals and support broker-side review.
-          </p>
-        </div>
-      </div>
-    </section>
-
+    <!-- How review works -->
     <section class="section">
       <div class="tvb-container">
         <h2 class="section-title">How broker review works</h2>
@@ -194,24 +154,27 @@
         <div class="grid-2">
           <div class="tvb-card">
             <ol class="steps">
-              <li>Upload or review exported listing data for an event</li>
-              <li>Compare rows, sections, seats, and listing details</li>
-              <li>Flag possible overlap or duplicate exposure</li>
-              <li>Review findings and decide what needs follow-up</li>
+              <li>Export listing data for an event or review set</li>
+              <li>Upload the CSV into the duplicate checker</li>
+              <li>Review flagged records and grouped conflicts</li>
+              <li>Decide what needs follow-up, correction, or escalation</li>
             </ol>
           </div>
 
           <div class="tvb-card">
             <h3>Built for a practical first step</h3>
             <p>
-              This is not bloated software theater. It is a focused broker-side workflow
-              for reviewing exported listings, spotting conflicts faster, and making cleaner decisions.
+              This is a focused broker-side workflow for reviewing exported listings,
+              spotting conflicts faster, and making cleaner decisions. It is not trying
+              to cosplay as a giant platform with five dashboards nobody asked for.
             </p>
           </div>
         </div>
       </div>
     </section>
 
+
+    <!-- Contact -->
     <section class="section" id="contact">
       <div class="container">
         <h2 class="section-title">Broker questions or pilot interest</h2>
@@ -250,7 +213,6 @@
 
   <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
 
-  <script src="./widget.js" defer></script>
   <script src="./js/main.js" defer></script>
 </body>
 </html>

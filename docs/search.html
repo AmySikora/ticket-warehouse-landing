@@ -52,38 +52,35 @@
   </header>
 
   <main>
+    <!-- Hero / intro -->
     <section class="section">
-      <div class="card tti-workflow tvb-container" style="margin-top:16px;">
-        <h1>Track ticket prices across marketplaces</h1>
-
-        <p class="lead">
-          Search once and open results across major ticket marketplaces.
-          Capture consistent price snapshots, save the URLs you used, and build a repeatable record of how listings change over time.
-        </p>
-
-        <p class="muted" style="margin-top:8px;">
-          This workflow supports transparency tracking, weekly reporting, and market research without repeating the same search manually across every site.
-        </p>
-
-        <!-- Snapshot workflow (v0) -->
+      <div class="tvb-container">
         <div class="card tti-workflow" style="margin-top:16px;">
-          <h3 style="margin-top:0;">Snapshot workflow</h3>
-          <ol class="steps">
-            <li>Open results for each marketplace.</li>
-            <li>Record the lowest listed price you see at that moment.</li>
-            <li>If the marketplace shows an all-in price, capture it. Otherwise leave fees blank.</li>
-            <li>Save the URL you used so future comparisons stay consistent.</li>
-            <li>Repeat on the same schedule to track price movement over time.</li>
-          </ol>
-          <p class="muted" style="margin-bottom:0;">
-            Manual entry is completely fine here. Consistency matters more than polish at this stage, because apparently software is allowed to grow up in public now.
+          <span class="badge">Repeatable ticket price tracking workflow</span>
+          <h1 style="margin-bottom:10px;">Track ticket prices across marketplaces</h1>
+
+          <p class="lead">
+            Search once, open results across major ticket marketplaces, and record consistent price snapshots you can compare over time.
+          </p>
+
+          <p class="muted" style="margin-top:8px;">
+            This workflow is built for transparency tracking, recurring price checks, weekly reporting, and market research.
+            It keeps the process simple on purpose, because not every useful tool needs to pretend it invented electricity.
           </p>
         </div>
+      </div>
+    </section>
 
-        <!-- Search tool -->
-        <div class="card search-card" style="margin-top:16px;">
+    <!-- Step 1 -->
+    <section class="section" aria-labelledby="step-1-title">
+      <div class="tvb-container">
+        <div class="card search-card">
           <div class="tms-header-row">
-            <h2 class="section-title" style="margin-bottom:0;">Track Prices</h2>
+            <div>
+              <p class="muted" style="margin:0 0 4px;">Step 1</p>
+              <h2 id="step-1-title" class="section-title" style="margin:0;">Search marketplaces</h2>
+            </div>
+
             <button
               type="button"
               id="tms-info-toggle"
@@ -96,20 +93,20 @@
             </button>
           </div>
 
-          <p class="muted" style="margin-top:0;">
-            Search ticket marketplaces once and capture consistent price snapshots for transparency tracking and weekly reporting.
+          <p class="muted" style="margin-top:10px;">
+            Enter the event, artist, team, or city you want to track, then open the same search across the marketplaces you care about.
           </p>
 
           <form id="tixSearch" class="ms-form" novalidate>
             <label class="ms-label">
-              <span class="ms-label-text">What are you looking for?</span>
+              <span class="ms-label-text">What are you tracking?</span>
               <div class="ms-input-wrap">
                 <span aria-hidden="true">🔍</span>
                 <input
                   type="text"
                   id="tms-query"
                   name="query"
-                  placeholder="katy perry, chappell roan seattle, trail blazers tickets"
+                  placeholder="chappell roan seattle, trail blazers portland, katy perry vegas"
                   autocomplete="off"
                   required
                   class="ms-input"
@@ -117,8 +114,15 @@
               </div>
             </label>
 
+            <p class="muted" style="margin:-4px 0 8px;">
+              Try searches like:
+              <span class="muted">Chappell Roan Seattle</span>,
+              <span class="muted">Trail Blazers Portland</span>,
+              <span class="muted">Beyoncé Los Angeles</span>
+            </p>
+
             <fieldset class="ms-sites">
-              <legend class="ms-legend">Search these sites</legend>
+              <legend class="ms-legend">Choose marketplaces</legend>
               <div class="ms-site-grid">
                 <label class="pill-check">
                   <input type="checkbox" id="site-google" checked>
@@ -135,41 +139,75 @@
             </fieldset>
 
             <div class="ms-actions">
-              <button type="submit" class="btn btn-primary" id="tms-open">Open results</button>
+              <button type="submit" class="btn primary" id="tms-open">Open results</button>
               <button type="button" id="tms-copy" class="btn">Copy all links</button>
-              <button type="button" id="tms-copy-template" class="btn">Copy snapshot template</button>
-              <button type="button" id="tms-reset" class="btn">Reset</button>
-
-              <span class="ms-hint muted">
-                Tip: include the artist, team, event, and city when you can.
-                If you’re tracking snapshots over time, keep your search terms consistent so your comparisons stay clean.
-              </span>
+              <button type="button" id="tms-copy-template" class="btn btn-ghost">Copy snapshot template</button>
+              <button type="button" id="tms-reset" class="btn btn-ghost">Reset</button>
             </div>
+
+            <p class="ms-hint muted" style="margin-top:10px;">
+              Tip: keep your search terms consistent from one check-in to the next so your comparisons stay cleaner.
+            </p>
           </form>
 
-          <div id="tms-preview">
-            <div class="muted mt-6">Preview links:</div>
+          <div id="tms-preview" style="margin-top:16px;">
+            <div class="muted" style="margin-bottom:8px;">Links that will open:</div>
             <div id="tms-links" class="ms-links"></div>
           </div>
         </div>
 
-        <!-- Snapshot capture panel (v0) -->
-        <div class="card tti-capture" style="margin-top:16px;">
+        <div id="tms-explainer" class="card ms-explainer is-collapsed" aria-hidden="true" style="margin-top:16px;">
+          <h3 class="ms-explainer-title">How this search works</h3>
+          <ul class="feature-list">
+            <li>Type the same words you would use in a normal search.</li>
+            <li>For each selected site, the tool opens a targeted search like <code>chappell roan seattle site:stubhub.com</code>.</li>
+            <li>For the combined Google tab, the tool adds “tickets” if it is not already in your query.</li>
+            <li>If a marketplace does not have listings yet, you will just land on its usual no-results page.</li>
+            <li>Nothing is scraped, stored remotely, or connected to your accounts. This simply saves you from rebuilding the same searches over and over.</li>
+          </ul>
+
+          <p class="muted" style="margin-top:10px;">
+            The goal is consistency first. Better comparisons come from repeating the same search workflow, not from pretending manual review disappeared.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2 -->
+    <section class="section" aria-labelledby="step-2-title">
+      <div class="tvb-container">
+        <div class="card tti-capture">
           <div class="tti-capture-head">
-            <h3 style="margin:0;">Capture snapshot</h3>
+            <div>
+              <p class="muted" style="margin:0 0 4px;">Step 2</p>
+              <h2 id="step-2-title" class="section-title" style="margin:0;">Capture a price snapshot</h2>
+            </div>
+
             <div class="tti-capture-actions">
               <button type="button" class="btn btn-sm" id="tti-export-csv">Export CSV</button>
               <button type="button" class="btn btn-sm btn-ghost" id="tti-clear-session">Clear session</button>
             </div>
           </div>
 
-          <p class="muted" style="margin:8px 0 12px;">
-            Enter the lowest listed price you see on each marketplace right now. This saves to your browser using localStorage.
+          <p class="muted" style="margin:10px 0 14px;">
+            After you review the marketplace results, record the lowest listed price you see and save the URL used for that snapshot.
+            Data is stored in your browser with localStorage.
           </p>
+
+          <div class="card tti-workflow" style="margin-bottom:16px;">
+            <h3 style="margin-top:0;">Snapshot workflow</h3>
+            <ol class="steps">
+              <li>Open results for each marketplace.</li>
+              <li>Record the lowest listed price you see at that moment.</li>
+              <li>If the marketplace shows an all-in price, capture that too.</li>
+              <li>Save the URL you used so future comparisons stay consistent.</li>
+              <li>Repeat on the same schedule to track price movement over time.</li>
+            </ol>
+          </div>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
             <div class="tti-grid">
-              <!-- Row 1 -->
+              <!-- Event details -->
               <label class="tti-field">
                 <span class="ms-label-text">Event name</span>
                 <input
@@ -181,36 +219,8 @@
                 />
               </label>
 
-              <label class="tti-field tti-price">
-                <span class="ms-label-text">Lowest listed price (USD)</span>
-                <input
-                  id="tti-price"
-                  type="number"
-                  inputmode="decimal"
-                  min="0"
-                  step="0.01"
-                  required
-                  class="tti-input"
-                  placeholder="e.g., 79.00"
-                />
-              </label>
-
-              <label class="tti-field tti-fees">
-                <span class="ms-label-text">All-in / fees (optional)</span>
-                <input
-                  id="tti-fees"
-                  type="number"
-                  inputmode="decimal"
-                  min="0"
-                  step="0.01"
-                  class="tti-input"
-                  placeholder="e.g., 102.50"
-                />
-              </label>
-
-              <!-- Row 2 -->
               <label class="tti-field">
-                <span class="ms-label-text">Event venue</span>
+                <span class="ms-label-text">Venue</span>
                 <input
                   id="tti-event-location"
                   type="text"
@@ -229,6 +239,7 @@
                 />
               </label>
 
+              <!-- Snapshot details -->
               <label class="tti-field">
                 <span class="ms-label-text">Marketplace</span>
                 <select id="tti-marketplace" required class="tti-input">
@@ -243,7 +254,34 @@
                 </select>
               </label>
 
-              <!-- Row 3 -->
+              <label class="tti-field tti-price">
+                <span class="ms-label-text">Lowest listed price</span>
+                <input
+                  id="tti-price"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="0.01"
+                  required
+                  class="tti-input"
+                  placeholder="e.g., 79.00"
+                />
+              </label>
+
+              <label class="tti-field tti-fees">
+                <span class="ms-label-text">All-in price (optional)</span>
+                <input
+                  id="tti-fees"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="0.01"
+                  class="tti-input"
+                  placeholder="e.g., 102.50"
+                />
+              </label>
+
+              <!-- Source -->
               <label class="tti-field tti-url">
                 <span class="ms-label-text">URL used</span>
                 <input
@@ -251,7 +289,7 @@
                   type="url"
                   required
                   class="tti-input"
-                  placeholder="Paste the listing or results URL you used"
+                  placeholder="Paste the results or listing URL you used"
                 />
               </label>
             </div>
@@ -259,18 +297,37 @@
             <div class="tti-row">
               <label class="tti-field" style="flex:1;">
                 <span class="ms-label-text">Notes (optional)</span>
-                <input id="tti-notes" type="text" class="tti-input" />
+                <input id="tti-notes" type="text" class="tti-input" placeholder="Optional notes about this snapshot" />
               </label>
 
-              <button type="submit" class="btn btn-primary" id="tti-save-snapshot">Save snapshot</button>
+              <button type="submit" class="btn primary" id="tti-save-snapshot">Save snapshot</button>
               <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
             </div>
 
             <p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
           </form>
+        </div>
+      </div>
+    </section>
 
-          <p class="muted" id="tti-event-summary" style="margin:8px 0 0;"></p>
-          <div class="tti-table-wrap" style="margin-top:14px;">
+    <!-- Step 3 -->
+    <section class="section" aria-labelledby="step-3-title">
+      <div class="tvb-container">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap;">
+            <div>
+              <p class="muted" style="margin:0 0 4px;">Step 3</p>
+              <h2 id="step-3-title" class="section-title" style="margin:0;">Review saved snapshots</h2>
+            </div>
+
+            <p class="muted" id="tti-event-summary" style="margin:0;"></p>
+          </div>
+
+          <p class="muted" style="margin:10px 0 14px;">
+            Review what you captured in this session, then export it when you are ready.
+          </p>
+
+          <div class="tti-table-wrap">
             <div class="muted">Saved this session:</div>
             <table class="tti-table" aria-label="Saved snapshots">
               <thead>
@@ -279,7 +336,7 @@
                   <th>Event</th>
                   <th>Marketplace</th>
                   <th>Price</th>
-                  <th>Fees</th>
+                  <th>All-in</th>
                   <th>URL</th>
                   <th></th>
                 </tr>
@@ -290,21 +347,33 @@
             </table>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Explainer -->
-        <div id="tms-explainer" class="card ms-explainer is-collapsed" aria-hidden="true" style="margin-top:16px;">
-          <h3 class="ms-explainer-title">How this search works</h3>
-          <ul class="feature-list">
-            <li>Type the same words you’d use in a normal search. Misspellings are still, tragically, part of the human condition.</li>
-            <li>For each site you select, the tool opens a targeted search like <code>chappell roan seattle site:stubhub.com</code>.</li>
-            <li>For the combined Google tab, the tool adds “tickets” if it is not already in your search so the results are stronger.</li>
-            <li>If a site does not have tickets yet, you will just see its normal no-results page.</li>
-            <li>Nothing is scraped, stored remotely, or connected to your accounts. This simply saves you from repeating the same search across multiple sites.</li>
-          </ul>
+    <!-- Use cases -->
+    <section class="section">
+      <div class="tvb-container">
+        <div class="grid-3">
+          <div class="card item">
+            <h3>Weekly price checks</h3>
+            <p class="muted">
+              Run the same search every week and build a more consistent comparison set over time.
+            </p>
+          </div>
 
-          <p class="muted" style="margin-top:10px;">
-            Use this page to create repeatable searches first, then capture snapshots in a consistent way so your reporting is more useful later.
-          </p>
+          <div class="card item">
+            <h3>Market research</h3>
+            <p class="muted">
+              Compare pricing across marketplaces without manually rebuilding the same search on every site.
+            </p>
+          </div>
+
+          <div class="card item">
+            <h3>Transparency tracking</h3>
+            <p class="muted">
+              Keep a simple record of event, marketplace, price, and URL for later review or reporting.
+            </p>
+          </div>
         </div>
       </div>
     </section>

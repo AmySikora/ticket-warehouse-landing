@@ -18,12 +18,11 @@
     content="Upload a ticket listings CSV and review duplicate exposure, listing overlap, and ticket conflict signals before they turn into disputes or refunds."
   />
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
-  <link rel="stylesheet" href="./styles-v2.css" />
+  <link rel="stylesheet" href="./styles-v2.css"/>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
 </head>
 
 <body class="verify-page">
-  <!-- Header -->
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay" aria-label="Ticket VeriGuard">
@@ -57,7 +56,7 @@
     <div class="tvb-container">
 
       <!-- Hero -->
-     <section class="tvb-card tvb-hero">
+      <section class="tvb-card tvb-hero">
         <span class="badge">Broker review tool</span>
         <h1>Upload listings and check for duplicate exposure.</h1>
         <p>
@@ -74,7 +73,7 @@
       </section>
 
       <!-- Why this is useful -->
-      <section class="tvb-card" style="margin-top:20px;">
+      <section class="tvb-card">
         <div class="grid-3">
           <div class="card item">
             <h3>Spot overlap faster</h3>
@@ -100,7 +99,7 @@
       </section>
 
       <!-- Upload + summary -->
-      <section class="tvb-card tvg-upload-card" style="margin-top:20px;">
+      <section class="tvb-card tvg-upload-card">
         <div class="contact-cta" style="margin-bottom:16px;">
           <div>
             <h2 class="section-title" style="margin-bottom:8px;">Duplicate Exposure Checker</h2>
@@ -115,8 +114,15 @@
             <input id="tvg-file-input" type="file" accept=".csv">
             Choose CSV file
           </label>
-          <button type="button" id="tvg-analyze-btn" class="btn btn-ghost" disabled>Run scan</button>
-          <button type="button" id="tvg-sample-btn" class="btn btn-ghost">Try sample CSV</button>
+
+          <button type="button" id="tvg-analyze-btn" class="btn btn-ghost" disabled>
+            Run scan
+          </button>
+
+          <button type="button" id="tvg-sample-btn" class="btn btn-ghost">
+            Try sample CSV
+          </button>
+
           <div id="tvg-file-label" class="tvb-note tvg-file-name">No file selected.</div>
         </div>
 
@@ -130,7 +136,7 @@
       </section>
 
       <!-- Filters -->
-      <section class="tvb-card tvg-filter-card" style="margin-top:20px;">
+      <section class="tvb-card tvg-filter-card">
         <div class="tvg-filter-row">
           <div class="tvb-note">Filter:</div>
 
@@ -150,8 +156,8 @@
         </div>
       </section>
 
-      <!-- Table -->
-      <section class="tvb-card tvg-table-card" style="margin-top:20px;">
+      <!-- Results -->
+      <section class="tvb-card tvg-table-card">
         <div class="tvg-table-header">
           <h3>Scan results</h3>
           <div class="tvb-note">
@@ -162,7 +168,7 @@
         <div class="tvg-table-wrap">
           <table id="tvg-results-table">
             <thead>
-             <tr>
+              <tr>
                 <th data-key="id">ID</th>
                 <th data-key="decision">Result</th>
                 <th data-key="marketplace">Marketplace</th>
@@ -185,7 +191,7 @@
       </section>
 
       <!-- Guidance -->
-      <section class="tvb-card" style="margin-top:20px;">
+      <section class="tvb-card">
         <div class="grid-2">
           <div class="card item">
             <h3>What this checks</h3>
@@ -210,7 +216,7 @@
       </section>
 
       <!-- Feedback -->
-      <section class="tvb-card tvg-feedback-card" style="margin-top:20px;">
+      <section class="tvb-card tvg-feedback-card">
         <div class="tvg-feedback-row">
           <span class="tvb-note">Was this scan helpful?</span>
           <button id="tvg-thumb-up" class="btn btn-ghost">👍 Yes</button>
@@ -220,7 +226,7 @@
       </section>
 
       <!-- CTA -->
-      <section class="tvb-card tvg-pilot-card" style="margin-top:20px;" id="contact">
+      <section class="tvb-card tvg-pilot-card" id="contact">
         <div class="tvg-pilot-label">
           <h3>Need a closer look at a real event or export?</h3>
           <p class="tvb-note">
