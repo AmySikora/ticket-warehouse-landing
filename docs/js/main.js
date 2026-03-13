@@ -1,140 +1,216 @@
-// ===== Helper: safe IIFE so one error doesn't kill everything =====
+// =====================================================
+// Ticket VeriGuard - main.js
+// Shared behavior for:
+// - all pages: footer year, mobile nav, toasts
+// - index.html: contact form
+// - search.html: marketplace search + snapshot capture
+// - duplicate-check.html: CSV duplicate exposure checker
+// =====================================================
+
+// =====================================================
+// Safe runner
+// =====================================================
 function tvgSafe(name, fn) {
   try {
     fn();
-  } catch (e) {
-    console.error(`[TicketVeriGuard] ${name} error:`, e);
+  } catch (error) {
+    console.error(`[TicketVeriGuard] ${name} error:`, error);
   }
 }
 
-// ===== Footer Year (all pages) =====
+// =====================================================
+// Small helpers
+// =====================================================
+function $(selector, scope = document) {
+  return scope.querySelector(selector);
+}
+
+function $all(selector, scope = document) {
+  return Array.from(scope.querySelectorAll(selector));
+}
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function safeText(value, fallback = "") {
+  const str = String(value ?? "").trim();
+  return str || fallback;
+}
+
+function withTimeout(ms, promise) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("timeout")), ms);
+    }),
+  ]);
+}
+
+function copyToClipboard(text) {
+  if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+    return Promise.reject(new Error("Clipboard API unavailable"));
+  }
+  return navigator.clipboard.writeText(text);
+}
+
+function downloadTextFile(filename, text, mimeType = "text/plain;charset=utf-8") {
+  const blob = new Blob([text], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+// =====================================================
+// Toast utility
+// =====================================================
+function showToast(message, type = "success", ttl = 4000) {
+  const root = document.getElementById("toast-root");
+  if (!root) return;
+
+  const toast = document.createElement("div");
+  toast.className = `toast toast--${type}`;
+  toast.role = "status";
+  toast.innerHTML = `
+    <div>${escapeHTML(message)}</div>
+    <button type="button" aria-label="Dismiss">✕</button>
+  `;
+
+  const close = () => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 180);
+  };
+
+  const dismissBtn = $("button", toast);
+  if (dismissBtn) dismissBtn.addEventListener("click", close);
+
+  root.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(close, ttl);
+}
+
+// =====================================================
+// Footer year
+// =====================================================
 tvgSafe("footer-year", () => {
-  const y = document.getElementById("y");
-  if (y) y.textContent = new Date().getFullYear();
+  const yearEl = document.getElementById("y");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
-// ===== Nav Toggle (all pages, single source of behavior) =====
+// =====================================================
+// Mobile nav
+// =====================================================
 tvgSafe("nav-toggle", () => {
-  const header = document.querySelector("header.nav, header");
-  const btn = document.querySelector(".nav-toggle");
+  const header = $("header.nav, header");
+  const toggleBtn = $(".nav-toggle");
   const nav = document.getElementById("primary-nav");
-  if (!header || !btn || !nav) return;
+
+  if (!header || !toggleBtn || !nav) return;
 
   function closeMenu() {
     nav.classList.remove("is-open");
     header.classList.remove("nav-open");
     document.body.classList.remove("menu-open");
-    btn.setAttribute("aria-expanded", "false");
+    toggleBtn.setAttribute("aria-expanded", "false");
   }
 
   function openMenu() {
     nav.classList.add("is-open");
     header.classList.add("nav-open");
     document.body.classList.add("menu-open");
-    btn.setAttribute("aria-expanded", "true");
+    toggleBtn.setAttribute("aria-expanded", "true");
   }
 
   function toggleMenu() {
     const isOpen =
       header.classList.contains("nav-open") || nav.classList.contains("is-open");
-    isOpen ? closeMenu() : openMenu();
+
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   }
 
-  btn.addEventListener("click", toggleMenu);
+  toggleBtn.addEventListener("click", toggleMenu);
+  $all("a", nav).forEach((link) => link.addEventListener("click", closeMenu));
 
-  // Close menu when a nav link is tapped (mobile)
-  nav.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
-
-  // Close menu if we resize up to desktop layout
   window.addEventListener("resize", () => {
     if (window.innerWidth > 900) closeMenu();
   });
 
-  // Esc to close
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
   });
 });
 
-// ===== Toast Utility (global) =====
-function showToast(message, type = "success", ttl = 4000) {
-  const root = document.getElementById("toast-root");
-  if (!root) return;
-
-  const el = document.createElement("div");
-  el.className = `toast toast--${type}`;
-  el.role = "status";
-  el.innerHTML = `
-    <div>${message}</div>
-    <button aria-label="Dismiss">✕</button>
-  `;
-
-  const close = () => {
-    el.classList.remove("show");
-    setTimeout(() => el.remove(), 180);
-  };
-
-  const btn = el.querySelector("button");
-  if (btn) btn.addEventListener("click", close);
-
-  root.appendChild(el);
-  requestAnimationFrame(() => el.classList.add("show"));
-  setTimeout(close, ttl);
-}
-
-// ===== Index: Contact Form =====
+// =====================================================
+// Index page: contact form
+// =====================================================
 tvgSafe("contact-form", () => {
   const form = document.getElementById("contact-form");
-  if (!form) return;
+  const submitBtn = document.getElementById("contact-submit");
+  const statusEl = document.getElementById("contact-status");
 
-  const btn = document.getElementById("contact-submit");
-  const status = document.getElementById("contact-status");
+  if (!form || !submitBtn || !statusEl) return;
+
   const API_URL =
     "https://tvg-contact-f9046a-5bc794bd5ce3.herokuapp.com/api/contact";
 
-  const withTimeout = (ms, promise) =>
-    Promise.race([
-      promise,
-      new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms)),
-    ]);
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!btn || !status) return;
+    statusEl.textContent = "";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
 
-    status.textContent = "";
-    btn.disabled = true;
-    btn.textContent = "Sending...";
-
-    const data = {
-      email: form.email.value.trim(),
-      message: form.message.value.trim(),
-      website: form.website ? form.website.value : "",
+    const payload = {
+      email: safeText(form.email?.value),
+      message: safeText(form.message?.value),
+      website: form.website?.value || "",
     };
 
     try {
-      const res = await withTimeout(
+      const response = await withTimeout(
         10000,
         fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         })
       );
-      if (!res.ok) throw new Error("Request failed");
+
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+
       window.location.href = "thanks.html";
-    } catch (err) {
-      status.textContent =
+    } catch (error) {
+      statusEl.textContent =
         "Sorry, we could not send right now. Please email hello@ticketveriguard.com.";
       showToast("Send failed", "error");
     } finally {
-      btn.disabled = false;
-      btn.textContent = "Request demo";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send message";
     }
   });
 });
 
-// ===== Brokers: Embedded Widget =====
+// =====================================================
+// Brokers page: embedded widget
+// =====================================================
 tvgSafe("brokers-widget", () => {
   const target = document.getElementById("tvg-widget");
   if (!target) return;
@@ -144,22 +220,27 @@ tvgSafe("brokers-widget", () => {
       console.error("TVGWidget not loaded");
       return;
     }
+
     if (target.dataset.mounted === "1") return;
+
     window.TVGWidget.mount("#tvg-widget", {
       whiteLabel: true,
       accent: "#22d3ee",
     });
+
     target.dataset.mounted = "1";
   }
 
-  if (document.readyState === "complete" || document.readyState === "interactive") {
-    mountWidget();
-  } else {
+  if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", mountWidget);
+  } else {
+    mountWidget();
   }
 });
 
-// ===== Verify: CSV Checking (verify.html) =====
+// =====================================================
+// Duplicate exposure checker page
+// =====================================================
 tvgSafe("verify-csv", () => {
   const fileInput = document.getElementById("tvg-file-input");
   const analyzeBtn = document.getElementById("tvg-analyze-btn");
@@ -177,238 +258,60 @@ tvgSafe("verify-csv", () => {
 
   if (!fileInput || !analyzeBtn || !sampleBtn || !table) return;
 
-  const tableBody = table.querySelector("tbody");
+  const tableBody = $("tbody", table);
 
   let allRows = [];
-  let sortState = { key: null, dir: 1 };
   let conflictGroups = [];
   let conflictLookup = {};
+  let sortState = { key: null, dir: 1 };
 
-  const normalizeHeader = (h) => (h || "").toString().trim().toLowerCase();
+  const normalizeHeader = (header) =>
+    String(header || "").trim().toLowerCase();
 
-  function onFileChange(e) {
-    const file = e.target.files[0];
-    const hasFile = !!file;
+  const setAnalyzeReadyState = (ready) => {
+    analyzeBtn.disabled = !ready;
+    analyzeBtn.classList.toggle("btn-active", ready);
+  };
 
-    fileLabel.textContent = hasFile ? file.name : "No file selected.";
-    analyzeBtn.disabled = !hasFile;
-    analyzeBtn.classList.toggle("btn-active", hasFile);
-  }
-  
-  function handleSampleClick(e) {
-  if (e) e.preventDefault();
-
-  console.log("handleSampleClick running");
-
-  fetch("./sample_listings.csv")
-    .then((res) => {
-      console.log("fetch response:", res.status, res.ok, res.url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.text();
-    })
-    .then((text) => {
-      console.log("sample csv loaded, length:", text.length);
-
-      if (!window.Papa) {
-        throw new Error("PapaParse is not loaded");
-      }
-
-      Papa.parse(text, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          console.log("Papa parse complete:", results);
-
-          fileLabel.textContent = "sample_listings.csv";
-          analyzeBtn.disabled = false;
-          analyzeBtn.classList.add("btn-active");
-
-          runAnalysis(results.data || [], "sample_listings.csv");
-        },
-        error: (err) => {
-          console.error("Papa parse error:", err);
-          alert("There was a problem parsing sample_listings.csv.");
-        },
-      });
-    })
-    .catch((err) => {
-      console.error("Sample CSV load failed:", err);
-      alert(`Could not load sample_listings.csv: ${err.message}`);
-    });
-}
-
-  function parseAndAnalyze() {
-    const file = fileInput.files[0];
-    if (!file || !window.Papa) return;
-
-    analyzeBtn.disabled = true;
-    analyzeBtn.textContent = "Run scan";
-
-
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        runAnalysis(results.data || [], file.name || "Your CSV");
-        analyzeBtn.textContent = "Analyze CSV";
-        analyzeBtn.disabled = false;
-      },
-      error: () => {
-        analyzeBtn.textContent = "Analyze CSV";
-        analyzeBtn.disabled = false;
-        alert("Sorry, there was a problem reading that file.");
-      },
-    });
+  function updateFileLabel(name = "No file selected.") {
+    if (fileLabel) fileLabel.textContent = name;
   }
 
-  function buildRows(data) {
-    return data
-      .map((row, idx) => {
-        const headers = Object.keys(row).reduce((acc, key) => {
-          acc[normalizeHeader(key)] = row[key];
-          return acc;
-        }, {});
-
-        const pick = (...names) => {
-          for (const n of names) {
-            const v = headers[normalizeHeader(n)];
-            if (v !== undefined && v !== "") return v;
-          }
-          return "";
-        };
-
-        const event = pick("event", "event name", "event_name");
-        const section = pick("section", "sec");
-        const r = pick("row");
-        const seat = pick("seat", "seat number", "seat_no", "seat #");
-        const mp = pick("marketplace", "source", "channel", "site");
-        const id = pick("id", "listing_id", "external_id") || String(idx + 1);
-        const when = pick("when", "timestamp", "time", "created_at");
-
-        const key = [event, section, r, seat]
-          .map((v) => (v || "").toString().trim())
-          .join("|");
-
-        return {
-          _index: idx,
-          id,
-          event,
-          marketplace: mp,
-          section,
-          row: r,
-          seat,
-          when,
-          decision: "Approved",
-          _key: key,
-        };
-      })
-      .filter((r) => Object.values(r).some((v) => (v || "").toString().trim() !== ""));
-  }
-
-  function hasRequiredColumns(rows) {
-    if (!rows.length) return false;
-    const s = rows[0];
-    return !!(s.event || s.section || s.row || s.seat);
-  }
-
-  function assignConflicts(rows) {
-    const byKey = {};
-    rows.forEach((r) => {
-      if (!r._key || r._key === "|||") return;
-      (byKey[r._key] ||= []).push(r);
-    });
-
-    const groups = [];
-    const lookup = {};
-    let riskyCount = 0;
-    let groupId = 1;
-
-    Object.entries(byKey).forEach(([key, list]) => {
-      if (list.length > 1) {
-        const [event, section, row, seat] = key.split("|");
-        groups.push({
-          id: groupId,
-          event,
-          section,
-          row,
-          seat,
-          size: list.length,
-        });
-
-        list.forEach((r, idx) => {
-          if (idx === 0) {
-            r.decision = "Approved";
-          } else {
-            r.decision = "Blocked";
-            riskyCount++;
-          }
-          lookup[r._index] = groupId;
-        });
-
-        groupId++;
-      }
-    });
-
-    return { groups, lookup, riskyCount };
-  }
-
-  function populateMarketplaceFilter() {
-    const seen = new Set();
-    allRows.forEach((r) => r.marketplace && seen.add(r.marketplace));
-    if (!filterMarketplace) return;
-    filterMarketplace.innerHTML = '<option value="all">All marketplaces</option>';
-    Array.from(seen)
-      .sort()
-      .forEach((mp) => {
-        const opt = document.createElement("option");
-        opt.value = mp;
-        opt.textContent = mp;
-        filterMarketplace.appendChild(opt);
-      });
-  }
-
-  function getFilteredRows() {
-    const d = filterDecision ? filterDecision.value : "all";
-    const mp = filterMarketplace ? filterMarketplace.value : "all";
-    return allRows.filter((r) => {
-      if (d !== "all" && r.decision !== d) return false;
-      if (mp !== "all" && r.marketplace !== mp) return false;
-      return true;
-    });
-  }
-
-  function escapeHTML(str) {
-    return (str || "")
-      .toString()
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+  function renderEmpty(message) {
+    if (!tableBody) return;
+    tableBody.innerHTML = `
+      <tr class="tvg-empty-row">
+        <td colspan="8">${escapeHTML(message)}</td>
+      </tr>
+    `;
   }
 
   function renderSummary({ scannedCount, conflictGroupCount, riskyCount, source }) {
     if (!summaryStrip) return;
+
     summaryStrip.innerHTML = "";
     summaryStrip.classList.add("is-visible");
 
-    const pill = (text) => {
-      const span = document.createElement("span");
-      span.className = "tvg-summary-pill";
-      span.textContent = text;
-      return span;
+    const makePill = (text) => {
+      const pill = document.createElement("span");
+      pill.className = "tvg-summary-pill";
+      pill.textContent = text;
+      return pill;
     };
 
     const strong = document.createElement("strong");
     strong.textContent = `${scannedCount.toLocaleString()} listings scanned`;
+
     summaryStrip.appendChild(strong);
     summaryStrip.appendChild(
-      pill(`${conflictGroupCount} conflict group${conflictGroupCount === 1 ? "" : "s"}`)
+      makePill(`${conflictGroupCount} conflict group${conflictGroupCount === 1 ? "" : "s"}`)
     );
-    summaryStrip.appendChild(pill(`${riskyCount} risky listing${riskyCount === 1 ? "" : "s"}`));
-    summaryStrip.appendChild(pill(`Source: ${source}`));
     summaryStrip.appendChild(
-      pill(
+      makePill(`${riskyCount} risky listing${riskyCount === 1 ? "" : "s"}`)
+    );
+    summaryStrip.appendChild(makePill(`Source: ${source}`));
+    summaryStrip.appendChild(
+      makePill(
         riskyCount > 0
           ? "These are the seats we’d sync across marketplaces."
           : "No duplicates found with this rule set."
@@ -416,14 +319,136 @@ tvgSafe("verify-csv", () => {
     );
   }
 
-  function renderEmpty(message) {
-    tableBody.innerHTML = `
-      <tr class="tvg-empty-row">
-        <td colspan="8">${message}</td>
-      </tr>`;
+  function clearSummary() {
+    if (!summaryStrip) return;
+    summaryStrip.innerHTML = "";
+    summaryStrip.classList.remove("is-visible");
+  }
+
+  function buildRows(data) {
+    return data
+      .map((row, index) => {
+        const normalized = Object.keys(row).reduce((acc, key) => {
+          acc[normalizeHeader(key)] = row[key];
+          return acc;
+        }, {});
+
+        const pick = (...names) => {
+          for (const name of names) {
+            const value = normalized[normalizeHeader(name)];
+            if (value !== undefined && value !== "") return value;
+          }
+          return "";
+        };
+
+        const event = pick("event", "event name", "event_name");
+        const section = pick("section", "sec");
+        const rowValue = pick("row");
+        const seat = pick("seat", "seat number", "seat_no", "seat #");
+        const marketplace = pick("marketplace", "source", "channel", "site");
+        const id = pick("id", "listing_id", "external_id") || String(index + 1);
+        const when = pick("when", "timestamp", "time", "created_at");
+
+        const key = [event, section, rowValue, seat]
+          .map((value) => String(value || "").trim())
+          .join("|");
+
+        return {
+          _index: index,
+          _key: key,
+          id,
+          event,
+          marketplace,
+          section,
+          row: rowValue,
+          seat,
+          when,
+          decision: "Approved",
+        };
+      })
+      .filter((row) =>
+        Object.values(row).some((value) => String(value || "").trim() !== "")
+      );
+  }
+
+  function hasRequiredColumns(rows) {
+    if (!rows.length) return false;
+    const sample = rows[0];
+    return Boolean(sample.event || sample.section || sample.row || sample.seat);
+  }
+
+  function assignConflicts(rows) {
+    const byKey = {};
+    const groups = [];
+    const lookup = {};
+    let riskyCount = 0;
+    let groupId = 1;
+
+    rows.forEach((row) => {
+      if (!row._key || row._key === "|||") return;
+      if (!byKey[row._key]) byKey[row._key] = [];
+      byKey[row._key].push(row);
+    });
+
+    Object.entries(byKey).forEach(([key, matches]) => {
+      if (matches.length <= 1) return;
+
+      const [event, section, rowValue, seat] = key.split("|");
+
+      groups.push({
+        id: groupId,
+        event,
+        section,
+        row: rowValue,
+        seat,
+        size: matches.length,
+      });
+
+      matches.forEach((row, index) => {
+        if (index > 0) {
+          row.decision = "Blocked";
+          riskyCount += 1;
+        }
+        lookup[row._index] = groupId;
+      });
+
+      groupId += 1;
+    });
+
+    return { groups, lookup, riskyCount };
+  }
+
+  function populateMarketplaceFilter() {
+    if (!filterMarketplace) return;
+
+    const marketplaces = Array.from(
+      new Set(allRows.map((row) => row.marketplace).filter(Boolean))
+    ).sort();
+
+    filterMarketplace.innerHTML = `<option value="all">All marketplaces</option>`;
+
+    marketplaces.forEach((marketplace) => {
+      const option = document.createElement("option");
+      option.value = marketplace;
+      option.textContent = marketplace;
+      filterMarketplace.appendChild(option);
+    });
+  }
+
+  function getFilteredRows() {
+    const decisionValue = filterDecision ? filterDecision.value : "all";
+    const marketplaceValue = filterMarketplace ? filterMarketplace.value : "all";
+
+    return allRows.filter((row) => {
+      if (decisionValue !== "all" && row.decision !== decisionValue) return false;
+      if (marketplaceValue !== "all" && row.marketplace !== marketplaceValue) return false;
+      return true;
+    });
   }
 
   function renderTable() {
+    if (!tableBody) return;
+
     const rows = getFilteredRows().slice();
     tableBody.innerHTML = "";
 
@@ -434,53 +459,56 @@ tvgSafe("verify-csv", () => {
 
     if (sortState.key) {
       rows.sort((a, b) => {
-        const va = (a[sortState.key] || "").toString().toLowerCase();
-        const vb = (b[sortState.key] || "").toString().toLowerCase();
-        if (va < vb) return -1 * sortState.dir;
-        if (va > vb) return 1 * sortState.dir;
+        const aValue = safeText(a[sortState.key]).toLowerCase();
+        const bValue = safeText(b[sortState.key]).toLowerCase();
+
+        if (aValue < bValue) return -1 * sortState.dir;
+        if (aValue > bValue) return 1 * sortState.dir;
         return 0;
       });
     }
 
-    const groupMeta = {};
-    conflictGroups.forEach((g) => (groupMeta[g.id] = g));
-    const inserted = new Set();
+    const groupMeta = Object.fromEntries(conflictGroups.map((group) => [group.id, group]));
+    const insertedGroupHeaders = new Set();
 
-    rows.forEach((r) => {
-      const gid = conflictLookup[r._index];
-      if (gid && !inserted.has(gid) && groupMeta[gid]) {
-        inserted.add(gid);
-        const g = groupMeta[gid];
-        const labelTr = document.createElement("tr");
-        labelTr.className = "tvg-group-label-row";
-        labelTr.innerHTML = `
+    rows.forEach((row) => {
+      const groupId = conflictLookup[row._index];
+
+      if (groupId && !insertedGroupHeaders.has(groupId) && groupMeta[groupId]) {
+        insertedGroupHeaders.add(groupId);
+
+        const group = groupMeta[groupId];
+        const labelRow = document.createElement("tr");
+        labelRow.className = "tvg-group-label-row";
+        labelRow.innerHTML = `
           <td colspan="8">
-            Conflict group #${g.id} — ${g.size} listings share the same seat
-            (${escapeHTML(g.event)} • Sec ${escapeHTML(g.section)} • Row ${escapeHTML(
-          g.row
-        )} • Seat ${escapeHTML(g.seat)})
-          </td>`;
-        tableBody.appendChild(labelTr);
+            Conflict group #${group.id} — ${group.size} listings share the same seat
+            (${escapeHTML(group.event)} • Sec ${escapeHTML(group.section)} • Row ${escapeHTML(group.row)} • Seat ${escapeHTML(group.seat)})
+          </td>
+        `;
+        tableBody.appendChild(labelRow);
       }
 
+      const isBlocked = row.decision === "Blocked";
       const tr = document.createElement("tr");
-      const isBlocked = r.decision === "Blocked";
-      tr.className = "tvg-row " + (isBlocked ? "tvg-conflict-row" : "tvg-clean-row");
+      tr.className = isBlocked ? "tvg-row tvg-conflict-row" : "tvg-row tvg-clean-row";
       tr.dataset.decision = isBlocked ? "Blocked" : "Approved";
 
       tr.innerHTML = `
-        <td>${escapeHTML(r.id)}</td>
-        <td>${
-          isBlocked
-            ? '<span class="tvg-status-pill tvg-status-risk">Duplicate seat</span>'
-            : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
-        }</td>
-        <td>${escapeHTML(r.marketplace || "—")}</td>
-        <td>${escapeHTML(r.event)}</td>
-        <td>${escapeHTML(r.section)}</td>
-        <td>${escapeHTML(r.row)}</td>
-        <td>${escapeHTML(r.seat)}</td>
-        <td>${escapeHTML(r.when)}</td>
+        <td>${escapeHTML(row.id)}</td>
+        <td>
+          ${
+            isBlocked
+              ? '<span class="tvg-status-pill tvg-status-risk">Duplicate seat</span>'
+              : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
+          }
+        </td>
+        <td>${escapeHTML(row.marketplace || "—")}</td>
+        <td>${escapeHTML(row.event)}</td>
+        <td>${escapeHTML(row.section)}</td>
+        <td>${escapeHTML(row.row)}</td>
+        <td>${escapeHTML(row.seat)}</td>
+        <td>${escapeHTML(row.when)}</td>
       `;
 
       tableBody.appendChild(tr);
@@ -488,60 +516,121 @@ tvgSafe("verify-csv", () => {
   }
 
   function runAnalysis(data, sourceLabel) {
-    const mapped = buildRows(data);
-    if (!mapped.length) {
+    const mappedRows = buildRows(data);
+
+    if (!mappedRows.length) {
       renderEmpty("We couldn’t find any listings in that file. Please check your CSV and try again.");
-      if (summaryStrip) {
-        summaryStrip.innerHTML = "";
-        summaryStrip.classList.remove("is-visible");
-      }
-      return;
-    }
-    if (!hasRequiredColumns(mapped)) {
-      renderEmpty(
-        "This demo expects columns for Event, Section, Row, and Seat. Optional: Marketplace. Try the sample CSV to see the expected format."
-      );
-      if (summaryStrip) {
-        summaryStrip.innerHTML = "";
-        summaryStrip.classList.remove("is-visible");
-      }
+      clearSummary();
+      downloadBtn && (downloadBtn.disabled = true);
       return;
     }
 
-    const conflicts = assignConflicts(mapped);
-    allRows = mapped;
+    if (!hasRequiredColumns(mappedRows)) {
+      renderEmpty(
+        "This demo expects columns for Event, Section, Row, and Seat. Optional: Marketplace. Try the sample CSV to see the expected format."
+      );
+      clearSummary();
+      downloadBtn && (downloadBtn.disabled = true);
+      return;
+    }
+
+    const conflicts = assignConflicts(mappedRows);
+
+    allRows = mappedRows;
     conflictGroups = conflicts.groups;
     conflictLookup = conflicts.lookup;
 
     populateMarketplaceFilter();
+
     renderSummary({
-      scannedCount: mapped.length,
+      scannedCount: mappedRows.length,
       conflictGroupCount: conflictGroups.length,
       riskyCount: conflicts.riskyCount,
       source: sourceLabel,
     });
+
     renderTable();
-    if (downloadBtn) downloadBtn.disabled = allRows.length === 0;
+
+    if (downloadBtn) {
+      downloadBtn.disabled = allRows.length === 0;
+    }
   }
 
-  function onHeaderClick(e) {
-    const th = e.target.closest("th[data-key]");
-    if (!th) return;
-    const key = th.getAttribute("data-key");
+  function parseAndAnalyzeFile() {
+    const file = fileInput.files?.[0];
+    if (!file || !window.Papa) return;
+
+    analyzeBtn.disabled = true;
+    analyzeBtn.textContent = "Running...";
+
+    window.Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete(results) {
+        runAnalysis(results.data || [], file.name || "Your CSV");
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = "Run scan";
+      },
+      error() {
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = "Run scan";
+        alert("Sorry, there was a problem reading that file.");
+      },
+    });
+  }
+
+  function loadSampleCsv(event) {
+    if (event) event.preventDefault();
+
+    fetch("./sample_listings.csv")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.text();
+      })
+      .then((text) => {
+        if (!window.Papa) {
+          throw new Error("PapaParse is not loaded");
+        }
+
+        window.Papa.parse(text, {
+          header: true,
+          skipEmptyLines: true,
+          complete(results) {
+            updateFileLabel("sample_listings.csv");
+            setAnalyzeReadyState(true);
+            runAnalysis(results.data || [], "sample_listings.csv");
+          },
+          error() {
+            alert("There was a problem parsing sample_listings.csv.");
+          },
+        });
+      })
+      .catch((error) => {
+        alert(`Could not load sample_listings.csv: ${error.message}`);
+      });
+  }
+
+  function onHeaderClick(event) {
+    const headerCell = event.target.closest("th[data-key]");
+    if (!headerCell) return;
+
+    const key = headerCell.getAttribute("data-key");
     if (!key) return;
 
     if (sortState.key === key) {
-      sortState.dir = -sortState.dir;
+      sortState.dir *= -1;
     } else {
       sortState.key = key;
       sortState.dir = 1;
     }
 
-    table.querySelectorAll("thead th").forEach((thEl) => {
-      thEl.classList.remove("sort-asc", "sort-desc");
+    $all("thead th", table).forEach((th) => {
+      th.classList.remove("sort-asc", "sort-desc");
     });
 
-    th.classList.add(sortState.dir === 1 ? "sort-asc" : "sort-desc");
+    headerCell.classList.add(sortState.dir === 1 ? "sort-asc" : "sort-desc");
     renderTable();
   }
 
@@ -551,64 +640,67 @@ tvgSafe("verify-csv", () => {
     renderTable();
   }
 
-  function downloadCleanedCSV() {
+  function downloadFilteredCsv() {
     if (!allRows.length) return;
+
     const headers = ["id", "decision", "marketplace", "event", "section", "row", "seat", "when"];
     const lines = [headers.join(",")];
-    allRows.forEach((r) => {
-      const vals = headers.map((h) => `"${(r[h] || "").toString().replace(/"/g, '""')}"`);
-      lines.push(vals.join(","));
+
+    allRows.forEach((row) => {
+      const values = headers.map((header) =>
+        `"${String(row[header] || "").replace(/"/g, '""')}"`
+      );
+      lines.push(values.join(","));
     });
-    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "ticket-veriguard-cleaned.csv";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+
+    downloadTextFile(
+      "ticket-veriguard-cleaned.csv",
+      lines.join("\n"),
+      "text/csv;charset=utf-8;"
+    );
   }
 
-  function handleThumb(up) {
+  function handleFeedback(isPositive) {
     if (!feedbackLabel) return;
-    feedbackLabel.textContent = up
+    feedbackLabel.textContent = isPositive
       ? "Thanks — glad it helped!"
       : "Thanks — your feedback helps us improve.";
   }
 
-  // Wire up
-  fileInput.addEventListener("change", onFileChange);
-  analyzeBtn.addEventListener("click", parseAndAnalyze);
-  sampleBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  console.log("sample button clicked");
-  handleSampleClick(e);
-});
+  fileInput.addEventListener("change", (event) => {
+    const file = event.target.files?.[0];
+    updateFileLabel(file ? file.name : "No file selected.");
+    setAnalyzeReadyState(Boolean(file));
+  });
 
-  table.querySelector("thead").addEventListener("click", onHeaderClick);
+  analyzeBtn.addEventListener("click", parseAndAnalyzeFile);
+  sampleBtn.addEventListener("click", loadSampleCsv);
+  $("thead", table)?.addEventListener("click", onHeaderClick);
+
   if (filterDecision) filterDecision.addEventListener("change", renderTable);
   if (filterMarketplace) filterMarketplace.addEventListener("change", renderTable);
   if (resetFiltersBtn) resetFiltersBtn.addEventListener("click", resetFilters);
-  if (downloadBtn) downloadBtn.addEventListener("click", downloadCleanedCSV);
-  if (thumbUp) thumbUp.addEventListener("click", () => handleThumb(true));
-  if (thumbDown) thumbDown.addEventListener("click", () => handleThumb(false));
+  if (downloadBtn) downloadBtn.addEventListener("click", downloadFilteredCsv);
+  if (thumbUp) thumbUp.addEventListener("click", () => handleFeedback(true));
+  if (thumbDown) thumbDown.addEventListener("click", () => handleFeedback(false));
 });
 
-/// ===== TixMarketSearch + TTI Snapshot Capture (search.html) =====
-(function () {
+// =====================================================
+// Search page: marketplace search + snapshot capture
+// =====================================================
+tvgSafe("search-workflow", () => {
   const form = document.getElementById("tixSearch");
-  if (!form) return; // only run on search.html
+  if (!form) return;
 
   const queryEl = document.getElementById("tms-query");
   const linksWrap = document.getElementById("tms-links");
-  const btnCopy = document.getElementById("tms-copy");
-  const btnCopyTemplate = document.getElementById("tms-copy-template");
-  const btnReset = document.getElementById("tms-reset");
+  const copyLinksBtn = document.getElementById("tms-copy");
+  const copyTemplateBtn = document.getElementById("tms-copy-template");
+  const resetBtn = document.getElementById("tms-reset");
   const infoToggle = document.getElementById("tms-info-toggle");
   const explainer = document.getElementById("tms-explainer");
 
-  const siteConfigs = [
+  const searchSites = [
     { id: "site-seatgeek", label: "SeatGeek", domain: "seatgeek.com" },
     { id: "site-vivid", label: "Vivid Seats", domain: "vividseats.com" },
     { id: "site-stubhub", label: "StubHub", domain: "stubhub.com" },
@@ -617,236 +709,29 @@ tvgSafe("verify-csv", () => {
     { id: "site-tickpick", label: "TickPick", domain: "tickpick.com" },
     { id: "site-viagogo", label: "Viagogo", domain: "viagogo.com" },
   ];
+
   const googleCheckboxId = "site-google";
+  const STORAGE_KEY = "tti_snapshots_v0";
 
-  function baseQuery(raw) {
-    return (raw || "").replace(/\s+/g, " ").trim();
-  }
+  const snapshotForm = document.getElementById("tti-snapshot-form");
+  const snapshotBody = document.getElementById("tti-snapshots-body");
+  const snapshotStatus = document.getElementById("tti-status");
+  const snapshotExportBtn = document.getElementById("tti-export-csv");
+  const snapshotClearBtn = document.getElementById("tti-clear-session");
+  const snapshotSaveBtn = document.getElementById("tti-save-snapshot");
+  const cancelEditBtn = document.getElementById("tti-cancel-edit");
+  const eventSummaryEl = document.getElementById("tti-event-summary");
 
-  function buildUrls() {
-    const raw = baseQuery(queryEl ? queryEl.value : "");
-    if (!raw) return [];
-
-    const urls = [];
-    const selectedDomains = [];
-
-    // Per-site Google searches: "<raw> site:domain"
-    siteConfigs.forEach((cfg) => {
-      const cb = document.getElementById(cfg.id);
-      if (!cb || !cb.checked) return;
-
-      const g = new URL("https://www.google.com/search");
-      g.searchParams.set("q", `${raw} site:${cfg.domain}`);
-      urls.push({ label: cfg.label, href: g.toString() });
-      selectedDomains.push(`site:${cfg.domain}`);
-    });
-
-    // Combined Google tab: add "tickets" if not present
-    const googleCb = document.getElementById(googleCheckboxId);
-    if (googleCb && googleCb.checked && selectedDomains.length) {
-      let qTickets = raw;
-      if (!/ticket/i.test(qTickets)) qTickets += " tickets";
-      const g = new URL("https://www.google.com/search");
-      g.searchParams.set("q", `${qTickets} ${selectedDomains.join(" OR ")}`);
-      urls.unshift({ label: "Google (all selected)", href: g.toString() });
-    }
-
-    return urls;
-  }
-
-  function renderPreview() {
-    const urls = buildUrls();
-    linksWrap.innerHTML = "";
-    if (!urls.length) return;
-
-    urls.forEach((u) => {
-      const a = document.createElement("a");
-      a.href = u.href;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.textContent = `${u.label}: ${u.href}`;
-      linksWrap.appendChild(a);
-    });
-  }
-
-  function openAll(event) {
-    event.preventDefault();
-    if (!queryEl.checkValidity()) {
-      queryEl.reportValidity();
-      return;
-    }
-
-    const urls = buildUrls();
-    if (!urls.length) return;
-
-    const first = window.open(urls[0].href, "_blank", "noopener");
-    let blocked = !first || first.closed;
-
-    for (let i = 1; i < urls.length; i++) {
-      const w = window.open(urls[i].href, "_blank", "noopener");
-      if (!w || w.closed) blocked = true;
-    }
-
-    if (blocked) {
-      const note = document.createElement("div");
-      note.className = "muted";
-      note.style.marginTop = "8px";
-      note.textContent =
-        "If only one tab opened, allow pop-ups for this site so all markets can open.";
-      linksWrap.appendChild(note);
-    }
-  }
-
-  function copyAll() {
-    const urls = buildUrls();
-    if (!urls.length) return;
-
-    const text = urls.map((u) => u.href).join("\n");
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        const old = btnCopy.textContent;
-        btnCopy.textContent = "Copied!";
-        setTimeout(() => (btnCopy.textContent = old), 900);
-      })
-      .catch(() => {});
-  }
-
-  function copySnapshotTemplate() {
-    if (!btnCopyTemplate) return;
-
-    const raw = baseQuery(queryEl ? queryEl.value : "");
-
-    const selected = siteConfigs
-      .filter((cfg) => {
-        const cb = document.getElementById(cfg.id);
-        return cb && cb.checked;
-      })
-      .map((cfg) => cfg.label);
-
-    const now = new Date();
-    const capturedAt = now.toISOString();
-    const markets = selected.length ? selected.join(", ") : "—";
-
-    const template = [
-      "Ticket Transparency Index — Snapshot (v0)",
-      "----------------------------------------",
-      `Search query: ${raw || "—"}`,
-      `Marketplaces selected: ${markets}`,
-      `Captured at (ISO): ${capturedAt}`,
-      "",
-      "Per-marketplace entries:",
-      "- Marketplace:",
-      "  Lowest listed price (USD):",
-      "  All-in / fees (USD, optional):",
-      "  URL used:",
-      "  Notes:",
-      "",
-      "- Marketplace:",
-      "  Lowest listed price (USD):",
-      "  All-in / fees (USD, optional):",
-      "  URL used:",
-      "  Notes:",
-      "",
-      "(Add/remove blocks as needed.)",
-    ].join("\n");
-
-    navigator.clipboard
-      .writeText(template)
-      .then(() => {
-        const old = btnCopyTemplate.textContent;
-        btnCopyTemplate.textContent = "Copied!";
-        setTimeout(() => (btnCopyTemplate.textContent = old), 900);
-      })
-      .catch(() => {});
-  }
-
-  function resetForm() {
-    form.reset();
-    linksWrap.innerHTML = "";
-    renderPreview();
-  }
-
-  // Info toggle for explainer card
-  function toggleExplainer() {
-    if (!explainer || !infoToggle) return;
-    const isOpen = infoToggle.getAttribute("aria-expanded") === "true";
-    infoToggle.setAttribute("aria-expanded", String(!isOpen));
-    explainer.classList.toggle("is-collapsed", isOpen);
-    explainer.setAttribute("aria-hidden", String(isOpen));
-  }
-
-  // Wire up MarketSearch events
-  form.addEventListener("submit", openAll);
-  if (queryEl) queryEl.addEventListener("input", renderPreview);
-
-  siteConfigs.forEach((cfg) => {
-    const cb = document.getElementById(cfg.id);
-    if (cb) cb.addEventListener("change", renderPreview);
-  });
-
-  const googleCb = document.getElementById(googleCheckboxId);
-  if (googleCb) googleCb.addEventListener("change", renderPreview);
-
-  if (btnCopy) btnCopy.addEventListener("click", copyAll);
-  if (btnCopyTemplate) btnCopyTemplate.addEventListener("click", copySnapshotTemplate);
-  if (btnReset) btnReset.addEventListener("click", resetForm);
-  if (infoToggle) infoToggle.addEventListener("click", toggleExplainer);
-
-  // Optional: open explainer on desktop hover
-  if (infoToggle && explainer && window.matchMedia("(hover:hover)").matches) {
-    infoToggle.addEventListener("mouseenter", () => {
-      infoToggle.setAttribute("aria-expanded", "true");
-      explainer.classList.remove("is-collapsed");
-      explainer.setAttribute("aria-hidden", "false");
-    });
-
-    infoToggle.addEventListener("mouseleave", () => {
-      infoToggle.setAttribute("aria-expanded", "false");
-      explainer.classList.add("is-collapsed");
-      explainer.setAttribute("aria-hidden", "true");
-    });
-  }
-
-  // ================================
-  // TTI: Snapshot capture (v0) - localStorage + CSV export
-  // ================================
-  const snapForm = document.getElementById("tti-snapshot-form");
-  const snapBody = document.getElementById("tti-snapshots-body");
-  const snapStatus = document.getElementById("tti-status");
-
-  const mpEl = document.getElementById("tti-marketplace");
+  const marketplaceEl = document.getElementById("tti-marketplace");
   const priceEl = document.getElementById("tti-price");
   const feesEl = document.getElementById("tti-fees");
   const urlEl = document.getElementById("tti-url");
   const notesEl = document.getElementById("tti-notes");
-
-  // Track whether the URL was auto-filled or manually typed/pasted
-  if (urlEl) {
-    urlEl.addEventListener("input", () => {
-      urlEl.dataset.autofill = "0";
-    });
-  }
-
-  function setUrlAuto(value) {
-    if (!urlEl) return;
-    urlEl.value = value || "";
-    urlEl.dataset.autofill = "1";
-  }
-
-  const btnExport = document.getElementById("tti-export-csv");
-  const btnClear = document.getElementById("tti-clear-session");
-  const btnSave = document.getElementById("tti-save-snapshot");
-  const btnCancelEdit = document.getElementById("tti-cancel-edit");
-
   const eventNameEl = document.getElementById("tti-event-name");
   const eventLocationEl = document.getElementById("tti-event-location");
   const eventDatesEl = document.getElementById("tti-event-dates");
 
-  let editingId = null;
-  const STORAGE_KEY = "tti_snapshots_v0";
-
-  const mpLabel = {
+  const marketplaceLabels = {
     stubhub: "StubHub",
     seatgeek: "SeatGeek",
     vivid: "Vivid Seats",
@@ -855,6 +740,176 @@ tvgSafe("verify-csv", () => {
     tickpick: "TickPick",
     viagogo: "Viagogo",
   };
+
+  let editingId = null;
+
+  function normalizeQuery(raw) {
+    return String(raw || "").replace(/\s+/g, " ").trim();
+  }
+
+  function getSelectedSearchUrls() {
+    const raw = normalizeQuery(queryEl?.value);
+    if (!raw) return [];
+
+    const urls = [];
+    const selectedDomains = [];
+
+    searchSites.forEach((site) => {
+      const checkbox = document.getElementById(site.id);
+      if (!checkbox || !checkbox.checked) return;
+
+      const url = new URL("https://www.google.com/search");
+      url.searchParams.set("q", `${raw} site:${site.domain}`);
+
+      urls.push({
+        label: site.label,
+        href: url.toString(),
+      });
+
+      selectedDomains.push(`site:${site.domain}`);
+    });
+
+    const googleCheckbox = document.getElementById(googleCheckboxId);
+    if (googleCheckbox && googleCheckbox.checked && selectedDomains.length) {
+      let combinedQuery = raw;
+      if (!/ticket/i.test(combinedQuery)) {
+        combinedQuery += " tickets";
+      }
+
+      const url = new URL("https://www.google.com/search");
+      url.searchParams.set("q", `${combinedQuery} ${selectedDomains.join(" OR ")}`);
+
+      urls.unshift({
+        label: "Google (all selected)",
+        href: url.toString(),
+      });
+    }
+
+    return urls;
+  }
+
+  function renderPreviewLinks() {
+    if (!linksWrap) return;
+
+    const urls = getSelectedSearchUrls();
+    linksWrap.innerHTML = "";
+
+    if (!urls.length) return;
+
+    urls.forEach((item) => {
+      const link = document.createElement("a");
+      link.href = item.href;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = `${item.label}: ${item.href}`;
+      linksWrap.appendChild(link);
+    });
+  }
+
+  function openAllResults(event) {
+    event.preventDefault();
+
+    if (!queryEl?.checkValidity()) {
+      queryEl?.reportValidity();
+      return;
+    }
+
+    const urls = getSelectedSearchUrls();
+    if (!urls.length) return;
+
+    const firstWindow = window.open(urls[0].href, "_blank", "noopener");
+    let blocked = !firstWindow || firstWindow.closed;
+
+    for (let i = 1; i < urls.length; i += 1) {
+      const popup = window.open(urls[i].href, "_blank", "noopener");
+      if (!popup || popup.closed) blocked = true;
+    }
+
+    if (blocked && linksWrap) {
+      const note = document.createElement("div");
+      note.className = "muted";
+      note.style.marginTop = "8px";
+      note.textContent =
+        "If only one tab opened, allow pop-ups for this site so all selected markets can open.";
+      linksWrap.appendChild(note);
+    }
+  }
+
+  function copyAllLinks() {
+    const urls = getSelectedSearchUrls();
+    if (!urls.length || !copyLinksBtn) return;
+
+    copyToClipboard(urls.map((item) => item.href).join("\n"))
+      .then(() => {
+        const oldText = copyLinksBtn.textContent;
+        copyLinksBtn.textContent = "Copied!";
+        setTimeout(() => {
+          copyLinksBtn.textContent = oldText;
+        }, 900);
+      })
+      .catch(() => {
+        showToast("Could not copy links", "error");
+      });
+  }
+
+  function copySnapshotTemplate() {
+    if (!copyTemplateBtn) return;
+
+    const raw = normalizeQuery(queryEl?.value);
+    const selectedMarkets = searchSites
+      .filter((site) => document.getElementById(site.id)?.checked)
+      .map((site) => site.label);
+
+    const template = [
+      "Ticket Transparency Index — Snapshot (v0)",
+      "----------------------------------------",
+      `Search query: ${raw || "—"}`,
+      `Marketplaces selected: ${selectedMarkets.length ? selectedMarkets.join(", ") : "—"}`,
+      `Captured at (ISO): ${new Date().toISOString()}`,
+      "",
+      "Per-marketplace entries:",
+      "- Marketplace:",
+      "  Lowest listed price (USD):",
+      "  All-in price (optional):",
+      "  URL used:",
+      "  Notes:",
+      "",
+      "- Marketplace:",
+      "  Lowest listed price (USD):",
+      "  All-in price (optional):",
+      "  URL used:",
+      "  Notes:",
+      "",
+      "(Add or remove blocks as needed.)",
+    ].join("\n");
+
+    copyToClipboard(template)
+      .then(() => {
+        const oldText = copyTemplateBtn.textContent;
+        copyTemplateBtn.textContent = "Copied!";
+        setTimeout(() => {
+          copyTemplateBtn.textContent = oldText;
+        }, 900);
+      })
+      .catch(() => {
+        showToast("Could not copy template", "error");
+      });
+  }
+
+  function resetSearchForm() {
+    form.reset();
+    if (linksWrap) linksWrap.innerHTML = "";
+    renderPreviewLinks();
+  }
+
+  function toggleExplainer() {
+    if (!infoToggle || !explainer) return;
+
+    const isOpen = infoToggle.getAttribute("aria-expanded") === "true";
+    infoToggle.setAttribute("aria-expanded", String(!isOpen));
+    explainer.classList.toggle("is-collapsed", isOpen);
+    explainer.setAttribute("aria-hidden", String(isOpen));
+  }
 
   function loadSnapshots() {
     try {
@@ -869,25 +924,40 @@ tvgSafe("verify-csv", () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }
 
-  function setStatus(msg) {
-    if (!snapStatus) return;
-    snapStatus.textContent = msg || "";
+  function setSnapshotStatus(message) {
+    if (snapshotStatus) snapshotStatus.textContent = message || "";
   }
 
-  function formatMoney(n) {
-    if (n === null || n === undefined || n === "") return "";
-    const num = Number(n);
-    if (!Number.isFinite(num)) return "";
-    return num.toFixed(2);
+  function formatMoney(value) {
+    if (value === null || value === undefined || value === "") return "";
+    const number = Number(value);
+    return Number.isFinite(number) ? number.toFixed(2) : "";
   }
 
   function formatTime(iso) {
     try {
-      const d = new Date(iso);
-      return d.toLocaleString();
+      return new Date(iso).toLocaleString();
     } catch {
       return iso;
     }
+  }
+
+  function escapeCsv(value) {
+    const str = String(value ?? "");
+    return /[",\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;
+  }
+
+  function setUrlAuto(value) {
+    if (!urlEl) return;
+    urlEl.value = value || "";
+    urlEl.dataset.autofill = "1";
+  }
+
+  function suggestedUrlForMarketplace(marketplaceKey) {
+    const urls = getSelectedSearchUrls();
+    const label = marketplaceLabels[marketplaceKey] || marketplaceKey;
+    const match = urls.find((item) => item.label === label);
+    return match ? match.href : "";
   }
 
   function startEdit(snapshot) {
@@ -896,8 +966,7 @@ tvgSafe("verify-csv", () => {
     if (eventNameEl) eventNameEl.value = snapshot.event_name || "";
     if (eventLocationEl) eventLocationEl.value = snapshot.event_location || "";
     if (eventDatesEl) eventDatesEl.value = snapshot.event_dates || "";
-
-    if (mpEl) mpEl.value = snapshot.marketplace || "";
+    if (marketplaceEl) marketplaceEl.value = snapshot.marketplace || "";
     if (priceEl) priceEl.value = snapshot.price ?? "";
     if (feesEl) feesEl.value = snapshot.fees ?? "";
     if (urlEl) {
@@ -906,34 +975,22 @@ tvgSafe("verify-csv", () => {
     }
     if (notesEl) notesEl.value = snapshot.notes || "";
 
-    if (btnSave) btnSave.textContent = "Update snapshot";
-    if (btnCancelEdit) btnCancelEdit.hidden = false;
+    if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Update snapshot";
+    if (cancelEditBtn) cancelEditBtn.hidden = false;
 
-    setStatus("Editing snapshot. Update fields and click “Update snapshot”.");
+    setSnapshotStatus('Editing snapshot. Update fields and click "Update snapshot".');
   }
 
   function cancelEdit() {
     editingId = null;
 
-    if (btnSave) btnSave.textContent = "Save snapshot";
-    if (btnCancelEdit) btnCancelEdit.hidden = true;
-
+    if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Save snapshot";
+    if (cancelEditBtn) cancelEditBtn.hidden = true;
     if (priceEl) priceEl.value = "";
     if (feesEl) feesEl.value = "";
     if (notesEl) notesEl.value = "";
 
-    setStatus("");
-  }
-
-  if (btnCancelEdit) btnCancelEdit.addEventListener("click", cancelEdit);
-
-  // Autofill Event name from the main search query (only if empty)
-  if (queryEl && eventNameEl) {
-    queryEl.addEventListener("blur", () => {
-      if (!eventNameEl.value.trim()) {
-        eventNameEl.value = baseQuery(queryEl.value);
-      }
-    });
+    setSnapshotStatus("");
   }
 
   function seedEventContextFromLastSnapshot() {
@@ -941,195 +998,181 @@ tvgSafe("verify-csv", () => {
     const last = items[items.length - 1];
     if (!last) return;
 
-    if (eventNameEl && !eventNameEl.value.trim()) eventNameEl.value = last.event_name || "";
+    if (eventNameEl && !eventNameEl.value.trim()) {
+      eventNameEl.value = last.event_name || "";
+    }
+
     if (eventLocationEl && !eventLocationEl.value.trim()) {
       eventLocationEl.value = last.event_location || "";
     }
+
     if (eventDatesEl && !eventDatesEl.value.trim()) {
       eventDatesEl.value = last.event_dates || "";
     }
   }
 
-  seedEventContextFromLastSnapshot();
-
   function renderSnapshots() {
-    if (!snapBody) return;
-    const items = loadSnapshots();
+    if (!snapshotBody) return;
 
-    const summaryEl = document.getElementById("tti-event-summary");
-    if (summaryEl) {
+    const items = loadSnapshots();
+    snapshotBody.innerHTML = "";
+
+    if (eventSummaryEl) {
       const latest = items[items.length - 1];
       if (latest?.event_name) {
         const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
-        summaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
+        eventSummaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
       } else {
-        summaryEl.textContent = "";
+        eventSummaryEl.textContent = "";
       }
     }
-
-    snapBody.innerHTML = "";
 
     if (!items.length) {
       const tr = document.createElement("tr");
       tr.innerHTML = `<td colspan="7" class="muted">No snapshots saved yet.</td>`;
-      snapBody.appendChild(tr);
+      snapshotBody.appendChild(tr);
       return;
     }
 
-    const sorted = items.slice().sort((a, b) => (a.captured_at < b.captured_at ? 1 : -1));
+    const sorted = items
+      .slice()
+      .sort((a, b) => (a.captured_at < b.captured_at ? 1 : -1));
 
-    sorted.forEach((s) => {
+    sorted.forEach((snapshot) => {
       const tr = document.createElement("tr");
-      const urlSafe = (s.url || "").replace(/"/g, "&quot;");
+      const eventText = [
+        snapshot.event_name,
+        snapshot.event_location,
+        snapshot.event_dates,
+      ]
+        .filter(Boolean)
+        .join(" · ");
 
-      const urlCell = s.url
-        ? `<a href="${urlSafe}" target="_blank" rel="noopener noreferrer">link</a>`
+      const urlCell = snapshot.url
+        ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">link</a>`
         : "";
 
-      const eventText = [s.event_name, s.event_location, s.event_dates].filter(Boolean).join(" · ");
-
       tr.innerHTML = `
-        <td>${formatTime(s.captured_at)}</td>
-        <td>${eventText}</td>
-        <td>${mpLabel[s.marketplace] || s.marketplace}</td>
-        <td>$${formatMoney(s.price)}</td>
-        <td>${s.fees !== null && s.fees !== "" ? `$${formatMoney(s.fees)}` : ""}</td>
+        <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
+        <td>${escapeHTML(eventText)}</td>
+        <td>${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace)}</td>
+        <td>$${escapeHTML(formatMoney(snapshot.price))}</td>
+        <td>${snapshot.fees !== null && snapshot.fees !== "" ? `$${escapeHTML(formatMoney(snapshot.fees))}` : ""}</td>
         <td>${urlCell}</td>
         <td>
-          <button type="button" class="btn tti-mini" data-edit="${s.id}">Edit</button>
-          <button type="button" class="btn tti-mini btn-ghost" data-del="${s.id}">Remove</button>
+          <button type="button" class="btn tti-mini" data-edit="${escapeHTML(snapshot.id)}">Edit</button>
+          <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
         </td>
       `;
 
-      snapBody.appendChild(tr);
+      snapshotBody.appendChild(tr);
     });
 
-    snapBody.querySelectorAll("[data-edit]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-edit");
-        const snap = loadSnapshots().find((x) => x.id === id);
-        if (!snap) return setStatus("Couldn’t find that snapshot.");
-        startEdit(snap);
+    $all("[data-edit]", snapshotBody).forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = button.getAttribute("data-edit");
+        const snapshot = loadSnapshots().find((item) => item.id === id);
+        if (!snapshot) {
+          setSnapshotStatus("Couldn’t find that snapshot.");
+          return;
+        }
+        startEdit(snapshot);
       });
     });
 
-    snapBody.querySelectorAll("[data-del]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-del");
-        const next = loadSnapshots().filter((x) => x.id !== id);
+    $all("[data-del]", snapshotBody).forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = button.getAttribute("data-del");
+        const next = loadSnapshots().filter((item) => item.id !== id);
         saveSnapshots(next);
         renderSnapshots();
-        setStatus("Removed snapshot.");
+        setSnapshotStatus("Removed snapshot.");
       });
     });
   }
 
-  function suggestedUrlForMarketplace(marketplaceKey) {
-    const urls = buildUrls();
-    const wantLabel = mpLabel[marketplaceKey] || marketplaceKey;
-    const hit = urls.find((u) => u.label === wantLabel);
-    return hit ? hit.href : "";
-  }
+  function saveSnapshot(event) {
+    event.preventDefault();
 
-  if (mpEl && urlEl) {
-    mpEl.addEventListener("change", () => {
-      const isEmpty = !urlEl.value.trim();
-      const wasAuto = urlEl.dataset.autofill !== "0";
+    const eventName = safeText(eventNameEl?.value);
+    const eventLocation = safeText(eventLocationEl?.value);
+    const eventDates = safeText(eventDatesEl?.value);
+    const marketplace = safeText(marketplaceEl?.value);
+    const price = priceEl?.value ?? "";
+    const fees = feesEl?.value ?? "";
+    const url = safeText(urlEl?.value);
+    const notes = safeText(notesEl?.value);
 
-      if (isEmpty || wasAuto) {
-        const guess = suggestedUrlForMarketplace(mpEl.value);
-        if (guess) setUrlAuto(guess);
-      }
-    });
-  }
+    if (!eventName) return setSnapshotStatus("Enter the event name.");
+    if (!marketplace) return setSnapshotStatus("Pick a marketplace.");
+    if (price === "" || !Number.isFinite(Number(price))) {
+      return setSnapshotStatus("Enter a valid price.");
+    }
+    if (!url) return setSnapshotStatus("Paste the URL you used.");
 
-  if (snapForm) {
-    snapForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const marketplace = mpEl?.value || "";
-      const price = priceEl?.value;
-      const fees = feesEl?.value;
-      const url = (urlEl?.value || "").trim();
-      const notes = (notesEl?.value || "").trim();
-
-      const event_name = (eventNameEl?.value || "").trim();
-      const event_location = (eventLocationEl?.value || "").trim();
-      const event_dates = (eventDatesEl?.value || "").trim();
-
-      if (!event_name) return setStatus("Enter the event name.");
-      if (!marketplace) return setStatus("Pick a marketplace.");
-      if (price === "" || !Number.isFinite(Number(price))) return setStatus("Enter a valid price.");
-      if (!url) return setStatus("Paste the URL you used.");
-
-      const items = loadSnapshots();
-
-      if (editingId) {
-        const idx = items.findIndex((x) => x.id === editingId);
-        if (idx !== -1) {
-          const prev = items[idx];
-          items[idx] = {
-            ...prev,
-            event_name,
-            event_location,
-            event_dates,
-            search_query: baseQuery(queryEl ? queryEl.value : ""),
-            marketplace,
-            price: Number(price),
-            fees: fees === "" ? null : Number(fees),
-            currency: "USD",
-            url,
-            notes,
-          };
-
-          saveSnapshots(items);
-          renderSnapshots();
-          cancelEdit();
-          return setStatus("Updated snapshot.");
-        }
-
-        editingId = null;
-      }
-
-      const entry = {
-        id: crypto?.randomUUID
-          ? crypto.randomUUID()
-          : String(Date.now()) + Math.random().toString(16).slice(2),
-        captured_at: new Date().toISOString(),
-        event_name,
-        event_location,
-        event_dates,
-        search_query: baseQuery(queryEl ? queryEl.value : ""),
-        marketplace,
-        price: Number(price),
-        fees: fees === "" ? null : Number(fees),
-        currency: "USD",
-        url,
-        notes,
-      };
-
-      items.push(entry);
-      saveSnapshots(items);
-      renderSnapshots();
-
-      if (priceEl) priceEl.value = "";
-      if (feesEl) feesEl.value = "";
-      if (notesEl) notesEl.value = "";
-
-      setStatus("Saved snapshot to this browser.");
-    });
-  }
-
-  function escapeCsv(val) {
-    const s = String(val ?? "");
-    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-    return s;
-  }
-
-  function exportCsv() {
     const items = loadSnapshots();
+
+    if (editingId) {
+      const index = items.findIndex((item) => item.id === editingId);
+
+      if (index !== -1) {
+        items[index] = {
+          ...items[index],
+          event_name: eventName,
+          event_location: eventLocation,
+          event_dates: eventDates,
+          search_query: normalizeQuery(queryEl?.value),
+          marketplace,
+          price: Number(price),
+          fees: fees === "" ? null : Number(fees),
+          currency: "USD",
+          url,
+          notes,
+        };
+
+        saveSnapshots(items);
+        renderSnapshots();
+        cancelEdit();
+        setSnapshotStatus("Updated snapshot.");
+        return;
+      }
+
+      editingId = null;
+    }
+
+    const entry = {
+      id:
+        window.crypto?.randomUUID?.() ??
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      captured_at: new Date().toISOString(),
+      event_name: eventName,
+      event_location: eventLocation,
+      event_dates: eventDates,
+      search_query: normalizeQuery(queryEl?.value),
+      marketplace,
+      price: Number(price),
+      fees: fees === "" ? null : Number(fees),
+      currency: "USD",
+      url,
+      notes,
+    };
+
+    items.push(entry);
+    saveSnapshots(items);
+    renderSnapshots();
+
+    if (priceEl) priceEl.value = "";
+    if (feesEl) feesEl.value = "";
+    if (notesEl) notesEl.value = "";
+
+    setSnapshotStatus("Saved snapshot to this browser.");
+  }
+
+  function exportSnapshotsCsv() {
+    const items = loadSnapshots();
+
     if (!items.length) {
-      setStatus("No snapshots to export yet.");
+      setSnapshotStatus("No snapshots to export yet.");
       return;
     }
 
@@ -1152,33 +1195,82 @@ tvgSafe("verify-csv", () => {
       ...items
         .slice()
         .sort((a, b) => (a.captured_at < b.captured_at ? -1 : 1))
-        .map((s) => headers.map((h) => escapeCsv(s[h])).join(",")),
+        .map((item) => headers.map((header) => escapeCsv(item[header])).join(",")),
     ];
 
-    const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-
     const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
-    a.download = `tti-snapshots-${stamp}.csv`;
-
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    setStatus("Exported CSV.");
+    downloadTextFile(`tti-snapshots-${stamp}.csv`, rows.join("\n"), "text/csv;charset=utf-8");
+    setSnapshotStatus("Exported CSV.");
   }
 
-  function clearSession() {
+  function clearSnapshots() {
     localStorage.removeItem(STORAGE_KEY);
     renderSnapshots();
-    setStatus("Cleared saved snapshots from this browser.");
+    setSnapshotStatus("Cleared saved snapshots from this browser.");
   }
 
-  if (btnExport) btnExport.addEventListener("click", exportCsv);
-  if (btnClear) btnClear.addEventListener("click", clearSession);
+  form.addEventListener("submit", openAllResults);
 
-  // Initial paint
+  if (queryEl) {
+    queryEl.addEventListener("input", renderPreviewLinks);
+    queryEl.addEventListener("blur", () => {
+      if (eventNameEl && !eventNameEl.value.trim()) {
+        eventNameEl.value = normalizeQuery(queryEl.value);
+      }
+    });
+  }
+
+  searchSites.forEach((site) => {
+    const checkbox = document.getElementById(site.id);
+    if (checkbox) checkbox.addEventListener("change", renderPreviewLinks);
+  });
+
+  const googleCheckbox = document.getElementById(googleCheckboxId);
+  if (googleCheckbox) googleCheckbox.addEventListener("change", renderPreviewLinks);
+
+  if (copyLinksBtn) copyLinksBtn.addEventListener("click", copyAllLinks);
+  if (copyTemplateBtn) copyTemplateBtn.addEventListener("click", copySnapshotTemplate);
+  if (resetBtn) resetBtn.addEventListener("click", resetSearchForm);
+  if (infoToggle) infoToggle.addEventListener("click", toggleExplainer);
+
+  if (infoToggle && explainer && window.matchMedia("(hover:hover)").matches) {
+    infoToggle.addEventListener("mouseenter", () => {
+      infoToggle.setAttribute("aria-expanded", "true");
+      explainer.classList.remove("is-collapsed");
+      explainer.setAttribute("aria-hidden", "false");
+    });
+
+    infoToggle.addEventListener("mouseleave", () => {
+      infoToggle.setAttribute("aria-expanded", "false");
+      explainer.classList.add("is-collapsed");
+      explainer.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  if (urlEl) {
+    urlEl.addEventListener("input", () => {
+      urlEl.dataset.autofill = "0";
+    });
+  }
+
+  if (marketplaceEl && urlEl) {
+    marketplaceEl.addEventListener("change", () => {
+      const isEmpty = !urlEl.value.trim();
+      const wasAutoFilled = urlEl.dataset.autofill !== "0";
+
+      if (isEmpty || wasAutoFilled) {
+        const suggested = suggestedUrlForMarketplace(marketplaceEl.value);
+        if (suggested) setUrlAuto(suggested);
+      }
+    });
+  }
+
+  if (snapshotForm) snapshotForm.addEventListener("submit", saveSnapshot);
+  if (cancelEditBtn) cancelEditBtn.addEventListener("click", cancelEdit);
+  if (snapshotExportBtn) snapshotExportBtn.addEventListener("click", exportSnapshotsCsv);
+  if (snapshotClearBtn) snapshotClearBtn.addEventListener("click", clearSnapshots);
+
+  seedEventContextFromLastSnapshot();
   renderSnapshots();
-  renderPreview();
-})();
+  renderPreviewLinks();
+});
