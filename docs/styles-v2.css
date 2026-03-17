@@ -1095,6 +1095,57 @@ button.btn,
   font-size: .88rem;
 }
 
+.tms-preset-list {
+  display: grid;
+  gap: 12px;
+}
+
+.tms-preset-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  background: rgba(14,20,32,.55);
+}
+
+.tms-preset-meta {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tms-preset-name {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.tms-preset-details {
+  color: var(--muted);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.tms-preset-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .tms-preset-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tms-preset-actions .btn {
+    width: 100%;
+  }
+}
+
 /* =====================================================
    10. BROKERS PAGE
    ===================================================== */

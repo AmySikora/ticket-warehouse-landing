@@ -692,6 +692,9 @@ tvgSafe("search-workflow", () => {
   const form = document.getElementById("tixSearch");
   if (!form) return;
 
+  const savePresetBtn = document.getElementById("tms-save-preset");
+  const presetsWrap = document.getElementById("tms-presets");
+  const PRESETS_KEY = "tvg_search_presets_v1";
   const queryEl = document.getElementById("tms-query");
   const linksWrap = document.getElementById("tms-links");
   const copyLinksBtn = document.getElementById("tms-copy");
@@ -1220,6 +1223,152 @@ tvgSafe("search-workflow", () => {
     });
   }
 
+    function loadPresets() {
+    try {
+      const raw = localStorage.getItem(PRESETS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function savePresets(items) {
+    localStorage.setItem(PRESETS_KEY, JSON.stringify(items));
+  }
+
+  function getSelectedSiteIds() {
+    return searchSites
+      .filter((site) => document.getElementById(site.id)?.checked)
+      .map((site) => site.id);
+  }
+
+  function getSelectedSiteLabels(siteIds) {
+    return searchSites
+      .filter((site) => siteIds.includes(site.id))
+      .map((site) => site.label);
+  }
+
+  function renderPresets() {
+    if (!presetsWrap) return;
+
+    const presets = loadPresets();
+    presetsWrap.innerHTML = "";
+
+    if (!presets.length) {
+      presetsWrap.innerHTML = `<p class="muted" style="margin:0;">No saved searches yet.</p>`;
+      return;
+    }
+
+    const list = document.createElement("div");
+    list.className = "tms-preset-list";
+
+    presets.forEach((preset) => {
+      const card = document.createElement("div");
+      card.className = "tms-preset-card";
+
+      const selectedLabels = getSelectedSiteLabels(preset.siteIds || []);
+      const details = [
+        preset.query || "No query",
+        selectedLabels.length ? `Markets: ${selectedLabels.join(", ")}` : "No markets selected",
+      ].join(" · ");
+
+      card.innerHTML = `
+        <div class="tms-preset-meta">
+          <div class="tms-preset-name">${escapeHTML(preset.name)}</div>
+          <div class="tms-preset-details">${escapeHTML(details)}</div>
+        </div>
+        <div class="tms-preset-actions">
+          <button type="button" class="btn" data-load-preset="${escapeHTML(preset.id)}">Load</button>
+          <button type="button" class="btn btn-ghost" data-delete-preset="${escapeHTML(preset.id)}">Delete</button>
+        </div>
+      `;
+
+      list.appendChild(card);
+    });
+
+    presetsWrap.appendChild(list);
+
+    $all("[data-load-preset]", presetsWrap).forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = button.getAttribute("data-load-preset");
+        loadPresetIntoForm(id);
+      });
+    });
+
+    $all("[data-delete-preset]", presetsWrap).forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = button.getAttribute("data-delete-preset");
+        deletePreset(id);
+      });
+    });
+  }
+
+  function saveCurrentPreset() {
+    const query = normalizeQuery(queryEl?.value);
+    const siteIds = getSelectedSiteIds();
+    const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
+
+    if (!query) {
+      showToast("Enter a search before saving a preset", "error");
+      return;
+    }
+
+    const name = window.prompt("Name this saved search:", query);
+    if (!name) return;
+
+    const presets = loadPresets();
+
+    const preset = {
+      id:
+        window.crypto?.randomUUID?.() ??
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      name: name.trim(),
+      query,
+      siteIds,
+      googleChecked,
+      createdAt: new Date().toISOString(),
+    };
+
+    presets.unshift(preset);
+    savePresets(presets.slice(0, 12));
+    renderPresets();
+    showToast("Saved search preset");
+  }
+
+  function loadPresetIntoForm(id) {
+    const preset = loadPresets().find((item) => item.id === id);
+    if (!preset) {
+      showToast("Could not find that preset", "error");
+      return;
+    }
+
+    if (queryEl) {
+      queryEl.value = preset.query || "";
+    }
+
+    searchSites.forEach((site) => {
+      const checkbox = document.getElementById(site.id);
+      if (checkbox) {
+        checkbox.checked = (preset.siteIds || []).includes(site.id);
+      }
+    });
+
+    const googleCheckbox = document.getElementById(googleCheckboxId);
+    if (googleCheckbox) {
+      googleCheckbox.checked = Boolean(preset.googleChecked);
+    }
+
+    renderPreviewLinks();
+    showToast("Preset loaded");
+  }
+
+  function deletePreset(id) {
+    const next = loadPresets().filter((item) => item.id !== id);
+    savePresets(next);
+    renderPresets();
+    showToast("Preset removed");
+  }
+
   searchSites.forEach((site) => {
     const checkbox = document.getElementById(site.id);
     if (checkbox) checkbox.addEventListener("change", renderPreviewLinks);
@@ -1269,8 +1418,10 @@ tvgSafe("search-workflow", () => {
   if (cancelEditBtn) cancelEditBtn.addEventListener("click", cancelEdit);
   if (snapshotExportBtn) snapshotExportBtn.addEventListener("click", exportSnapshotsCsv);
   if (snapshotClearBtn) snapshotClearBtn.addEventListener("click", clearSnapshots);
+  if (savePresetBtn) savePresetBtn.addEventListener("click", saveCurrentPreset);
 
   seedEventContextFromLastSnapshot();
   renderSnapshots();
   renderPreviewLinks();
+  renderPresets();
 });
