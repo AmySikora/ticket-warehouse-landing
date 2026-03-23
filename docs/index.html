@@ -2,32 +2,26 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-G4R61ZH08K');
-  </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
+  gtag('config', 'G-G4R61ZH08K');
+</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — Track Ticket Prices Across Marketplaces</title>
+  <title>Ticket VeriGuard — Ticket Risk & Duplicate Exposure Monitoring</title>
 
   <!-- SEO / Social -->
-  <meta
-    name="description"
-    content="Track ticket prices across marketplaces in one search. Compare results, capture repeatable price snapshots, and monitor ticket market changes over time."
-  />
+  <meta name="description" content="Ticket VeriGuard surfaces risky duplicate ticket exposure across marketplaces, helping reduce consumer harm, chargebacks, and post-sale disputes." />
   <meta property="og:title" content="Ticket VeriGuard" />
-  <meta
-    property="og:description"
-    content="Search ticket marketplaces once, capture price snapshots, and track market changes over time."
-  />
+  <meta property="og:description" content="Consumer-risk and duplicate-exposure monitoring for ticket marketplaces." />
   <meta property="og:image" content="/favicon_logo.png" />
 
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
-  <link rel="stylesheet" href="./styles-v2.css"/>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 
 <body class="page-index">
@@ -38,24 +32,20 @@
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button
-        class="nav-toggle"
-        id="navToggle"
-        aria-expanded="false"
-        aria-controls="primary-nav"
-        aria-label="Toggle navigation"
-      >
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
 
       <nav class="topnav" id="primary-nav">
-        <a href="index.html" class="nav-link nav-active" aria-current="page">Home</a>
-        <a href="search.html" class="nav-link">Track Prices</a>
-        <a href="brokers.html" class="nav-link">For Brokers</a>
-        <a href="prototype.html" class="nav-link">How It Works</a>
-        <a href="index.html#contact" class="nav-link">Contact</a>
+        <a href="index.html" class="nav-link nav-active">Home</a>
+        <a href="brokers.html" class="nav-link">Brokers</a>
+        <a href="verify.html" class="nav-link">CSV Check</a>
+        <a href="prototype.html" class="nav-link">How it works</a>
+        <a href="search.html" class="nav-link">TixMarketSearch</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Try Live Demo</a>
+        <a href="index.html#contact" class="nav-link">Contact Us</a>
       </nav>
     </div>
   </header>
@@ -64,163 +54,68 @@
     <!-- Hero -->
     <section class="hero">
       <div class="container hero-grid">
+        <!-- Main hero card -->
         <div class="hero-copy card hero-card">
-          <span class="badge">📈 Search once. Track ticket prices across marketplaces.</span>
+          <span class="badge">✨ Duplicate exposure detected before it becomes a problem</span>
 
           <h1 class="grad-text">
-            Compare ticket prices across marketplaces in one search.
+            Surface risky duplicate ticket exposure across marketplaces.
           </h1>
 
           <p class="lead">
-            Ticket VeriGuard helps you open consistent ticket searches across major marketplaces,
-            capture repeatable price snapshots, and build a clearer record of how listings change over time.
+            Ticket VeriGuard monitors ticket listings across marketplaces to identify
+            duplicate exposure and behavioral risk patterns that lead to consumer harm,
+            chargebacks, and disputes. We make risk visible so stakeholders can act
+            before problems escalate.
           </p>
 
           <div class="cta">
-            <a href="search.html" class="btn primary">Start tracking prices</a>
+            <a href="#contact" class="btn btn-ghost">Talk to us</a>
             <a href="prototype.html" class="btn btn-ghost">See how it works</a>
           </div>
-
-          <p class="muted" style="margin-top:12px;">
-            Built for transparency tracking, recurring price checks, weekly reporting, and market research,
-            with room to grow into broker-side monitoring and duplicate exposure review.
-          </p>
         </div>
 
-        <aside class="card hero-card" aria-label="Key benefits">
+        <!-- Stats card -->
+        <aside class="card hero-card" aria-label="Key stats">
           <div class="stat">
             <div>
-              <strong>One search workflow</strong><br />
-              <small class="muted">Open matching results across marketplaces</small>
+              <strong>Continuous monitoring</strong><br />
+              <small class="muted">Across marketplaces</small>
             </div>
-            <small class="muted">Less repetitive work</small>
+            <small class="muted">Near-real time</small>
           </div>
 
           <div class="stat">
             <div>
-              <strong>Repeatable snapshots</strong><br />
-              <small class="muted">Capture consistent price checks over time</small>
+              <strong>Duplicate exposure detected</strong><br />
+              <small class="muted">Seats, rows, sections</small>
             </div>
-            <small class="muted">Track movement</small>
+            <small class="muted">Risk signals</small>
           </div>
 
           <div class="stat">
             <div>
-              <strong>Saved records</strong><br />
-              <small class="muted">Keep event, marketplace, price, and URL together</small>
+              <strong>Low-lift setup</strong><br />
+              <small class="muted">Works alongside existing tools</small>
             </div>
-            <small class="muted">Export-ready</small>
+            <small class="muted">Non-disruptive</small>
           </div>
 
           <small class="muted note">
-            Start with price tracking now, then build toward broader transparency, reporting, and risk insights.
+            Signals highlight exposure and behavioral risk patterns, not enforcement actions.
           </small>
         </aside>
       </div>
     </section>
 
-    <!-- How it works -->
-    <section id="how-home">
-      <div class="container">
-        <h2 class="section-title">How Ticket VeriGuard works</h2>
-
-        <div class="grid-3">
-          <div class="card item">
-            <h3>1. Search marketplaces</h3>
-            <p class="muted">
-              Enter an event, artist, team, or city and open targeted searches across major ticket sites.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>2. Capture snapshots</h3>
-            <p class="muted">
-              Record the lowest listed prices you find and save the exact URLs used for repeatable comparisons.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>3. Track changes over time</h3>
-            <p class="muted">
-              Save snapshots, export your session, and build a more useful record of market movement.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Current value -->
-    <section id="what">
-      <div class="container">
-        <h2 class="section-title">What you can do with it right now</h2>
-
-        <p>
-          Ticket VeriGuard is currently strongest as a ticket price tracking workflow.
-          It helps you compare marketplace results, save consistent snapshots, and build a cleaner record of how pricing changes over time.
-        </p>
-
-        <div class="grid-2">
-          <div class="card item">
-            <h3>Best current uses</h3>
-            <ul class="feature-list">
-              <li>Compare listings across major marketplaces</li>
-              <li>Capture weekly or recurring price snapshots</li>
-              <li>Support transparency reporting and market research</li>
-              <li>Keep event, venue, date, price, and URL records together</li>
-            </ul>
-          </div>
-
-          <div class="card item">
-            <h3>Why this is useful</h3>
-            <ol class="steps">
-              <li>Manual ticket searching is repetitive and inconsistent</li>
-              <li>Consistent search terms create cleaner comparisons</li>
-              <li>Saved snapshots make price changes easier to review</li>
-              <li>That creates a stronger foundation for future reporting and analysis</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Use cases -->
-    <section id="use-cases">
-      <div class="container">
-        <h2 class="section-title">Who this helps</h2>
-
-        <div class="grid-3">
-          <div class="card item">
-            <h3>Market researchers</h3>
-            <p class="muted">
-              Compare marketplace pricing in a more consistent way without rebuilding the same searches repeatedly.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Weekly trackers</h3>
-            <p class="muted">
-              Run the same search on the same schedule and capture snapshots that are easier to compare over time.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Broker-side review teams</h3>
-            <p class="muted">
-              Start with pricing visibility now, then expand into duplicate exposure checks and operational review workflows.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Broker angle -->
+    <!-- Broker / Marketplace Teaser -->
     <section class="tvb-broker-teaser">
       <div class="tvb-wrap">
         <div class="tvb-head">
           <h2>For Brokers & Marketplaces</h2>
           <p class="tvb-sub">
-            Ticket VeriGuard can also support broker-side monitoring by surfacing duplicate exposure
-            and listing patterns that often lead to refunds, disputes, and trust issues.
+            Ticket VeriGuard helps surface duplicate exposure and seller risk
+            before it turns into refunds, disputes, or lost trust.
           </p>
         </div>
 
@@ -235,76 +130,88 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <path d="M21 21l-3.9-3.9"/><circle cx="11" cy="11" r="7.25"/>
             </svg>
-            Surface patterns tied to disputes, confusion, and chargebacks
+            Surface high-risk patterns tied to disputes and chargebacks
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6h-6"/>
             </svg>
-            Support trust, transparency, and downstream operational decisions
+            Protect trust, ratings, and downstream revenue
           </li>
         </ul>
 
         <div class="tvb-cta">
-          <a href="./brokers.html" class="btn btn-ghost">Explore broker use cases</a>
+          <a href="./brokers.html" class="btn btn-ghost">Learn more</a>
         </div>
       </div>
     </section>
 
-    <!-- Why use it -->
+    <!-- What is -->
+    <section id="what">
+      <div class="container">
+        <h2 class="section-title">What does Ticket VeriGuard do?</h2>
+
+        <p>
+          Ticket VeriGuard monitors ticket listings across marketplaces to detect
+          duplicate exposure and behavioral risk patterns. It provides visibility
+          where existing inventory tools assume cooperation.
+        </p>
+
+        <div class="grid-2">
+          <div class="card item">
+            <h3>What it monitors</h3>
+            <ul class="feature-list">
+              <li>Listings across connected marketplaces</li>
+              <li>Seat, row, and section duplication</li>
+              <li>Repeated exposure patterns linked to disputes</li>
+            </ul>
+          </div>
+
+          <div class="card item">
+            <h3>How it works behind the scenes</h3>
+            <ol class="steps">
+              <li>Scan listings across marketplaces</li>
+              <li>Detect duplicate exposure and conflicts</li>
+              <li>Flag high-risk patterns and sellers</li>
+              <li>Present clear, human-readable signals</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why -->
     <section id="why">
       <div class="container">
         <h2 class="section-title">Why use Ticket VeriGuard?</h2>
 
         <div class="grid-2">
           <div class="card item">
-            <h3>Cleaner comparisons</h3>
+            <h3>Timely risk signals</h3>
             <p class="muted">
-              Using the same query across marketplaces reduces noise and makes your snapshots more useful.
+              Indicators update continuously as listings change across marketplaces.
             </p>
           </div>
 
           <div class="card item">
-            <h3>Less repetitive work</h3>
+            <h3>Low-lift integration</h3>
             <p class="muted">
-              Instead of rebuilding searches site by site, you can use one consistent workflow.
+              Designed to complement existing tools without disrupting workflows.
             </p>
           </div>
 
           <div class="card item">
-            <h3>Useful records</h3>
+            <h3>Trust & transparency</h3>
             <p class="muted">
-              Saved prices, dates, marketplaces, and URLs create a stronger paper trail for review and reporting.
+              Supports compliance, audits, and consumer confidence.
             </p>
           </div>
 
           <div class="card item">
-            <h3>Room to grow</h3>
+            <h3>Future-ready</h3>
             <p class="muted">
-              Today it supports tracking and transparency. Next it can support trend views, event pages, and broker-side risk insights.
+              Aligned with increasing regulation around resale transparency.
             </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <section id="cta-home">
-      <div class="container">
-        <div class="card">
-          <div class="contact-cta">
-            <div>
-              <h3>Start with the working workflow</h3>
-              <p>
-                The strongest part of Ticket VeriGuard right now is the marketplace search and snapshot workflow.
-                Use it to compare prices, capture consistent snapshots, and build tracking data over time.
-              </p>
-            </div>
-
-            <div class="actions">
-              <a class="btn primary" href="search.html">Go to Track Prices</a>
-              <a class="btn btn-ghost" href="prototype.html">Read the workflow</a>
-            </div>
           </div>
         </div>
       </div>
@@ -313,70 +220,49 @@
     <!-- Contact -->
     <section id="contact">
       <div class="container">
-        <h2 class="section-title">Want to talk through the product?</h2>
+        <h2 class="section-title">Want to understand your risk exposure?</h2>
 
         <div class="card">
           <div class="contact-cta">
             <div>
-              <h3>Questions, ideas, or broker use cases</h3>
+              <h3>See how duplicate exposure shows up in real listings</h3>
               <p>
-                We can walk through the current tracking workflow, discuss future transparency reporting,
-                or talk through broker-side monitoring use cases. Or email directly:
+                We can walk through a real event and show how exposure and risk
+                patterns appear. Or email us directly:
                 <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>
                 •
-                <a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com"
-                  target="_blank"
-                  rel="noopener"
-                >
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com" target="_blank" rel="noopener">
                   Open in Gmail
                 </a>
               </p>
             </div>
 
             <div class="actions">
-              <a class="btn primary" href="mailto:hello@ticketveriguard.com">Contact us</a>
-              <a class="btn btn-ghost" href="search.html">Try the tracker</a>
+              <a class="btn primary" href="mailto:hello@ticketveriguard.com">Request a walkthrough</a>
+              <a class="btn btn-ghost" href="https://amysikora.github.io/tvg-demo/index.html" target="_blank" rel="noopener">
+                Try the live demo
+              </a>
             </div>
           </div>
 
-          <form
-            id="contact-form"
-            style="display:grid; gap:12px; max-width:520px; margin-top:14px"
-            novalidate
-          >
-            <input
-              type="text"
-              name="website"
-              autocomplete="off"
-              tabindex="-1"
-              aria-hidden="true"
-              style="position:absolute;left:-9999px;width:0;height:0;opacity:0"
-            />
+          <form id="contact-form" style="display:grid; gap:12px; max-width:520px; margin-top:14px" novalidate>
+            <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
+              style="position:absolute;left:-9999px;width:0;height:0;opacity:0" />
 
             <label>
               <span>Email</span><br/>
-              <input
-                required
-                type="email"
-                name="email"
-                autocomplete="email"
-                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"
-              />
+              <input required type="email" name="email" autocomplete="email"
+                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
             </label>
 
             <label>
               <span>Message</span><br/>
-              <textarea
-                required
-                name="message"
-                rows="4"
-                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"
-              ></textarea>
+              <textarea required name="message" rows="4"
+                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
             </label>
 
             <button class="btn primary" type="submit" id="contact-submit">
-              Send message
+              Request walkthrough
             </button>
 
             <p id="contact-status" class="muted" style="margin:6px 0 0"></p>
