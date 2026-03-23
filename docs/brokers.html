@@ -2,47 +2,31 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-G4R61ZH08K');
-  </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
+  gtag('config', 'G-G4R61ZH08K');
+</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — For Brokers</title>
-
-  <meta
-    name="description"
-    content="Broker-side tools for reviewing duplicate ticket exposure, listing overlap, and ticket risk patterns before they turn into disputes, refunds, or lost trust."
-  />
-  <meta property="og:title" content="Ticket VeriGuard — For Brokers" />
-  <meta
-    property="og:description"
-    content="Use Ticket VeriGuard to review duplicate ticket exposure, listing conflicts, and broker-side risk patterns."
-  />
-  <meta property="og:image" content="/favicon_logo.png" />
-
+  <title>Ticket VeriGuard — Brokers & Marketplaces</title>
+  <meta name="description" content="Ticket VeriGuard surfaces risky duplicate ticket exposure across marketplaces to reduce chargebacks, disputes, and consumer harm."/>
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
-  <link rel="stylesheet" href="./styles-v2.css"/>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 
-<body class="tvb-page">
+<body class="brokers-page">
+  <!-- Header (same as index) -->
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button
-        class="nav-toggle"
-        id="navToggle"
-        aria-expanded="false"
-        aria-controls="primary-nav"
-        aria-label="Toggle navigation"
-      >
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -50,158 +34,151 @@
 
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="search.html" class="nav-link">Track Prices</a>
-        <a href="brokers.html" class="nav-link nav-active" aria-current="page">For Brokers</a>
-        <a href="prototype.html" class="nav-link">How It Works</a>
-        <a href="#contact" class="nav-link">Contact</a>
+        <a href="brokers.html" class="nav-link nav-active">Brokers</a>
+        <a href="verify.html" class="nav-link">CSV Check</a>
+        <a href="prototype.html" class="nav-link">How it works</a>
+        <a href="search.html" class="nav-link">TixMarketSearch</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Try Live Demo</a>
+        <a href="index.html#contact" class="nav-link">Contact Us</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <!-- Hero -->
-    <section class="section">
-      <div class="tvb-container">
-        <div class="tvb-hero card">
-          <span class="badge">For brokers and ticket operations teams</span>
-          <h1>Spot duplicate ticket exposure before it leads to disputes, refunds, and lost trust.</h1>
+  <main class="tvb-page">
+    <div class="tvb-container">
+      <section class="tvb-hero">
+        <h1>Know when listings create duplicate exposure — before it becomes fallout</h1>
+        <p>
+          Duplicate listings don’t just create operational mess. They trigger chargebacks, disputes, bad reviews,
+          and lost trust. Ticket VeriGuard monitors exposure across marketplaces and surfaces risk signals so you can
+          act early.
+        </p>
+
+        <div class="tvb-cta-row">
+          <a class="btn btn-ghost" href="mailto:hello@ticketveriguard.com?subject=Pilot%20Request%20(Ticket%20VeriGuard)">Request a pilot</a>
+          <a class="btn btn-ghost" href="verify.html">Try the CSV Check</a>
+        </div>
+
+        <div class="tvb-note">Low-lift setup • Works alongside your current tools • Designed for visibility, not enforcement</div>
+      </section>
+
+      <section class="tvb-panels">
+        <div class="tvb-card">
+          <h3>What brokers & marketplaces get</h3>
+          <ul class="tvb-list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M12 3.75l7.5 3v5.25c0 4.05-3.094 7.88-7.5 8.25-4.406-.37-7.5-4.2-7.5-8.25V6.75L12 3.75z"/>
+              </svg>
+              <span><strong>Duplicate exposure signals</strong> that highlight when the same inventory appears in multiple places.</span>
+            </li>
+
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M21 21l-3.9-3.9"/><circle cx="11" cy="11" r="7.25"/>
+              </svg>
+              <span><strong>Risk pattern visibility</strong> to help identify repeat issues tied to disputes and chargebacks.</span>
+            </li>
+
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6h-6"/>
+              </svg>
+              <span><strong>Cleaner outcomes</strong> with fewer escalations, fewer customer headaches, and more trust.</span>
+            </li>
+          </ul>
+        </div>
+
+        <aside class="tvb-card">
+          <h3>The cost of duplicate exposure</h3>
           <p>
-            Ticket VeriGuard helps brokers review listing overlap, duplicate exposure,
-            and event-level ticket conflicts before they turn into customer issues,
-            seller friction, or expensive operational cleanup.
+            Section 112 · Row H appears in more than one place. Even one bad outcome can mean replacement seats,
+            fees, support time, and a public complaint.
           </p>
-
-          <div class="tvb-cta-row">
-            <a href="duplicate-check.html" class="btn primary">Open Duplicate Checker</a>
-            <a href="#contact" class="btn btn-ghost">Contact</a>
+          <p><strong>Typical impact:</strong> $300–$500 loss (or more) from a single dispute.</p>
+          <div class="tvb-cta-row" style="margin-top:14px;">
+            <a class="btn btn-ghost" href="mailto:hello@ticketveriguard.com?subject=Pilot%20Request%20(Ticket%20VeriGuard)">Pilot with my data</a>
           </div>
+        </aside>
+      </section>
 
-          <p class="tvb-note">
-            Start with exported listing data, review flagged records, and catch issues
-            earlier without forcing a totally new workflow on your team.
+      <section class="tvb-grid-2">
+        <div class="tvb-card">
+          <h3>How it works</h3>
+          <ol class="tvb-list" style="gap:12px;">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16"/>
+              </svg>
+              <span>Upload a CSV of active listings (or connect your workflow later).</span>
+            </li>
+
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/>
+              </svg>
+              <span>We scan for duplicate exposure, conflicts, and repeat-risk patterns.</span>
+            </li>
+
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M5 12l4 4L19 6"/>
+              </svg>
+              <span>Review flagged rows and decide what to fix, pause, or watch.</span>
+            </li>
+          </ol>
+
+          <p class="muted" style="margin-top:10px;">
+            Note: Ticket VeriGuard is designed to surface risk and exposure. It does not remove listings or enforce marketplace rules.
           </p>
         </div>
-      </div>
-    </section>
 
-    <!-- Why it matters -->
-    <section class="section">
-      <div class="tvb-container">
-        <h2 class="section-title">Why duplicate exposure matters</h2>
-
-        <div class="grid-3">
-          <div class="tvb-card">
-            <h3>One overlap can become a costly mess</h3>
-            <p>
-              When the same seats appear in more than one place, the result can be
-              broken fulfillment, refunds, support escalations, chargebacks, and public complaints.
-            </p>
-          </div>
-
-          <div class="tvb-card">
-            <h3>Manual review breaks down fast</h3>
-            <p>
-              Brokers often end up comparing sections, rows, seats, and listing exports by hand.
-              That takes time, creates inconsistency, and makes easy misses more likely.
-            </p>
-          </div>
-
-          <div class="tvb-card">
-            <h3>Earlier visibility changes outcomes</h3>
-            <p>
-              Better visibility into listing overlap gives teams a practical way to catch risk sooner,
-              review events more confidently, and reduce downstream cleanup.
-            </p>
-          </div>
+        <div class="tvb-card">
+          <h3>Roadmap</h3>
+          <ul class="tvb-list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M12 6v12M6 12h12"/>
+              </svg>
+              <span>Continuous monitoring (webhooks / scheduled scans)</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M3 12h18M12 3v18"/>
+              </svg>
+              <span>Bulk imports and automated reporting</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16"/>
+              </svg>
+              <span>Analytics: exposure history, dispute-linked patterns, marketplace trends</span>
+            </li>
+          </ul>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- What it helps you see -->
-    <section class="section">
-      <div class="tvb-container">
-        <h2 class="section-title">What Ticket VeriGuard helps you see</h2>
-
-        <div class="grid-2">
-          <div class="tvb-card">
-            <h3>Duplicate exposure signals</h3>
-            <ul class="feature-list">
-              <li>Repeated event, section, row, and seat combinations</li>
-              <li>Possible overlap across exports or listing sets</li>
-              <li>Records worth closer broker-side review</li>
-              <li>Patterns that may raise dispute or refund risk</li>
-            </ul>
-          </div>
-
-          <div class="tvb-card">
-            <h3>Operational review support</h3>
-            <ul class="feature-list">
-              <li>Spot-checking one event before broader review</li>
-              <li>Testing CSV exports from different workflows</li>
-              <li>Supporting trust and operations teams</li>
-              <li>Running pilot analyses before deeper automation</li>
-            </ul>
-          </div>
+      <section class="tvb-card" style="margin-top:16px;">
+        <h3>Ready to try it with real listings?</h3>
+        <p>
+          Send a sample CSV (or use the on-page upload). I’ll help you run the first scan and walk through what
+          the risk signals mean.
+        </p>
+        <div class="tvb-cta-row">
+          <a class="btn btn-ghost" href="mailto:hello@ticketveriguard.com?subject=Pilot%20Request%20(Ticket%20VeriGuard)">Request a pilot</a>
+          <a class="btn btn-ghost" href="verify.html">Try the CSV Check</a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- How review works -->
-    <section class="section">
-      <div class="tvb-container">
-        <h2 class="section-title">How broker review works</h2>
-
-        <div class="grid-2">
-          <div class="tvb-card">
-            <ol class="steps">
-              <li>Export listing data for an event or review set</li>
-              <li>Upload the CSV into the duplicate checker</li>
-              <li>Review flagged records and grouped conflicts</li>
-              <li>Decide what needs follow-up, correction, or escalation</li>
-            </ol>
-          </div>
-
-          <div class="tvb-card">
-            <h3>Built for a practical first step</h3>
-            <p>
-              This is a focused broker-side workflow for reviewing exported listings,
-              spotting conflicts faster, and making cleaner decisions. It is not trying
-              to cosplay as a giant platform with five dashboards nobody asked for.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- Contact -->
-    <section class="section" id="contact">
-      <div class="container">
-        <h2 class="section-title">Broker questions or pilot interest</h2>
-
-        <div class="card">
-          <div class="contact-cta">
-            <div>
-              <h3>Get in touch</h3>
-              <p>
-                Reach out if you want to discuss duplicate exposure, broker review workflows,
-                or using Ticket VeriGuard in a pilot. You can also email directly at
-                <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>.
-              </p>
-            </div>
-
-            <div class="actions">
-              <a class="btn primary" href="mailto:hello@ticketveriguard.com">Email Ticket VeriGuard</a>
-              <a class="btn btn-ghost" href="duplicate-check.html">Open Duplicate Checker</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      <section class="tvg-embed-preview">
+        <h2>Live Demo</h2>
+        <div id="tvg-widget"></div>
+      </section>
+    </div>
   </main>
 
   <footer>
-    <div class="container footer-bar">
+    <div class="container" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
       <div class="muted">
         <a class="muted" href="#">Terms</a> ·
@@ -211,8 +188,8 @@
     </div>
   </footer>
 
-  <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
-
+  <!-- Load widget + shared JS -->
+  <script src="widget.js?v=3" defer></script>
   <script src="./js/main.js" defer></script>
 </body>
 </html>
