@@ -2,26 +2,32 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G4R61ZH08K');
+  </script>
 
-  gtag('config', 'G-G4R61ZH08K');
-</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Ticket VeriGuard — Ticket Risk & Duplicate Exposure Monitoring</title>
 
   <!-- SEO / Social -->
-  <meta name="description" content="Ticket VeriGuard surfaces risky duplicate ticket exposure across marketplaces, helping reduce consumer harm, chargebacks, and post-sale disputes." />
+  <meta
+    name="description"
+    content="Ticket VeriGuard helps surface duplicate ticket exposure across marketplaces, compare listings more clearly, and support repeatable ticket review workflows."
+  />
   <meta property="og:title" content="Ticket VeriGuard" />
-  <meta property="og:description" content="Consumer-risk and duplicate-exposure monitoring for ticket marketplaces." />
+  <meta
+    property="og:description"
+    content="Search, capture, and review ticket listings across marketplaces with a clearer workflow."
+  />
   <meta property="og:image" content="/favicon_logo.png" />
 
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles-v2.css" />
 </head>
 
 <body class="page-index">
@@ -32,7 +38,13 @@
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primary-nav">
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Toggle navigation"
+      >
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -40,12 +52,11 @@
 
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link nav-active">Home</a>
-        <a href="brokers.html" class="nav-link">Brokers</a>
-        <a href="verify.html" class="nav-link">CSV Check</a>
-        <a href="prototype.html" class="nav-link">How it works</a>
-        <a href="search.html" class="nav-link">TixMarketSearch</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Try Live Demo</a>
-        <a href="index.html#contact" class="nav-link">Contact Us</a>
+        <a href="search.html" class="nav-link">Tool</a>
+        <a href="duplicate-check.html" class="nav-link">Duplicate Check</a>
+        <a href="brokers.html" class="nav-link">For Brokers</a>
+        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Live Demo</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
     </div>
   </header>
@@ -54,68 +65,137 @@
     <!-- Hero -->
     <section class="hero">
       <div class="container hero-grid">
-        <!-- Main hero card -->
         <div class="hero-copy card hero-card">
-          <span class="badge">✨ Duplicate exposure detected before it becomes a problem</span>
+          <span class="badge">Repeatable ticket review without the mess</span>
 
           <h1 class="grad-text">
-            Surface risky duplicate ticket exposure across marketplaces.
+            Search, capture, and review ticket listings across marketplaces.
           </h1>
 
           <p class="lead">
-            Ticket VeriGuard monitors ticket listings across marketplaces to identify
-            duplicate exposure and behavioral risk patterns that lead to consumer harm,
-            chargebacks, and disputes. We make risk visible so stakeholders can act
-            before problems escalate.
+            Ticket VeriGuard helps you compare listings, document pricing snapshots,
+            and surface duplicate ticket exposure with a workflow that is easier to
+            repeat and easier to review.
           </p>
 
           <div class="cta">
-            <a href="#contact" class="btn btn-ghost">Talk to us</a>
-            <a href="prototype.html" class="btn btn-ghost">See how it works</a>
+            <a href="search.html" class="btn primary">Open the tool</a>
+            <a href="duplicate-check.html" class="btn btn-ghost">Run duplicate check</a>
           </div>
         </div>
 
-        <!-- Stats card -->
-        <aside class="card hero-card" aria-label="Key stats">
+        <aside class="card hero-card" aria-label="Key workflow benefits">
           <div class="stat">
             <div>
-              <strong>Continuous monitoring</strong><br />
-              <small class="muted">Across marketplaces</small>
+              <strong>Search once</strong><br />
+              <small class="muted">Across major marketplaces</small>
             </div>
-            <small class="muted">Near-real time</small>
+            <small class="muted">Faster setup</small>
           </div>
 
           <div class="stat">
             <div>
-              <strong>Duplicate exposure detected</strong><br />
-              <small class="muted">Seats, rows, sections</small>
+              <strong>Capture snapshots</strong><br />
+              <small class="muted">Price, all-in cost, and URL</small>
             </div>
-            <small class="muted">Risk signals</small>
+            <small class="muted">Repeatable tracking</small>
           </div>
 
           <div class="stat">
             <div>
-              <strong>Low-lift setup</strong><br />
-              <small class="muted">Works alongside existing tools</small>
+              <strong>Check duplicate exposure</strong><br />
+              <small class="muted">Event, section, row, seat overlap</small>
             </div>
-            <small class="muted">Non-disruptive</small>
+            <small class="muted">Clearer review</small>
           </div>
 
           <small class="muted note">
-            Signals highlight exposure and behavioral risk patterns, not enforcement actions.
+            Built to support practical listing review, not theatrical software copy.
           </small>
         </aside>
       </div>
     </section>
 
-    <!-- Broker / Marketplace Teaser -->
+    <!-- Workflow -->
+    <section id="what">
+      <div class="container">
+        <h2 class="section-title">How Ticket VeriGuard works</h2>
+
+        <p>
+          Ticket VeriGuard brings search, price capture, and duplicate exposure review
+          into one clearer workflow so you can investigate listings without rebuilding
+          the same process every time.
+        </p>
+
+        <div class="grid-2">
+          <div class="card item">
+            <h3>Core workflow</h3>
+            <ol class="steps">
+              <li>Search the same event across selected marketplaces</li>
+              <li>Capture repeatable price snapshots and URLs</li>
+              <li>Review saved results over time</li>
+              <li>Check exported listings for duplicate exposure</li>
+            </ol>
+          </div>
+
+          <div class="card item">
+            <h3>What you can review</h3>
+            <ul class="feature-list">
+              <li>Marketplace-by-marketplace search coverage</li>
+              <li>Lowest listed and all-in price comparisons</li>
+              <li>Saved snapshot history for recurring checks</li>
+              <li>Duplicate seat overlap in uploaded CSV data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why it is useful -->
+    <section id="why">
+      <div class="container">
+        <h2 class="section-title">Why use it</h2>
+
+        <div class="grid-2">
+          <div class="card item">
+            <h3>Less repetitive work</h3>
+            <p class="muted">
+              Reuse the same search approach and capture structure instead of manually rebuilding checks across sites.
+            </p>
+          </div>
+
+          <div class="card item">
+            <h3>Cleaner comparisons</h3>
+            <p class="muted">
+              Keep pricing snapshots and source URLs together so later review is less guesswork and less chaos.
+            </p>
+          </div>
+
+          <div class="card item">
+            <h3>More useful review signals</h3>
+            <p class="muted">
+              Spot listing overlap and duplicate exposure earlier, before it turns into a larger operational headache.
+            </p>
+          </div>
+
+          <div class="card item">
+            <h3>Flexible use cases</h3>
+            <p class="muted">
+              Useful for recurring market checks, broker-side review, transparency tracking, and pilot analysis.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Broker teaser -->
     <section class="tvb-broker-teaser">
       <div class="tvb-wrap">
         <div class="tvb-head">
-          <h2>For Brokers & Marketplaces</h2>
+          <h2>For brokers and marketplaces</h2>
           <p class="tvb-sub">
-            Ticket VeriGuard helps surface duplicate exposure and seller risk
-            before it turns into refunds, disputes, or lost trust.
+            Ticket VeriGuard can support event-level review workflows by helping surface overlap,
+            duplicate exposure, and listing patterns that deserve a closer look.
           </p>
         </div>
 
@@ -124,19 +204,19 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <path d="M12 3.75l7.5 3v5.25c0 4.05-3.094 7.88-7.5 8.25-4.406-.37-7.5-4.2-7.5-8.25V6.75L12 3.75z"/>
             </svg>
-            Identify duplicate ticket exposure across marketplaces
+            Review duplicate exposure more quickly
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <path d="M21 21l-3.9-3.9"/><circle cx="11" cy="11" r="7.25"/>
             </svg>
-            Surface high-risk patterns tied to disputes and chargebacks
+            Support event-level listing analysis
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6h-6"/>
             </svg>
-            Protect trust, ratings, and downstream revenue
+            Add visibility without rebuilding every workflow
           </li>
         </ul>
 
@@ -146,89 +226,18 @@
       </div>
     </section>
 
-    <!-- What is -->
-    <section id="what">
-      <div class="container">
-        <h2 class="section-title">What does Ticket VeriGuard do?</h2>
-
-        <p>
-          Ticket VeriGuard monitors ticket listings across marketplaces to detect
-          duplicate exposure and behavioral risk patterns. It provides visibility
-          where existing inventory tools assume cooperation.
-        </p>
-
-        <div class="grid-2">
-          <div class="card item">
-            <h3>What it monitors</h3>
-            <ul class="feature-list">
-              <li>Listings across connected marketplaces</li>
-              <li>Seat, row, and section duplication</li>
-              <li>Repeated exposure patterns linked to disputes</li>
-            </ul>
-          </div>
-
-          <div class="card item">
-            <h3>How it works behind the scenes</h3>
-            <ol class="steps">
-              <li>Scan listings across marketplaces</li>
-              <li>Detect duplicate exposure and conflicts</li>
-              <li>Flag high-risk patterns and sellers</li>
-              <li>Present clear, human-readable signals</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Why -->
-    <section id="why">
-      <div class="container">
-        <h2 class="section-title">Why use Ticket VeriGuard?</h2>
-
-        <div class="grid-2">
-          <div class="card item">
-            <h3>Timely risk signals</h3>
-            <p class="muted">
-              Indicators update continuously as listings change across marketplaces.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Low-lift integration</h3>
-            <p class="muted">
-              Designed to complement existing tools without disrupting workflows.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Trust & transparency</h3>
-            <p class="muted">
-              Supports compliance, audits, and consumer confidence.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Future-ready</h3>
-            <p class="muted">
-              Aligned with increasing regulation around resale transparency.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Contact -->
     <section id="contact">
       <div class="container">
-        <h2 class="section-title">Want to understand your risk exposure?</h2>
+        <h2 class="section-title">Want to review a real event or listing set?</h2>
 
         <div class="card">
           <div class="contact-cta">
             <div>
-              <h3>See how duplicate exposure shows up in real listings</h3>
+              <h3>See the workflow on a real example</h3>
               <p>
-                We can walk through a real event and show how exposure and risk
-                patterns appear. Or email us directly:
+                We can walk through how search, snapshot capture, and duplicate exposure review
+                fit together. Or email us directly:
                 <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>
                 •
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@ticketveriguard.com" target="_blank" rel="noopener">
@@ -246,19 +255,34 @@
           </div>
 
           <form id="contact-form" style="display:grid; gap:12px; max-width:520px; margin-top:14px" novalidate>
-            <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
-              style="position:absolute;left:-9999px;width:0;height:0;opacity:0" />
+            <input
+              type="text"
+              name="website"
+              autocomplete="off"
+              tabindex="-1"
+              aria-hidden="true"
+              style="position:absolute;left:-9999px;width:0;height:0;opacity:0"
+            />
 
             <label>
               <span>Email</span><br/>
-              <input required type="email" name="email" autocomplete="email"
-                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"/>
+              <input
+                required
+                type="email"
+                name="email"
+                autocomplete="email"
+                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"
+              />
             </label>
 
             <label>
               <span>Message</span><br/>
-              <textarea required name="message" rows="4"
-                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"></textarea>
+              <textarea
+                required
+                name="message"
+                rows="4"
+                style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0e1420; color:var(--text)"
+              ></textarea>
             </label>
 
             <button class="btn primary" type="submit" id="contact-submit">

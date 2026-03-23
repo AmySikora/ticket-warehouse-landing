@@ -12,10 +12,10 @@
 
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — Track Ticket Prices</title>
+  <title>Ticket VeriGuard — Ticket Investigation Tool</title>
   <meta
     name="description"
-    content="Search ticket marketplaces once, capture consistent price snapshots, and track ticket market changes over time."
+    content="Search ticket marketplaces, capture consistent listing snapshots, and review ticket activity with a repeatable workflow."
   />
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles-v2.css"/>
@@ -43,9 +43,9 @@
 
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="search.html" class="nav-link nav-active" aria-current="page">Track Prices</a>
+        <a href="search.html" class="nav-link nav-active" aria-current="page">Tool</a>
+        <a href="duplicate-check.html" class="nav-link">Duplicate Check</a>
         <a href="brokers.html" class="nav-link">For Brokers</a>
-        <a href="prototype.html" class="nav-link">How It Works</a>
         <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
     </div>
@@ -56,16 +56,15 @@
     <section class="section">
       <div class="tvb-container">
         <div class="card tti-workflow" style="margin-top:16px;">
-          <span class="badge">Repeatable ticket price tracking workflow</span>
-          <h1 style="margin-bottom:10px;">Track ticket prices across marketplaces</h1>
+          <span class="badge">Repeatable ticket review workflow</span>
+          <h1 style="margin-bottom:10px;">Search, capture, and review ticket listings</h1>
 
           <p class="lead">
-            Search once, open results across major ticket marketplaces, and record consistent price snapshots you can compare over time.
+            Run the same search across marketplaces, capture consistent snapshots, and review listings over time.
           </p>
 
           <p class="muted" style="margin-top:8px;">
-            This workflow is built for transparency tracking, recurring price checks, weekly reporting, and market research.
-            It keeps the process simple on purpose, because not every useful tool needs to pretend it invented electricity.
+            Designed for repeatable checks, not one-off guesswork.
           </p>
         </div>
       </div>
@@ -94,7 +93,7 @@
           </div>
 
           <p class="muted" style="margin-top:10px;">
-            Enter the event, artist, team, or city you want to track, then open the same search across the marketplaces you care about.
+            Enter the event, artist, team, or city you want to review, then open the same search across the marketplaces you care about.
           </p>
 
           <form id="tixSearch" class="ms-form" novalidate>
@@ -148,23 +147,24 @@
             <p class="ms-hint muted" style="margin-top:10px;">
               Tip: keep your search terms consistent from one check-in to the next so your comparisons stay cleaner.
             </p>
+
             <div class="card" style="margin-top:16px;">
-            <div class="contact-cta">
-              <div>
-                <p class="muted" style="margin:0 0 4px;">Saved searches</p>
-                <h3 style="margin:0;">Reuse repeatable search setups</h3>
-                <p class="muted" style="margin:8px 0 0;">
-                  Save a query and selected marketplaces so you can run the same search again later.
-                </p>
+              <div class="contact-cta">
+                <div>
+                  <p class="muted" style="margin:0 0 4px;">Saved searches</p>
+                  <h3 style="margin:0;">Reuse repeatable search setups</h3>
+                  <p class="muted" style="margin:8px 0 0;">
+                    Save a query and selected marketplaces so you can run the same search again later.
+                  </p>
+                </div>
+
+                <div class="actions">
+                  <button type="button" class="btn btn-ghost" id="tms-save-preset">Save current search</button>
+                </div>
               </div>
 
-              <div class="actions">
-                <button type="button" class="btn btn-ghost" id="tms-save-preset">Save current search</button>
-              </div>
-            </div>
-
-            <div id="tms-presets" style="margin-top:16px;">
-              <p class="muted" style="margin:0;">No saved searches yet.</p>
+              <div id="tms-presets" style="margin-top:16px;">
+                <p class="muted" style="margin:0;">No saved searches yet.</p>
               </div>
             </div>
           </form>
@@ -186,7 +186,7 @@
           </ul>
 
           <p class="muted" style="margin-top:10px;">
-            The goal is consistency first. Better comparisons come from repeating the same search workflow, not from pretending manual review disappeared.
+            Better comparisons come from repeating the same workflow, not from pretending manual review disappeared.
           </p>
         </div>
       </div>
@@ -199,7 +199,7 @@
           <div class="tti-capture-head">
             <div>
               <p class="muted" style="margin:0 0 4px;">Step 2</p>
-              <h2 id="step-2-title" class="section-title" style="margin:0;">Capture a price snapshot</h2>
+              <h2 id="step-2-title" class="section-title" style="margin:0;">Capture a listing snapshot</h2>
             </div>
 
             <div class="tti-capture-actions">
@@ -209,8 +209,7 @@
           </div>
 
           <p class="muted" style="margin:10px 0 14px;">
-            After you review the marketplace results, record the lowest listed price you see and save the URL used for that snapshot.
-            Data is stored in your browser with localStorage.
+            After reviewing marketplace results, record the listing details you want to compare later. Data is stored in your browser with localStorage.
           </p>
 
           <div class="card tti-workflow" style="margin-bottom:16px;">
@@ -220,13 +219,12 @@
               <li>Record the lowest listed price you see at that moment.</li>
               <li>If the marketplace shows an all-in price, capture that too.</li>
               <li>Save the URL you used so future comparisons stay consistent.</li>
-              <li>Repeat on the same schedule to track price movement over time.</li>
+              <li>Repeat on the same schedule to track changes over time.</li>
             </ol>
           </div>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
             <div class="tti-grid">
-              <!-- Event details -->
               <label class="tti-field">
                 <span class="ms-label-text">Event name</span>
                 <input
@@ -258,7 +256,6 @@
                 />
               </label>
 
-              <!-- Snapshot details -->
               <label class="tti-field">
                 <span class="ms-label-text">Marketplace</span>
                 <select id="tti-marketplace" required class="tti-input">
@@ -300,7 +297,6 @@
                 />
               </label>
 
-              <!-- Source -->
               <label class="tti-field tti-url">
                 <span class="ms-label-text">URL used</span>
                 <input
@@ -369,6 +365,27 @@
       </div>
     </section>
 
+    <!-- Step 4 -->
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card">
+          <div>
+            <p class="muted" style="margin:0 0 4px;">Step 4</p>
+            <h2 class="section-title" style="margin:0;">Check duplicate exposure</h2>
+          </div>
+
+          <p class="muted" style="margin:10px 0 14px;">
+            Export your snapshots or use your own CSV to check for duplicate listings across marketplaces.
+          </p>
+
+          <div class="actions">
+            <a href="duplicate-check.html" class="btn primary">Open duplicate check</a>
+            <span class="muted">Use exported data or sample CSV</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Use cases -->
     <section class="section">
       <div class="tvb-container">
@@ -383,14 +400,14 @@
           <div class="card item">
             <h3>Market research</h3>
             <p class="muted">
-              Compare pricing across marketplaces without manually rebuilding the same search on every site.
+              Compare listings across marketplaces without manually rebuilding the same search each time.
             </p>
           </div>
 
           <div class="card item">
-            <h3>Transparency tracking</h3>
+            <h3>Review workflow</h3>
             <p class="muted">
-              Keep a simple record of event, marketplace, price, and URL for later review or reporting.
+              Keep a simple record of event, marketplace, price, and source URL for later review or reporting.
             </p>
           </div>
         </div>
