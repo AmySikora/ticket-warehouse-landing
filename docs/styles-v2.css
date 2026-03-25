@@ -1163,12 +1163,14 @@ body.tvb-page main {
 
 .tvb-hero {
   margin-bottom: 0;
+  padding: 32px 40px;
 }
 
 .tvb-hero h1 {
   margin: 0 0 10px;
   font-size: clamp(30px, 5vw, 44px);
   line-height: 1.1;
+  padding: 20px;
 }
 
 .tvb-hero p {
