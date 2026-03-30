@@ -326,50 +326,59 @@ tvgSafe("verify-csv", () => {
   }
 
   function buildRows(data) {
-    return data
-      .map((row, index) => {
-        const normalized = Object.keys(row).reduce((acc, key) => {
-          acc[normalizeHeader(key)] = row[key];
-          return acc;
-        }, {});
+  const expandedRows = [];
 
-        const pick = (...names) => {
-          for (const name of names) {
-            const value = normalized[normalizeHeader(name)];
-            if (value !== undefined && value !== "") return value;
-          }
-          return "";
-        };
+  data.forEach((row, index) => {
+    const normalized = Object.keys(row).reduce((acc, key) => {
+      acc[normalizeHeader(key)] = row[key];
+      return acc;
+    }, {});
 
-        const event = pick("event", "event name", "event_name");
-        const section = pick("section", "sec");
-        const rowValue = pick("row");
-        const seat = pick("seat", "seat number", "seat_no", "seat #");
-        const marketplace = pick("marketplace", "source", "channel", "site");
-        const id = pick("id", "listing_id", "external_id") || String(index + 1);
-        const when = pick("when", "timestamp", "time", "created_at");
+    const pick = (...names) => {
+      for (const name of names) {
+        const value = normalized[normalizeHeader(name)];
+        if (value !== undefined && value !== "") return value;
+      }
+      return "";
+    };
 
-        const key = [event, section, rowValue, seat]
-          .map((value) => String(value || "").trim())
-          .join("|");
+    const event = pick("event", "event name", "event_name");
+    const section = pick("section", "sec");
+    const rowValue = pick("row");
+    const seatRaw = pick("seat", "seat number", "seat_no", "seat #");
+    const marketplace = pick("marketplace", "source", "channel", "site");
+    const id = pick("id", "listing_id", "external_id") || String(index + 1);
+    const when = pick("when", "timestamp", "time", "created_at");
 
-        return {
-          _index: index,
-          _key: key,
-          id,
-          event,
-          marketplace,
-          section,
-          row: rowValue,
-          seat,
-          when,
-          decision: "Approved",
-        };
-      })
-      .filter((row) =>
-        Object.values(row).some((value) => String(value || "").trim() !== "")
-      );
-  }
+    const parsedSeats = parseSeatTokens(seatRaw);
+    const seats = parsedSeats.seats.length ? parsedSeats.seats : [String(seatRaw || "").trim()];
+
+    seats.forEach((seat) => {
+      const key = [event, section, rowValue, seat]
+        .map((value) => String(value || "").trim())
+        .join("|");
+
+      expandedRows.push({
+        _index: `${index}-${seat}`,
+        _sourceIndex: index,
+        _key: key,
+        id,
+        event,
+        marketplace,
+        section,
+        row: rowValue,
+        seat,
+        when,
+        decision: "Approved",
+      });
+    });
+  });
+
+  return expandedRows.filter((row) =>
+    [row.event, row.section, row.row, row.seat, row.marketplace, row.when]
+      .some((value) => String(value || "").trim() !== "")
+  );
+}
 
   function hasRequiredColumns(rows) {
     if (!rows.length) return false;
@@ -1006,6 +1015,61 @@ tvgSafe("search-workflow", () => {
 
     setSnapshotStatus("");
   }
+
+  function parseSeatTokens(raw) {
+  const errors = [];
+  if (!raw || !String(raw).trim()) {
+    return { seats: [], errors, deduped: false };
+  }
+
+  let s = String(raw).trim()
+    .replace(/[–—]/g, "-")
+    .replace(/\s*-\s*/g, "-")
+    .replace(/[ \t]+/g, ",")
+    .replace(/,+/g, ",")
+    .replace(/^,|,$/g, "");
+
+  const parts = s.split(",");
+  const out = [];
+
+  for (const part of parts) {
+    if (!part) continue;
+
+    if (/^\d+\-\d+$/.test(part)) {
+      const [aStr, bStr] = part.split("-");
+      const a = parseInt(aStr, 10);
+      const b = parseInt(bStr, 10);
+
+      if (!Number.isFinite(a) || !Number.isFinite(b) || a <= 0 || b <= 0) {
+        errors.push(`Bad range "${part}"`);
+        continue;
+      }
+
+      if (a > b) {
+        errors.push(`Range start > end in "${part}"`);
+        continue;
+      }
+
+      for (let n = a; n <= b; n += 1) out.push(String(n));
+      continue;
+    }
+
+    if (/^\d+$/.test(part)) {
+      const n = parseInt(part, 10);
+      if (n <= 0) {
+        errors.push(`Seat must be positive in "${part}"`);
+      } else {
+        out.push(String(n));
+      }
+      continue;
+    }
+
+    errors.push(`Unrecognized token "${part}"`);
+  }
+
+  const uniq = Array.from(new Set(out)).sort((a, b) => Number(a) - Number(b));
+  return { seats: uniq, errors, deduped: uniq.length !== out.length };
+}
 
   function seedEventContextFromLastSnapshot() {
     const items = loadSnapshots();
