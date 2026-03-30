@@ -302,6 +302,8 @@ tvgSafe("brokers-widget", () => {
 // Duplicate exposure checker page
 // =====================================================
 tvgSafe("verify-csv", () => {
+  const SNAPSHOT_STORAGE_KEY = "tti_snapshots_v0";
+  const DUPLICATE_AUTO_RUN_KEY = "tti_duplicate_autorun_v1";
   const fileInput = document.getElementById("tvg-file-input");
   const analyzeBtn = document.getElementById("tvg-analyze-btn");
   const sampleBtn = document.getElementById("tvg-sample-btn");
@@ -335,14 +337,6 @@ tvgSafe("verify-csv", () => {
     analyzeBtn.classList.toggle("btn-active", ready);
   };
 
-
-  const autoRunMode = sessionStorage.getItem(DUPLICATE_AUTO_RUN_KEY);
-
-  if (autoRunMode === "snapshots") {
-    sessionStorage.removeItem(DUPLICATE_AUTO_RUN_KEY);
-    runSavedSnapshotScan();
-  }
-
   function updateFileLabel(name = "No file selected.") {
     if (fileLabel) fileLabel.textContent = name;
   }
@@ -355,9 +349,6 @@ tvgSafe("verify-csv", () => {
       </tr>
     `;
   }
-
-  const SNAPSHOT_STORAGE_KEY = "tti_snapshots_v0";
-  const DUPLICATE_AUTO_RUN_KEY = "tti_duplicate_autorun_v1";
 
   function loadSavedSnapshots() {
     try {
@@ -404,32 +395,6 @@ tvgSafe("verify-csv", () => {
     }));
   }
 
-  function runSavedSnapshotScan() {
-    const snapshots = loadSavedSnapshots();
-
-    if (!snapshots.length) {
-      renderEmpty("No saved snapshots were found in this browser.");
-      clearSummary();
-      if (downloadBtn) downloadBtn.disabled = true;
-      showToast("No saved snapshots found", "error");
-      updateCurrentContext();
-      return;
-    }
-
-    try {
-      updateFileLabel("Saved snapshots");
-      setAnalyzeReadyState(true);
-      updateCurrentContext();
-
-      const rows = mapSnapshotsToRows(snapshots);
-      runAnalysis(rows, "Saved snapshots");
-    } catch (error) {
-      console.error("Saved snapshot scan failed:", error);
-      renderEmpty("Something went wrong while scanning saved snapshots.");
-      clearSummary();
-      showToast("Snapshot scan failed", "error");
-    }
-  }
 
   function renderSummary({ scannedCount, conflictGroupCount, riskyCount, source }) {
     if (!summaryStrip) return;
@@ -495,6 +460,13 @@ tvgSafe("verify-csv", () => {
       clearSummary();
       showToast("Snapshot scan failed", "error");
     }
+       updateCurrentContext();
+
+      const autoRunMode = sessionStorage.getItem(DUPLICATE_AUTO_RUN_KEY);
+      if (autoRunMode === "snapshots") {
+        sessionStorage.removeItem(DUPLICATE_AUTO_RUN_KEY);
+        runSavedSnapshotScan();
+      }
   }
 
   function buildRows(data) {
@@ -994,15 +966,15 @@ tvgSafe("search-workflow", () => {
 
     sessionStorage.setItem(DUPLICATE_AUTO_RUN_KEY, "snapshots");
     window.location.href = "duplicate-check.html";
+  }
 
-      if (openDuplicateCheckBtn) {
+  if (openDuplicateCheckBtn) {
     openDuplicateCheckBtn.addEventListener("click", (event) => {
       event.preventDefault();
       openDuplicateCheckFromSnapshots();
     });
   }
-  }
-
+  
   function getSelectedSearchUrls() {
     const raw = normalizeQuery(queryEl?.value);
     if (!raw) return [];
