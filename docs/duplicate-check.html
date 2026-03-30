@@ -16,7 +16,7 @@
 
   <meta
     name="description"
-    content="Check ticket listings for duplicate exposure and overlapping seats across marketplaces."
+    content="Review duplicate exposure from saved ticket snapshots and identify overlapping seats across marketplaces."
   />
 
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
@@ -37,6 +37,7 @@
         id="navToggle"
         aria-expanded="false"
         aria-controls="primary-nav"
+        aria-label="Toggle navigation"
       >
         <span class="bar"></span>
         <span class="bar"></span>
@@ -46,7 +47,7 @@
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
         <a href="search.html" class="nav-link">Tool</a>
-        <a href="duplicate-check.html" class="nav-link nav-active">Duplicate Check</a>
+        <a href="duplicate-check.html" class="nav-link nav-active" aria-current="page">Duplicate Check</a>
         <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
     </div>
@@ -59,34 +60,42 @@
       <section class="tvb-card tvb-hero">
         <span class="badge">Step 4 — Final review</span>
 
-        <h1>Check listings for duplicate exposure</h1>
+        <h1>Review duplicate exposure from your snapshots</h1>
 
         <p>
-          Use exported snapshots or your own CSV file to identify duplicate seats,
-          overlapping listings, and records that may need review.
+          This is the final step in the Ticket VeriGuard workflow. Review captured listings,
+          flag overlapping seats, and spot duplicate exposure across marketplaces.
         </p>
 
-        <div class="tvb-note">
-          A conflict means the same <strong>event, section, row, and seat</strong>
-          appears more than once. This scan runs locally in your browser.
+        <div id="tvg-current-context" class="tvb-note" style="margin-top:14px;">
+          Using saved snapshots from this browser.
+        </div>
+
+        <div class="tvb-note" style="margin-top:12px;">
+          Conflicts are detected when the same <strong>event, section, row, and seat</strong>
+          appear more than once, including seat ranges like <strong>2-4</strong>.
         </div>
       </section>
 
-      <!-- Upload -->
+      <!-- Run scan -->
       <section class="tvb-card tvg-upload-card">
         <div class="contact-cta" style="margin-bottom:16px;">
           <div>
             <h2 class="section-title" style="margin-bottom:8px;">Run duplicate check</h2>
             <p class="muted" style="margin-bottom:0;">
-              Upload a CSV or use your exported snapshot data to scan for overlap.
+              Saved snapshots are now the main workflow. CSV upload is still available as a fallback.
             </p>
           </div>
         </div>
 
         <div class="tvg-upload-row">
+          <button type="button" id="tvg-run-snapshots-btn" class="btn btn-primary">
+            Run from saved snapshots
+          </button>
+
           <label class="btn btn-ghost tvg-file-label">
             <input id="tvg-file-input" type="file" accept=".csv">
-            Choose CSV file
+            Upload CSV instead
           </label>
 
           <button type="button" id="tvg-analyze-btn" class="btn btn-ghost" disabled>
@@ -101,7 +110,7 @@
         </div>
 
         <div class="tvg-microcopy">
-          Runs locally in your browser. No files are uploaded or stored.
+          Runs locally in your browser. No files are uploaded or stored remotely.
         </div>
 
         <div id="tvg-summary" class="tvg-summary-strip" aria-live="polite"></div>
@@ -135,9 +144,11 @@
       <!-- Results -->
       <section class="tvb-card tvg-table-card">
         <div class="tvg-table-header">
-          <h3>Scan results</h3>
-          <div class="tvb-note">
-            Conflict groups help highlight repeated seats across listings.
+          <div>
+            <h3>Scan results</h3>
+            <div class="tvb-note">
+              Flagged listings represent seats that may already be listed elsewhere.
+            </div>
           </div>
         </div>
 
@@ -158,7 +169,7 @@
             <tbody>
               <tr class="tvg-empty-row">
                 <td colspan="8">
-                  Upload a CSV or try the sample file to see results.
+                  Run the scan to view duplicate exposure results.
                 </td>
               </tr>
             </tbody>
@@ -166,27 +177,53 @@
         </div>
       </section>
 
-      <!-- Context (trimmed down) -->
+      <!-- Context -->
       <section class="tvb-card">
         <div class="grid-2">
           <div class="card item">
             <h3>What this checks</h3>
             <ul class="feature-list">
               <li>Duplicate seats across listings</li>
+              <li>Seat range overlaps, such as 2-4 vs 3</li>
               <li>Repeated event, section, row, and seat combinations</li>
-              <li>Overlap across marketplaces</li>
-              <li>Records that may need review</li>
+              <li>Cross-marketplace listing conflicts</li>
             </ul>
           </div>
 
           <div class="card item">
             <h3>Best use</h3>
             <ul class="feature-list">
-              <li>Review exported snapshot data</li>
-              <li>Spot-check a single event</li>
-              <li>Support broker-side review workflows</li>
-              <li>Run quick validation before deeper analysis</li>
+              <li>Review saved snapshots from the Tool page</li>
+              <li>Validate one event before sharing or exporting data</li>
+              <li>Spot-check duplicate exposure quickly</li>
+              <li>Use CSV only when you need a manual import</li>
             </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Workflow reminder -->
+      <section class="tvb-card">
+        <div class="grid-3">
+          <div class="card item">
+            <h3>Step 1</h3>
+            <p class="muted">
+              Search marketplaces using consistent terms so your comparisons stay cleaner.
+            </p>
+          </div>
+
+          <div class="card item">
+            <h3>Step 2</h3>
+            <p class="muted">
+              Capture snapshots with event, section, row, seat, marketplace, price, and URL.
+            </p>
+          </div>
+
+          <div class="card item">
+            <h3>Step 3</h3>
+            <p class="muted">
+              Review saved snapshots, then run duplicate exposure to catch overlaps before they become problems.
+            </p>
           </div>
         </div>
       </section>
@@ -196,7 +233,7 @@
         <div class="tvg-pilot-label">
           <h3>Need help reviewing a real event?</h3>
           <p class="tvb-note">
-            Reach out if you want to walk through this workflow with real data.
+            Reach out if you want to walk through the workflow using real listing data.
           </p>
         </div>
 

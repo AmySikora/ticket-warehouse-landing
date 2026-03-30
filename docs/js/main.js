@@ -315,6 +315,8 @@ tvgSafe("verify-csv", () => {
   const thumbUp = document.getElementById("tvg-thumb-up");
   const thumbDown = document.getElementById("tvg-thumb-down");
   const feedbackLabel = document.getElementById("tvg-feedback-label");
+  const runSnapshotsBtn = document.getElementById("tvg-run-snapshots-btn");
+  const currentContextEl = document.getElementById("tvg-current-context");
 
   if (!fileInput || !analyzeBtn || !sampleBtn || !table) return;
 
@@ -333,6 +335,14 @@ tvgSafe("verify-csv", () => {
     analyzeBtn.classList.toggle("btn-active", ready);
   };
 
+
+  const autoRunMode = sessionStorage.getItem(DUPLICATE_AUTO_RUN_KEY);
+
+  if (autoRunMode === "snapshots") {
+    sessionStorage.removeItem(DUPLICATE_AUTO_RUN_KEY);
+    runSavedSnapshotScan();
+  }
+
   function updateFileLabel(name = "No file selected.") {
     if (fileLabel) fileLabel.textContent = name;
   }
@@ -344,6 +354,81 @@ tvgSafe("verify-csv", () => {
         <td colspan="8">${escapeHTML(message)}</td>
       </tr>
     `;
+  }
+
+  const SNAPSHOT_STORAGE_KEY = "tti_snapshots_v0";
+  const DUPLICATE_AUTO_RUN_KEY = "tti_duplicate_autorun_v1";
+
+  function loadSavedSnapshots() {
+    try {
+      const raw = localStorage.getItem(SNAPSHOT_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.error("Could not load saved snapshots:", error);
+      return [];
+    }
+  }
+
+  function updateCurrentContext() {
+    if (!currentContextEl) return;
+
+    const items = loadSavedSnapshots();
+    if (!items.length) {
+      currentContextEl.textContent = "No saved snapshots found in this browser.";
+      return;
+    }
+
+    const latest = items[items.length - 1];
+    const parts = [
+      latest.event_name,
+      latest.event_location,
+      latest.event_dates,
+    ].filter(Boolean);
+
+    currentContextEl.textContent = parts.length
+      ? `Analyzing: ${parts.join(" · ")}`
+      : "Using saved snapshots from this browser.";
+  }
+
+  function mapSnapshotsToRows(items) {
+    return items.map((item, index) => ({
+      id: item.id || String(index + 1),
+      event: item.event_name || "",
+      section: item.section || "",
+      row: item.row || "",
+      seat: item.seat || "",
+      marketplace: item.marketplace || "",
+      created_at: item.captured_at || "",
+      when: item.captured_at || "",
+    }));
+  }
+
+  function runSavedSnapshotScan() {
+    const snapshots = loadSavedSnapshots();
+
+    if (!snapshots.length) {
+      renderEmpty("No saved snapshots were found in this browser.");
+      clearSummary();
+      if (downloadBtn) downloadBtn.disabled = true;
+      showToast("No saved snapshots found", "error");
+      updateCurrentContext();
+      return;
+    }
+
+    try {
+      updateFileLabel("Saved snapshots");
+      setAnalyzeReadyState(true);
+      updateCurrentContext();
+
+      const rows = mapSnapshotsToRows(snapshots);
+      runAnalysis(rows, "Saved snapshots");
+    } catch (error) {
+      console.error("Saved snapshot scan failed:", error);
+      renderEmpty("Something went wrong while scanning saved snapshots.");
+      clearSummary();
+      showToast("Snapshot scan failed", "error");
+    }
   }
 
   function renderSummary({ scannedCount, conflictGroupCount, riskyCount, source }) {
@@ -383,6 +468,33 @@ tvgSafe("verify-csv", () => {
     if (!summaryStrip) return;
     summaryStrip.innerHTML = "";
     summaryStrip.classList.remove("is-visible");
+  }
+
+  function runSavedSnapshotScan() {
+    const snapshots = loadSavedSnapshots();
+
+    if (!snapshots.length) {
+      renderEmpty("No saved snapshots were found in this browser.");
+      clearSummary();
+      if (downloadBtn) downloadBtn.disabled = true;
+      showToast("No saved snapshots found", "error");
+      updateCurrentContext();
+      return;
+    }
+
+    try {
+      updateFileLabel("Saved snapshots");
+      setAnalyzeReadyState(true);
+      updateCurrentContext();
+
+      const rows = mapSnapshotsToRows(snapshots);
+      runAnalysis(rows, "Saved snapshots");
+    } catch (error) {
+      console.error("Saved snapshot scan failed:", error);
+      renderEmpty("Something went wrong while scanning saved snapshots.");
+      clearSummary();
+      showToast("Snapshot scan failed", "error");
+    }
   }
 
   function buildRows(data) {
@@ -771,6 +883,9 @@ tvgSafe("verify-csv", () => {
   if (downloadBtn) downloadBtn.addEventListener("click", downloadFilteredCsv);
   if (thumbUp) thumbUp.addEventListener("click", () => handleFeedback(true));
   if (thumbDown) thumbDown.addEventListener("click", () => handleFeedback(false));
+  if (runSnapshotsBtn) { 
+      runSnapshotsBtn.addEventListener("click", runSavedSnapshotScan);
+  }
 });
 
 // =====================================================
@@ -790,6 +905,8 @@ tvgSafe("search-workflow", () => {
   const resetBtn = document.getElementById("tms-reset");
   const infoToggle = document.getElementById("tms-info-toggle");
   const explainer = document.getElementById("tms-explainer");
+  const DUPLICATE_AUTO_RUN_KEY = "tti_duplicate_autorun_v1";
+  const openDuplicateCheckBtn = document.getElementById("tti-open-duplicate-check");
 
   const searchSites = [
     { id: "site-seatgeek", label: "SeatGeek", domain: "seatgeek.com" },
@@ -836,10 +953,54 @@ tvgSafe("search-workflow", () => {
     viagogo: "Viagogo",
   };
 
+  const ctx = document.getElementById("tvg-current-context");
+
+  function updateContextFromSnapshots() {
+    const raw = localStorage.getItem("tti_snapshots_v0");
+    if (!raw) return;
+
+    const items = JSON.parse(raw);
+    const latest = items[items.length - 1];
+
+    if (!latest) return;
+
+    const parts = [
+      latest.event_name,
+      latest.event_location,
+      latest.event_dates
+    ].filter(Boolean);
+
+    if (ctx) {
+      ctx.textContent = parts.length
+        ? `Analyzing: ${parts.join(" · ")}`
+        : "Using saved snapshots";
+    }
+  }
+
   let editingId = null;
 
   function normalizeQuery(raw) {
     return String(raw || "").replace(/\s+/g, " ").trim();
+  }
+
+    function openDuplicateCheckFromSnapshots() {
+    const items = loadSnapshots();
+
+    if (!items.length) {
+      setSnapshotStatus("Save at least one snapshot before running duplicate check.");
+      showToast("No saved snapshots yet", "error");
+      return;
+    }
+
+    sessionStorage.setItem(DUPLICATE_AUTO_RUN_KEY, "snapshots");
+    window.location.href = "duplicate-check.html";
+
+      if (openDuplicateCheckBtn) {
+    openDuplicateCheckBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      openDuplicateCheckFromSnapshots();
+    });
+  }
   }
 
   function getSelectedSearchUrls() {
