@@ -223,103 +223,137 @@
           </div>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
-            <div class="tti-grid">
-              <label class="tti-field">
-                <span class="ms-label-text">Event name</span>
-                <input
-                  id="tti-event-name"
-                  type="text"
-                  required
-                  class="tti-input"
-                  placeholder="e.g., Wet Leg"
-                />
-              </label>
+  <div class="tti-grid">
+    <!-- Event details -->
+    <label class="tti-field">
+      <span class="ms-label-text">Event name</span>
+      <input
+        id="tti-event-name"
+        type="text"
+        required
+        class="tti-input"
+        placeholder="e.g., Wet Leg"
+      />
+    </label>
 
-              <label class="tti-field">
-                <span class="ms-label-text">Venue</span>
-                <input
-                  id="tti-event-location"
-                  type="text"
-                  class="tti-input"
-                  placeholder="e.g., Seattle Center, Seattle, WA"
-                />
-              </label>
+    <label class="tti-field">
+      <span class="ms-label-text">Venue</span>
+      <input
+        id="tti-event-location"
+        type="text"
+        class="tti-input"
+        placeholder="e.g., Seattle Center, Seattle, WA"
+      />
+    </label>
 
-              <label class="tti-field">
-                <span class="ms-label-text">Event date(s)</span>
-                <input
-                  id="tti-event-dates"
-                  type="text"
-                  class="tti-input"
-                  placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
-                />
-              </label>
+    <label class="tti-field">
+      <span class="ms-label-text">Event date(s)</span>
+      <input
+        id="tti-event-dates"
+        type="text"
+        class="tti-input"
+        placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
+      />
+    </label>
 
-              <label class="tti-field">
-                <span class="ms-label-text">Marketplace</span>
-                <select id="tti-marketplace" required class="tti-input">
-                  <option value="" selected disabled>Select…</option>
-                  <option value="stubhub">StubHub</option>
-                  <option value="etix">Etix</option>
-                  <option value="seatgeek">SeatGeek</option>
-                  <option value="vivid">Vivid Seats</option>
-                  <option value="ticketmaster">Ticketmaster</option>
-                  <option value="tickpick">TickPick</option>
-                  <option value="viagogo">Viagogo</option>
-                </select>
-              </label>
+    <!-- Seat details -->
+    <label class="tti-field">
+      <span class="ms-label-text">Section</span>
+      <input
+        id="tti-section"
+        type="text"
+        class="tti-input"
+        placeholder="e.g., 112"
+      />
+    </label>
 
-              <label class="tti-field tti-price">
-                <span class="ms-label-text">Lowest listed price</span>
-                <input
-                  id="tti-price"
-                  type="number"
-                  inputmode="decimal"
-                  min="0"
-                  step="0.01"
-                  required
-                  class="tti-input"
-                  placeholder="e.g., 79.00"
-                />
-              </label>
+    <label class="tti-field">
+      <span class="ms-label-text">Row</span>
+      <input
+        id="tti-row"
+        type="text"
+        class="tti-input"
+        placeholder="e.g., G"
+      />
+    </label>
 
-              <label class="tti-field tti-fees">
-                <span class="ms-label-text">All-in price (optional)</span>
-                <input
-                  id="tti-fees"
-                  type="number"
-                  inputmode="decimal"
-                  min="0"
-                  step="0.01"
-                  class="tti-input"
-                  placeholder="e.g., 102.50"
-                />
-              </label>
+    <label class="tti-field">
+      <span class="ms-label-text">Seat</span>
+      <input
+        id="tti-seat"
+        type="text"
+        class="tti-input"
+        placeholder="e.g., 8"
+      />
+    </label>
 
-              <label class="tti-field tti-url">
-                <span class="ms-label-text">URL used</span>
-                <input
-                  id="tti-url"
-                  type="url"
-                  required
-                  class="tti-input"
-                  placeholder="Paste the results or listing URL you used"
-                />
-              </label>
-            </div>
+    <!-- Snapshot details -->
+    <label class="tti-field">
+      <span class="ms-label-text">Marketplace</span>
+      <select id="tti-marketplace" required class="tti-input">
+        <option value="" selected disabled>Select…</option>
+        <option value="stubhub">StubHub</option>
+        <option value="etix">Etix</option>
+        <option value="seatgeek">SeatGeek</option>
+        <option value="vivid">Vivid Seats</option>
+        <option value="ticketmaster">Ticketmaster</option>
+        <option value="tickpick">TickPick</option>
+        <option value="viagogo">Viagogo</option>
+      </select>
+    </label>
 
-            <div class="tti-row">
-              <label class="tti-field" style="flex:1;">
-                <span class="ms-label-text">Notes (optional)</span>
-                <input id="tti-notes" type="text" class="tti-input" placeholder="Optional notes about this snapshot" />
-              </label>
+    <label class="tti-field tti-price">
+      <span class="ms-label-text">Lowest listed price</span>
+      <input
+        id="tti-price"
+        type="number"
+        inputmode="decimal"
+        min="0"
+        step="0.01"
+        required
+        class="tti-input"
+        placeholder="e.g., 79.00"
+      />
+    </label>
 
-              <button type="submit" class="btn primary" id="tti-save-snapshot">Save snapshot</button>
-              <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
-            </div>
+    <label class="tti-field tti-fees">
+      <span class="ms-label-text">All-in price (optional)</span>
+      <input
+        id="tti-fees"
+        type="number"
+        inputmode="decimal"
+        min="0"
+        step="0.01"
+        class="tti-input"
+        placeholder="e.g., 102.50"
+      />
+    </label>
 
-            <p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
-          </form>
+    <!-- Source -->
+    <label class="tti-field tti-url">
+      <span class="ms-label-text">URL used</span>
+      <input
+        id="tti-url"
+        type="url"
+        required
+        class="tti-input"
+        placeholder="Paste the results or listing URL you used"
+      />
+    </label>
+  </div>
+
+  <div class="tti-row">
+    <label class="tti-field" style="flex:1;">
+      <span class="ms-label-text">Notes (optional)</span>
+      <input id="tti-notes" type="text" class="tti-input" placeholder="Optional notes about this snapshot" />
+    </label>
+
+    <button type="submit" class="btn primary" id="tti-save-snapshot">Save snapshot</button>
+    <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
+  </div>
+
+  <p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
+</form>
         </div>
       </div>
     </section>
