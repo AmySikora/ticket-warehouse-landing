@@ -734,6 +734,10 @@ tvgSafe("search-workflow", () => {
   const eventLocationEl = document.getElementById("tti-event-location");
   const eventDatesEl = document.getElementById("tti-event-dates");
 
+  const sectionEl = document.getElementById("tti-section");
+  const rowEl = document.getElementById("tti-row");
+  const seatEl = document.getElementById("tti-seat");
+
   const marketplaceLabels = {
     stubhub: "StubHub",
     seatgeek: "SeatGeek",
@@ -981,6 +985,10 @@ tvgSafe("search-workflow", () => {
     if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Update snapshot";
     if (cancelEditBtn) cancelEditBtn.hidden = false;
 
+    if (sectionEl) sectionEl.value = snapshot.section || "";
+    if (rowEl) rowEl.value = snapshot.row || "";
+    if (seatEl) seatEl.value = snapshot.seat || "";
+
     setSnapshotStatus('Editing snapshot. Update fields and click "Update snapshot".');
   }
 
@@ -992,6 +1000,9 @@ tvgSafe("search-workflow", () => {
     if (priceEl) priceEl.value = "";
     if (feesEl) feesEl.value = "";
     if (notesEl) notesEl.value = "";
+    if (sectionEl) sectionEl.value = "";
+    if (rowEl) rowEl.value = "";
+    if (seatEl) seatEl.value = "";
 
     setSnapshotStatus("");
   }
@@ -1032,7 +1043,7 @@ tvgSafe("search-workflow", () => {
 
     if (!items.length) {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="7" class="muted">No snapshots saved yet.</td>`;
+      tr.innerHTML = `<td colspan="10" class="muted">No snapshots saved yet.</td>`;
       snapshotBody.appendChild(tr);
       return;
     }
@@ -1058,6 +1069,9 @@ tvgSafe("search-workflow", () => {
       tr.innerHTML = `
         <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
         <td>${escapeHTML(eventText)}</td>
+        <td>${escapeHTML(snapshot.section || "")}</td>
+        <td>${escapeHTML(snapshot.row || "")}</td>
+        <td>${escapeHTML(snapshot.seat || "")}</td>
         <td>${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace)}</td>
         <td>$${escapeHTML(formatMoney(snapshot.price))}</td>
         <td>${snapshot.fees !== null && snapshot.fees !== "" ? `$${escapeHTML(formatMoney(snapshot.fees))}` : ""}</td>
@@ -1097,6 +1111,9 @@ tvgSafe("search-workflow", () => {
   function saveSnapshot(event) {
     event.preventDefault();
 
+    const section = safeText(sectionEl?.value);
+    const row = safeText(rowEl?.value);
+    const seat = safeText(seatEl?.value);
     const eventName = safeText(eventNameEl?.value);
     const eventLocation = safeText(eventLocationEl?.value);
     const eventDates = safeText(eventDatesEl?.value);
@@ -1131,6 +1148,9 @@ tvgSafe("search-workflow", () => {
           currency: "USD",
           url,
           notes,
+          section,
+          row,
+          seat,
         };
 
         saveSnapshots(items);
@@ -1140,7 +1160,7 @@ tvgSafe("search-workflow", () => {
         return;
       }
 
-      editingId = null;
+      editingId =  null;
     }
 
     const entry = {
@@ -1158,6 +1178,9 @@ tvgSafe("search-workflow", () => {
       currency: "USD",
       url,
       notes,
+      section,
+      row,
+      seat,
     };
 
     items.push(entry);
@@ -1184,6 +1207,9 @@ tvgSafe("search-workflow", () => {
       "event_name",
       "event_location",
       "event_dates",
+      "section",
+      "row",
+      "seat",
       "search_query",
       "marketplace",
       "price",
