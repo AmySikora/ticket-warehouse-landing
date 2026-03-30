@@ -47,7 +47,7 @@ function withTimeout(ms, promise) {
   return Promise.race([
     promise,
     new Promise((_, reject) => {
-      setTimeout(() => reject(new Error("timeout")), ms);
+      setTimeout(() => reject(new Error("timeout")));
     }),
   ]);
 }
@@ -71,6 +71,66 @@ function downloadTextFile(filename, text, mimeType = "text/plain;charset=utf-8")
   link.remove();
 
   URL.revokeObjectURL(url);
+}
+
+// Shared seat parser for BOTH duplicate check and snapshots
+function parseSeatTokens(raw) {
+  const errors = [];
+
+  if (!raw || !String(raw).trim()) {
+    return { seats: [], errors, deduped: false };
+  }
+
+  let s = String(raw)
+    .trim()
+    .replace(/[–—]/g, "-")
+    .replace(/\s*-\s*/g, "-")
+    .replace(/[ \t]+/g, ",")
+    .replace(/,+/g, ",")
+    .replace(/^,|,$/g, "");
+
+  const parts = s.split(",");
+  const out = [];
+
+  for (const part of parts) {
+    if (!part) continue;
+
+    if (/^\d+-\d+$/.test(part)) {
+      const [aStr, bStr] = part.split("-");
+      const a = parseInt(aStr, 10);
+      const b = parseInt(bStr, 10);
+
+      if (!Number.isFinite(a) || !Number.isFinite(b) || a <= 0 || b <= 0) {
+        errors.push(`Bad range "${part}"`);
+        continue;
+      }
+
+      if (a > b) {
+        errors.push(`Range start > end in "${part}"`);
+        continue;
+      }
+
+      for (let n = a; n <= b; n += 1) {
+        out.push(String(n));
+      }
+      continue;
+    }
+
+    if (/^\d+$/.test(part)) {
+      const n = parseInt(part, 10);
+      if (n <= 0) {
+        errors.push(`Seat must be positive in "${part}"`);
+      } else {
+        out.push(String(n));
+      }
+      continue;
+    }
+
+    errors.push(`Unrecognized token "${part}"`);
+  }
+
+  const uniq = Array.from(new Set(out)).sort((a, b) => Number(a) - Number(b));
+  return { seats: uniq, errors, deduped: uniq.length !== out.length };
 }
 
 // =====================================================
@@ -326,59 +386,61 @@ tvgSafe("verify-csv", () => {
   }
 
   function buildRows(data) {
-  const expandedRows = [];
+    const expandedRows = [];
 
-  data.forEach((row, index) => {
-    const normalized = Object.keys(row).reduce((acc, key) => {
-      acc[normalizeHeader(key)] = row[key];
-      return acc;
-    }, {});
+    data.forEach((row, index) => {
+      const normalized = Object.keys(row).reduce((acc, key) => {
+        acc[normalizeHeader(key)] = row[key];
+        return acc;
+      }, {});
 
-    const pick = (...names) => {
-      for (const name of names) {
-        const value = normalized[normalizeHeader(name)];
-        if (value !== undefined && value !== "") return value;
-      }
-      return "";
-    };
+      const pick = (...names) => {
+        for (const name of names) {
+          const value = normalized[normalizeHeader(name)];
+          if (value !== undefined && value !== "") return value;
+        }
+        return "";
+      };
 
-    const event = pick("event", "event name", "event_name");
-    const section = pick("section", "sec");
-    const rowValue = pick("row");
-    const seatRaw = pick("seat", "seat number", "seat_no", "seat #");
-    const marketplace = pick("marketplace", "source", "channel", "site");
-    const id = pick("id", "listing_id", "external_id") || String(index + 1);
-    const when = pick("when", "timestamp", "time", "created_at");
+      const event = pick("event", "event name", "event_name");
+      const section = pick("section", "sec");
+      const rowValue = pick("row");
+      const seatRaw = pick("seat", "seat number", "seat_no", "seat #");
+      const marketplace = pick("marketplace", "source", "channel", "site");
+      const id = pick("id", "listing_id", "external_id") || String(index + 1);
+      const when = pick("when", "timestamp", "time", "created_at");
 
-    const parsedSeats = parseSeatTokens(seatRaw);
-    const seats = parsedSeats.seats.length ? parsedSeats.seats : [String(seatRaw || "").trim()];
+      const parsedSeats = parseSeatTokens(seatRaw);
+      const seats = parsedSeats.seats.length
+        ? parsedSeats.seats
+        : [String(seatRaw || "").trim()];
 
-    seats.forEach((seat) => {
-      const key = [event, section, rowValue, seat]
-        .map((value) => String(value || "").trim())
-        .join("|");
+      seats.forEach((seat) => {
+        const key = [event, section, rowValue, seat]
+          .map((value) => String(value || "").trim())
+          .join("|");
 
-      expandedRows.push({
-        _index: `${index}-${seat}`,
-        _sourceIndex: index,
-        _key: key,
-        id,
-        event,
-        marketplace,
-        section,
-        row: rowValue,
-        seat,
-        when,
-        decision: "Approved",
+        expandedRows.push({
+          _index: `${index}-${seat}`,
+          _sourceIndex: index,
+          _key: key,
+          id,
+          event,
+          marketplace,
+          section,
+          row: rowValue,
+          seat,
+          when,
+          decision: "Approved",
+        });
       });
     });
-  });
 
-  return expandedRows.filter((row) =>
-    [row.event, row.section, row.row, row.seat, row.marketplace, row.when]
-      .some((value) => String(value || "").trim() !== "")
-  );
-}
+    return expandedRows.filter((row) =>
+      [row.event, row.section, row.row, row.seat, row.marketplace, row.when]
+        .some((value) => String(value || "").trim() !== "")
+    );
+  }
 
   function hasRequiredColumns(rows) {
     if (!rows.length) return false;
@@ -530,7 +592,7 @@ tvgSafe("verify-csv", () => {
     if (!mappedRows.length) {
       renderEmpty("We couldn’t find any listings in that file. Please check your CSV and try again.");
       clearSummary();
-      downloadBtn && (downloadBtn.disabled = true);
+      if (downloadBtn) downloadBtn.disabled = true;
       return;
     }
 
@@ -539,7 +601,7 @@ tvgSafe("verify-csv", () => {
         "This demo expects columns for Event, Section, Row, and Seat. Optional: Marketplace. Try the sample CSV to see the expected format."
       );
       clearSummary();
-      downloadBtn && (downloadBtn.disabled = true);
+      if (downloadBtn) downloadBtn.disabled = true;
       return;
     }
 
@@ -566,76 +628,77 @@ tvgSafe("verify-csv", () => {
   }
 
   function parseAndAnalyzeFile() {
-  const file = fileInput.files?.[0];
-  if (!file || !window.Papa) return;
+    const file = fileInput.files?.[0];
+    if (!file || !window.Papa) return;
 
-  analyzeBtn.disabled = true;
-  analyzeBtn.textContent = "Running...";
+    analyzeBtn.disabled = true;
+    analyzeBtn.textContent = "Running...";
 
-  window.Papa.parse(file, {
-    header: true,
-    skipEmptyLines: true,
-    complete(results) {
-      try {
-        runAnalysis(results.data || [], file.name || "Your CSV");
-      } catch (error) {
-        console.error("Duplicate scan failed:", error);
-        renderEmpty("Something went wrong while scanning this file.");
-        clearSummary();
-        showToast("Scan failed", "error");
-      } finally {
+    window.Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete(results) {
+        try {
+          runAnalysis(results.data || [], file.name || "Your CSV");
+        } catch (error) {
+          console.error("Duplicate scan failed:", error);
+          renderEmpty("Something went wrong while scanning this file.");
+          clearSummary();
+          showToast("Scan failed", "error");
+        } finally {
+          analyzeBtn.disabled = false;
+          analyzeBtn.textContent = "Run scan";
+        }
+      },
+      error(error) {
+        console.error("PapaParse error:", error);
         analyzeBtn.disabled = false;
         analyzeBtn.textContent = "Run scan";
-      }
-    },
-    error(error) {
-      console.error("PapaParse error:", error);
-      analyzeBtn.disabled = false;
-      analyzeBtn.textContent = "Run scan";
-      alert("Sorry, there was a problem reading that file.");
-    },
-  });
-}
-  function loadSampleCsv(event) {
-  if (event) event.preventDefault();
-
-  fetch("./sample_listings.csv")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      return response.text();
-    })
-    .then((text) => {
-      if (!window.Papa) {
-        throw new Error("PapaParse is not loaded");
-      }
-
-      window.Papa.parse(text, {
-        header: true,
-        skipEmptyLines: true,
-        complete(results) {
-          try {
-            updateFileLabel("sample_listings.csv");
-            setAnalyzeReadyState(true);
-            runAnalysis(results.data || [], "sample_listings.csv");
-          } catch (error) {
-            console.error("Sample scan failed:", error);
-            renderEmpty("Something went wrong while scanning the sample file.");
-            clearSummary();
-            showToast("Sample scan failed", "error");
-          }
-        },
-        error(error) {
-          console.error("Sample parse error:", error);
-          alert("There was a problem parsing sample_listings.csv.");
-        },
-      });
-    })
-    .catch((error) => {
-      alert(`Could not load sample_listings.csv: ${error.message}`);
+        alert("Sorry, there was a problem reading that file.");
+      },
     });
-}
+  }
+
+  function loadSampleCsv(event) {
+    if (event) event.preventDefault();
+
+    fetch("./sample_listings.csv")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.text();
+      })
+      .then((text) => {
+        if (!window.Papa) {
+          throw new Error("PapaParse is not loaded");
+        }
+
+        window.Papa.parse(text, {
+          header: true,
+          skipEmptyLines: true,
+          complete(results) {
+            try {
+              updateFileLabel("sample_listings.csv");
+              setAnalyzeReadyState(true);
+              runAnalysis(results.data || [], "sample_listings.csv");
+            } catch (error) {
+              console.error("Sample scan failed:", error);
+              renderEmpty("Something went wrong while scanning the sample file.");
+              clearSummary();
+              showToast("Sample scan failed", "error");
+            }
+          },
+          error(error) {
+            console.error("Sample parse error:", error);
+            alert("There was a problem parsing sample_listings.csv.");
+          },
+        });
+      })
+      .catch((error) => {
+        alert(`Could not load sample_listings.csv: ${error.message}`);
+      });
+  }
 
   function onHeaderClick(event) {
     const headerCell = event.target.closest("th[data-key]");
@@ -1185,7 +1248,7 @@ tvgSafe("search-workflow", () => {
         return;
       }
 
-      editingId =  null;
+      editingId = null;
     }
 
     const entry = {
@@ -1274,62 +1337,7 @@ tvgSafe("search-workflow", () => {
     });
   }
 
-  function parseSeatTokens(raw) {
-  const errors = [];
-  if (!raw || !String(raw).trim()) {
-    return { seats: [], errors, deduped: false };
-  }
-
-  let s = String(raw).trim()
-    .replace(/[–—]/g, "-")
-    .replace(/\s*-\s*/g, "-")
-    .replace(/[ \t]+/g, ",")
-    .replace(/,+/g, ",")
-    .replace(/^,|,$/g, "");
-
-  const parts = s.split(",");
-  const out = [];
-
-  for (const part of parts) {
-    if (!part) continue;
-
-    if (/^\d+\-\d+$/.test(part)) {
-      const [aStr, bStr] = part.split("-");
-      const a = parseInt(aStr, 10);
-      const b = parseInt(bStr, 10);
-
-      if (!Number.isFinite(a) || !Number.isFinite(b) || a <= 0 || b <= 0) {
-        errors.push(`Bad range "${part}"`);
-        continue;
-      }
-
-      if (a > b) {
-        errors.push(`Range start > end in "${part}"`);
-        continue;
-      }
-
-      for (let n = a; n <= b; n += 1) out.push(String(n));
-      continue;
-    }
-
-    if (/^\d+$/.test(part)) {
-      const n = parseInt(part, 10);
-      if (n <= 0) {
-        errors.push(`Seat must be positive in "${part}"`);
-      } else {
-        out.push(String(n));
-      }
-      continue;
-    }
-
-    errors.push(`Unrecognized token "${part}"`);
-  }
-
-  const uniq = Array.from(new Set(out)).sort((a, b) => Number(a) - Number(b));
-  return { seats: uniq, errors, deduped: uniq.length !== out.length };
-}
-
-    function loadPresets() {
+  function loadPresets() {
     try {
       const raw = localStorage.getItem(PRESETS_KEY);
       return raw ? JSON.parse(raw) : [];
