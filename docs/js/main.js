@@ -460,13 +460,6 @@ tvgSafe("verify-csv", () => {
       clearSummary();
       showToast("Snapshot scan failed", "error");
     }
-       updateCurrentContext();
-
-      const autoRunMode = sessionStorage.getItem(DUPLICATE_AUTO_RUN_KEY);
-      if (autoRunMode === "snapshots") {
-        sessionStorage.removeItem(DUPLICATE_AUTO_RUN_KEY);
-        runSavedSnapshotScan();
-      }
   }
 
   function buildRows(data) {
@@ -857,6 +850,14 @@ tvgSafe("verify-csv", () => {
   if (thumbDown) thumbDown.addEventListener("click", () => handleFeedback(false));
   if (runSnapshotsBtn) { 
       runSnapshotsBtn.addEventListener("click", runSavedSnapshotScan);
+
+      updateCurrentContext();
+
+      const autoRunMode = sessionStorage.getItem(DUPLICATE_AUTO_RUN_KEY);
+      if (autoRunMode === "snapshots") {
+        sessionStorage.removeItem(DUPLICATE_AUTO_RUN_KEY);
+        runSavedSnapshotScan();
+      }
   }
 });
 
