@@ -1629,6 +1629,13 @@ function highlightEditingRow() {
     savePresets(presets.slice(0, 12));
     renderPresets();
     showToast("Saved search preset");
+    setSnapshotStatus("Snapshot saved ✔");
+    setTimeout(() => setSnapshotStatus(""), 1500);
+
+    document.getElementById("step-3-title")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   }
 
   function loadPresetIntoForm(id) {
