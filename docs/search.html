@@ -12,10 +12,10 @@
 
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — Ticket Investigation Tool</title>
+  <title>Ticket VeriGuard — Compare Tickets Faster</title>
   <meta
     name="description"
-    content="Search ticket marketplaces, save clean snapshots, and run seat checks with a workflow that feels a lot less messy."
+    content="Search resale ticket sites, save listings you want to compare, and check seat details without the usual mess."
   />
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles-v2.css"/>
@@ -54,46 +54,46 @@
     <section class="section">
       <div class="tvb-container">
         <div class="card tti-workflow" style="margin-top:16px;">
-          <span class="badge">Fast, repeatable ticket review</span>
+          <span class="badge">Fast, fan-friendly ticket search</span>
 
           <h1 class="grad-text" style="margin-bottom:10px;">
-            Cut the chaos out of ticket review.
+            Find better ticket prices without the usual mess.
           </h1>
 
           <p class="lead">
-            Search across marketplaces, save clean snapshots, and check seats without rebuilding the same process every single time.
+            Search across resale sites, save tickets you want to compare, and check seat details before you buy.
           </p>
 
           <p class="muted" style="margin-top:8px;">
-            Same workflow, less mess, much better visibility.
+            Less tab chaos, less second-guessing, better ticket shopping.
           </p>
 
           <div class="grid-2" style="gap:16px; margin-top:20px;">
             <div class="card item">
               <h3 style="margin-bottom:6px;">1. Search</h3>
               <p class="muted" style="margin:0;">
-                Open the same search across marketplaces so your comparisons start from the same place.
+                Open the same search across multiple resale sites in one shot.
               </p>
             </div>
 
             <div class="card item">
-              <h3 style="margin-bottom:6px;">2. Capture</h3>
+              <h3 style="margin-bottom:6px;">2. Save tickets</h3>
               <p class="muted" style="margin:0;">
-                Save listing snapshots with the details you actually need later.
+                Hold onto the listings you like so you can compare them more easily.
               </p>
             </div>
 
             <div class="card item">
-              <h3 style="margin-bottom:6px;">3. Review</h3>
+              <h3 style="margin-bottom:6px;">3. Compare</h3>
               <p class="muted" style="margin:0;">
-                Keep your saved listings together instead of chasing scattered notes and tabs.
+                Review prices, seats, and links side by side instead of bouncing between tabs.
               </p>
             </div>
 
             <div class="card item">
-              <h3 style="margin-bottom:6px;">4. Seat Check</h3>
+              <h3 style="margin-bottom:6px;">4. Check seats</h3>
               <p class="muted" style="margin:0;">
-                Run a quick check to spot seat conflicts before they turn into a bigger headache.
+                Run a quick check to see whether listings may be showing the same seats.
               </p>
             </div>
           </div>
@@ -108,7 +108,7 @@
           <div class="tms-header-row">
             <div>
               <p class="muted" style="margin:0 0 4px;">Step 1</p>
-              <h2 id="step-1-title" class="section-title" style="margin:0;">Search marketplaces</h2>
+              <h2 id="step-1-title" class="section-title" style="margin:0;">Search resale sites</h2>
             </div>
 
             <button
@@ -124,12 +124,12 @@
           </div>
 
           <p class="muted" style="margin-top:10px;">
-            Start with one solid search so everything you save later is easier to compare.
+            Start with one solid search so your comparisons are cleaner right from the beginning.
           </p>
 
           <form id="tixSearch" class="ms-form" novalidate>
             <label class="ms-label">
-              <span class="ms-label-text">What are you tracking?</span>
+              <span class="ms-label-text">What tickets are you looking for?</span>
               <div class="ms-input-wrap">
                 <span aria-hidden="true">🔍</span>
                 <input
@@ -152,7 +152,7 @@
             </p>
 
             <fieldset class="ms-sites">
-              <legend class="ms-legend">Choose marketplaces</legend>
+              <legend class="ms-legend">Choose sites to search</legend>
               <div class="ms-site-grid">
                 <label class="pill-check">
                   <input type="checkbox" id="site-google" checked>
@@ -171,21 +171,21 @@
             <div class="ms-actions">
               <button type="submit" class="btn primary" id="tms-open">Open results</button>
               <button type="button" id="tms-copy" class="btn">Copy all links</button>
-              <button type="button" id="tms-copy-template" class="btn btn-ghost">Copy snapshot template</button>
+              <button type="button" id="tms-copy-template" class="btn btn-ghost">Copy save template</button>
               <button type="button" id="tms-reset" class="btn btn-ghost">Reset</button>
             </div>
 
             <p class="ms-hint muted" style="margin-top:10px;">
-              Tip: using the same search wording each time makes your later snapshots much easier to compare.
+              Tip: using the same search wording each time makes your saved ticket comparisons much easier later.
             </p>
 
             <div class="card" style="margin-top:16px;">
               <div class="contact-cta">
                 <div>
                   <p class="muted" style="margin:0 0 4px;">Saved searches</p>
-                  <h3 style="margin:0;">Keep your favorite setup ready to go</h3>
+                  <h3 style="margin:0;">Save your go-to ticket search</h3>
                   <p class="muted" style="margin:8px 0 0;">
-                    Save a query and selected marketplaces so you can jump back in without rebuilding everything from scratch.
+                    Keep your favorite search and site combo ready so you can check prices again later without starting over.
                   </p>
                 </div>
 
@@ -212,12 +212,12 @@
             <li>Type the same words you would normally use in a search.</li>
             <li>For each selected site, the tool opens a targeted search like <code>chappell roan seattle site:stubhub.com</code>.</li>
             <li>For the combined Google tab, the tool adds “tickets” if it is not already in your query.</li>
-            <li>If a marketplace does not have listings yet, you will land on its usual no-results page.</li>
+            <li>If a site does not have listings yet, you will land on its usual no-results page.</li>
             <li>Nothing is scraped or stored remotely. This just saves you from rebuilding the same searches over and over.</li>
           </ul>
 
           <p class="muted" style="margin-top:10px;">
-            Cleaner review starts with a cleaner routine.
+            Cleaner ticket shopping starts with a cleaner search routine.
           </p>
         </div>
       </div>
@@ -230,7 +230,7 @@
           <div class="tti-capture-head">
             <div>
               <p class="muted" style="margin:0 0 4px;">Step 2</p>
-              <h2 id="step-2-title" class="section-title" style="margin:0;">Capture a snapshot</h2>
+              <h2 id="step-2-title" class="section-title" style="margin:0;">Save a ticket to compare</h2>
             </div>
 
             <div class="tti-capture-actions">
@@ -240,22 +240,22 @@
           </div>
 
           <p class="muted" style="margin:10px 0 14px;">
-            Save what you see right now so later review feels organized instead of stitched together.
+            Save the ticket details you care about now so it is easier to compare your options later.
           </p>
 
           <div class="card tti-workflow" style="margin-bottom:16px;">
-            <h3 style="margin-top:0;">Capture checklist</h3>
+            <h3 style="margin-top:0;">Quick save checklist</h3>
             <ol class="steps">
               <li>Open the listing or results page you want to track</li>
               <li>Save the listed price you see right now</li>
               <li>Add all-in price if it is shown</li>
               <li>Keep the exact URL you used</li>
-              <li>Repeat over time to build a cleaner history</li>
+              <li>Repeat over time if you want to watch prices change</li>
             </ol>
           </div>
 
           <div id="tti-edit-banner" class="tti-edit-banner" hidden>
-            Editing a saved snapshot. Update the fields below, then click <strong>Update snapshot</strong>.
+            Editing a saved ticket. Update the fields below, then click <strong>Update ticket</strong>.
           </div>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
@@ -322,7 +322,7 @@
               </label>
 
               <label class="tti-field">
-                <span class="ms-label-text">Marketplace</span>
+                <span class="ms-label-text">Site</span>
                 <select id="tti-marketplace" required class="tti-input">
                   <option value="" selected disabled>Select…</option>
                   <option value="stubhub">StubHub</option>
@@ -336,7 +336,7 @@
               </label>
 
               <label class="tti-field tti-price">
-                <span class="ms-label-text">Lowest listed price</span>
+                <span class="ms-label-text">Listed price</span>
                 <input
                   id="tti-price"
                   type="number"
@@ -363,13 +363,13 @@
               </label>
 
               <label class="tti-field tti-url">
-                <span class="ms-label-text">URL used</span>
+                <span class="ms-label-text">Link</span>
                 <input
                   id="tti-url"
                   type="url"
                   required
                   class="tti-input"
-                  placeholder="Paste the results or listing URL you used"
+                  placeholder="Paste the results or listing link you used"
                 />
               </label>
             </div>
@@ -377,10 +377,10 @@
             <div class="tti-row">
               <label class="tti-field" style="flex:1;">
                 <span class="ms-label-text">Notes (optional)</span>
-                <input id="tti-notes" type="text" class="tti-input" placeholder="Optional notes about this snapshot" />
+                <input id="tti-notes" type="text" class="tti-input" placeholder="Optional notes about this ticket" />
               </label>
 
-              <button type="submit" class="btn primary" id="tti-save-snapshot">Save snapshot</button>
+              <button type="submit" class="btn primary" id="tti-save-snapshot">Save ticket</button>
               <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
             </div>
 
@@ -397,46 +397,41 @@
           <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap;">
             <div>
               <p class="muted" style="margin:0 0 4px;">Step 3</p>
-              <h2 id="step-3-title" class="section-title" style="margin:0;">Review saved snapshots</h2>
+              <h2 id="step-3-title" class="section-title" style="margin:0;">Compare your saved tickets</h2>
             </div>
 
             <p class="muted" id="tti-event-summary" style="margin:0;"></p>
           </div>
 
           <p class="muted" style="margin:10px 0 8px;">
-            Everything you save shows up here, ready to review without all the tab-hopping nonsense.
+            Everything you save shows up here so you can compare your options without all the tab-hopping.
           </p>
 
           <p class="muted" style="margin:0 0 14px;">
-            Fix anything that looks off, then move on to Seat Check when your snapshot set looks good.
+            Fix anything that looks off, then run Seat Check if you want a little extra reassurance.
           </p>
 
           <div class="tti-table-wrap">
             <div class="muted">Saved this session:</div>
-            <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-              <a href="duplicate-check.html" class="btn primary">
-                Run seat check
-              </a>
-            </div>
-            <table class="tti-table" aria-label="Saved snapshots">
+            <table class="tti-table" aria-label="Saved tickets">
               <thead>
                 <tr>
-                  <th>Captured</th>
+                  <th>Saved</th>
                   <th>Event</th>
                   <th>Section</th>
                   <th>Row</th>
                   <th>Seat</th>
-                  <th>Marketplace</th>
+                  <th>Site</th>
                   <th>Price</th>
                   <th>All-in</th>
-                  <th>URL</th>
+                  <th>Link</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody id="tti-snapshots-body">
                 <tr>
                   <td colspan="10" class="muted">
-                    No snapshots saved yet. Start with a search, then save your first listing in Step 2.
+                    No saved tickets yet. Start with a search, then save a few listings to compare.
                   </td>
                 </tr>
               </tbody>
@@ -456,12 +451,12 @@
           </div>
 
           <p class="muted" style="margin:10px 0 14px;">
-            Run a seat check on your saved snapshots to catch overlapping listings faster.
+            Double-check whether saved listings may be showing the same seats before you decide.
           </p>
 
           <div class="actions">
             <a href="duplicate-check.html" class="btn primary" id="tti-open-duplicate-check">Run seat check</a>
-            <span class="muted">Use saved snapshots or upload a CSV</span>
+            <span class="muted">Use your saved tickets or upload a CSV</span>
           </div>
         </div>
       </div>
@@ -472,23 +467,23 @@
       <div class="tvb-container">
         <div class="grid-3">
           <div class="card item">
-            <h3>Track pricing over time</h3>
+            <h3>Compare prices faster</h3>
             <p class="muted">
-              Save repeat snapshots and build a clearer view of how listings move from one check-in to the next.
+              Open multiple resale sites quickly and stop losing time rebuilding the same search over and over.
             </p>
           </div>
 
           <div class="card item">
-            <h3>Keep seat details together</h3>
+            <h3>Save the tickets you like</h3>
             <p class="muted">
-              Hold onto section, row, seat, price, and URL in one place so your review stays grounded in the actual listing.
+              Keep your best options together so you can come back and compare them more easily.
             </p>
           </div>
 
           <div class="card item">
-            <h3>Catch overlap faster</h3>
+            <h3>Shop with more confidence</h3>
             <p class="muted">
-              Run a quick seat check to surface listings that may be colliding across marketplaces.
+              Use seat details and a quick seat check to make sure your comparisons actually make sense.
             </p>
           </div>
         </div>

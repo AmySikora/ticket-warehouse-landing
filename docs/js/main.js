@@ -1264,13 +1264,13 @@ function highlightEditingRow() {
     if (rowEl) rowEl.value = snapshot.row || "";
     if (seatEl) seatEl.value = snapshot.seat || "";
 
-    if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Update snapshot";
+    if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Update ticket";
     if (cancelEditBtn) cancelEditBtn.hidden = false;
 
     setEditingVisualState(true);
     highlightEditingRow();
 
-    setSnapshotStatus('Editing snapshot. Update fields and click "Update snapshot".');
+    setSnapshotStatus('Editing snapshot. Update fields and click "Update ticket".');
 
     if (snapshotForm) {
       snapshotForm.scrollIntoView({
@@ -1285,7 +1285,7 @@ function highlightEditingRow() {
 
       if (snapshotForm) snapshotForm.reset();
 
-      if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Save snapshot";
+      if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Save ticket";
       if (cancelEditBtn) cancelEditBtn.hidden = true;
 
       setEditingVisualState(false);
@@ -1466,7 +1466,7 @@ function highlightEditingRow() {
     if (feesEl) feesEl.value = "";
     if (notesEl) notesEl.value = "";
 
-    setSnapshotStatus("Saved snapshot to this browser.");
+    setSnapshotStatus("Saved ticket.");
   }
 
   function exportSnapshotsCsv() {
