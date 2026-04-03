@@ -1213,7 +1213,13 @@ tvgSafe("search-workflow", () => {
     if (seatEl) seatEl.value = snapshot.seat || "";
 
     setSnapshotStatus('Editing snapshot. Update fields and click "Update snapshot".');
+    if (snapshotForm) {
+    snapshotForm.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }
+}
 
       function cancelEdit() {
       editingId = null;
