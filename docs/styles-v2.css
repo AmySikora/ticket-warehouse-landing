@@ -1027,6 +1027,29 @@ button.btn,
   gap: 14px;
 }
 
+.tti-form.is-editing {
+  padding: 16px;
+  border: 1px solid rgba(34,211,238,.45);
+  border-radius: 16px;
+  background: rgba(34,211,238,.06);
+  box-shadow: 0 0 0 3px rgba(34,211,238,.10);
+}
+
+.tti-edit-banner {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(34,211,238,.35);
+  background: rgba(34,211,238,.08);
+  color: #d9fbff;
+  font-weight: 600;
+}
+
+#tti-status {
+  min-height: 24px;
+  font-weight: 600;
+}
+
 .tti-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1075,6 +1098,14 @@ button.btn,
 }
 
 .tti-table th,
+  .tti-table tr.is-editing-row td {
+  background: rgba(79,70,229,.18);
+}
+
+.tti-table tr.is-editing-row {
+  box-shadow: inset 4px 0 0 var(--brand-2);
+}
+
 .tti-table td {
   padding: 10px 12px;
   border-bottom: 1px solid rgba(255,255,255,.08);
@@ -1144,6 +1175,32 @@ button.btn,
   .tms-preset-actions .btn {
     width: 100%;
   }
+}
+
+.tti-form.is-editing {
+  padding: 16px;
+  border: 1px solid rgba(34,211,238,.45);
+  border-radius: 16px;
+  background: rgba(34,211,238,.06);
+  box-shadow: 0 0 0 3px rgba(34,211,238,.10);
+}
+
+.tti-table tr.is-editing-row td {
+  background: rgba(79,70,229,.18);
+}
+
+.tti-table tr.is-editing-row {
+  box-shadow: inset 4px 0 0 var(--brand-2);
+}
+
+#tti-status {
+  min-height: 24px;
+  font-weight: 600;
+}
+
+.tti-form.is-editing + #tti-status,
+.tti-form.is-editing ~ #tti-status {
+  color: #c7f9ff;
 }
 
 /* =====================================================

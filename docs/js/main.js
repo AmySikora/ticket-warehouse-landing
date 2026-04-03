@@ -903,6 +903,7 @@ tvgSafe("search-workflow", () => {
   const snapshotSaveBtn = document.getElementById("tti-save-snapshot");
   const cancelEditBtn = document.getElementById("tti-cancel-edit");
   const eventSummaryEl = document.getElementById("tti-event-summary");
+  const editBannerEl = document.getElementById("tti-edit-banner");
 
   const marketplaceEl = document.getElementById("tti-marketplace");
   const priceEl = document.getElementById("tti-price");
@@ -953,6 +954,44 @@ tvgSafe("search-workflow", () => {
 
   let editingId = null;
 
+  function setEditingVisualState(isEditing) {
+  if (snapshotForm) {
+    snapshotForm.classList.toggle("is-editing", isEditing);
+  }
+
+  if (editBannerEl) {
+    editBannerEl.hidden = !isEditing;
+  }
+}
+
+  function highlightEditingRow() {
+    if (!snapshotBody) return;
+
+    $all("tr", snapshotBody).forEach((row) => {
+      const rowId = row.getAttribute("data-snapshot-id");
+      row.classList.toggle("is-editing-row", Boolean(editingId && rowId === editingId));
+    });
+  }
+
+  function setEditingVisualState(isEditing) {
+  if (snapshotForm) {
+    snapshotForm.classList.toggle("is-editing", isEditing);
+  }
+
+  if (editBannerEl) {
+    editBannerEl.hidden = !isEditing;
+  }
+}
+
+function highlightEditingRow() {
+  if (!snapshotBody) return;
+
+  $all("tr", snapshotBody).forEach((row) => {
+    const rowId = row.getAttribute("data-snapshot-id");
+    row.classList.toggle("is-editing-row", Boolean(editingId && rowId === editingId));
+  });
+}
+
   function normalizeQuery(raw) {
     return String(raw || "").replace(/\s+/g, " ").trim();
   }
@@ -974,8 +1013,24 @@ tvgSafe("search-workflow", () => {
     openDuplicateCheckBtn.addEventListener("click", (event) => {
       event.preventDefault();
       openDuplicateCheckFromSnapshots();
+
+      function setEditingVisualState(isEditing) {
+  if (snapshotForm) {
+    snapshotForm.classList.toggle("is-editing", isEditing);
+  }
+}
+
+      function highlightEditingRow() {
+        if (!snapshotBody) return;
+
+        $all("tr", snapshotBody).forEach((row) => {
+          const rowEditId = row.getAttribute("data-snapshot-id");
+          row.classList.toggle("is-editing-row", Boolean(editingId && rowEditId === editingId));
+        });
+      }
     });
   }
+
   
   function getSelectedSearchUrls() {
     const raw = normalizeQuery(queryEl?.value);
@@ -1205,23 +1260,27 @@ tvgSafe("search-workflow", () => {
     }
     if (notesEl) notesEl.value = snapshot.notes || "";
 
-    if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Update snapshot";
-    if (cancelEditBtn) cancelEditBtn.hidden = false;
-
     if (sectionEl) sectionEl.value = snapshot.section || "";
     if (rowEl) rowEl.value = snapshot.row || "";
     if (seatEl) seatEl.value = snapshot.seat || "";
 
+    if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Update snapshot";
+    if (cancelEditBtn) cancelEditBtn.hidden = false;
+
+    setEditingVisualState(true);
+    highlightEditingRow();
+
     setSnapshotStatus('Editing snapshot. Update fields and click "Update snapshot".');
+
     if (snapshotForm) {
-    snapshotForm.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+      snapshotForm.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
   }
 }
 
-      function cancelEdit() {
+  function cancelEdit() {
       editingId = null;
 
       if (snapshotForm) snapshotForm.reset();
@@ -1229,8 +1288,10 @@ tvgSafe("search-workflow", () => {
       if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Save snapshot";
       if (cancelEditBtn) cancelEditBtn.hidden = true;
 
+      setEditingVisualState(false);
+      highlightEditingRow();
       setSnapshotStatus("");
-}
+    }
 
   function seedEventContextFromLastSnapshot() {
     const items = loadSnapshots();
@@ -1250,6 +1311,7 @@ tvgSafe("search-workflow", () => {
     }
   }
 
+  
   function renderSnapshots() {
     if (!snapshotBody) return;
 
@@ -1268,7 +1330,11 @@ tvgSafe("search-workflow", () => {
 
     if (!items.length) {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="10" class="muted">No snapshots saved yet.</td>`;
+      tr.innerHTML = `
+        <td colspan="10" class="muted">
+          No snapshots saved yet. Start at Step 1, then save your first listing in Step 2.
+        </td>
+    `;
       snapshotBody.appendChild(tr);
       return;
     }
@@ -1279,10 +1345,16 @@ tvgSafe("search-workflow", () => {
 
     sorted.forEach((snapshot) => {
       const tr = document.createElement("tr");
+        tr.setAttribute("data-snapshot-id", snapshot.id);
+
+        if (editingId && snapshot.id === editingId) {
+          tr.classList.add("is-editing-row");
+        }
       const eventText = [
         snapshot.event_name,
         snapshot.event_location,
         snapshot.event_dates,
+
       ]
         .filter(Boolean)
         .join(" · ");
@@ -1601,6 +1673,9 @@ tvgSafe("search-workflow", () => {
   const googleCheckbox = document.getElementById(googleCheckboxId);
   if (googleCheckbox) googleCheckbox.addEventListener("change", renderPreviewLinks);
 
+  form.addEventListener("submit", openAllResults);
+
+  if (form) form.addEventListener("submit", openAllResults);
   if (copyLinksBtn) copyLinksBtn.addEventListener("click", copyAllLinks);
   if (copyTemplateBtn) copyTemplateBtn.addEventListener("click", copySnapshotTemplate);
   if (resetBtn) resetBtn.addEventListener("click", resetSearchForm);
