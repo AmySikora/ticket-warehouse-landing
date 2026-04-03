@@ -15,7 +15,7 @@
   <title>Ticket VeriGuard — Ticket Investigation Tool</title>
   <meta
     name="description"
-    content="Search ticket marketplaces, capture consistent listing snapshots, and review ticket activity with a repeatable workflow."
+    content="Search ticket marketplaces, capture consistent listing snapshots, and review seat conflicts with a repeatable workflow."
   />
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles-v2.css"/>
@@ -44,7 +44,7 @@
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
         <a href="search.html" class="nav-link nav-active" aria-current="page">Tool</a>
-        <a href="duplicate-check.html" class="nav-link">Duplicate Check</a>
+        <a href="duplicate-check.html" class="nav-link">Seat Check</a>
         <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
     </div>
@@ -55,15 +55,15 @@
     <section class="section">
       <div class="tvb-container">
         <div class="card tti-workflow" style="margin-top:16px;">
-          <span class="badge">Repeatable ticket review workflow</span>
-          <h1 style="margin-bottom:10px;">Search, capture, and review ticket listings</h1>
+          <span class="badge">Simple, repeatable ticket workflow</span>
+          <h1 style="margin-bottom:10px;">Search once. Capture clean data. Review with confidence.</h1>
 
           <p class="lead">
-            Run the same search across marketplaces, capture consistent snapshots, and review listings over time.
+            Run the same search across marketplaces, save consistent snapshots, and review listings without the usual chaos.
           </p>
 
           <p class="muted" style="margin-top:8px;">
-            Designed for repeatable checks, not one-off guesswork.
+            Built for real workflow, not one-off guesswork.
           </p>
         </div>
       </div>
@@ -92,7 +92,7 @@
           </div>
 
           <p class="muted" style="margin-top:10px;">
-            Enter the event, artist, team, or city you want to review, then open the same search across the marketplaces you care about.
+            Start with a consistent search so everything you capture later actually compares.
           </p>
 
           <form id="tixSearch" class="ms-form" novalidate>
@@ -208,152 +208,152 @@
           </div>
 
           <p class="muted" style="margin:10px 0 14px;">
-            After reviewing marketplace results, record the listing details you want to compare later. Data is stored in your browser with localStorage.
+            Capture what you see right now, price, seat, and source, so your comparisons stay clean later.
           </p>
 
           <div class="card tti-workflow" style="margin-bottom:16px;">
             <h3 style="margin-top:0;">Snapshot workflow</h3>
             <ol class="steps">
-              <li>Open results for each marketplace.</li>
-              <li>Record the lowest listed price you see at that moment.</li>
-              <li>If the marketplace shows an all-in price, capture that too.</li>
-              <li>Save the URL you used so future comparisons stay consistent.</li>
-              <li>Repeat on the same schedule to track changes over time.</li>
+              <li>Open results for each marketplace</li>
+              <li>Capture the lowest listed price at that moment</li>
+              <li>Add all-in pricing if it is shown</li>
+              <li>Save the exact URL you used</li>
+              <li>Repeat over time to track changes</li>
             </ol>
           </div>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
-  <div class="tti-grid">
-    <!-- Event details -->
-    <label class="tti-field">
-      <span class="ms-label-text">Event name</span>
-      <input
-        id="tti-event-name"
-        type="text"
-        required
-        class="tti-input"
-        placeholder="e.g., Wet Leg"
-      />
-    </label>
+            <div class="tti-grid">
+              <!-- Event details -->
+              <label class="tti-field">
+                <span class="ms-label-text">Event name</span>
+                <input
+                  id="tti-event-name"
+                  type="text"
+                  required
+                  class="tti-input"
+                  placeholder="e.g., Wet Leg"
+                />
+              </label>
 
-    <label class="tti-field">
-      <span class="ms-label-text">Venue</span>
-      <input
-        id="tti-event-location"
-        type="text"
-        class="tti-input"
-        placeholder="e.g., Seattle Center, Seattle, WA"
-      />
-    </label>
+              <label class="tti-field">
+                <span class="ms-label-text">Venue</span>
+                <input
+                  id="tti-event-location"
+                  type="text"
+                  class="tti-input"
+                  placeholder="e.g., Seattle Center, Seattle, WA"
+                />
+              </label>
 
-    <label class="tti-field">
-      <span class="ms-label-text">Event date(s)</span>
-      <input
-        id="tti-event-dates"
-        type="text"
-        class="tti-input"
-        placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
-      />
-    </label>
+              <label class="tti-field">
+                <span class="ms-label-text">Event date(s)</span>
+                <input
+                  id="tti-event-dates"
+                  type="text"
+                  class="tti-input"
+                  placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
+                />
+              </label>
 
-    <!-- Seat details -->
-    <label class="tti-field">
-      <span class="ms-label-text">Section</span>
-      <input
-        id="tti-section"
-        type="text"
-        class="tti-input"
-        placeholder="e.g., 112"
-      />
-    </label>
+              <!-- Seat details -->
+              <label class="tti-field">
+                <span class="ms-label-text">Section</span>
+                <input
+                  id="tti-section"
+                  type="text"
+                  class="tti-input"
+                  placeholder="e.g., 112"
+                />
+              </label>
 
-    <label class="tti-field">
-      <span class="ms-label-text">Row</span>
-      <input
-        id="tti-row"
-        type="text"
-        class="tti-input"
-        placeholder="e.g., G"
-      />
-    </label>
+              <label class="tti-field">
+                <span class="ms-label-text">Row</span>
+                <input
+                  id="tti-row"
+                  type="text"
+                  class="tti-input"
+                  placeholder="e.g., G"
+                />
+              </label>
 
-    <label class="tti-field">
-      <span class="ms-label-text">Seat</span>
-      <input
-        id="tti-seat"
-        type="text"
-        class="tti-input"
-        placeholder="e.g., 8"
-      />
-    </label>
+              <label class="tti-field">
+                <span class="ms-label-text">Seat</span>
+                <input
+                  id="tti-seat"
+                  type="text"
+                  class="tti-input"
+                  placeholder="e.g., 8 or 2-4"
+                />
+              </label>
 
-    <!-- Snapshot details -->
-    <label class="tti-field">
-      <span class="ms-label-text">Marketplace</span>
-      <select id="tti-marketplace" required class="tti-input">
-        <option value="" selected disabled>Select…</option>
-        <option value="stubhub">StubHub</option>
-        <option value="etix">Etix</option>
-        <option value="seatgeek">SeatGeek</option>
-        <option value="vivid">Vivid Seats</option>
-        <option value="ticketmaster">Ticketmaster</option>
-        <option value="tickpick">TickPick</option>
-        <option value="viagogo">Viagogo</option>
-      </select>
-    </label>
+              <!-- Snapshot details -->
+              <label class="tti-field">
+                <span class="ms-label-text">Marketplace</span>
+                <select id="tti-marketplace" required class="tti-input">
+                  <option value="" selected disabled>Select…</option>
+                  <option value="stubhub">StubHub</option>
+                  <option value="etix">Etix</option>
+                  <option value="seatgeek">SeatGeek</option>
+                  <option value="vivid">Vivid Seats</option>
+                  <option value="ticketmaster">Ticketmaster</option>
+                  <option value="tickpick">TickPick</option>
+                  <option value="viagogo">Viagogo</option>
+                </select>
+              </label>
 
-    <label class="tti-field tti-price">
-      <span class="ms-label-text">Lowest listed price</span>
-      <input
-        id="tti-price"
-        type="number"
-        inputmode="decimal"
-        min="0"
-        step="0.01"
-        required
-        class="tti-input"
-        placeholder="e.g., 79.00"
-      />
-    </label>
+              <label class="tti-field tti-price">
+                <span class="ms-label-text">Lowest listed price</span>
+                <input
+                  id="tti-price"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="0.01"
+                  required
+                  class="tti-input"
+                  placeholder="e.g., 79.00"
+                />
+              </label>
 
-    <label class="tti-field tti-fees">
-      <span class="ms-label-text">All-in price (optional)</span>
-      <input
-        id="tti-fees"
-        type="number"
-        inputmode="decimal"
-        min="0"
-        step="0.01"
-        class="tti-input"
-        placeholder="e.g., 102.50"
-      />
-    </label>
+              <label class="tti-field tti-fees">
+                <span class="ms-label-text">All-in price (optional)</span>
+                <input
+                  id="tti-fees"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="0.01"
+                  class="tti-input"
+                  placeholder="e.g., 102.50"
+                />
+              </label>
 
-    <!-- Source -->
-    <label class="tti-field tti-url">
-      <span class="ms-label-text">URL used</span>
-      <input
-        id="tti-url"
-        type="url"
-        required
-        class="tti-input"
-        placeholder="Paste the results or listing URL you used"
-      />
-    </label>
-  </div>
+              <!-- Source -->
+              <label class="tti-field tti-url">
+                <span class="ms-label-text">URL used</span>
+                <input
+                  id="tti-url"
+                  type="url"
+                  required
+                  class="tti-input"
+                  placeholder="Paste the results or listing URL you used"
+                />
+              </label>
+            </div>
 
-  <div class="tti-row">
-    <label class="tti-field" style="flex:1;">
-      <span class="ms-label-text">Notes (optional)</span>
-      <input id="tti-notes" type="text" class="tti-input" placeholder="Optional notes about this snapshot" />
-    </label>
+            <div class="tti-row">
+              <label class="tti-field" style="flex:1;">
+                <span class="ms-label-text">Notes (optional)</span>
+                <input id="tti-notes" type="text" class="tti-input" placeholder="Optional notes about this snapshot" />
+              </label>
 
-    <button type="submit" class="btn primary" id="tti-save-snapshot">Save snapshot</button>
-    <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
-  </div>
+              <button type="submit" class="btn primary" id="tti-save-snapshot">Save snapshot</button>
+              <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
+            </div>
 
-  <p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
-</form>
+            <p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
+          </form>
         </div>
       </div>
     </section>
@@ -372,7 +372,7 @@
           </div>
 
           <p class="muted" style="margin:10px 0 14px;">
-            Review what you captured in this session, then export it when you are ready.
+            Everything you captured lives here, clean, sortable, and ready to review.
           </p>
 
           <div class="tti-table-wrap">
@@ -407,16 +407,16 @@
         <div class="card">
           <div>
             <p class="muted" style="margin:0 0 4px;">Step 4</p>
-            <h2 class="section-title" style="margin:0;">Check duplicate exposure</h2>
+            <h2 class="section-title" style="margin:0;">Check for seat conflicts</h2>
           </div>
 
           <p class="muted" style="margin:10px 0 14px;">
-            Export your snapshots or use your own CSV to check for duplicate listings across marketplaces.
+            Run your saved snapshots through the checker to catch overlapping seats across listings.
           </p>
 
           <div class="actions">
-            <a href="duplicate-check.html" class="btn primary">Open duplicate check</a>
-            <span class="muted">Use exported data or sample CSV</span>
+            <a href="duplicate-check.html" class="btn primary" id="tti-open-duplicate-check">Run seat check</a>
+            <span class="muted">Use your saved snapshots or a CSV file</span>
           </div>
         </div>
       </div>
@@ -429,21 +429,21 @@
           <div class="card item">
             <h3>Weekly price checks</h3>
             <p class="muted">
-              Run the same search every week and build a more consistent comparison set over time.
+              Run the same search regularly and build a clearer view of how listings change over time.
             </p>
           </div>
 
           <div class="card item">
             <h3>Market research</h3>
             <p class="muted">
-              Compare listings across marketplaces without manually rebuilding the same search each time.
+              Compare listings across marketplaces without rebuilding the same search every time.
             </p>
           </div>
 
           <div class="card item">
             <h3>Review workflow</h3>
             <p class="muted">
-              Keep a simple record of event, marketplace, price, and source URL for later review or reporting.
+              Keep event, price, seat, and source together so your review stays grounded in the actual listing.
             </p>
           </div>
         </div>

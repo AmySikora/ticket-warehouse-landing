@@ -806,12 +806,13 @@ tvgSafe("verify-csv", () => {
   }
 
   function downloadFilteredCsv() {
-    if (!allRows.length) return;
+    const rows = getFilteredRows();
+    if (!rows.length) return;
 
     const headers = ["id", "decision", "marketplace", "event", "section", "row", "seat", "when"];
     const lines = [headers.join(",")];
 
-    allRows.forEach((row) => {
+    rows.forEach((row) => {
       const values = headers.map((header) =>
         `"${String(row[header] || "").replace(/"/g, '""')}"`
       );
@@ -823,7 +824,7 @@ tvgSafe("verify-csv", () => {
       lines.join("\n"),
       "text/csv;charset=utf-8;"
     );
-  }
+}
 
   function handleFeedback(isPositive) {
     if (!feedbackLabel) return;
@@ -1214,20 +1215,16 @@ tvgSafe("search-workflow", () => {
     setSnapshotStatus('Editing snapshot. Update fields and click "Update snapshot".');
   }
 
-  function cancelEdit() {
-    editingId = null;
+      function cancelEdit() {
+      editingId = null;
 
-    if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Save snapshot";
-    if (cancelEditBtn) cancelEditBtn.hidden = true;
-    if (priceEl) priceEl.value = "";
-    if (feesEl) feesEl.value = "";
-    if (notesEl) notesEl.value = "";
-    if (sectionEl) sectionEl.value = "";
-    if (rowEl) rowEl.value = "";
-    if (seatEl) seatEl.value = "";
+      if (snapshotForm) snapshotForm.reset();
 
-    setSnapshotStatus("");
-  }
+      if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Save snapshot";
+      if (cancelEditBtn) cancelEditBtn.hidden = true;
+
+      setSnapshotStatus("");
+}
 
   function seedEventContextFromLastSnapshot() {
     const items = loadSnapshots();
@@ -1305,28 +1302,6 @@ tvgSafe("search-workflow", () => {
       `;
 
       snapshotBody.appendChild(tr);
-    });
-
-    $all("[data-edit]", snapshotBody).forEach((button) => {
-      button.addEventListener("click", () => {
-        const id = button.getAttribute("data-edit");
-        const snapshot = loadSnapshots().find((item) => item.id === id);
-        if (!snapshot) {
-          setSnapshotStatus("Couldn’t find that snapshot.");
-          return;
-        }
-        startEdit(snapshot);
-      });
-    });
-
-    $all("[data-del]", snapshotBody).forEach((button) => {
-      button.addEventListener("click", () => {
-        const id = button.getAttribute("data-del");
-        const next = loadSnapshots().filter((item) => item.id !== id);
-        saveSnapshots(next);
-        renderSnapshots();
-        setSnapshotStatus("Removed snapshot.");
-      });
     });
   }
 
@@ -1455,22 +1430,17 @@ tvgSafe("search-workflow", () => {
   }
 
   function clearSnapshots() {
-    localStorage.removeItem(STORAGE_KEY);
-    renderSnapshots();
-    setSnapshotStatus("Cleared saved snapshots from this browser.");
+  localStorage.removeItem(STORAGE_KEY);
+
+  cancelEdit();
+  renderSnapshots();
+
+  if (eventSummaryEl) {
+    eventSummaryEl.textContent = "";
   }
 
-  form.addEventListener("submit", openAllResults);
-
-  if (queryEl) {
-    queryEl.addEventListener("input", renderPreviewLinks);
-    queryEl.addEventListener("blur", () => {
-      if (eventNameEl && !eventNameEl.value.trim()) {
-        eventNameEl.value = normalizeQuery(queryEl.value);
-      }
-    });
-  }
-
+  setSnapshotStatus("Cleared saved snapshots from this browser.");
+}
   function loadPresets() {
     try {
       const raw = localStorage.getItem(PRESETS_KEY);
@@ -1672,4 +1642,35 @@ tvgSafe("search-workflow", () => {
   renderSnapshots();
   renderPreviewLinks();
   renderPresets();
+    if (snapshotBody) {
+    snapshotBody.addEventListener("click", (event) => {
+      const editBtn = event.target.closest("[data-edit]");
+      if (editBtn) {
+        const id = editBtn.getAttribute("data-edit");
+        const snapshot = loadSnapshots().find((item) => item.id === id);
+
+        if (!snapshot) {
+          setSnapshotStatus("Couldn’t find that snapshot.");
+          return;
+        }
+
+        startEdit(snapshot);
+        return;
+      }
+
+      const deleteBtn = event.target.closest("[data-del]");
+        if (deleteBtn) {
+          const id = deleteBtn.getAttribute("data-del");
+          const next = loadSnapshots().filter((item) => item.id !== id);
+          saveSnapshots(next);
+
+          if (editingId === id) {
+            cancelEdit();
+          }
+
+          renderSnapshots();
+          setSnapshotStatus("Removed snapshot.");
+        }
+    });
+  }
 });
