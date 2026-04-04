@@ -13,10 +13,12 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Ticket VeriGuard — Compare Tickets Faster</title>
+
   <meta
     name="description"
-    content="Search resale ticket sites, save listings you want to compare, and check seat details without the usual mess."
+    content="Search resale ticket sites, save listings, and instantly see which tickets are the best deal."
   />
+
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
   <link rel="stylesheet" href="./styles-v2.css"/>
 </head>
@@ -28,404 +30,149 @@
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button
-        class="nav-toggle"
-        id="navToggle"
-        aria-expanded="false"
-        aria-controls="primary-nav"
-        aria-label="Toggle navigation"
-      >
+      <button class="nav-toggle" id="navToggle">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
 
       <nav class="topnav" id="primary-nav">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="search.html" class="nav-link nav-active" aria-current="page">Tool</a>
+        <a href="search.html" class="nav-link nav-active">Tool</a>
         <a href="duplicate-check.html" class="nav-link">Seat Check</a>
-        <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <!-- Hero -->
+
+    <!-- HERO -->
     <section class="section">
       <div class="tvb-container">
-        <div class="card tti-workflow" style="margin-top:16px;">
-          <span class="badge">Fast, fan-friendly ticket search</span>
-
-          <h1 class="grad-text" style="margin-bottom:10px;">
-            Find better ticket prices without the usual mess.
-          </h1>
-
-          <p class="lead">
-            Search across resale sites, save tickets you want to compare, and check seat details before you buy.
-          </p>
+        <div class="card" style="margin-top:16px;">
+          <h1 class="grad-text">Find the best ticket without the tab chaos</h1>
 
           <p class="muted" style="margin-top:8px;">
-            Less tab chaos, less second-guessing, better ticket shopping.
+            Search resale sites, save ticket options, and instantly see which one is cheapest.
           </p>
-
-          <div class="grid-2" style="gap:16px; margin-top:20px;">
-            <div class="card item">
-              <h3 style="margin-bottom:6px;">1. Search</h3>
-              <p class="muted" style="margin:0;">
-                Open the same search across multiple resale sites in one shot.
-              </p>
-            </div>
-
-            <div class="card item">
-              <h3 style="margin-bottom:6px;">2. Save tickets</h3>
-              <p class="muted" style="margin:0;">
-                Hold onto the listings you like so you can compare them more easily.
-              </p>
-            </div>
-
-            <div class="card item">
-              <h3 style="margin-bottom:6px;">3. Compare</h3>
-              <p class="muted" style="margin:0;">
-                Review prices, seats, and links side by side instead of bouncing between tabs.
-              </p>
-            </div>
-
-            <div class="card item">
-              <h3 style="margin-bottom:6px;">4. Check seats</h3>
-              <p class="muted" style="margin:0;">
-                Run a quick check to see whether listings may be showing the same seats.
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- Step 1 -->
-    <section class="section" aria-labelledby="step-1-title">
+    <!-- SEARCH -->
+    <section class="section">
       <div class="tvb-container">
         <div class="card search-card">
-          <div class="tms-header-row">
-            <div>
-              <p class="muted" style="margin:0 0 4px;">Step 1</p>
-              <h2 id="step-1-title" class="section-title" style="margin:0;">Search resale sites</h2>
-            </div>
 
-            <button
-              type="button"
-              id="tms-info-toggle"
-              class="tms-info-pill"
-              aria-expanded="false"
-              aria-controls="tms-explainer"
-            >
-              <span aria-hidden="true">?</span>
-              <span class="sr-only">How this search works</span>
-            </button>
-          </div>
-
-          <p class="muted" style="margin-top:10px;">
-            Start with one solid search so your comparisons are cleaner right from the beginning.
-          </p>
+          <h2>Search tickets</h2>
 
           <form id="tixSearch" class="ms-form" novalidate>
+
             <label class="ms-label">
-              <span class="ms-label-text">What tickets are you looking for?</span>
               <div class="ms-input-wrap">
-                <span aria-hidden="true">🔍</span>
+                <span>🔍</span>
                 <input
                   type="text"
                   id="tms-query"
-                  name="query"
-                  placeholder="chappell roan seattle, trail blazers portland, katy perry vegas"
-                  autocomplete="off"
+                  placeholder="chappell roan seattle, trail blazers portland..."
                   required
                   class="ms-input"
                 />
               </div>
             </label>
 
-            <p class="muted" style="margin:-4px 0 8px;">
-              Try searches like:
-              <span class="muted">Chappell Roan Seattle</span>,
-              <span class="muted">Trail Blazers Portland</span>,
-              <span class="muted">Beyoncé Los Angeles</span>
-            </p>
-
-            <fieldset class="ms-sites">
-              <legend class="ms-legend">Choose sites to search</legend>
-              <div class="ms-site-grid">
-                <label class="pill-check">
-                  <input type="checkbox" id="site-google" checked>
-                  <span>Google (all selected)</span>
-                </label>
-                <label class="pill-check"><input type="checkbox" id="site-seatgeek" checked><span>SeatGeek</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid Seats</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-stubhub" checked><span>StubHub</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-ticketmaster" checked><span>Ticketmaster</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-tickpick" checked><span>TickPick</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-viagogo" checked><span>Viagogo</span></label>
-                <label class="pill-check"><input type="checkbox" id="site-etix" checked><span>Etix</span></label>
-              </div>
-            </fieldset>
+            <div class="ms-site-grid">
+              <label class="pill-check"><input type="checkbox" id="site-google" checked><span>Google</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-seatgeek" checked><span>SeatGeek</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-stubhub" checked><span>StubHub</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-ticketmaster" checked><span>Ticketmaster</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-tickpick" checked><span>TickPick</span></label>
+            </div>
 
             <div class="ms-actions">
-              <button type="submit" class="btn primary" id="tms-open">Open results</button>
-              <button type="button" id="tms-copy" class="btn">Copy all links</button>
-              <button type="button" id="tms-copy-template" class="btn btn-ghost">Copy save template</button>
+              <button type="submit" class="btn primary">Search tickets</button>
+              <button type="button" id="tms-copy" class="btn">Copy links</button>
               <button type="button" id="tms-reset" class="btn btn-ghost">Reset</button>
             </div>
 
-            <p class="ms-hint muted" style="margin-top:10px;">
-              Tip: using the same search wording each time makes your saved ticket comparisons much easier later.
-            </p>
-
-            <div class="card" style="margin-top:16px;">
-              <div class="contact-cta">
-                <div>
-                  <p class="muted" style="margin:0 0 4px;">Saved searches</p>
-                  <h3 style="margin:0;">Save your go-to ticket search</h3>
-                  <p class="muted" style="margin:8px 0 0;">
-                    Keep your favorite search and site combo ready so you can check prices again later without starting over.
-                  </p>
-                </div>
-
-                <div class="actions">
-                  <button type="button" class="btn btn-ghost" id="tms-save-preset">Save current search</button>
-                </div>
-              </div>
-
-              <div id="tms-presets" style="margin-top:16px;">
-                <p class="muted" style="margin:0;">No saved searches yet.</p>
-              </div>
-            </div>
           </form>
 
-          <div id="tms-preview" style="margin-top:16px;">
-            <div class="muted" style="margin-bottom:8px;">Links that will open:</div>
-            <div id="tms-links" class="ms-links"></div>
-          </div>
-        </div>
+          <div id="tms-links" class="ms-links" style="margin-top:16px;"></div>
 
-        <div id="tms-explainer" class="card ms-explainer is-collapsed" aria-hidden="true" style="margin-top:16px;">
-          <h3 class="ms-explainer-title">How this search works</h3>
-          <ul class="feature-list">
-            <li>Type the same words you would normally use in a search.</li>
-            <li>For each selected site, the tool opens a targeted search like <code>chappell roan seattle site:stubhub.com</code>.</li>
-            <li>For the combined Google tab, the tool adds “tickets” if it is not already in your query.</li>
-            <li>If a site does not have listings yet, you will land on its usual no-results page.</li>
-            <li>Nothing is scraped or stored remotely. This just saves you from rebuilding the same searches over and over.</li>
-          </ul>
-
-          <p class="muted" style="margin-top:10px;">
-            Cleaner ticket shopping starts with a cleaner search routine.
-          </p>
         </div>
       </div>
     </section>
 
-    <!-- Step 2 -->
-    <section class="section" aria-labelledby="step-2-title">
+    <!-- SAVE -->
+    <section class="section">
       <div class="tvb-container">
-        <div class="card tti-capture">
-          <div class="tti-capture-head">
-            <div>
-              <p class="muted" style="margin:0 0 4px;">Step 2</p>
-              <h2 id="step-2-title" class="section-title" style="margin:0;">Save a ticket to compare</h2>
-            </div>
+        <div class="card">
 
-            <div class="tti-capture-actions">
-              <button type="button" class="btn btn-sm" id="tti-export-csv">Export CSV</button>
-              <button type="button" class="btn btn-sm btn-ghost" id="tti-clear-session">Clear session</button>
-            </div>
-          </div>
+          <h2>Save a ticket</h2>
 
-          <p class="muted" style="margin:10px 0 14px;">
-            Save the ticket details you care about now so it is easier to compare your options later.
-          </p>
-
-          <div class="card tti-workflow" style="margin-bottom:16px;">
-            <h3 style="margin-top:0;">Quick save checklist</h3>
-            <ol class="steps">
-              <li>Open the listing or results page you want to track</li>
-              <li>Save the listed price you see right now</li>
-              <li>Add all-in price if it is shown</li>
-              <li>Keep the exact URL you used</li>
-              <li>Repeat over time if you want to watch prices change</li>
-            </ol>
-          </div>
-
-          <div id="tti-edit-banner" class="tti-edit-banner" hidden>
-            Editing a saved ticket. Update the fields below, then click <strong>Update ticket</strong>.
-          </div>
+          <p class="muted">Save ticket details so you can compare them in one place.</p>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
+
             <div class="tti-grid">
-              <label class="tti-field">
-                <span class="ms-label-text">Event name</span>
-                <input
-                  id="tti-event-name"
-                  type="text"
-                  required
-                  class="tti-input"
-                  placeholder="e.g., Wet Leg"
-                />
-              </label>
 
-              <label class="tti-field">
-                <span class="ms-label-text">Venue</span>
-                <input
-                  id="tti-event-location"
-                  type="text"
-                  class="tti-input"
-                  placeholder="e.g., Seattle Center, Seattle, WA"
-                />
-              </label>
+              <input id="tti-event-name" placeholder="Event name" required class="tti-input"/>
+              <input id="tti-event-location" placeholder="Venue" class="tti-input"/>
+              <input id="tti-event-dates" placeholder="Date" class="tti-input"/>
 
-              <label class="tti-field">
-                <span class="ms-label-text">Event date(s)</span>
-                <input
-                  id="tti-event-dates"
-                  type="text"
-                  class="tti-input"
-                  placeholder="e.g., 2026-07-10 or Jul 10–12, 2026"
-                />
-              </label>
+              <input id="tti-section" placeholder="Section" class="tti-input"/>
+              <input id="tti-row" placeholder="Row" class="tti-input"/>
+              <input id="tti-seat" placeholder="Seat (ex: 2-4)" class="tti-input"/>
 
-              <label class="tti-field">
-                <span class="ms-label-text">Section</span>
-                <input
-                  id="tti-section"
-                  type="text"
-                  class="tti-input"
-                  placeholder="e.g., 112"
-                />
-              </label>
+              <select id="tti-marketplace" required class="tti-input">
+                <option value="" disabled selected>Site</option>
+                <option value="stubhub">StubHub</option>
+                <option value="seatgeek">SeatGeek</option>
+                <option value="vivid">Vivid</option>
+                <option value="ticketmaster">Ticketmaster</option>
+                <option value="tickpick">TickPick</option>
+              </select>
 
-              <label class="tti-field">
-                <span class="ms-label-text">Row</span>
-                <input
-                  id="tti-row"
-                  type="text"
-                  class="tti-input"
-                  placeholder="e.g., G"
-                />
-              </label>
+              <input id="tti-price" type="number" placeholder="Price" required class="tti-input"/>
+              <input id="tti-fees" type="number" placeholder="All-in (optional)" class="tti-input"/>
+              <input id="tti-url" type="url" placeholder="Ticket link" required class="tti-input"/>
 
-              <label class="tti-field">
-                <span class="ms-label-text">Seat</span>
-                <input
-                  id="tti-seat"
-                  type="text"
-                  class="tti-input"
-                  placeholder="e.g., 8 or 2-4"
-                />
-              </label>
-
-              <label class="tti-field">
-                <span class="ms-label-text">Site</span>
-                <select id="tti-marketplace" required class="tti-input">
-                  <option value="" selected disabled>Select…</option>
-                  <option value="stubhub">StubHub</option>
-                  <option value="etix">Etix</option>
-                  <option value="seatgeek">SeatGeek</option>
-                  <option value="vivid">Vivid Seats</option>
-                  <option value="ticketmaster">Ticketmaster</option>
-                  <option value="tickpick">TickPick</option>
-                  <option value="viagogo">Viagogo</option>
-                </select>
-              </label>
-
-              <label class="tti-field tti-price">
-                <span class="ms-label-text">Listed price</span>
-                <input
-                  id="tti-price"
-                  type="number"
-                  inputmode="decimal"
-                  min="0"
-                  step="0.01"
-                  required
-                  class="tti-input"
-                  placeholder="e.g., 79.00"
-                />
-              </label>
-
-              <label class="tti-field tti-fees">
-                <span class="ms-label-text">All-in price (optional)</span>
-                <input
-                  id="tti-fees"
-                  type="number"
-                  inputmode="decimal"
-                  min="0"
-                  step="0.01"
-                  class="tti-input"
-                  placeholder="e.g., 102.50"
-                />
-              </label>
-
-              <label class="tti-field tti-url">
-                <span class="ms-label-text">Link</span>
-                <input
-                  id="tti-url"
-                  type="url"
-                  required
-                  class="tti-input"
-                  placeholder="Paste the results or listing link you used"
-                />
-              </label>
             </div>
 
             <div class="tti-row">
-              <label class="tti-field" style="flex:1;">
-                <span class="ms-label-text">Notes (optional)</span>
-                <input id="tti-notes" type="text" class="tti-input" placeholder="Optional notes about this ticket" />
-              </label>
-
-              <button type="submit" class="btn primary" id="tti-save-snapshot">Save ticket</button>
-              <button type="button" class="btn btn-ghost" id="tti-cancel-edit" hidden>Cancel</button>
+              <button type="submit" class="btn primary">Save</button>
             </div>
 
-            <p class="muted" id="tti-status" style="margin:8px 0 0;"></p>
+            <p id="tti-status" class="muted"></p>
+
           </form>
+
         </div>
       </div>
     </section>
 
-    <!-- Step 3 -->
-    <section class="section" aria-labelledby="step-3-title">
+    <!-- COMPARE -->
+    <section class="section">
       <div class="tvb-container">
         <div class="card">
-          <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap;">
-            <div>
-              <p class="muted" style="margin:0 0 4px;">Step 3</p>
-              <h2 id="step-3-title" class="section-title" style="margin:0;">Compare your saved tickets</h2>
-            </div>
 
-            <p class="muted" id="tti-event-summary" style="margin:0;"></p>
+          <h2>Your ticket options</h2>
+
+          <div id="tti-best-deal-summary"></div>
+
+          <div class="tti-compare-toolbar">
+            <label class="tti-sort-wrap">
+              <span class="muted">Sort:</span>
+              <select id="tti-sort" class="tti-sort-select">
+                <option value="price-asc">Lowest price</option>
+                <option value="allin-asc">Lowest total</option>
+                <option value="newest">Newest</option>
+              </select>
+            </label>
           </div>
 
-          <p class="muted" style="margin:10px 0 14px;">
-          Compare your saved ticket options, sort by price, and spot the cheapest ones faster.
-        </p>
-         
-        <div class="tti-compare-toolbar">
-          <div class="muted">Saved this session:</div>
-
-          <label class="tti-sort-wrap" for="tti-sort">
-            <span class="muted">Sort by:</span>
-            <select id="tti-sort" class="tti-sort-select">
-              <option value="price-asc">Lowest price</option>
-              <option value="price-desc">Highest price</option>
-              <option value="allin-asc">Lowest all-in</option>
-              <option value="newest">Newest saved</option>
-              <option value="oldest">Oldest saved</option>
-              <option value="marketplace">Marketplace</option>
-            </select>
-          </label>
-        </div>
-
           <div class="tti-table-wrap">
-            <div class="muted">Saved this session:</div>
-            <table class="tti-table" aria-label="Saved tickets">
+            <table class="tti-table">
               <thead>
                 <tr>
                   <th>Saved</th>
@@ -435,7 +182,7 @@
                   <th>Seat</th>
                   <th>Site</th>
                   <th>Price</th>
-                  <th>All-in</th>
+                  <th>Total</th>
                   <th>Link</th>
                   <th></th>
                 </tr>
@@ -443,74 +190,41 @@
               <tbody id="tti-snapshots-body">
                 <tr>
                   <td colspan="10" class="muted">
-                    No saved tickets yet. Start with a search, then save a few listings to compare.
+                    No saved tickets yet.
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Step 4 -->
+    <!-- SEAT CHECK -->
     <section class="section">
       <div class="tvb-container">
         <div class="card">
-          <div>
-            <p class="muted" style="margin:0 0 4px;">Step 4</p>
-            <h2 class="section-title" style="margin:0;">Run seat check</h2>
-          </div>
 
-          <p class="muted" style="margin:10px 0 14px;">
-            Double-check whether saved listings may be showing the same seats before you decide.
+          <h2>Check seats (optional)</h2>
+
+          <p class="muted">
+            See if listings might be the same seats before you choose.
           </p>
 
-          <div class="actions">
-            <a href="duplicate-check.html" class="btn primary" id="tti-open-duplicate-check">Run seat check</a>
-            <span class="muted">Use your saved tickets or upload a CSV</span>
-          </div>
+          <a href="duplicate-check.html" class="btn primary">
+            Check seats
+          </a>
+
         </div>
       </div>
     </section>
 
-    <!-- Use cases -->
-    <section class="section">
-      <div class="tvb-container">
-        <div class="grid-3">
-          <div class="card item">
-            <h3>Compare prices faster</h3>
-            <p class="muted">
-              Open multiple resale sites quickly and stop losing time rebuilding the same search over and over.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Save the tickets you like</h3>
-            <p class="muted">
-              Keep your best options together so you can come back and compare them more easily.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Shop with more confidence</h3>
-            <p class="muted">
-              Use seat details and a quick seat check to make sure your comparisons actually make sense.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer>
     <div class="container footer-bar">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
-      <div class="muted">
-        <a class="muted" href="#">Terms</a> ·
-        <a class="muted" href="#">Privacy</a> ·
-        <a class="muted" href="#">Status</a>
-      </div>
     </div>
   </footer>
 

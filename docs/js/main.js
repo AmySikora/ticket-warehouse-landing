@@ -1680,9 +1680,9 @@ function highlightEditingRow() {
     });
   }
   const snapshotSortEl = document.getElementById("tti-sort");
-    if (snapshotSortEl) {
-      snapshotSortEl.addEventListener("change", renderSnapshots);
-    }
+if (snapshotSortEl) {
+  snapshotSortEl.addEventListener("change", renderSnapshots);
+}
 
   function saveCurrentPreset() {
     const query = normalizeQuery(queryEl?.value);

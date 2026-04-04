@@ -699,6 +699,10 @@ button.btn,
   height: 100%;
 }
 
+.btn.primary:hover {
+  transform: translateY(-2px);
+}
+
 .tvb-broker-teaser {
   padding: clamp(40px, 6vw, 72px) 0;
   background:
@@ -1203,6 +1207,139 @@ button.btn,
   color: #c7f9ff;
 }
 
+.tti-compare-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+}
+
+.tti-sort-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tti-sort-select {
+  min-width: 180px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  background: #0e1420;
+  color: var(--text);
+}
+
+.tti-sort-select:focus {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+.tti-best-deal-summary {
+  margin: 0 0 14px;
+}
+
+.tti-best-deal-card {
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at top left, rgba(250,204,21,.10), transparent 45%),
+    radial-gradient(circle at top right, rgba(34,211,238,.10), transparent 45%),
+    rgba(14,20,32,.70);
+}
+
+.tti-best-deal-label {
+  display: inline-flex;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0b0f14;
+  background: linear-gradient(90deg, #facc15, #fde68a);
+}
+
+.tti-best-deal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tti-best-deal-item {
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+}
+
+.tti-best-deal-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.tti-best-deal-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.tti-best-deal-meta,
+.tti-best-deal-empty {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.tti-price-badge {
+  display: inline-flex;
+  margin-left: 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: #0b0f14;
+  background: linear-gradient(90deg, #facc15, #fde68a);
+  vertical-align: middle;
+}
+
+.tti-price-badge-allin {
+  background: linear-gradient(90deg, #22d3ee, #a5f3fc);
+}
+
+.tti-table tr.is-lowest-price-row td {
+  background: rgba(250, 204, 21, 0.10);
+}
+
+.tti-table tr.is-lowest-allin-row td {
+  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.22);
+}
+
+@media (max-width: 640px) {
+  .tti-compare-toolbar {
+    align-items: stretch;
+  }
+
+  .tti-sort-wrap {
+    width: 100%;
+  }
+
+  .tti-sort-select {
+    width: 100%;
+  }
+
+  .tti-best-deal-grid {
+    grid-template-columns: 1fr;
+  }
+}
 /* =====================================================
    10. BROKERS PAGE
    ===================================================== */
