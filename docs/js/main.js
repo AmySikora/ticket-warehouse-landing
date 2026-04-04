@@ -1313,75 +1313,156 @@ function highlightEditingRow() {
 
   
   function renderSnapshots() {
-    if (!snapshotBody) return;
+  if (!snapshotBody) return;
 
-    const items = loadSnapshots();
-    snapshotBody.innerHTML = "";
+  const items = loadSnapshots();
+  snapshotBody.innerHTML = "";
 
-    if (eventSummaryEl) {
-      const latest = items[items.length - 1];
-      if (latest?.event_name) {
-        const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
-        eventSummaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
-      } else {
-        eventSummaryEl.textContent = "";
-      }
+  if (eventSummaryEl) {
+    const latest = items[items.length - 1];
+    if (latest?.event_name) {
+      const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
+      eventSummaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
+    } else {
+      eventSummaryEl.textContent = "";
     }
-
-    if (!items.length) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td colspan="10" class="muted">
-          No snapshots saved yet. Start at Step 1, then save your first listing in Step 2.
-        </td>
-    `;
-      snapshotBody.appendChild(tr);
-      return;
-    }
-
-    const sorted = items
-      .slice()
-      .sort((a, b) => (a.captured_at < b.captured_at ? 1 : -1));
-
-    sorted.forEach((snapshot) => {
-      const tr = document.createElement("tr");
-        tr.setAttribute("data-snapshot-id", snapshot.id);
-
-        if (editingId && snapshot.id === editingId) {
-          tr.classList.add("is-editing-row");
-        }
-      const eventText = [
-        snapshot.event_name,
-        snapshot.event_location,
-        snapshot.event_dates,
-
-      ]
-        .filter(Boolean)
-        .join(" · ");
-
-      const urlCell = snapshot.url
-        ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">link</a>`
-        : "";
-
-      tr.innerHTML = `
-        <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
-        <td>${escapeHTML(eventText)}</td>
-        <td>${escapeHTML(snapshot.section || "")}</td>
-        <td>${escapeHTML(snapshot.row || "")}</td>
-        <td>${escapeHTML(snapshot.seat || "")}</td>
-        <td>${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace)}</td>
-        <td>$${escapeHTML(formatMoney(snapshot.price))}</td>
-        <td>${snapshot.fees !== null && snapshot.fees !== "" ? `$${escapeHTML(formatMoney(snapshot.fees))}` : ""}</td>
-        <td>${urlCell}</td>
-        <td>
-          <button type="button" class="btn tti-mini" data-edit="${escapeHTML(snapshot.id)}">Edit</button>
-          <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
-        </td>
-      `;
-
-      snapshotBody.appendChild(tr);
-    });
   }
+
+  if (!items.length) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td colspan="10" class="muted">
+        No saved tickets yet. Save a few listings to compare prices, seats, and links in one place.
+      </td>
+    `;
+    snapshotBody.appendChild(tr);
+    return;
+  }
+
+  const sortEl = document.getElementById("tti-sort");
+  const sortValue = sortEl?.value || "price-asc";
+
+  const getNumeric = (value) => {
+    const num = Number(value);
+    return Number.isFinite(num) ? num : null;
+  };
+
+  const priceValues = items
+    .map((item) => getNumeric(item.price))
+    .filter((value) => value !== null);
+
+  const allInValues = items
+    .map((item) => getNumeric(item.fees))
+    .filter((value) => value !== null);
+
+  const lowestPrice = priceValues.length ? Math.min(...priceValues) : null;
+  const lowestAllIn = allInValues.length ? Math.min(...allInValues) : null;
+
+  const sorted = items.slice().sort((a, b) => {
+    const aPrice = getNumeric(a.price);
+    const bPrice = getNumeric(b.price);
+    const aAllIn = getNumeric(a.fees);
+    const bAllIn = getNumeric(b.fees);
+    const aTime = a.captured_at || "";
+    const bTime = b.captured_at || "";
+    const aMarketplace = (marketplaceLabels[a.marketplace] || a.marketplace || "").toLowerCase();
+    const bMarketplace = (marketplaceLabels[b.marketplace] || b.marketplace || "").toLowerCase();
+
+    switch (sortValue) {
+      case "price-desc":
+        return (bPrice ?? -Infinity) - (aPrice ?? -Infinity);
+
+      case "allin-asc":
+        if (aAllIn === null && bAllIn === null) return 0;
+        if (aAllIn === null) return 1;
+        if (bAllIn === null) return -1;
+        return aAllIn - bAllIn;
+
+      case "oldest":
+        return aTime < bTime ? -1 : aTime > bTime ? 1 : 0;
+
+      case "newest":
+        return aTime < bTime ? 1 : aTime > bTime ? -1 : 0;
+
+      case "marketplace":
+        return aMarketplace.localeCompare(bMarketplace);
+
+      case "price-asc":
+      default:
+        if (aPrice === null && bPrice === null) return 0;
+        if (aPrice === null) return 1;
+        if (bPrice === null) return -1;
+        return aPrice - bPrice;
+    }
+  });
+
+  sorted.forEach((snapshot) => {
+    const tr = document.createElement("tr");
+    tr.setAttribute("data-snapshot-id", snapshot.id);
+
+    if (editingId && snapshot.id === editingId) {
+      tr.classList.add("is-editing-row");
+    }
+
+    const priceNumber = getNumeric(snapshot.price);
+    const allInNumber = getNumeric(snapshot.fees);
+
+    const isLowestPrice = lowestPrice !== null && priceNumber === lowestPrice;
+    const isLowestAllIn = lowestAllIn !== null && allInNumber === lowestAllIn;
+
+    if (isLowestPrice) {
+      tr.classList.add("is-lowest-price-row");
+    }
+
+    if (isLowestAllIn) {
+      tr.classList.add("is-lowest-allin-row");
+    }
+
+    const eventText = [
+      snapshot.event_name,
+      snapshot.event_location,
+      snapshot.event_dates,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+
+    const urlCell = snapshot.url
+      ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">view</a>`
+      : "";
+
+    const priceBadge = isLowestPrice
+      ? `<span class="tti-price-badge">Lowest price</span>`
+      : "";
+
+    const allInBadge = isLowestAllIn
+      ? `<span class="tti-price-badge tti-price-badge-allin">Lowest all-in</span>`
+      : "";
+
+    tr.innerHTML = `
+      <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
+      <td>${escapeHTML(eventText)}</td>
+      <td>${escapeHTML(snapshot.section || "")}</td>
+      <td>${escapeHTML(snapshot.row || "")}</td>
+      <td>${escapeHTML(snapshot.seat || "")}</td>
+      <td>${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace)}</td>
+      <td>
+        $${escapeHTML(formatMoney(snapshot.price))}
+        ${priceBadge}
+      </td>
+      <td>
+        ${snapshot.fees !== null && snapshot.fees !== "" ? `$${escapeHTML(formatMoney(snapshot.fees))}` : ""}
+        ${allInBadge}
+      </td>
+      <td>${urlCell}</td>
+      <td>
+        <button type="button" class="btn tti-mini" data-edit="${escapeHTML(snapshot.id)}">Edit</button>
+        <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
+      </td>
+    `;
+
+    snapshotBody.appendChild(tr);
+  });
+}
 
   function saveSnapshot(event) {
     event.preventDefault();
@@ -1598,6 +1679,10 @@ function highlightEditingRow() {
       });
     });
   }
+  const snapshotSortEl = document.getElementById("tti-sort");
+    if (snapshotSortEl) {
+      snapshotSortEl.addEventListener("change", renderSnapshots);
+    }
 
   function saveCurrentPreset() {
     const query = normalizeQuery(queryEl?.value);

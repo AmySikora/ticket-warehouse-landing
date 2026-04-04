@@ -403,13 +403,25 @@
             <p class="muted" id="tti-event-summary" style="margin:0;"></p>
           </div>
 
-          <p class="muted" style="margin:10px 0 8px;">
-            Everything you save shows up here so you can compare your options without all the tab-hopping.
-          </p>
+          <p class="muted" style="margin:10px 0 14px;">
+          Compare your saved ticket options, sort by price, and spot the cheapest ones faster.
+        </p>
+         
+        <div class="tti-compare-toolbar">
+          <div class="muted">Saved this session:</div>
 
-          <p class="muted" style="margin:0 0 14px;">
-            Fix anything that looks off, then run Seat Check if you want a little extra reassurance.
-          </p>
+          <label class="tti-sort-wrap" for="tti-sort">
+            <span class="muted">Sort by:</span>
+            <select id="tti-sort" class="tti-sort-select">
+              <option value="price-asc">Lowest price</option>
+              <option value="price-desc">Highest price</option>
+              <option value="allin-asc">Lowest all-in</option>
+              <option value="newest">Newest saved</option>
+              <option value="oldest">Oldest saved</option>
+              <option value="marketplace">Marketplace</option>
+            </select>
+          </label>
+        </div>
 
           <div class="tti-table-wrap">
             <div class="muted">Saved this session:</div>
