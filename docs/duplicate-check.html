@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
+  <!-- Google tag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -11,42 +11,32 @@
   </script>
 
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Ticket VeriGuard — Seat Check</title>
 
   <meta
     name="description"
-    content="Check saved ticket listings for possible same-seat matches so you can compare resale ticket options with more confidence."
+    content="Check if ticket listings may be the same seats so you can compare options with confidence."
   />
 
-  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="icon" href="./favicon_logo.png"/>
   <link rel="stylesheet" href="./styles-v2.css"/>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
 </head>
 
 <body class="verify-page">
+
+  <!-- NAV (matches your other pages now) -->
   <header class="nav">
     <div class="nav--brand">
-      <a href="index.html" class="logo-bay" aria-label="Ticket VeriGuard Home">
+      <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button
-        class="nav-toggle"
-        id="navToggle"
-        aria-expanded="false"
-        aria-controls="primary-nav"
-        aria-label="Toggle navigation"
-      >
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-
-      <nav class="topnav" id="primary-nav">
+       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
         <a href="search.html" class="nav-link">Tool</a>
-        <a href="duplicate-check.html" class="nav-link nav-active" aria-current="page">Seat Check</a>
+        <a href="duplicate-check.html" class="nav-link" nav-active" aria-current="page">Seat Check</a>
         <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
     </div>
@@ -55,39 +45,27 @@
   <main class="tvb-page">
     <div class="tvb-container">
 
-      <section class="tvb-card tvb-hero">
-        <span class="badge">Step 4 of 4</span>
+      <!-- HERO -->
+      <section class="tvb-card">
+        <h1>Check if tickets might be the same seats</h1>
 
-        <h1>Check for possible same-seat matches</h1>
-
-        <p>
-          Use Seat Check to spot listings that may be the same seats across different resale sites.
-          It’s a quick final pass before you decide which ticket is the best deal.
+        <p class="muted" style="margin-top:8px;">
+          Run a quick check to spot listings that may overlap so you don’t accidentally compare the same ticket twice.
         </p>
 
-        <div id="tvg-current-context" class="tvb-note" style="margin-top:14px;">
+        <div id="tvg-current-context" class="tvb-note" style="margin-top:12px;">
           Using saved tickets from this browser.
-        </div>
-
-        <div class="tvb-note" style="margin-top:12px;">
-          Ticket VeriGuard flags listings when the same
-          <strong>event, section, row, and seat</strong> appear more than once,
-          including seat ranges like <strong>2-4</strong>.
         </div>
       </section>
 
-      <section class="tvb-card tvg-upload-card">
-        <div class="contact-cta" style="margin-bottom:16px;">
-          <div>
-            <h2 class="section-title" style="margin-bottom:8px;">Run Seat Check</h2>
-            <p class="muted" style="margin-bottom:0;">
-              Start with your saved tickets. CSV upload is here too if you want to check a file instead.
-            </p>
-          </div>
-        </div>
+      <!-- ACTIONS -->
+      <section class="tvb-card">
+
+        <h2 style="margin-bottom:12px;">Check tickets</h2>
 
         <div class="tvg-upload-row">
-          <button type="button" id="tvg-run-snapshots-btn" class="btn btn-primary">
+
+          <button type="button" id="tvg-run-snapshots-btn" class="btn primary">
             Check saved tickets
           </button>
 
@@ -101,146 +79,90 @@
           </button>
 
           <button type="button" id="tvg-sample-btn" class="btn btn-ghost">
-            Try sample file
+            Try sample
           </button>
 
-          <div id="tvg-file-label" class="tvb-note tvg-file-name">No file selected.</div>
+          <div id="tvg-file-label" class="tvb-note tvg-file-name">
+            No file selected
+          </div>
+
         </div>
 
         <div class="tvg-microcopy">
-          Everything runs locally in your browser. Nothing is uploaded anywhere, because apparently privacy is still a nice idea.
+          Everything runs locally. Nothing is uploaded.
         </div>
 
-        <div id="tvg-summary" class="tvg-summary-strip" aria-live="polite"></div>
+        <div id="tvg-summary" class="tvg-summary-strip"></div>
+
       </section>
 
-      <section class="tvb-card tvg-filter-card">
+      <!-- FILTERS -->
+      <section class="tvb-card">
         <div class="tvg-filter-row">
-          <div class="tvb-note">View:</div>
 
-          <select id="tvg-filter-decision" class="btn btn-ghost tvg-filter-select">
+          <select id="tvg-filter-decision" class="btn btn-ghost">
             <option value="all">All results</option>
             <option value="Approved">Looks fine</option>
             <option value="Blocked">Possible same seat</option>
           </select>
 
-          <select id="tvg-filter-marketplace" class="btn btn-ghost tvg-filter-select">
-            <option value="all">All marketplaces</option>
+          <select id="tvg-filter-marketplace" class="btn btn-ghost">
+            <option value="all">All sites</option>
           </select>
 
-          <button id="tvg-reset-filters" class="btn btn-ghost">Reset</button>
+          <button id="tvg-reset-filters" class="btn btn-ghost">
+            Reset
+          </button>
 
           <div class="tvg-filter-spacer"></div>
 
           <button id="tvg-download-clean" class="btn btn-ghost" disabled>
-            Download results
+            Download
           </button>
+
         </div>
       </section>
 
-      <section class="tvb-card tvg-table-card">
-        <div class="tvg-table-header">
-          <div>
-            <h3>Seat check results</h3>
-            <div class="tvb-note">
-              Listings marked <strong>Possible same seat</strong> may match another saved ticket in your list.
-            </div>
-          </div>
-        </div>
+      <!-- RESULTS -->
+      <section class="tvb-card">
+
+        <h3 style="margin-bottom:6px;">Results</h3>
+
+        <p class="tvb-note">
+          “Possible same seat” means listings may refer to the same ticket.
+        </p>
 
         <div class="tvg-table-wrap">
           <table id="tvg-results-table">
             <thead>
               <tr>
-                <th data-key="id">ID</th>
-                <th data-key="decision">Result</th>
-                <th data-key="marketplace">Marketplace</th>
-                <th data-key="event">Event</th>
-                <th data-key="section">Section</th>
-                <th data-key="row">Row</th>
-                <th data-key="seat">Seat</th>
-                <th data-key="when">Saved</th>
+                <th>ID</th>
+                <th>Result</th>
+                <th>Site</th>
+                <th>Event</th>
+                <th>Section</th>
+                <th>Row</th>
+                <th>Seat</th>
+                <th>Saved</th>
               </tr>
             </thead>
             <tbody>
               <tr class="tvg-empty-row">
                 <td colspan="8">
-                  Run Seat Check to review your saved tickets.
+                  Run a check to see your results.
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
       </section>
 
-      <section class="tvb-card">
-        <div class="grid-2">
-          <div class="card item">
-            <h3>What this helps you catch</h3>
-            <ul class="feature-list">
-              <li>Listings that may be the exact same seat</li>
-              <li>Seat range overlaps, such as 2-4 and 3</li>
-              <li>Repeated event, section, row, and seat combinations</li>
-              <li>Possible duplicates across marketplaces</li>
-            </ul>
-          </div>
-
-          <div class="card item">
-            <h3>How to use it</h3>
-            <ul class="feature-list">
-              <li>Save a few ticket options first</li>
-              <li>Run Seat Check before you buy</li>
-              <li>Compare price, fees, and marketplace side by side</li>
-              <li>Use CSV only if you want to import listings manually</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="tvb-card">
-        <div class="grid-4">
-          <div class="card item">
-            <h3>Step 1</h3>
-            <p class="muted">
-              Search once and open multiple resale sites.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Step 2</h3>
-            <p class="muted">
-              Save the tickets you are considering.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Step 3</h3>
-            <p class="muted">
-              Compare your saved ticket options in one place.
-            </p>
-          </div>
-
-          <div class="card item">
-            <h3>Step 4</h3>
-            <p class="muted">
-              Check for possible same-seat matches before you choose.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="tvb-card tvg-pilot-card" id="contact">
-        <div class="tvg-pilot-label">
-          <h3>Want help or want to share feedback?</h3>
-          <p class="tvb-note">
-            Ticket shopping gets messy fast. If something feels confusing, send a note.
-          </p>
-        </div>
-
-        <div class="actions">
-          <a class="btn btn-primary" href="mailto:hello@ticketveriguard.com">Email Ticket VeriGuard</a>
-          <a class="btn btn-ghost" href="search.html">Back to Tool</a>
-        </div>
+      <!-- CTA BACK -->
+      <section class="tvb-card" style="text-align:center;">
+        <a href="search.html" class="btn primary">
+          Back to tickets
+        </a>
       </section>
 
     </div>
@@ -249,15 +171,8 @@
   <footer>
     <div class="container footer-bar">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
-      <div class="muted">
-        <a class="muted" href="#">Terms</a> ·
-        <a class="muted" href="#">Privacy</a> ·
-        <a class="muted" href="#">Status</a>
-      </div>
     </div>
   </footer>
-
-  <div id="toast-root" aria-live="polite"></div>
 
   <script src="./js/main.js" defer></script>
 </body>
