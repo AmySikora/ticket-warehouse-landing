@@ -414,17 +414,17 @@ tvgSafe("verify-csv", () => {
 
     summaryStrip.appendChild(strong);
     summaryStrip.appendChild(
-      makePill(`${conflictGroupCount} conflict group${conflictGroupCount === 1 ? "" : "s"}`)
+      makePill(`${conflictGroupCount} possible match group${conflictGroupCount === 1 ? "" : "s"}`)
     );
     summaryStrip.appendChild(
-      makePill(`${riskyCount} risky listing${riskyCount === 1 ? "" : "s"}`)
+      makePill(`${riskyCount} possible same-seat listing${riskyCount === 1 ? "" : "s"}`)
     );
     summaryStrip.appendChild(makePill(`Source: ${source}`));
     summaryStrip.appendChild(
       makePill(
         riskyCount > 0
-          ? "These are the seats we’d sync across marketplaces."
-          : "No duplicates found with this rule set."
+          ? "Review the possible same-seat matches below."
+          : "No possible same-seat matches found."
       )
     );
   }
@@ -630,7 +630,7 @@ tvgSafe("verify-csv", () => {
         labelRow.className = "tvg-group-label-row";
         labelRow.innerHTML = `
           <td colspan="8">
-            Conflict group #${group.id} — ${group.size} listings share the same seat
+            Possible match group #${group.id} — ${group.size} listings may share the same seat
             (${escapeHTML(group.event)} • Sec ${escapeHTML(group.section)} • Row ${escapeHTML(group.row)} • Seat ${escapeHTML(group.seat)})
           </td>
         `;
@@ -647,8 +647,8 @@ tvgSafe("verify-csv", () => {
         <td>
           ${
             isBlocked
-              ? '<span class="tvg-status-pill tvg-status-risk">Duplicate seat</span>'
-              : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
+              ? '<span class="tvg-status-pill tvg-status-risk">Possible same seat</span>'
+              : '<span class="tvg-status-pill tvg-status-ok">Looks fine</span>'
           }
         </td>
         <td>${escapeHTML(row.marketplace || "—")}</td>

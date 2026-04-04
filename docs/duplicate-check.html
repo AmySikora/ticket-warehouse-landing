@@ -16,7 +16,7 @@
 
   <meta
     name="description"
-    content="Review saved ticket snapshots and catch overlapping seats across marketplaces with a cleaner final check."
+    content="Check saved ticket listings for possible same-seat matches so you can compare resale ticket options with more confidence."
   />
 
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
@@ -25,10 +25,9 @@
 </head>
 
 <body class="verify-page">
-  <!-- Header -->
   <header class="nav">
     <div class="nav--brand">
-      <a href="index.html" class="logo-bay">
+      <a href="index.html" class="logo-bay" aria-label="Ticket VeriGuard Home">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
@@ -56,75 +55,73 @@
   <main class="tvb-page">
     <div class="tvb-container">
 
-      <!-- Hero -->
       <section class="tvb-card tvb-hero">
-        <span class="badge">Step 4 — Final review</span>
+        <span class="badge">Step 4 of 4</span>
 
-        <h1>Check saved snapshots for seat conflicts</h1>
+        <h1>Check for possible same-seat matches</h1>
 
         <p>
-          This is the final step in the Ticket VeriGuard workflow. Review saved listings,
-          catch overlapping seats, and do one last clean check before moving on.
+          Use Seat Check to spot listings that may be the same seats across different resale sites.
+          It’s a quick final pass before you decide which ticket is the best deal.
         </p>
 
         <div id="tvg-current-context" class="tvb-note" style="margin-top:14px;">
-          Using saved snapshots from this browser.
+          Using saved tickets from this browser.
         </div>
 
         <div class="tvb-note" style="margin-top:12px;">
-          A conflict is flagged when the same <strong>event, section, row, and seat</strong>
-          appears more than once, including seat ranges like <strong>2-4</strong>.
+          Ticket VeriGuard flags listings when the same
+          <strong>event, section, row, and seat</strong> appear more than once,
+          including seat ranges like <strong>2-4</strong>.
         </div>
       </section>
 
-      <!-- Run scan -->
       <section class="tvb-card tvg-upload-card">
         <div class="contact-cta" style="margin-bottom:16px;">
           <div>
-            <h2 class="section-title" style="margin-bottom:8px;">Run seat check</h2>
+            <h2 class="section-title" style="margin-bottom:8px;">Run Seat Check</h2>
             <p class="muted" style="margin-bottom:0;">
-              Saved snapshots are the main workflow. CSV upload is still here if you need a fallback.
+              Start with your saved tickets. CSV upload is here too if you want to check a file instead.
             </p>
           </div>
         </div>
 
         <div class="tvg-upload-row">
           <button type="button" id="tvg-run-snapshots-btn" class="btn btn-primary">
-            Run from saved snapshots
+            Check saved tickets
           </button>
 
           <label class="btn btn-ghost tvg-file-label">
             <input id="tvg-file-input" type="file" accept=".csv">
-            Upload CSV instead
+            Upload CSV
           </label>
 
           <button type="button" id="tvg-analyze-btn" class="btn btn-ghost" disabled>
-            Run scan
+            Check file
           </button>
 
           <button type="button" id="tvg-sample-btn" class="btn btn-ghost">
-            Try sample CSV
+            Try sample file
           </button>
 
           <div id="tvg-file-label" class="tvb-note tvg-file-name">No file selected.</div>
         </div>
 
         <div class="tvg-microcopy">
-          Runs locally in your browser. No files are uploaded or stored remotely.
+          Everything runs locally in your browser. Nothing is uploaded anywhere, because apparently privacy is still a nice idea.
         </div>
 
         <div id="tvg-summary" class="tvg-summary-strip" aria-live="polite"></div>
       </section>
 
-      <!-- Filters -->
       <section class="tvb-card tvg-filter-card">
         <div class="tvg-filter-row">
-          <div class="tvb-note">Filter:</div>
+          <div class="tvb-note">View:</div>
 
           <select id="tvg-filter-decision" class="btn btn-ghost tvg-filter-select">
             <option value="all">All results</option>
-            <option value="Approved">Clear only</option>
-            <option value="Blocked">Flagged only</option>
+            <option value="Approved">Looks fine</option>
+            <option value="Blocked">Possible same seat</option>
           </select>
 
           <select id="tvg-filter-marketplace" class="btn btn-ghost tvg-filter-select">
@@ -136,18 +133,17 @@
           <div class="tvg-filter-spacer"></div>
 
           <button id="tvg-download-clean" class="btn btn-ghost" disabled>
-            Download filtered CSV
+            Download results
           </button>
         </div>
       </section>
 
-      <!-- Results -->
       <section class="tvb-card tvg-table-card">
         <div class="tvg-table-header">
           <div>
-            <h3>Scan results</h3>
+            <h3>Seat check results</h3>
             <div class="tvb-note">
-              Flagged listings may overlap with another saved seat listing.
+              Listings marked <strong>Possible same seat</strong> may match another saved ticket in your list.
             </div>
           </div>
         </div>
@@ -163,13 +159,13 @@
                 <th data-key="section">Section</th>
                 <th data-key="row">Row</th>
                 <th data-key="seat">Seat</th>
-                <th data-key="when">When</th>
+                <th data-key="when">Saved</th>
               </tr>
             </thead>
             <tbody>
               <tr class="tvg-empty-row">
                 <td colspan="8">
-                  Run the scan to view seat check results.
+                  Run Seat Check to review your saved tickets.
                 </td>
               </tr>
             </tbody>
@@ -177,63 +173,67 @@
         </div>
       </section>
 
-      <!-- Context -->
       <section class="tvb-card">
         <div class="grid-2">
           <div class="card item">
-            <h3>What this checks</h3>
+            <h3>What this helps you catch</h3>
             <ul class="feature-list">
-              <li>Repeated seats across listings</li>
-              <li>Seat range overlaps, such as 2-4 vs 3</li>
+              <li>Listings that may be the exact same seat</li>
+              <li>Seat range overlaps, such as 2-4 and 3</li>
               <li>Repeated event, section, row, and seat combinations</li>
-              <li>Cross-marketplace listing conflicts</li>
+              <li>Possible duplicates across marketplaces</li>
             </ul>
           </div>
 
           <div class="card item">
-            <h3>Best use</h3>
+            <h3>How to use it</h3>
             <ul class="feature-list">
-              <li>Review saved snapshots from the Tool page</li>
-              <li>Validate one event before exporting or sharing data</li>
-              <li>Spot-check seat conflicts quickly</li>
-              <li>Use CSV only when you need a manual import</li>
+              <li>Save a few ticket options first</li>
+              <li>Run Seat Check before you buy</li>
+              <li>Compare price, fees, and marketplace side by side</li>
+              <li>Use CSV only if you want to import listings manually</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <!-- Workflow reminder -->
       <section class="tvb-card">
-        <div class="grid-3">
+        <div class="grid-4">
           <div class="card item">
             <h3>Step 1</h3>
             <p class="muted">
-              Search marketplaces using consistent terms so your comparisons stay cleaner.
+              Search once and open multiple resale sites.
             </p>
           </div>
 
           <div class="card item">
             <h3>Step 2</h3>
             <p class="muted">
-              Capture snapshots with event, section, row, seat, marketplace, price, and URL.
+              Save the tickets you are considering.
             </p>
           </div>
 
           <div class="card item">
             <h3>Step 3</h3>
             <p class="muted">
-              Review saved snapshots, then run a seat check to catch overlaps before they become bigger problems.
+              Compare your saved ticket options in one place.
+            </p>
+          </div>
+
+          <div class="card item">
+            <h3>Step 4</h3>
+            <p class="muted">
+              Check for possible same-seat matches before you choose.
             </p>
           </div>
         </div>
       </section>
 
-      <!-- CTA -->
       <section class="tvb-card tvg-pilot-card" id="contact">
         <div class="tvg-pilot-label">
-          <h3>Need help reviewing a real event?</h3>
+          <h3>Want help or want to share feedback?</h3>
           <p class="tvb-note">
-            Reach out if you want to walk through the workflow using real listing data.
+            Ticket shopping gets messy fast. If something feels confusing, send a note.
           </p>
         </div>
 

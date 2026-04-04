@@ -1459,9 +1459,8 @@ textarea:focus {
   gap: 10px;
   padding: 12px;
   border-radius: 10px;
-  background:
-    radial-gradient(circle at top, rgba(90,120,255,0.18), transparent 70%),
-    rgba(10,18,34,0.8);
+  background: rgba(15,23,42,0.7);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 .verify-page .tvg-filter-spacer {
@@ -1533,24 +1532,25 @@ textarea:focus {
 }
 
 .verify-page #tvg-results-table tbody tr:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.35);
+  background: rgba(255,255,255,0.06);
+  transform: none;
+  box-shadow: none;
 }
 
 .verify-page #tvg-results-table tbody tr:not(.tvg-group-label-row):not(.tvg-empty-row) {
-  background: #22404b;
+  background: rgba(255,255,255,0.02);
 }
 
 .verify-page #tvg-results-table tbody tr.tvg-row-approved,
 .verify-page #tvg-results-table tbody tr.tvg-clean-row,
 .verify-page #tvg-results-table tbody tr[data-decision="Approved"] {
-  background: #1f5a45;
+  background: rgba(16,185,129,0.10);
 }
 
 .verify-page #tvg-results-table tbody tr.tvg-row-approved:hover,
 .verify-page #tvg-results-table tbody tr.tvg-clean-row:hover,
-.verify-page #tvg-results-table tbody tr[data-decision="Approved"]:hover {
-  background: #276c53;
+.verify-page #tvg-results-table tbody tr[data-decision="Blocked"] {
+  background: rgba(239,68,68,0.10);
 }
 
 .verify-page #tvg-results-table tbody tr.tvg-row-blocked,
@@ -1582,9 +1582,9 @@ textarea:focus {
   color: rgba(255, 255, 255, 0.94);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   vertical-align: middle;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .verify-page .tvg-empty-row td {
@@ -1615,16 +1615,17 @@ textarea:focus {
 
 .verify-page .tvg-badge-approved,
 .verify-page .tvg-status-ok {
-  background: rgba(16, 185, 129, 0.18);
-  color: #d1fae5;
-  border: 1px solid rgba(16, 185, 129, 0.28);
+  background: rgba(16,185,129,0.12);
+  color: #bbf7d0;
+  border: 1px solid rgba(16,185,129,0.25);
 }
+
 
 .verify-page .tvg-badge-blocked,
 .verify-page .tvg-status-risk {
-  background: rgba(239, 68, 68, 0.18);
-  color: #fee2e2;
-  border: 1px solid rgba(239, 68, 68, 0.28);
+  background: rgba(239,68,68,0.12);
+  color: #fecaca;
+  border: 1px solid rgba(239,68,68,0.25);
 }
 
 .verify-page .tvg-conflict-row {
