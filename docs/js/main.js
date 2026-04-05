@@ -1722,6 +1722,7 @@ if (snapshotSortEl) {
       block: "start"
     });
   }
+  button.textContent = "Checking...";
 
   function loadPresetIntoForm(id) {
     const preset = loadPresets().find((item) => item.id === id);
