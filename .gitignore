@@ -3,6 +3,7 @@ backend/venv/
 backend/__pycache__/
 backend/*.pyc
 backend/instance/*.db
+backend/*.db
 
 # macOS
 .DS_Store
