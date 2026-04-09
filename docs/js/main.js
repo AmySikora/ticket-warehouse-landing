@@ -361,6 +361,23 @@ tvgSafe("verify-csv", () => {
     }
   }
 
+  function bindSearchInputs() {
+  const fields = [
+    queryEl,
+    document.getElementById("site-google"),
+    document.getElementById("site-seatgeek"),
+    document.getElementById("site-vivid"),
+    document.getElementById("site-stubhub"),
+    document.getElementById("site-ticketmaster"),
+    document.getElementById("site-tickpick")
+  ].filter(Boolean);
+
+  fields.forEach((field) => {
+    field.addEventListener("input", renderPreviewLinks);
+    field.addEventListener("change", renderPreviewLinks);
+  });
+}
+
   function updateCurrentContext() {
     if (!currentContextEl) return;
 
@@ -1023,7 +1040,7 @@ tvgSafe("search-workflow", () => {
       );
     }
   }
-  
+
   const copyLinksBtn = document.getElementById("tms-copy");
   const copyTemplateBtn = document.getElementById("tms-copy-template");
   const resetBtn = document.getElementById("tms-reset");
@@ -1225,23 +1242,34 @@ function highlightEditingRow() {
     return urls;
   }
 
-  function renderPreviewLinks() {
-    if (!linksWrap) return;
+ function renderPreviewLinks() {
+  if (!linksWrap) return;
 
-    const urls = getSelectedSearchUrls();
-    linksWrap.innerHTML = "";
+  const urls = getSelectedSearchUrls();
+  linksWrap.innerHTML = "";
 
-    if (!urls.length) return;
-
-    urls.forEach((item) => {
-      const link = document.createElement("a");
-      link.href = buildOutboundUrl(item.href, { source: item.source || "" });
-      link.target = "_blank";
-      link.rel = "noopener";
-      link.textContent = `${item.label}: ${item.href}`;
-      linksWrap.appendChild(link);
-    });
+  if (!urls.length) {
+    linksWrap.innerHTML = `<p class="muted">Start typing and select sites to generate links.</p>`;
+    return;
   }
+
+  const list = document.createElement("ul");
+
+  urls.forEach((item) => {
+    const li = document.createElement("li");
+
+    const link = document.createElement("a");
+    link.href = buildOutboundUrl(item.href, { source: item.source });
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = item.label;
+
+    li.appendChild(link);
+    list.appendChild(li);
+  });
+
+  linksWrap.appendChild(list);
+}
 
   function openAllResults(event) {
     event.preventDefault();
@@ -2004,6 +2032,7 @@ if (snapshotSortEl) {
 
           renderSnapshots();
           setSnapshotStatus("Removed snapshot.");
+          renderPreviewLinks();
         }
     });
   }
