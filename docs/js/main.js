@@ -395,6 +395,7 @@ tvgSafe("verify-csv", () => {
     }));
   }
 
+
   function renderSummary({ scannedCount, conflictGroupCount, riskyCount, source }) {
     if (!summaryStrip) return;
 
@@ -564,7 +565,7 @@ tvgSafe("verify-csv", () => {
 
     return { groups, lookup, riskyCount };
   }
-  
+
   function populateMarketplaceFilter() {
     if (!filterMarketplace) return;
 
@@ -823,7 +824,7 @@ tvgSafe("verify-csv", () => {
       lines.join("\n"),
       "text/csv;charset=utf-8;"
     );
-  }
+}
 
   function handleFeedback(isPositive) {
     if (!feedbackLabel) return;
@@ -848,16 +849,16 @@ tvgSafe("verify-csv", () => {
   if (downloadBtn) downloadBtn.addEventListener("click", downloadFilteredCsv);
   if (thumbUp) thumbUp.addEventListener("click", () => handleFeedback(true));
   if (thumbDown) thumbDown.addEventListener("click", () => handleFeedback(false));
-  if (runSnapshotsBtn) {
-    runSnapshotsBtn.addEventListener("click", runSavedSnapshotScan);
+  if (runSnapshotsBtn) { 
+      runSnapshotsBtn.addEventListener("click", runSavedSnapshotScan);
 
-    updateCurrentContext();
+      updateCurrentContext();
 
-    const autoRunMode = sessionStorage.getItem(DUPLICATE_AUTO_RUN_KEY);
-    if (autoRunMode === "snapshots") {
-      sessionStorage.removeItem(DUPLICATE_AUTO_RUN_KEY);
-      runSavedSnapshotScan();
-    }
+      const autoRunMode = sessionStorage.getItem(DUPLICATE_AUTO_RUN_KEY);
+      if (autoRunMode === "snapshots") {
+        sessionStorage.removeItem(DUPLICATE_AUTO_RUN_KEY);
+        runSavedSnapshotScan();
+      }
   }
 });
 
@@ -893,7 +894,6 @@ tvgSafe("search-workflow", () => {
 
   const googleCheckboxId = "site-google";
   const STORAGE_KEY = "tti_snapshots_v0";
-  const BACKEND_BASE = "http://127.0.0.1:5001";
 
   const snapshotForm = document.getElementById("tti-snapshot-form");
   const snapshotBody = document.getElementById("tti-snapshots-body");
@@ -917,21 +917,6 @@ tvgSafe("search-workflow", () => {
   const sectionEl = document.getElementById("tti-section");
   const rowEl = document.getElementById("tti-row");
   const seatEl = document.getElementById("tti-seat");
-  
-  const searchBtn = document.getElementById("tms-search");
-    if (searchBtn) {
-    searchBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      openSelectedLinks();
-    });
-  }
-
-  if (form) {
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      openSelectedLinks();
-    });
-  }
 
   const marketplaceLabels = {
     stubhub: "StubHub",
@@ -944,74 +929,40 @@ tvgSafe("search-workflow", () => {
   };
 
   const ctx = document.getElementById("tvg-current-context");
-  let editingId = null;
-
-  function buildOutboundUrl(rawUrl, meta = {}) {
-    if (!rawUrl) return "";
-
-    const params = new URLSearchParams({
-      url: rawUrl,
-      event: meta.event || "",
-      section: meta.section || "",
-      row: meta.row || "",
-      source: meta.source || "",
-    });
-
-    return `${BACKEND_BASE}/out?${params.toString()}`;
-  }
-
-  function normalizeQuery(raw) {
-    return String(raw || "").replace(/\s+/g, " ").trim();
-  }
-
-  function loadSnapshots() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function saveSnapshots(items) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }
-
-  function setSnapshotStatus(message) {
-    if (snapshotStatus) snapshotStatus.textContent = message || "";
-  }
 
   function updateContextFromSnapshots() {
-    const items = loadSnapshots();
+    const raw = localStorage.getItem("tti_snapshots_v0");
+    if (!raw) return;
+
+    const items = JSON.parse(raw);
     const latest = items[items.length - 1];
 
-    if (!ctx) return;
-
-    if (!latest) {
-      ctx.textContent = "";
-      return;
-    }
+    if (!latest) return;
 
     const parts = [
       latest.event_name,
       latest.event_location,
-      latest.event_dates,
+      latest.event_dates
     ].filter(Boolean);
 
-    ctx.textContent = parts.length
-      ? `Analyzing: ${parts.join(" · ")}`
-      : "Using saved snapshots";
+    if (ctx) {
+      ctx.textContent = parts.length
+        ? `Analyzing: ${parts.join(" · ")}`
+        : "Using saved snapshots";
+    }
   }
+
+  let editingId = null;
 
   function setEditingVisualState(isEditing) {
-    if (snapshotForm) {
-      snapshotForm.classList.toggle("is-editing", isEditing);
-    }
-
-    if (editBannerEl) {
-      editBannerEl.hidden = !isEditing;
-    }
+  if (snapshotForm) {
+    snapshotForm.classList.toggle("is-editing", isEditing);
   }
+
+  if (editBannerEl) {
+    editBannerEl.hidden = !isEditing;
+  }
+}
 
   function highlightEditingRow() {
     if (!snapshotBody) return;
@@ -1022,7 +973,30 @@ tvgSafe("search-workflow", () => {
     });
   }
 
-  function openDuplicateCheckFromSnapshots() {
+  function setEditingVisualState(isEditing) {
+  if (snapshotForm) {
+    snapshotForm.classList.toggle("is-editing", isEditing);
+  }
+
+  if (editBannerEl) {
+    editBannerEl.hidden = !isEditing;
+  }
+}
+
+function highlightEditingRow() {
+  if (!snapshotBody) return;
+
+  $all("tr", snapshotBody).forEach((row) => {
+    const rowId = row.getAttribute("data-snapshot-id");
+    row.classList.toggle("is-editing-row", Boolean(editingId && rowId === editingId));
+  });
+}
+
+  function normalizeQuery(raw) {
+    return String(raw || "").replace(/\s+/g, " ").trim();
+  }
+
+    function openDuplicateCheckFromSnapshots() {
     const items = loadSnapshots();
 
     if (!items.length) {
@@ -1035,6 +1009,29 @@ tvgSafe("search-workflow", () => {
     window.location.href = "duplicate-check.html";
   }
 
+  if (openDuplicateCheckBtn) {
+    openDuplicateCheckBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      openDuplicateCheckFromSnapshots();
+
+      function setEditingVisualState(isEditing) {
+  if (snapshotForm) {
+    snapshotForm.classList.toggle("is-editing", isEditing);
+  }
+}
+
+      function highlightEditingRow() {
+        if (!snapshotBody) return;
+
+        $all("tr", snapshotBody).forEach((row) => {
+          const rowEditId = row.getAttribute("data-snapshot-id");
+          row.classList.toggle("is-editing-row", Boolean(editingId && rowEditId === editingId));
+        });
+      }
+    });
+  }
+
+  
   function getSelectedSearchUrls() {
     const raw = normalizeQuery(queryEl?.value);
     if (!raw) return [];
@@ -1052,7 +1049,6 @@ tvgSafe("search-workflow", () => {
       urls.push({
         label: site.label,
         href: url.toString(),
-        source: site.label,
       });
 
       selectedDomains.push(`site:${site.domain}`);
@@ -1071,7 +1067,6 @@ tvgSafe("search-workflow", () => {
       urls.unshift({
         label: "Google (all selected)",
         href: url.toString(),
-        source: "Google",
       });
     }
 
@@ -1088,9 +1083,7 @@ tvgSafe("search-workflow", () => {
 
     urls.forEach((item) => {
       const link = document.createElement("a");
-      link.href = buildOutboundUrl(item.href, {
-        source: item.source || "",
-      });
+      link.href = item.href;
       link.target = "_blank";
       link.rel = "noopener";
       link.textContent = `${item.label}: ${item.href}`;
@@ -1098,23 +1091,22 @@ tvgSafe("search-workflow", () => {
     });
   }
 
-  function openSelectedLinks() {
+  function openAllResults(event) {
+    event.preventDefault();
+
+    if (!queryEl?.checkValidity()) {
+      queryEl?.reportValidity();
+      return;
+    }
+
     const urls = getSelectedSearchUrls();
     if (!urls.length) return;
 
-    const firstUrl = buildOutboundUrl(urls[0].href, {
-      source: urls[0].source || "",
-    });
-
-    const firstWindow = window.open(firstUrl, "_blank", "noopener");
+    const firstWindow = window.open(urls[0].href, "_blank", "noopener");
     let blocked = !firstWindow || firstWindow.closed;
 
     for (let i = 1; i < urls.length; i += 1) {
-      const wrappedUrl = buildOutboundUrl(urls[i].href, {
-        source: urls[i].source || "",
-      });
-
-      const popup = window.open(wrappedUrl, "_blank", "noopener");
+      const popup = window.open(urls[i].href, "_blank", "noopener");
       if (!popup || popup.closed) blocked = true;
     }
 
@@ -1204,6 +1196,23 @@ tvgSafe("search-workflow", () => {
     explainer.setAttribute("aria-hidden", String(isOpen));
   }
 
+  function loadSnapshots() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveSnapshots(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+
+  function setSnapshotStatus(message) {
+    if (snapshotStatus) snapshotStatus.textContent = message || "";
+  }
+
   function formatMoney(value) {
     if (value === null || value === undefined || value === "") return "";
     const number = Number(value);
@@ -1268,21 +1277,21 @@ tvgSafe("search-workflow", () => {
         behavior: "smooth",
         block: "start",
       });
-    }
   }
+}
 
   function cancelEdit() {
-    editingId = null;
+      editingId = null;
 
-    if (snapshotForm) snapshotForm.reset();
+      if (snapshotForm) snapshotForm.reset();
 
-    if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Save ticket";
-    if (cancelEditBtn) cancelEditBtn.hidden = true;
+      if (snapshotSaveBtn) snapshotSaveBtn.textContent = "Save ticket";
+      if (cancelEditBtn) cancelEditBtn.hidden = true;
 
-    setEditingVisualState(false);
-    highlightEditingRow();
-    setSnapshotStatus("");
-  }
+      setEditingVisualState(false);
+      highlightEditingRow();
+      setSnapshotStatus("");
+    }
 
   function seedEventContextFromLastSnapshot() {
     const items = loadSnapshots();
@@ -1302,159 +1311,158 @@ tvgSafe("search-workflow", () => {
     }
   }
 
+  
   function renderSnapshots() {
-    if (!snapshotBody) return;
+  if (!snapshotBody) return;
 
-    const items = loadSnapshots();
-    snapshotBody.innerHTML = "";
+  const items = loadSnapshots();
+  snapshotBody.innerHTML = "";
 
-    updateContextFromSnapshots();
-
-    if (eventSummaryEl) {
-      const latest = items[items.length - 1];
-      if (latest?.event_name) {
-        const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
-        eventSummaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
-      } else {
-        eventSummaryEl.textContent = "";
-      }
+  if (eventSummaryEl) {
+    const latest = items[items.length - 1];
+    if (latest?.event_name) {
+      const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
+      eventSummaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
+    } else {
+      eventSummaryEl.textContent = "";
     }
-
-    if (!items.length) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td colspan="10" class="muted">
-          No saved tickets yet. Save a few listings to compare prices, seats, and links in one place.
-        </td>
-      `;
-      snapshotBody.appendChild(tr);
-      return;
-    }
-
-    const sortEl = document.getElementById("tti-sort");
-    const sortValue = sortEl?.value || "price-asc";
-
-    const getNumeric = (value) => {
-      const num = Number(value);
-      return Number.isFinite(num) ? num : null;
-    };
-
-    const priceValues = items
-      .map((item) => getNumeric(item.price))
-      .filter((value) => value !== null);
-
-    const allInValues = items
-      .map((item) => getNumeric(item.fees))
-      .filter((value) => value !== null);
-
-    const lowestPrice = priceValues.length ? Math.min(...priceValues) : null;
-    const lowestAllIn = allInValues.length ? Math.min(...allInValues) : null;
-
-    const sorted = items.slice().sort((a, b) => {
-      const aPrice = getNumeric(a.price);
-      const bPrice = getNumeric(b.price);
-      const aAllIn = getNumeric(a.fees);
-      const bAllIn = getNumeric(b.fees);
-      const aTime = a.captured_at || "";
-      const bTime = b.captured_at || "";
-      const aMarketplace = (marketplaceLabels[a.marketplace] || a.marketplace || "").toLowerCase();
-      const bMarketplace = (marketplaceLabels[b.marketplace] || b.marketplace || "").toLowerCase();
-
-      switch (sortValue) {
-        case "price-desc":
-          return (bPrice ?? -Infinity) - (aPrice ?? -Infinity);
-
-        case "allin-asc":
-          if (aAllIn === null && bAllIn === null) return 0;
-          if (aAllIn === null) return 1;
-          if (bAllIn === null) return -1;
-          return aAllIn - bAllIn;
-
-        case "oldest":
-          return aTime < bTime ? -1 : aTime > bTime ? 1 : 0;
-
-        case "newest":
-          return aTime < bTime ? 1 : aTime > bTime ? -1 : 0;
-
-        case "marketplace":
-          return aMarketplace.localeCompare(bMarketplace);
-
-        case "price-asc":
-        default:
-          if (aPrice === null && bPrice === null) return 0;
-          if (aPrice === null) return 1;
-          if (bPrice === null) return -1;
-          return aPrice - bPrice;
-      }
-    });
-
-    sorted.forEach((snapshot) => {
-      const tr = document.createElement("tr");
-      tr.setAttribute("data-snapshot-id", snapshot.id);
-
-      if (editingId && snapshot.id === editingId) {
-        tr.classList.add("is-editing-row");
-      }
-
-      const priceNumber = getNumeric(snapshot.price);
-      const allInNumber = getNumeric(snapshot.fees);
-
-      const isLowestPrice = lowestPrice !== null && priceNumber === lowestPrice;
-      const isLowestAllIn = lowestAllIn !== null && allInNumber === lowestAllIn;
-
-      if (isLowestPrice) {
-        tr.classList.add("is-lowest-price-row");
-      }
-
-      if (isLowestAllIn) {
-        tr.classList.add("is-lowest-allin-row");
-      }
-
-      const eventText = [
-        snapshot.event_name,
-        snapshot.event_location,
-        snapshot.event_dates,
-      ]
-        .filter(Boolean)
-        .join(" · ");
-
-      const urlCell = snapshot.url
-        ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">view</a>`
-        : "";
-
-      const priceBadge = isLowestPrice
-        ? `<span class="tti-price-badge">Lowest price</span>`
-        : "";
-
-      const allInBadge = isLowestAllIn
-        ? `<span class="tti-price-badge tti-price-badge-allin">Lowest all-in</span>`
-        : "";
-
-      tr.innerHTML = `
-        <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
-        <td>${escapeHTML(eventText)}</td>
-        <td>${escapeHTML(snapshot.section || "")}</td>
-        <td>${escapeHTML(snapshot.row || "")}</td>
-        <td>${escapeHTML(snapshot.seat || "")}</td>
-        <td>${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace)}</td>
-        <td>
-          $${escapeHTML(formatMoney(snapshot.price))}
-          ${priceBadge}
-        </td>
-        <td>
-          ${snapshot.fees !== null && snapshot.fees !== "" ? `$${escapeHTML(formatMoney(snapshot.fees))}` : ""}
-          ${allInBadge}
-        </td>
-        <td>${urlCell}</td>
-        <td>
-          <button type="button" class="btn tti-mini" data-edit="${escapeHTML(snapshot.id)}">Edit</button>
-          <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
-        </td>
-      `;
-
-      snapshotBody.appendChild(tr);
-    });
   }
+
+  if (!items.length) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td colspan="10" class="muted">
+        No saved tickets yet. Save a few listings to compare prices, seats, and links in one place.
+      </td>
+    `;
+    snapshotBody.appendChild(tr);
+    return;
+  }
+
+  const sortEl = document.getElementById("tti-sort");
+  const sortValue = sortEl?.value || "price-asc";
+
+  const getNumeric = (value) => {
+    const num = Number(value);
+    return Number.isFinite(num) ? num : null;
+  };
+
+  const priceValues = items
+    .map((item) => getNumeric(item.price))
+    .filter((value) => value !== null);
+
+  const allInValues = items
+    .map((item) => getNumeric(item.fees))
+    .filter((value) => value !== null);
+
+  const lowestPrice = priceValues.length ? Math.min(...priceValues) : null;
+  const lowestAllIn = allInValues.length ? Math.min(...allInValues) : null;
+
+  const sorted = items.slice().sort((a, b) => {
+    const aPrice = getNumeric(a.price);
+    const bPrice = getNumeric(b.price);
+    const aAllIn = getNumeric(a.fees);
+    const bAllIn = getNumeric(b.fees);
+    const aTime = a.captured_at || "";
+    const bTime = b.captured_at || "";
+    const aMarketplace = (marketplaceLabels[a.marketplace] || a.marketplace || "").toLowerCase();
+    const bMarketplace = (marketplaceLabels[b.marketplace] || b.marketplace || "").toLowerCase();
+
+    switch (sortValue) {
+      case "price-desc":
+        return (bPrice ?? -Infinity) - (aPrice ?? -Infinity);
+
+      case "allin-asc":
+        if (aAllIn === null && bAllIn === null) return 0;
+        if (aAllIn === null) return 1;
+        if (bAllIn === null) return -1;
+        return aAllIn - bAllIn;
+
+      case "oldest":
+        return aTime < bTime ? -1 : aTime > bTime ? 1 : 0;
+
+      case "newest":
+        return aTime < bTime ? 1 : aTime > bTime ? -1 : 0;
+
+      case "marketplace":
+        return aMarketplace.localeCompare(bMarketplace);
+
+      case "price-asc":
+      default:
+        if (aPrice === null && bPrice === null) return 0;
+        if (aPrice === null) return 1;
+        if (bPrice === null) return -1;
+        return aPrice - bPrice;
+    }
+  });
+
+  sorted.forEach((snapshot) => {
+    const tr = document.createElement("tr");
+    tr.setAttribute("data-snapshot-id", snapshot.id);
+
+    if (editingId && snapshot.id === editingId) {
+      tr.classList.add("is-editing-row");
+    }
+
+    const priceNumber = getNumeric(snapshot.price);
+    const allInNumber = getNumeric(snapshot.fees);
+
+    const isLowestPrice = lowestPrice !== null && priceNumber === lowestPrice;
+    const isLowestAllIn = lowestAllIn !== null && allInNumber === lowestAllIn;
+
+    if (isLowestPrice) {
+      tr.classList.add("is-lowest-price-row");
+    }
+
+    if (isLowestAllIn) {
+      tr.classList.add("is-lowest-allin-row");
+    }
+
+    const eventText = [
+      snapshot.event_name,
+      snapshot.event_location,
+      snapshot.event_dates,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+
+    const urlCell = snapshot.url
+      ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">view</a>`
+      : "";
+
+    const priceBadge = isLowestPrice
+      ? `<span class="tti-price-badge">Lowest price</span>`
+      : "";
+
+    const allInBadge = isLowestAllIn
+      ? `<span class="tti-price-badge tti-price-badge-allin">Lowest all-in</span>`
+      : "";
+
+    tr.innerHTML = `
+      <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
+      <td>${escapeHTML(eventText)}</td>
+      <td>${escapeHTML(snapshot.section || "")}</td>
+      <td>${escapeHTML(snapshot.row || "")}</td>
+      <td>${escapeHTML(snapshot.seat || "")}</td>
+      <td>${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace)}</td>
+      <td>
+        $${escapeHTML(formatMoney(snapshot.price))}
+        ${priceBadge}
+      </td>
+      <td>
+        ${snapshot.fees !== null && snapshot.fees !== "" ? `$${escapeHTML(formatMoney(snapshot.fees))}` : ""}
+        ${allInBadge}
+      </td>
+      <td>${urlCell}</td>
+      <td>
+        <button type="button" class="btn tti-mini" data-edit="${escapeHTML(snapshot.id)}">Edit</button>
+        <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
+      </td>
+    `;
+
+    snapshotBody.appendChild(tr);
+  });
+}
 
   function saveSnapshot(event) {
     event.preventDefault();
@@ -1581,18 +1589,17 @@ tvgSafe("search-workflow", () => {
   }
 
   function clearSnapshots() {
-    localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(STORAGE_KEY);
 
-    cancelEdit();
-    renderSnapshots();
+  cancelEdit();
+  renderSnapshots();
 
-    if (eventSummaryEl) {
-      eventSummaryEl.textContent = "";
-    }
-
-    setSnapshotStatus("Cleared saved snapshots from this browser.");
+  if (eventSummaryEl) {
+    eventSummaryEl.textContent = "";
   }
 
+  setSnapshotStatus("Cleared saved snapshots from this browser.");
+}
   function loadPresets() {
     try {
       const raw = localStorage.getItem(PRESETS_KEY);
@@ -1672,6 +1679,10 @@ tvgSafe("search-workflow", () => {
       });
     });
   }
+  const snapshotSortEl = document.getElementById("tti-sort");
+if (snapshotSortEl) {
+  snapshotSortEl.addEventListener("change", renderSnapshots);
+}
 
   function saveCurrentPreset() {
     const query = normalizeQuery(queryEl?.value);
@@ -1708,7 +1719,7 @@ tvgSafe("search-workflow", () => {
 
     document.getElementById("step-3-title")?.scrollIntoView({
       behavior: "smooth",
-      block: "start",
+      block: "start"
     });
   }
 
@@ -1746,11 +1757,6 @@ tvgSafe("search-workflow", () => {
     showToast("Preset removed");
   }
 
-  const snapshotSortEl = document.getElementById("tti-sort");
-  if (snapshotSortEl) {
-    snapshotSortEl.addEventListener("change", renderSnapshots);
-  }
-
   searchSites.forEach((site) => {
     const checkbox = document.getElementById(site.id);
     if (checkbox) checkbox.addEventListener("change", renderPreviewLinks);
@@ -1759,26 +1765,10 @@ tvgSafe("search-workflow", () => {
   const googleCheckbox = document.getElementById(googleCheckboxId);
   if (googleCheckbox) googleCheckbox.addEventListener("change", renderPreviewLinks);
 
-  if (queryEl) {
-    queryEl.addEventListener("input", renderPreviewLinks);
-  }
+  form.addEventListener("submit", openAllResults);
 
-  if (form) {
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      openSelectedLinks();
-    });
-  }
-
+  if (form) form.addEventListener("submit", openAllResults);
   if (copyLinksBtn) copyLinksBtn.addEventListener("click", copyAllLinks);
-
-  if (openDuplicateCheckBtn) {
-    openDuplicateCheckBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      openDuplicateCheckFromSnapshots();
-    });
-  }
-
   if (copyTemplateBtn) copyTemplateBtn.addEventListener("click", copySnapshotTemplate);
   if (resetBtn) resetBtn.addEventListener("click", resetSearchForm);
   if (infoToggle) infoToggle.addEventListener("click", toggleExplainer);
@@ -1825,8 +1815,7 @@ tvgSafe("search-workflow", () => {
   renderSnapshots();
   renderPreviewLinks();
   renderPresets();
-
-  if (snapshotBody) {
+    if (snapshotBody) {
     snapshotBody.addEventListener("click", (event) => {
       const editBtn = event.target.closest("[data-edit]");
       if (editBtn) {
@@ -1843,18 +1832,18 @@ tvgSafe("search-workflow", () => {
       }
 
       const deleteBtn = event.target.closest("[data-del]");
-      if (deleteBtn) {
-        const id = deleteBtn.getAttribute("data-del");
-        const next = loadSnapshots().filter((item) => item.id !== id);
-        saveSnapshots(next);
+        if (deleteBtn) {
+          const id = deleteBtn.getAttribute("data-del");
+          const next = loadSnapshots().filter((item) => item.id !== id);
+          saveSnapshots(next);
 
-        if (editingId === id) {
-          cancelEdit();
+          if (editingId === id) {
+            cancelEdit();
+          }
+
+          renderSnapshots();
+          setSnapshotStatus("Removed snapshot.");
         }
-
-        renderSnapshots();
-        setSnapshotStatus("Removed snapshot.");
-      }
     });
   }
 });
