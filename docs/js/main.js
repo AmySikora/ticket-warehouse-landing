@@ -874,6 +874,99 @@ tvgSafe("search-workflow", () => {
   const PRESETS_KEY = "tvg_search_presets_v1";
   const queryEl = document.getElementById("tms-query");
   const linksWrap = document.getElementById("tms-links");
+
+  const BACKEND_BASE = "http://127.0.0.1:5001";
+
+function buildOutboundUrl(rawUrl, meta = {}) {
+  if (!rawUrl) return "";
+
+  const params = new URLSearchParams({
+    url: rawUrl,
+    source: meta.source || "",
+  });
+
+  return `${BACKEND_BASE}/out?${params.toString()}`;
+}
+
+function getSelectedSearchUrls() {
+  const raw = normalizeQuery(queryEl?.value);
+  if (!raw) return [];
+
+  const urls = [];
+  const selectedDomains = [];
+
+  searchSites.forEach((site) => {
+    const checkbox = document.getElementById(site.id);
+    if (!checkbox || !checkbox.checked) return;
+
+    const url = new URL("https://www.google.com/search");
+    url.searchParams.set("q", `${raw} site:${site.domain}`);
+
+    urls.push({
+      label: site.label,
+      href: url.toString(),
+      source: site.label,
+    });
+
+    selectedDomains.push(`site:${site.domain}`);
+  });
+
+  const googleCheckbox = document.getElementById(googleCheckboxId);
+  if (googleCheckbox && googleCheckbox.checked && selectedDomains.length) {
+    let combinedQuery = raw;
+    if (!/ticket/i.test(combinedQuery)) {
+      combinedQuery += " tickets";
+    }
+
+    const url = new URL("https://www.google.com/search");
+    url.searchParams.set("q", `${combinedQuery} ${selectedDomains.join(" OR ")}`);
+
+    urls.unshift({
+      label: "Google (all selected)",
+      href: url.toString(),
+      source: "Google",
+    });
+  }
+
+  return urls;
+}
+
+function openAllResults(event) {
+  event.preventDefault();
+
+  if (!queryEl?.checkValidity()) {
+    queryEl?.reportValidity();
+    return;
+  }
+
+  const urls = getSelectedSearchUrls();
+  if (!urls.length) return;
+
+  const firstUrl = buildOutboundUrl(urls[0].href, {
+    source: urls[0].source || "",
+  });
+
+  const firstWindow = window.open(firstUrl, "_blank", "noopener");
+  let blocked = !firstWindow || firstWindow.closed;
+
+  for (let i = 1; i < urls.length; i += 1) {
+    const wrappedUrl = buildOutboundUrl(urls[i].href, {
+      source: urls[i].source || "",
+    });
+
+    const popup = window.open(wrappedUrl, "_blank", "noopener");
+    if (!popup || popup.closed) blocked = true;
+  }
+
+  if (blocked && linksWrap) {
+    const note = document.createElement("div");
+    note.className = "muted";
+    note.style.marginTop = "8px";
+    note.textContent =
+      "If only one tab opened, allow pop-ups for this site so all selected markets can open.";
+    linksWrap.appendChild(note);
+  }
+}
   const copyLinksBtn = document.getElementById("tms-copy");
   const copyTemplateBtn = document.getElementById("tms-copy-template");
   const resetBtn = document.getElementById("tms-reset");
@@ -1049,6 +1142,7 @@ function highlightEditingRow() {
       urls.push({
         label: site.label,
         href: url.toString(),
+        source: site.label,
       });
 
       selectedDomains.push(`site:${site.domain}`);
@@ -1067,6 +1161,7 @@ function highlightEditingRow() {
       urls.unshift({
         label: "Google (all selected)",
         href: url.toString(),
+        source: "Google",
       });
     }
 
@@ -1083,7 +1178,7 @@ function highlightEditingRow() {
 
     urls.forEach((item) => {
       const link = document.createElement("a");
-      link.href = item.href;
+      link.href = buildOutboundUrl(item.href, { source: item.source || "" });
       link.target = "_blank";
       link.rel = "noopener";
       link.textContent = `${item.label}: ${item.href}`;
@@ -1102,11 +1197,20 @@ function highlightEditingRow() {
     const urls = getSelectedSearchUrls();
     if (!urls.length) return;
 
-    const firstWindow = window.open(urls[0].href, "_blank", "noopener");
+    const firstUrl = buildOutboundUrl(urls[0].href, {
+      source: urls[0].source || "",
+    });
+
+    const firstWindow = window.open(firstUrl, "_blank", "noopener");
     let blocked = !firstWindow || firstWindow.closed;
 
     for (let i = 1; i < urls.length; i += 1) {
-      const popup = window.open(urls[i].href, "_blank", "noopener");
+  
+    const wrappedUrl = buildOutboundUrl(urls[i].href, {
+      source: urls[i].source || "",
+    });
+
+    const popup = window.open(wrappedUrl, "_blank", "noopener");
       if (!popup || popup.closed) blocked = true;
     }
 

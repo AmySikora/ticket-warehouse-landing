@@ -1837,4 +1837,141 @@ footer {
   color: var(--muted);
 }
 
-.footer-b
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* =====================================================
+   15. UTILITIES
+   ===================================================== */
+.mb-10 { margin-bottom: 10px; }
+.mt-6 { margin-top: 6px; }
+.mt-8 { margin-top: 8px; }
+.flex { display: flex; }
+.between { justify-content: space-between; }
+.wrap { flex-wrap: wrap; }
+.w-100 { width: 100%; }
+.block { display: block; }
+
+/* =====================================================
+   16. RESPONSIVE
+   ===================================================== */
+@media (max-width: 900px) {
+  .page-index .hero {
+    padding: 56px 0 32px;
+  }
+
+  .page-index .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .page-index .cta,
+  .cta,
+  .cta-row,
+  .actions,
+  .tvb-cta,
+  .tvb-cta-row,
+  .tvg-pilot-actions,
+  .contact-cta .actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-index .cta .btn,
+  .cta .btn,
+  .cta-row .btn,
+  .actions .btn,
+  .tvb-cta .btn,
+  .tvb-cta-row .btn,
+  .contact-cta .actions .btn {
+    width: auto;
+    min-width: 56%;
+  }
+
+  .tti-grid,
+  .tvb-grid-2,
+  .tvb-row {
+    grid-template-columns: 1fr;
+  }
+
+  .tti-row,
+  .ms-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ms-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .verify-page .tvb-card {
+    padding: 18px;
+  }
+
+  .verify-page .tvg-upload-row,
+  .verify-page .tvg-filter-row,
+  .verify-page .tvg-feedback-row {
+    align-items: stretch;
+  }
+
+  .verify-page .tvg-filter-select,
+  .verify-page .tvg-upload-row .btn,
+  .verify-page .tvg-file-label,
+  .verify-page .tvg-file-name {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .verify-page .tvg-filter-spacer {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .tms-header-row {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .tms-info-pill {
+    padding-inline: 8px;
+    font-size: 12px;
+  }
+
+  .page-search .section {
+    padding: 18px 0;
+  }
+
+  #tms-preview {
+    padding: 12px;
+  }
+}
+
+/* =====================================================
+   17. REDUCED MOTION
+   ===================================================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+
+  .btn,
+  .btn:hover,
+  .btn:active,
+  .topnav a,
+  .nav-link,
+  .tvb-benefits li,
+  .tms-info-pill,
+  .pill-check,
+  .verify-page #tvg-results-table tbody tr {
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}

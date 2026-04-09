@@ -1,9 +1,9 @@
+from typing import Tuple
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 from flask import Flask, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
-
 app = Flask(__name__, instance_relative_config=True)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ticketveriguard.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -42,7 +42,7 @@ def normalize_url(url: str) -> str:
     return url.strip()
 
 
-def maybe_apply_affiliate_link(url: str) -> tuple[str, bool]:
+def maybe_apply_affiliate_link(url: str) -> Tuple[str, bool]:
     """
     Placeholder for future affiliate logic.
     For now, return the original URL unchanged.
