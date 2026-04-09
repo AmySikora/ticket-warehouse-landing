@@ -875,98 +875,155 @@ tvgSafe("search-workflow", () => {
   const queryEl = document.getElementById("tms-query");
   const linksWrap = document.getElementById("tms-links");
 
-  const BACKEND_BASE = "http://127.0.0.1:5001";
+  const BACKEND_BASE =
+    window.APP_CONFIG?.backendBase ||
+    window.location.origin;
 
-function buildOutboundUrl(rawUrl, meta = {}) {
-  if (!rawUrl) return "";
+  const ENABLE_OUTBOUND_LOGGING =
+    window.APP_CONFIG?.enableOutboundLogging ?? false;
 
-  const params = new URLSearchParams({
-    url: rawUrl,
-    source: meta.source || "",
-  });
+  function canUseBackendLogging() {
+    if (!ENABLE_OUTBOUND_LOGGING) return false;
+    if (!BACKEND_BASE) return false;
 
-  return `${BACKEND_BASE}/out?${params.toString()}`;
-}
+    try {
+      const backendUrl = new URL(BACKEND_BASE, window.location.href);
 
-function getSelectedSearchUrls() {
-  const raw = normalizeQuery(queryEl?.value);
-  if (!raw) return [];
+      // Allow local backend during development
+      if (
+        backendUrl.hostname === "127.0.0.1" ||
+        backendUrl.hostname === "localhost"
+      ) {
+        return true;
+      }
 
-  const urls = [];
-  const selectedDomains = [];
+      // Allow same-origin backend in production
+      return backendUrl.origin === window.location.origin;
+    } catch (error) {
+      console.error("Invalid backend base URL:", error);
+      return false;
+    }
+  }
 
-  searchSites.forEach((site) => {
-    const checkbox = document.getElementById(site.id);
-    if (!checkbox || !checkbox.checked) return;
+  function buildOutboundUrl(rawUrl, meta = {}) {
+    if (!rawUrl) return "";
 
-    const url = new URL("https://www.google.com/search");
-    url.searchParams.set("q", `${raw} site:${site.domain}`);
-
-    urls.push({
-      label: site.label,
-      href: url.toString(),
-      source: site.label,
-    });
-
-    selectedDomains.push(`site:${site.domain}`);
-  });
-
-  const googleCheckbox = document.getElementById(googleCheckboxId);
-  if (googleCheckbox && googleCheckbox.checked && selectedDomains.length) {
-    let combinedQuery = raw;
-    if (!/ticket/i.test(combinedQuery)) {
-      combinedQuery += " tickets";
+    if (!canUseBackendLogging()) {
+      return rawUrl;
     }
 
-    const url = new URL("https://www.google.com/search");
-    url.searchParams.set("q", `${combinedQuery} ${selectedDomains.join(" OR ")}`);
-
-    urls.unshift({
-      label: "Google (all selected)",
-      href: url.toString(),
-      source: "Google",
-    });
-  }
-
-  return urls;
-}
-
-function openAllResults(event) {
-  event.preventDefault();
-
-  if (!queryEl?.checkValidity()) {
-    queryEl?.reportValidity();
-    return;
-  }
-
-  const urls = getSelectedSearchUrls();
-  if (!urls.length) return;
-
-  const firstUrl = buildOutboundUrl(urls[0].href, {
-    source: urls[0].source || "",
-  });
-
-  const firstWindow = window.open(firstUrl, "_blank", "noopener");
-  let blocked = !firstWindow || firstWindow.closed;
-
-  for (let i = 1; i < urls.length; i += 1) {
-    const wrappedUrl = buildOutboundUrl(urls[i].href, {
-      source: urls[i].source || "",
+    const params = new URLSearchParams({
+      url: rawUrl,
     });
 
-    const popup = window.open(wrappedUrl, "_blank", "noopener");
-    if (!popup || popup.closed) blocked = true;
+    if (meta.source) {
+      params.set("source", meta.source);
+    }
+
+    return `${BACKEND_BASE.replace(/\/$/, "")}/out?${params.toString()}`;
   }
 
-  if (blocked && linksWrap) {
+  function getSelectedSearchUrls() {
+    const raw = normalizeQuery(queryEl?.value);
+    if (!raw) return [];
+
+    const urls = [];
+    const selectedDomains = [];
+
+    searchSites.forEach((site) => {
+      const checkbox = document.getElementById(site.id);
+      if (!checkbox || !checkbox.checked) return;
+
+      const url = new URL("https://www.google.com/search");
+      url.searchParams.set("q", `${raw} site:${site.domain}`);
+
+      urls.push({
+        label: site.label,
+        href: url.toString(),
+        source: site.label,
+      });
+
+      selectedDomains.push(`site:${site.domain}`);
+    });
+
+    const googleCheckbox = document.getElementById(googleCheckboxId);
+    if (googleCheckbox && googleCheckbox.checked && selectedDomains.length) {
+      let combinedQuery = raw;
+
+      if (!/ticket/i.test(combinedQuery)) {
+        combinedQuery += " tickets";
+      }
+
+      const url = new URL("https://www.google.com/search");
+      url.searchParams.set("q", `${combinedQuery} ${selectedDomains.join(" OR ")}`);
+
+      urls.unshift({
+        label: "Google (all selected)",
+        href: url.toString(),
+        source: "Google",
+      });
+    }
+
+    return urls;
+  }
+
+  function clearOpenAllNote() {
+    if (!linksWrap) return;
+    const oldNote = linksWrap.querySelector(".tvg-open-note");
+    if (oldNote) oldNote.remove();
+  }
+
+  function showOpenAllNote(message) {
+    if (!linksWrap) return;
+
+    clearOpenAllNote();
+
     const note = document.createElement("div");
-    note.className = "muted";
+    note.className = "muted tvg-open-note";
     note.style.marginTop = "8px";
-    note.textContent =
-      "If only one tab opened, allow pop-ups for this site so all selected markets can open.";
+    note.textContent = message;
+
     linksWrap.appendChild(note);
   }
-}
+
+  function openAllResults(event) {
+    event.preventDefault();
+
+    clearOpenAllNote();
+
+    if (!queryEl?.checkValidity()) {
+      queryEl?.reportValidity();
+      return;
+    }
+
+    const urls = getSelectedSearchUrls();
+
+    if (!urls.length) {
+      showToast("Select at least one marketplace.", "error");
+      return;
+    }
+
+    let blocked = false;
+
+    urls.forEach((item, index) => {
+      const finalUrl = buildOutboundUrl(item.href, {
+        source: item.source || "",
+      });
+
+      const popup = window.open(finalUrl, "_blank", "noopener");
+
+      if (!popup || popup.closed) {
+        blocked = true;
+      }
+    });
+
+    if (blocked) {
+      showOpenAllNote(
+        "If only one tab opened, allow pop-ups for this site so all selected markets can open."
+      );
+    }
+  }
+  
   const copyLinksBtn = document.getElementById("tms-copy");
   const copyTemplateBtn = document.getElementById("tms-copy-template");
   const resetBtn = document.getElementById("tms-reset");
