@@ -564,7 +564,7 @@ tvgSafe("verify-csv", () => {
 
     return { groups, lookup, riskyCount };
   }
-
+  
   function populateMarketplaceFilter() {
     if (!filterMarketplace) return;
 
@@ -917,6 +917,21 @@ tvgSafe("search-workflow", () => {
   const sectionEl = document.getElementById("tti-section");
   const rowEl = document.getElementById("tti-row");
   const seatEl = document.getElementById("tti-seat");
+  
+  const searchBtn = document.getElementById("tms-search");
+    if (searchBtn) {
+    searchBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      openSelectedLinks();
+    });
+  }
+
+  if (form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      openSelectedLinks();
+    });
+  }
 
   const marketplaceLabels = {
     stubhub: "StubHub",
