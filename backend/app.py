@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 
 from flask import Flask, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__, instance_relative_config=True)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ticketveriguard.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -20,14 +21,21 @@ class ClickLog(db.Model):
     )
     destination_url = db.Column(db.Text, nullable=False)
     normalized_url = db.Column(db.Text, nullable=True)
+    final_url = db.Column(db.Text, nullable=True)
     event_name = db.Column(db.String(255), nullable=True)
     section = db.Column(db.String(100), nullable=True)
     row = db.Column(db.String(100), nullable=True)
     source = db.Column(db.String(100), nullable=True)
+    referrer = db.Column(db.Text, nullable=True)
+    user_agent = db.Column(db.Text, nullable=True)
     affiliate_applied = db.Column(db.Boolean, nullable=False, default=False)
 
     def __repr__(self):
         return f"<ClickLog {self.id} {self.destination_url}>"
+
+
+def normalize_url(url: str) -> str:
+    return str(url or "").strip()
 
 
 def is_valid_http_url(url: str) -> bool:
@@ -36,10 +44,6 @@ def is_valid_http_url(url: str) -> bool:
         return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
     except Exception:
         return False
-
-
-def normalize_url(url: str) -> str:
-    return url.strip()
 
 
 def maybe_apply_affiliate_link(url: str) -> Tuple[str, bool]:
@@ -62,7 +66,7 @@ def health():
 
 @app.route("/out", methods=["GET"])
 def outbound_redirect():
-    destination_url = request.args.get("url", "").strip()
+    destination_url = normalize_url(request.args.get("url", ""))
     event_name = request.args.get("event")
     section = request.args.get("section")
     row = request.args.get("row")
@@ -77,17 +81,21 @@ def outbound_redirect():
     normalized = normalize_url(destination_url)
     final_url, affiliate_applied = maybe_apply_affiliate_link(normalized)
 
-    click = ClickLog(
-        destination_url=destination_url,
-        normalized_url=normalized,
-        event_name=event_name,
-        section=section,
-        row=row,
-        source=source,
-        affiliate_applied=affiliate_applied,
-    )
-    db.session.add(click)
-    db.session.commit()
+    try:
+        click = ClickLog(
+            destination_url=destination_url,
+            normalized_url=normalized,
+            event_name=event_name,
+            section=section,
+            row=row,
+            source=source,
+            affiliate_applied=affiliate_applied,
+        )
+        db.session.add(click)
+        db.session.commit()
+    except Exception as error:
+        db.session.rollback()
+        app.logger.error("Failed to log outbound click: %s", error)
 
     return redirect(final_url, code=302)
 
