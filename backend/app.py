@@ -67,10 +67,10 @@ def health():
 @app.route("/out", methods=["GET"])
 def outbound_redirect():
     destination_url = normalize_url(request.args.get("url", ""))
-    event_name = request.args.get("event")
-    section = request.args.get("section")
-    row = request.args.get("row")
-    source = request.args.get("source")
+    event_name = normalize_url(request.args.get("event", ""))
+    section = normalize_url(request.args.get("section", ""))
+    row = normalize_url(request.args.get("row", ""))
+    source = normalize_url(request.args.get("source", ""))
 
     if not destination_url:
         return jsonify({"error": "Missing required query parameter: url"}), 400
@@ -81,14 +81,20 @@ def outbound_redirect():
     normalized = normalize_url(destination_url)
     final_url, affiliate_applied = maybe_apply_affiliate_link(normalized)
 
+    referrer = request.referrer
+    user_agent = request.headers.get("User-Agent")
+
     try:
         click = ClickLog(
             destination_url=destination_url,
             normalized_url=normalized,
-            event_name=event_name,
-            section=section,
-            row=row,
-            source=source,
+            final_url=final_url,
+            event_name=event_name or None,
+            section=section or None,
+            row=row or None,
+            source=source or None,
+            referrer=referrer,
+            user_agent=user_agent,
             affiliate_applied=affiliate_applied,
         )
         db.session.add(click)
