@@ -1500,54 +1500,21 @@ function highlightEditingRow() {
     }
   }
 
-  
-  function renderSnapshots() {
-  if (!snapshotBody) return;
+  function getEventGroupKey(snapshot) {
+  return [
+    safeText(snapshot.event_name, "Unknown event"),
+    safeText(snapshot.event_location),
+    safeText(snapshot.event_dates),
+  ].join("||");
+}
 
-  const items = loadSnapshots();
-  snapshotBody.innerHTML = "";
+function getNumeric(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : null;
+}
 
-  if (eventSummaryEl) {
-    const latest = items[items.length - 1];
-    if (latest?.event_name) {
-      const parts = [latest.event_name, latest.event_location, latest.event_dates].filter(Boolean);
-      eventSummaryEl.textContent = parts.length ? `Tracking: ${parts.join(" · ")}` : "";
-    } else {
-      eventSummaryEl.textContent = "";
-    }
-  }
-
-  if (!items.length) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td colspan="10" class="muted">
-        No saved tickets yet. Save a few listings to compare prices, seats, and links in one place.
-      </td>
-    `;
-    snapshotBody.appendChild(tr);
-    return;
-  }
-
-  const sortEl = document.getElementById("tti-sort");
-  const sortValue = sortEl?.value || "price-asc";
-
-  const getNumeric = (value) => {
-    const num = Number(value);
-    return Number.isFinite(num) ? num : null;
-  };
-
-  const priceValues = items
-    .map((item) => getNumeric(item.price))
-    .filter((value) => value !== null);
-
-  const allInValues = items
-    .map((item) => getNumeric(item.fees))
-    .filter((value) => value !== null);
-
-  const lowestPrice = priceValues.length ? Math.min(...priceValues) : null;
-  const lowestAllIn = allInValues.length ? Math.min(...allInValues) : null;
-
-  const sorted = items.slice().sort((a, b) => {
+function sortSnapshotsForView(items, sortValue) {
+  return items.slice().sort((a, b) => {
     const aPrice = getNumeric(a.price);
     const bPrice = getNumeric(b.price);
     const aAllIn = getNumeric(a.fees);
@@ -1559,7 +1526,10 @@ function highlightEditingRow() {
 
     switch (sortValue) {
       case "price-desc":
-        return (bPrice ?? -Infinity) - (aPrice ?? -Infinity);
+        if (aPrice === null && bPrice === null) return 0;
+        if (aPrice === null) return 1;
+        if (bPrice === null) return -1;
+        return bPrice - aPrice;
 
       case "allin-asc":
         if (aAllIn === null && bAllIn === null) return 0;
@@ -1584,72 +1554,180 @@ function highlightEditingRow() {
         return aPrice - bPrice;
     }
   });
+}
 
-  sorted.forEach((snapshot) => {
+function groupSnapshotsByEvent(items) {
+  const groups = new Map();
+
+  items.forEach((snapshot) => {
+    const key = getEventGroupKey(snapshot);
+
+    if (!groups.has(key)) {
+      groups.set(key, {
+        key,
+        event_name: safeText(snapshot.event_name, "Unknown event"),
+        event_location: safeText(snapshot.event_location),
+        event_dates: safeText(snapshot.event_dates),
+        items: [],
+      });
+    }
+
+    groups.get(key).items.push(snapshot);
+  });
+
+  return Array.from(groups.values());
+}
+  
+  function renderSnapshots() {
+  if (!snapshotBody) return;
+
+  const items = loadSnapshots();
+  snapshotBody.innerHTML = "";
+
+  if (eventSummaryEl) {
+    eventSummaryEl.textContent = items.length
+      ? `${items.length} saved ticket${items.length === 1 ? "" : "s"} across ${groupSnapshotsByEvent(items).length} event${groupSnapshotsByEvent(items).length === 1 ? "" : "s"}`
+      : "";
+  }
+
+  if (!items.length) {
     const tr = document.createElement("tr");
-    tr.setAttribute("data-snapshot-id", snapshot.id);
-
-    if (editingId && snapshot.id === editingId) {
-      tr.classList.add("is-editing-row");
-    }
-
-    const priceNumber = getNumeric(snapshot.price);
-    const allInNumber = getNumeric(snapshot.fees);
-
-    const isLowestPrice = lowestPrice !== null && priceNumber === lowestPrice;
-    const isLowestAllIn = lowestAllIn !== null && allInNumber === lowestAllIn;
-
-    if (isLowestPrice) {
-      tr.classList.add("is-lowest-price-row");
-    }
-
-    if (isLowestAllIn) {
-      tr.classList.add("is-lowest-allin-row");
-    }
-
-    const eventText = [
-      snapshot.event_name,
-      snapshot.event_location,
-      snapshot.event_dates,
-    ]
-      .filter(Boolean)
-      .join(" · ");
-
-    const urlCell = snapshot.url
-      ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">view</a>`
-      : "";
-
-    const priceBadge = isLowestPrice
-      ? `<span class="tti-price-badge">Lowest price</span>`
-      : "";
-
-    const allInBadge = isLowestAllIn
-      ? `<span class="tti-price-badge tti-price-badge-allin">Lowest all-in</span>`
-      : "";
-
     tr.innerHTML = `
-      <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
-      <td>${escapeHTML(eventText)}</td>
-      <td>${escapeHTML(snapshot.section || "")}</td>
-      <td>${escapeHTML(snapshot.row || "")}</td>
-      <td>${escapeHTML(snapshot.seat || "")}</td>
-      <td>${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace)}</td>
-      <td>
-        $${escapeHTML(formatMoney(snapshot.price))}
-        ${priceBadge}
+      <td colspan="10" class="muted">
+        No saved tickets yet. Save a few listings to compare prices, seats, and links in one place.
       </td>
-      <td>
-        ${snapshot.fees !== null && snapshot.fees !== "" ? `$${escapeHTML(formatMoney(snapshot.fees))}` : ""}
-        ${allInBadge}
-      </td>
-      <td>${urlCell}</td>
-      <td>
-        <button type="button" class="btn tti-mini" data-edit="${escapeHTML(snapshot.id)}">Edit</button>
-        <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
+    `;
+    snapshotBody.appendChild(tr);
+    return;
+  }
+
+  const sortEl = document.getElementById("tti-sort");
+  const sortValue = sortEl?.value || "price-asc";
+
+  const grouped = groupSnapshotsByEvent(items);
+
+  grouped.forEach((group) => {
+    const sortedItems = sortSnapshotsForView(group.items, sortValue);
+
+    const priceValues = sortedItems
+      .map((item) => getNumeric(item.price))
+      .filter((value) => value !== null);
+
+    const allInValues = sortedItems
+      .map((item) => getNumeric(item.fees))
+      .filter((value) => value !== null);
+
+    const lowestPrice = priceValues.length ? Math.min(...priceValues) : null;
+    const lowestAllIn = allInValues.length ? Math.min(...allInValues) : null;
+
+    const cardRow = document.createElement("tr");
+    cardRow.className = "tti-event-card-row";
+
+    const listingCount = sortedItems.length;
+    const eventMeta = [group.event_location, group.event_dates].filter(Boolean).join(" • ");
+
+    cardRow.innerHTML = `
+      <td colspan="10">
+        <section class="tti-event-card">
+          <div class="tti-event-card__header">
+            <div class="tti-event-card__title-wrap">
+              <h3 class="tti-event-card__title">${escapeHTML(group.event_name)}</h3>
+              <p class="tti-event-card__meta">${escapeHTML(eventMeta)}</p>
+            </div>
+            <div class="tti-event-card__badges">
+              ${
+                lowestPrice !== null
+                  ? `<span class="tti-price-badge">Lowest price: $${escapeHTML(formatMoney(lowestPrice))}</span>`
+                  : ""
+              }
+              ${
+                lowestAllIn !== null
+                  ? `<span class="tti-price-badge tti-price-badge-allin">Lowest all-in: $${escapeHTML(formatMoney(lowestAllIn))}</span>`
+                  : ""
+              }
+              <span class="tti-price-badge">${listingCount} listing${listingCount === 1 ? "" : "s"}</span>
+            </div>
+          </div>
+
+          <div class="tti-event-card__table-wrap">
+            <table class="tti-event-table">
+              <thead>
+                <tr>
+                  <th>Saved</th>
+                  <th>Section</th>
+                  <th>Row</th>
+                  <th>Seat</th>
+                  <th>Site</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                  <th>Link</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${sortedItems
+                  .map((snapshot) => {
+                    const priceNumber = getNumeric(snapshot.price);
+                    const allInNumber = getNumeric(snapshot.fees);
+
+                    const isLowestPrice =
+                      lowestPrice !== null && priceNumber === lowestPrice;
+
+                    const isLowestAllIn =
+                      lowestAllIn !== null && allInNumber === lowestAllIn;
+
+                    const urlCell = snapshot.url
+                      ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">view</a>`
+                      : "";
+
+                    const priceBadge = isLowestPrice
+                      ? `<span class="tti-price-badge">Lowest price</span>`
+                      : "";
+
+                    const allInBadge = isLowestAllIn
+                      ? `<span class="tti-price-badge tti-price-badge-allin">Lowest all-in</span>`
+                      : "";
+
+                    return `
+                      <tr data-snapshot-id="${escapeHTML(snapshot.id)}" class="${
+                        editingId && snapshot.id === editingId ? "is-editing-row" : ""
+                      } ${isLowestPrice ? "is-lowest-price-row" : ""} ${
+                        isLowestAllIn ? "is-lowest-allin-row" : ""
+                      }">
+                        <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
+                        <td>${escapeHTML(snapshot.section || "")}</td>
+                        <td>${escapeHTML(snapshot.row || "")}</td>
+                        <td>${escapeHTML(snapshot.seat || "")}</td>
+                        <td>${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace || "")}</td>
+                        <td>
+                          $${escapeHTML(formatMoney(snapshot.price))}
+                          ${priceBadge}
+                        </td>
+                        <td>
+                          ${
+                            snapshot.fees !== null && snapshot.fees !== ""
+                              ? `$${escapeHTML(formatMoney(snapshot.fees))}`
+                              : ""
+                          }
+                          ${allInBadge}
+                        </td>
+                        <td>${urlCell}</td>
+                        <td>
+                          <button type="button" class="btn tti-mini" data-edit="${escapeHTML(snapshot.id)}">Edit</button>
+                          <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
+                        </td>
+                      </tr>
+                    `;
+                  })
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </td>
     `;
 
-    snapshotBody.appendChild(tr);
+    snapshotBody.appendChild(cardRow);
   });
 }
 
