@@ -1,3 +1,4 @@
+import os
 from typing import Tuple
 from datetime import datetime, timezone
 from urllib.parse import urlparse
@@ -6,7 +7,12 @@ from flask import Flask, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, instance_relative_config=True)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ticketveriguard.db"
+
+default_db_path = os.path.join(os.path.dirname(__file__), "ticketveriguard.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    "DATABASE_URL",
+    f"sqlite:///{default_db_path}"
+)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -105,6 +111,7 @@ def outbound_redirect():
 
     return redirect(final_url, code=302)
 
+
 @app.route("/logs", methods=["GET"])
 def logs():
     rows = ClickLog.query.order_by(ClickLog.timestamp.desc()).limit(25).all()
@@ -122,7 +129,13 @@ def logs():
         for row in rows
     ]), 200
 
-if __name__ == "__main__":
+
+def init_db() -> None:
     with app.app_context():
         db.create_all()
-    app.run(debug=True, port=5001)
+
+
+if __name__ == "__main__":
+    init_db()
+    port = int(os.environ.get("PORT", 5001))
+    app.run(host="0.0.0.0", port=port, debug=False)
