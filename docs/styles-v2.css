@@ -1124,6 +1124,17 @@ button.btn,
   text-transform: uppercase;
 }
 
+.tti-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tti-table th,
+.tti-table td {
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  vertical-align: top;
+}
+
 .tti-mini {
   padding: 8px 10px;
   border-radius: 10px;
