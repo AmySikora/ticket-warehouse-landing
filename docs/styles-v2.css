@@ -1188,6 +1188,10 @@ button.btn,
   border-collapse: collapse;
 }
 
+#tti-event-summary {
+  display: none !important;
+}
+
 .tms-preset-list {
   display: grid;
   gap: 12px;

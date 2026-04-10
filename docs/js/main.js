@@ -399,6 +399,25 @@ tvgSafe("verify-csv", () => {
       : "Using saved snapshots from this browser.";
   }
 
+  function normalizeGroupValue(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function normalizeDateValue(value) {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+
+  const parsed = new Date(raw);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toISOString().slice(0, 10);
+  }
+
+  return raw.toLowerCase().replace(/\s+/g, " ");
+}
+
   function mapSnapshotsToRows(items) {
     return items.map((item, index) => ({
       id: item.id || String(index + 1),
@@ -1500,12 +1519,35 @@ function highlightEditingRow() {
     }
   }
 
-  function getEventGroupKey(snapshot) {
-  return [
-    safeText(snapshot.event_name, "Unknown event"),
-    safeText(snapshot.event_location),
-    safeText(snapshot.event_dates),
-  ].join("||");
+  function normalizeGroupValue(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function normalizeDateValue(value) {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+
+  const parsed = new Date(raw);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toISOString().slice(0, 10);
+  }
+
+  return raw.toLowerCase().replace(/\s+/g, " ");
+}
+
+function getEventGroupKey(snapshot) {
+  const eventName = normalizeGroupValue(snapshot.event_name);
+  const eventDate = normalizeDateValue(snapshot.event_dates);
+
+  // fallback: if no usable date, group only by name
+  if (!eventDate) {
+    return eventName;
+  }
+
+  return `${eventName}||${eventDate}`;
 }
 
 function getNumeric(value) {
@@ -1570,9 +1612,23 @@ function groupSnapshotsByEvent(items) {
         event_dates: safeText(snapshot.event_dates),
         items: [],
       });
+      console.log(
+        snapshot.event_name,
+        snapshot.event_dates,
+        getEventGroupKey(snapshot)
+      );
     }
 
-    groups.get(key).items.push(snapshot);
+    const group = groups.get(key);
+    group.items.push(snapshot);
+
+    if (!group.event_location && snapshot.event_location) {
+      group.event_location = safeText(snapshot.event_location);
+    }
+
+    if (!group.event_dates && snapshot.event_dates) {
+      group.event_dates = safeText(snapshot.event_dates);
+    }
   });
 
   return Array.from(groups.values());
