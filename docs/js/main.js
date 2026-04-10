@@ -1584,12 +1584,6 @@ function groupSnapshotsByEvent(items) {
   const items = loadSnapshots();
   snapshotBody.innerHTML = "";
 
-  if (eventSummaryEl) {
-    eventSummaryEl.textContent = items.length
-      ? `${items.length} saved ticket${items.length === 1 ? "" : "s"} across ${groupSnapshotsByEvent(items).length} event${groupSnapshotsByEvent(items).length === 1 ? "" : "s"}`
-      : "";
-  }
-
   if (!items.length) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -1862,8 +1856,8 @@ function groupSnapshotsByEvent(items) {
   renderSnapshots();
 
   if (eventSummaryEl) {
-    eventSummaryEl.textContent = "";
-  }
+  eventSummaryEl.textContent = `${grouped.length} event${grouped.length === 1 ? "" : "s"}`;
+}
 
   setSnapshotStatus("Cleared saved snapshots from this browser.");
 }
@@ -2082,6 +2076,10 @@ if (snapshotSortEl) {
   renderSnapshots();
   renderPreviewLinks();
   renderPresets();
+   
+  if (eventSummaryEl) {
+  eventSummaryEl.remove();
+}
     if (snapshotBody) {
     snapshotBody.addEventListener("click", (event) => {
       const editBtn = event.target.closest("[data-edit]");
