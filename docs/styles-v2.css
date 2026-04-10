@@ -1141,6 +1141,53 @@ button.btn,
   font-size: .88rem;
 }
 
+.tti-event-card-row > td {
+  padding: 0.75rem 0;
+  border: 0;
+}
+
+.tti-event-card {
+  border: 1px solid rgba(64, 194, 255, 0.45);
+  border-radius: 18px;
+  padding: 1rem;
+  background: rgba(7, 18, 45, 0.92);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.tti-event-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.tti-event-card__title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.tti-event-card__meta {
+  margin: 0.35rem 0 0;
+  opacity: 0.9;
+}
+
+.tti-event-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.tti-event-card__table-wrap {
+  overflow-x: auto;
+}
+
+.tti-event-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
 .tms-preset-list {
   display: grid;
   gap: 12px;
