@@ -1539,15 +1539,7 @@ function normalizeDateValue(value) {
 }
 
 function getEventGroupKey(snapshot) {
-  const eventName = normalizeGroupValue(snapshot.event_name);
-  const eventDate = normalizeDateValue(snapshot.event_dates);
-
-  // fallback: if no usable date, group only by name
-  if (!eventDate) {
-    return eventName;
-  }
-
-  return `${eventName}||${eventDate}`;
+  return normalizeGroupValue(snapshot.event_name);
 }
 
 function getNumeric(value) {
