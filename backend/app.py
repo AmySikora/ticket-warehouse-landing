@@ -9,10 +9,12 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__, instance_relative_config=True)
 
 default_db_path = os.path.join(os.path.dirname(__file__), "ticketveriguard.db")
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-    "DATABASE_URL",
-    f"sqlite:///{default_db_path}"
-)
+database_url = os.environ.get("DATABASE_URL", f"sqlite:///{default_db_path}")
+
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -135,7 +137,9 @@ def init_db() -> None:
         db.create_all()
 
 
+init_db()
+
+
 if __name__ == "__main__":
-    init_db()
     port = int(os.environ.get("PORT", 5001))
     app.run(host="0.0.0.0", port=port, debug=False)
