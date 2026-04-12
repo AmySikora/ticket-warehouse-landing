@@ -960,22 +960,14 @@ tvgSafe("verify-csv", () => {
     viagogo: "Viagogo",
   };
 
-  const BACKEND_BASE =
-    window.APP_CONFIG?.backendBase || window.location.origin;
+  const BACKEND_BASE = "https://ticketveriguard-production.up.railway.app";
 
   const ENABLE_OUTBOUND_LOGGING =
     window.APP_CONFIG?.enableOutboundLogging ?? false;
 
   function canUseBackendLogging() {
-    if (!ENABLE_OUTBOUND_LOGGING || !BACKEND_BASE) return false;
-
-    try {
-      const backendUrl = new URL(BACKEND_BASE, window.location.href);
-      return ["http:", "https:"].includes(backendUrl.protocol);
-    } catch {
-      return false;
-    }
-  }
+  return false;
+}
 
   function normalizeQuery(value) {
     return safeText(value).replace(/\s+/g, " ");
@@ -1262,20 +1254,9 @@ function groupSnapshotsByEvent(items) {
     renderSnapshots();
   }
 
-  function buildOutboundUrl(rawUrl, meta = {}) {
-    if (!rawUrl) return "";
-
-    if (!canUseBackendLogging()) {
-      return rawUrl;
-    }
-
-    const params = new URLSearchParams({
-      url: rawUrl,
-      source: meta.source || "",
-    });
-
-    return `${BACKEND_BASE}/out?${params.toString()}`;
-  }
+  function buildOutboundUrl(rawUrl) {
+  return rawUrl || "";
+}
 
   function getSelectedSearchUrls() {
     const raw = normalizeQuery(queryEl?.value);
@@ -1876,9 +1857,14 @@ function groupSnapshotsByEvent(items) {
           // 👇 scroll to the form
           const formEl = document.getElementById("tti-snapshot-form");
           if (formEl) {
-            formEl.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
+          
+          const y = formEl.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: y, behavior: "smooth" });
 
+          if (eventNameEl) {
+              eventNameEl.focus();
+            }
+}
           return;
         }
 
