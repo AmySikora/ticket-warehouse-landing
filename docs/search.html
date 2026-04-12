@@ -38,12 +38,10 @@
 
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="search.html" class="nav-link" nav-active" aria-current="page">Tool</a>
+        <a href="search.html" class="nav-link nav-active" aria-current="page">Tool</a>
         <a href="duplicate-check.html" class="nav-link">Seat Check</a>
         <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
-    </div>
-  </header>
     </div>
   </header>
 
@@ -156,68 +154,49 @@
     </section>
 
     <!-- COMPARE -->
-    <section class="section">
-      <div class="tvb-container">
-        <div class="card">
+    <!-- COMPARE -->
+<section class="section">
+  <div class="tvb-container">
+    <div class="card">
 
-          <h2>Your ticket options</h2>
+      <h2>Your ticket options</h2>
 
-          <div class="tti-compare-toolbar">
-            <label class="tti-sort-wrap">
-              <span class="muted">Events:</span>
-              <select id="tti-event-sort" class="tti-sort-select">
-                <option value="lowest-price">Lowest price</option>
-                <option value="lowest-total">Lowest total</option>
-                <option value="event-name">Event name</option>
-                <option value="most-recent">Most recent</option>
-              </select>
-            </label>
+      <div class="tti-compare-toolbar">
+        <label class="tti-sort-wrap">
+          <span class="muted">Events:</span>
+          <select id="tti-event-sort" class="tti-sort-select">
+            <option value="lowest-price">Lowest price</option>
+            <option value="lowest-total">Lowest total</option>
+            <option value="event-name">Event name</option>
+            <option value="most-recent">Most recent</option>
+          </select>
+        </label>
 
-            <label class="tti-sort-wrap">
-              <span class="muted">Listings:</span>
-              <select id="tti-sort" class="tti-sort-select">
-                <option value="price-asc">Lowest price</option>
-                <option value="allin-asc">Lowest total</option>
-                <option value="newest">Newest</option>
-                <option value="marketplace">Marketplace</option>
-              </select>
-            </label>
+        <label class="tti-sort-wrap">
+          <span class="muted">Listings:</span>
+          <select id="tti-sort" class="tti-sort-select">
+            <option value="price-asc">Lowest price</option>
+            <option value="allin-asc">Lowest total</option>
+            <option value="newest">Newest</option>
+            <option value="marketplace">Marketplace</option>
+          </select>
+        </label>
 
-  <div class="tti-toolbar-actions">
-    <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
-    <button type="button" class="btn btn-ghost" id="tti-collapse-all">Collapse all</button>
-  </div>
-</div>
-
-          <div class="tti-table-wrap">
-            <table class="tti-table">
-              <thead>
-                <tr>
-                  <th>Saved</th>
-                  <th>Event</th>
-                  <th>Section</th>
-                  <th>Row</th>
-                  <th>Seat</th>
-                  <th>Site</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                  <th>Link</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="tti-snapshots-body">
-                <tr>
-                  <td colspan="10" class="muted">
-                    No saved tickets yet.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
+        <div class="tti-toolbar-actions">
+          <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
+          <button type="button" class="btn btn-ghost" id="tti-collapse-all">Collapse all</button>
         </div>
       </div>
-    </section>
+
+      <div class="tti-table-wrap">
+        <div id="tti-snapshots-body" class="tti-snapshots-list">
+          <div class="muted">No saved tickets yet.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
     <!-- SEAT CHECK -->
     <section class="section">
