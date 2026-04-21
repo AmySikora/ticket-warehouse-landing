@@ -966,7 +966,46 @@ tvgSafe("verify-csv", () => {
     window.APP_CONFIG?.enableOutboundLogging ?? false;
 
   function canUseBackendLogging() {
-  return false;
+  const config = window.APP_CONFIG || {};
+  const backendBase = String(config.backendBase || "").trim();
+  return Boolean(config.enableOutboundLogging && backendBase);
+}
+
+function extractRealUrl(rawUrl) {
+  try {
+    const parsed = new URL(rawUrl);
+
+    if (parsed.hostname.includes("google.com") && parsed.searchParams.has("adurl")) {
+      return parsed.searchParams.get("adurl") || rawUrl;
+    }
+
+    return rawUrl;
+  } catch (error) {
+    return rawUrl;
+  }
+}
+
+function buildOutboundUrl(rawUrl, meta = {}) {
+  const cleanUrl = extractRealUrl(rawUrl || "");
+  const config = window.APP_CONFIG || {};
+  const backendBase = String(config.backendBase || "").trim().replace(/\/$/, "");
+
+  if (!cleanUrl) return "";
+
+  if (!canUseBackendLogging()) {
+    return cleanUrl;
+  }
+
+  const params = new URLSearchParams({
+    url: cleanUrl,
+  });
+
+  if (meta.source) params.set("source", meta.source);
+  if (meta.event) params.set("event", meta.event);
+  if (meta.section) params.set("section", meta.section);
+  if (meta.row) params.set("row", meta.row);
+
+  return `${backendBase}/out?${params.toString()}`;
 }
 
   function normalizeQuery(value) {
