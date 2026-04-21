@@ -1007,6 +1007,7 @@ function buildOutboundUrl(rawUrl, meta = {}) {
   });
 
   if (meta.source) params.set("source", meta.source);
+                   params.set("event", rawUrl);
 
   return `${base}/out?${params.toString()}`;
 }
