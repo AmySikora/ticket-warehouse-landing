@@ -960,9 +960,6 @@ tvgSafe("verify-csv", () => {
     viagogo: "Viagogo",
   };
 
-  const ENABLE_OUTBOUND_LOGGING =
-    window.APP_CONFIG?.enableOutboundLogging ?? false;
-
   function canUseBackendLogging() {
   const config = window.APP_CONFIG || {};
   const backendBase = String(config.backendBase || "").trim();
@@ -994,11 +991,14 @@ function extractRealUrl(rawUrl) {
 
 function buildOutboundUrl(rawUrl, meta = {}) {
   const cleanUrl = extractRealUrl(rawUrl);
-
   const config = window.APP_CONFIG || {};
-  const base = (config.backendBase || "").replace(/\/$/, "");
+  const base = String(config.backendBase || "").replace(/\/$/, "");
 
-  if (!config.enableOutboundLogging || !base) {
+  if (!cleanUrl) {
+    return "";
+  }
+
+  if (!canUseBackendLogging()) {
     return cleanUrl;
   }
 
