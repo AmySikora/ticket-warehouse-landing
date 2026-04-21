@@ -960,8 +960,6 @@ tvgSafe("verify-csv", () => {
     viagogo: "Viagogo",
   };
 
-  const BACKEND_BASE = "https://ticketveriguard-production.up.railway.app";
-
   const ENABLE_OUTBOUND_LOGGING =
     window.APP_CONFIG?.enableOutboundLogging ?? false;
 
