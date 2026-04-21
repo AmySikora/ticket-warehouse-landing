@@ -1,5 +1,4 @@
 window.APP_CONFIG = {
-  backendBase: "",
-  enableOutboundLogging: false
+  backendBase: "https://web-production-0c3dcb.up.railway.app",
+  enableOutboundLogging: true
 };
-
