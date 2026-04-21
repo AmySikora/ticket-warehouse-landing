@@ -971,39 +971,44 @@ tvgSafe("verify-csv", () => {
 
 function extractRealUrl(rawUrl) {
   try {
-    const parsed = new URL(rawUrl);
+    const url = new URL(rawUrl);
 
-    if (parsed.hostname.includes("google.com") && parsed.searchParams.has("adurl")) {
-      return parsed.searchParams.get("adurl") || rawUrl;
+    // Handle Google ad redirect links
+    if (url.hostname.includes("google.com")) {
+      // Case 1: adurl param
+      if (url.searchParams.has("adurl")) {
+        return url.searchParams.get("adurl");
+      }
+
+      // Case 2: fallback to data-pcu style URLs if you ever capture them
+      if (url.searchParams.has("url")) {
+        return url.searchParams.get("url");
+      }
     }
 
     return rawUrl;
-  } catch (error) {
+  } catch (e) {
     return rawUrl;
   }
 }
 
 function buildOutboundUrl(rawUrl, meta = {}) {
-  const cleanUrl = extractRealUrl(rawUrl || "");
+  const cleanUrl = extractRealUrl(rawUrl);
+
   const config = window.APP_CONFIG || {};
-  const backendBase = String(config.backendBase || "").trim().replace(/\/$/, "");
+  const base = (config.backendBase || "").replace(/\/$/, "");
 
-  if (!cleanUrl) return "";
-
-  if (!canUseBackendLogging()) {
+  if (!config.enableOutboundLogging || !base) {
     return cleanUrl;
   }
 
   const params = new URLSearchParams({
-    url: cleanUrl,
+    url: cleanUrl
   });
 
   if (meta.source) params.set("source", meta.source);
-  if (meta.event) params.set("event", meta.event);
-  if (meta.section) params.set("section", meta.section);
-  if (meta.row) params.set("row", meta.row);
 
-  return `${backendBase}/out?${params.toString()}`;
+  return `${base}/out?${params.toString()}`;
 }
 
   function normalizeQuery(value) {
