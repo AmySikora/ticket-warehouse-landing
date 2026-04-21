@@ -1296,10 +1296,6 @@ function groupSnapshotsByEvent(items) {
     renderSnapshots();
   }
 
-  function buildOutboundUrl(rawUrl) {
-  return rawUrl || "";
-}
-
   function getSelectedSearchUrls() {
     const raw = normalizeQuery(queryEl?.value);
     if (!raw) return [];
