@@ -1,220 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G4R61ZH08K');
+  </script>
 
-  gtag('config', 'G-G4R61ZH08K');
-</script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Ticket VeriGuard — How It Works</title>
-  <meta name="description" content="A plain-English walkthrough of how Ticket VeriGuard monitors duplicate ticket exposure and surfaces risk signals across marketplaces."/>
-  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
-  <link rel="stylesheet" href="./styles.css" />
+
+  <meta
+    name="description"
+    content="Learn how Ticket VeriGuard helps you compare ticket listings, save options, and check for possible duplicate seats."
+  />
+
+  <link rel="icon" href="./favicon_logo.png"/>
+  <link rel="stylesheet" href="./styles-v2.css"/>
 </head>
 
-<body class="page-prototype">
+<body>
+
+  <!-- NAV -->
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="brokers.html" class="nav-link">Brokers</a>
-        <a href="verify.html" class="nav-link">CSV Check</a>
-        <a href="prototype.html" class="nav-link nav-active">How it works</a>
-        <a href="search.html" class="nav-link">TixMarketSearch</a>
-        <a href="https://amysikora.github.io/tvg-demo/index.html" class="nav-link">Try Live Demo</a>
-        <a href="./index.html#contact" class="nav-link">Contact Us</a>
+        <a href="search.html" class="nav-link">Tool</a>
+        <a href="duplicate-check.html" class="nav-link">Seat Check</a>
+        <a href="how-it-works.html" class="nav-link nav-active" aria-current="page">How It Works</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <!-- Intro -->
+
+    <!-- HERO -->
     <section class="section">
-      <div class="container">
-        <h1>How Ticket VeriGuard works</h1>
-        <p class="lead">
-          Ticket VeriGuard monitors ticket listings across marketplaces to detect
-          duplicate exposure and surface risk signals that often lead to disputes,
-          chargebacks, and consumer harm.
-        </p>
-        <div class="cta-row">
-          <a class="btn btn-ghost" href="./index.html#contact">Talk to us</a>
+      <div class="tvb-container">
+        <div class="card" style="text-align:center;">
+
+          <h1>How Ticket VeriGuard works</h1>
+
+          <p class="lead" style="margin-top:10px;">
+            Ticket VeriGuard helps you compare ticket listings faster,
+            keep track of your options, and avoid accidentally reviewing the same seats twice.
+          </p>
+
         </div>
       </div>
     </section>
 
-    <!-- Flow -->
+    <!-- FLOW -->
     <section class="section">
-      <div class="container">
-        <h2>The flow at a glance</h2>
-        <div class="grid-2">
-          <div class="card">
-            <h3>1) Connect or upload</h3>
-            <p class="muted">
-              Provide ticket data via CSV uploads or marketplace connections.
-              You control what data is shared and when.
-            </p>
-
-            <h3 class="mt-8">2) Normalize listings</h3>
-            <p class="muted">
-              Ticket details are parsed and normalized so seats, rows, and sections
-              can be compared accurately across sources.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>3) Detect duplicate exposure</h3>
-            <p class="muted">
-              We scan for the same inventory appearing more than once across marketplaces
-              and identify patterns linked to higher risk.
-            </p>
-
-            <h3 class="mt-8">4) Surface risk signals</h3>
-            <p class="muted">
-              Results are presented clearly so teams can decide what to pause,
-              fix, monitor, or investigate further.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TixMarketSearch teaser -->
-    <section class="section">
-      <div class="container">
-        <h2>Search listings across marketplaces</h2>
-        <p class="muted">
-          Want to quickly locate where a ticket appears across sites like StubHub,
-          SeatGeek, and Vivid Seats? Try our
-          <a href="search.html">TixMarketSearch tool</a> to open marketplace results side by side.
-        </p>
-      </div>
-    </section>
-
-    <!-- Scenario -->
-    <section class="section">
-      <div class="container">
-        <h2>What happens when the same ticket appears twice?</h2>
+      <div class="tvb-container">
         <div class="card">
-          <p>
-            In many resale workflows, duplicate listings can exist at the same time.
-            When that exposure isn’t visible, it often leads to failed fulfillments,
-            refunds, and customer disputes.
-          </p>
-          <p class="muted">
-            Ticket VeriGuard does not block checkouts or enforce marketplace rules.
-            Instead, it highlights where duplicate exposure exists and where patterns
-            suggest elevated risk — giving teams the information needed to act early.
-          </p>
+
+          <h2>The process</h2>
+
+          <div class="grid-3" style="margin-top:18px;">
+
+            <div class="item">
+              <h3>1. Search across marketplaces</h3>
+              <p class="muted">
+                Start with an artist, team, or event. Ticket VeriGuard opens searches across major ticket sites
+                so you can compare options without jumping between tabs.
+              </p>
+            </div>
+
+            <div class="item">
+              <h3>2. Save listings you are considering</h3>
+              <p class="muted">
+                As you browse, save ticket listings you want to compare. Keep track of section, row, seat,
+                price, and source in one place.
+              </p>
+            </div>
+
+            <div class="item">
+              <h3>3. Compare with less guesswork</h3>
+              <p class="muted">
+                Review your saved listings side by side so you can quickly spot the best deal
+                without losing track of details.
+              </p>
+            </div>
+
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Prototype API -->
+    <!-- SEAT CHECK -->
     <section class="section">
-      <div class="container">
-        <h2>Prototype: what the signals look like</h2>
+      <div class="tvb-container">
+        <div class="card">
 
-        <div class="card mb-10">
-          <h3>Register a ticket listing</h3>
-<pre><code>POST /api/tickets
-Authorization: Bearer &lt;YOUR_API_KEY&gt;
+          <h2>Use Seat Check for extra confidence</h2>
 
-{
-  "ticket_id": "A1-ROW3-12",
-  "event": "RockFest 2025",
-  "section": "A1",
-  "row": "3",
-  "seat": "12",
-  "marketplace": "ExampleMarket",
-  "status": "listed"
-}</code></pre>
-        </div>
-
-        <div class="card mb-10">
-          <h3>Flag duplicate exposure</h3>
-<pre><code>POST /api/exposure
-Authorization: Bearer &lt;YOUR_API_KEY&gt;
-
-{
-  "ticket_id": "A1-ROW3-12",
-  "exposure_count": 2,
-  "risk_level": "high"
-}</code></pre>
-
-          <p class="muted mt-6">
-            These signals can be surfaced in dashboards, reports, or alerts —
-            depending on how teams want to consume them.
+          <p class="muted" style="margin-top:10px;">
+            Sometimes the same ticket can appear on multiple marketplaces. Seat Check helps you identify
+            listings that may refer to the same seat so you do not accidentally compare duplicates.
           </p>
+
+          <div style="margin-top:18px;">
+            <a href="duplicate-check.html" class="btn primary">
+              Try Seat Check
+            </a>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- VALUE -->
     <section class="section">
-      <div class="container">
-        <h2>Quick FAQ</h2>
-        <div class="grid-2">
-          <div class="card">
-            <h3>Does Ticket VeriGuard block listings or sales?</h3>
-            <p class="muted">
-              No. Ticket VeriGuard provides visibility into duplicate exposure and risk.
-              Decisions and enforcement remain with your existing systems.
-            </p>
+      <div class="tvb-container">
+        <div class="card" style="text-align:center;">
+
+          <h2>Why this matters</h2>
+
+          <p class="muted" style="margin-top:10px; max-width:720px; margin-left:auto; margin-right:auto;">
+            Ticket shopping often means juggling multiple tabs, comparing inconsistent listings,
+            and trying to remember what you already saw. Ticket VeriGuard simplifies that process
+            so you can make a more confident decision faster.
+          </p>
+
+          <div style="margin-top:20px;">
+            <a href="search.html" class="btn primary">
+              Start comparing tickets
+            </a>
           </div>
 
-          <div class="card">
-            <h3>Do we need to replace our current tools?</h3>
-            <p class="muted">
-              No. Ticket VeriGuard is designed to work alongside existing aggregation
-              and inventory systems.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>How often are scans run?</h3>
-            <p class="muted">
-              Scans can be run on demand, scheduled, or triggered by updates,
-              depending on integration level.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>Can we try this with sample data?</h3>
-            <p class="muted">
-              Yes. Email <a href="mailto:hello@ticketveriguard.com">hello@ticketveriguard.com</a>
-              to run a pilot scan with your own listings.
-            </p>
-          </div>
         </div>
       </div>
     </section>
+
   </main>
 
   <footer>
     <div class="container footer-bar">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
-      <div class="muted">
-        <a class="muted" href="#">Terms</a> ·
-        <a class="muted" href="#">Privacy</a> ·
-        <a class="muted" href="#">Status</a>
-      </div>
     </div>
   </footer>
 
