@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
+  <!-- Google tag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -10,207 +10,148 @@
     gtag('config', 'G-G4R61ZH08K');
   </script>
 
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Ticket VeriGuard — Compare Ticket Deals Faster</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ticket VeriGuard — Compare Ticket Listings Smarter</title>
 
   <meta
     name="description"
-    content="Compare ticket listings across major marketplaces, save your options, and quickly spot the best deal."
+    content="Compare ticket listings across marketplaces, save your options, and catch possible duplicate listings before you buy."
   />
 
-  <link rel="icon" href="./favicon_logo.png"/>
-  <link rel="stylesheet" href="./styles-v2.css"/>
+  <link rel="icon" href="./favicon_logo.png" />
+  <link rel="stylesheet" href="./styles-v2.css" />
 </head>
-
 <body class="page-index">
 
-  <!-- NAV -->
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
-        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img" />
       </a>
+
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
 
       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link nav-active" aria-current="page">Home</a>
-        <a href="search.html" class="nav-link">Tool</a>
-        <a href="duplicate-check.html" class="nav-link">Seat Check</a>
-        <a href="prototype.html" class="nav-link">How It Works</a>
-        <a href="#contact" class="nav-link">Contact</a>
+        <a href="search.html" class="nav-link">Search</a>
+        <a href="saved.html" class="nav-link">Saved</a>
+        <a href="compare.html" class="nav-link">Compare</a>
+        <a href="how-it-works.html" class="nav-link">How It Works</a>
       </nav>
     </div>
   </header>
 
   <main>
-
-    <!-- HERO -->
     <section class="section">
       <div class="tvb-container">
         <div class="card" style="margin-top:20px; text-align:center;">
-
           <p class="muted" style="margin-bottom:8px;">
-            Compare ticket listings across major marketplaces
+            Compare ticket listings across marketplaces with less guesswork
           </p>
 
           <h1 class="grad-text">
-            Find better ticket deals without the tab chaos
+            Find better ticket options without the tab chaos
           </h1>
 
-          <p class="lead" style="margin-top:10px; max-width:720px; margin-left:auto; margin-right:auto;">
-            Ticket VeriGuard helps you search ticket sites faster, save the options you are considering,
-            and quickly see which listing is actually the best deal.
+          <p class="lead" style="margin-top:10px; max-width:760px; margin-left:auto; margin-right:auto;">
+            Ticket VeriGuard helps you search across ticket sites, save listings you want to watch,
+            compare options side by side, and catch possible duplicate listings before you click out.
           </p>
 
-          <div style="margin-top:20px;">
-            <a href="search.html" class="btn primary">
-              Start comparing tickets
-            </a>
+          <div style="margin-top:20px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+            <a href="search.html" class="btn primary">Start Searching</a>
+            <a href="how-it-works.html" class="btn btn-ghost">See How It Works</a>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- VALUE STRIP -->
     <section class="section">
       <div class="tvb-container">
         <div class="grid-3">
-
           <div class="card item">
             <h3>Search faster</h3>
             <p class="muted">
-              Open searches across multiple ticket marketplaces without jumping through endless tabs.
+              Open event searches across multiple ticket marketplaces from one place instead of juggling tabs.
             </p>
           </div>
 
           <div class="card item">
-            <h3>Save your options</h3>
+            <h3>Save the listings that matter</h3>
             <p class="muted">
-              Keep the listings you are considering in one place so you can compare them side by side.
+              Keep track of the options you are seriously considering, including section, row, seat, price, and source.
             </p>
           </div>
 
           <div class="card item">
-            <h3>Spot the best deal</h3>
+            <h3>Compare with more confidence</h3>
             <p class="muted">
-              Review prices, fees, and saved listings faster so you can make a smarter choice.
+              Review listings side by side and catch possible duplicate listings before making your decision.
             </p>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="section" id="how-it-works">
+    <section class="section">
       <div class="tvb-container">
         <div class="card">
+          <h2>Why Ticket VeriGuard?</h2>
+          <p class="muted" style="max-width:760px; margin-top:10px;">
+            Ticket shopping gets messy fast. The same event can appear across multiple marketplaces,
+            prices are easy to lose track of, and similar listings can blur together. Ticket VeriGuard
+            helps you stay organized so you can compare more clearly and buy with more confidence.
+          </p>
 
-          <h2>How it works</h2>
-
-          <div class="grid-3" style="margin-top:18px;">
+          <div class="grid-3" style="margin-top:20px;">
             <div class="item">
-              <h3>1. Search</h3>
-              <p class="muted">
-                Start with an artist, team, or event and open searches across major ticket marketplaces.
-              </p>
+              <h3>Search</h3>
+              <p class="muted">Start with an event and open marketplace searches quickly.</p>
             </div>
 
             <div class="item">
-              <h3>2. Save listings</h3>
-              <p class="muted">
-                Save ticket options you want to compare, including section, row, seat, price, and link.
-              </p>
+              <h3>Save</h3>
+              <p class="muted">Keep listings in one place instead of relying on memory and open tabs.</p>
             </div>
 
             <div class="item">
-              <h3>3. Compare with less guesswork</h3>
-              <p class="muted">
-                Review your saved listings in one place and use Seat Check to catch possible duplicate seats.
-              </p>
+              <h3>Compare</h3>
+              <p class="muted">Spot price differences, listing overlaps, and stronger options faster.</p>
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- TRUST / WHY USE IT -->
     <section class="section">
       <div class="tvb-container">
         <div class="card" style="text-align:center;">
-
-          <h2>Why use Ticket VeriGuard?</h2>
-
-          <p class="muted" style="max-width:760px; margin:14px auto 0;">
-            Ticket shopping can get messy fast. Ticket VeriGuard is built to help you compare listings more clearly,
-            keep track of what you found, and feel more confident before you click out to a marketplace.
+          <h2>Ready to compare tickets more clearly?</h2>
+          <p class="muted" style="margin-top:10px; max-width:700px; margin-left:auto; margin-right:auto;">
+            Start with your event, save the listings you want to review, and compare them in one place.
           </p>
 
           <div style="margin-top:20px;">
-            <a href="search.html" class="btn primary">
-              Open the tool
-            </a>
+            <a href="search.html" class="btn primary">Go to Search</a>
           </div>
-
         </div>
       </div>
     </section>
-
-    <!-- ABOUT PREVIEW -->
-    <section class="section">
-      <div class="tvb-container">
-        <div class="card">
-
-          <h2>About Ticket VeriGuard</h2>
-
-          <p class="muted" style="margin-top:10px;">
-            Ticket VeriGuard is designed to make ticket comparison easier by helping shoppers search faster,
-            save listings, and review their options without losing track of details across multiple sites.
-          </p>
-
-          <p class="muted" style="margin-top:10px;">
-            It is especially useful for comparing resale listings, organizing the options you are watching,
-            and checking whether listings may refer to the same seats.
-          </p>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="section" id="contact">
-      <div class="tvb-container">
-        <div class="card">
-
-          <h3>Have feedback or questions?</h3>
-
-          <p class="muted">
-            We are continuing to improve Ticket VeriGuard and would love to hear what would make it more useful.
-          </p>
-
-          <div style="margin-top:16px;">
-            <a href="mailto:hello@ticketveriguard.com" class="btn btn-ghost">
-              Email hello@ticketveriguard.com
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <footer>
-    <div class="container footer-bar" style="display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;">
+    <div class="container footer-bar" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;">
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
-
-      <div style="display:flex; flex-wrap:wrap; gap:14px;">
-        <a href="about.html" class="muted">About</a>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <a href="how-it-works.html" class="muted">How It Works</a>
         <a href="privacy.html" class="muted">Privacy</a>
         <a href="terms.html" class="muted">Terms</a>
-        <a href="disclosure.html" class="muted">Affiliate Disclosure</a>
+        <a href="disclosure.html" class="muted">Disclosure</a>
       </div>
     </div>
   </footer>
