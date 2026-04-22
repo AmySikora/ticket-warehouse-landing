@@ -12,11 +12,11 @@
 
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Ticket VeriGuard — Compare Tickets Faster</title>
+  <title>Ticket VeriGuard — Search and Compare Ticket Listings</title>
 
   <meta
     name="description"
-    content="Search resale ticket sites, save listings, and instantly see which tickets are the best deal."
+    content="Search ticket marketplaces, save listings, compare your options, and check for possible duplicate seats."
   />
 
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
@@ -36,14 +36,12 @@
         <span class="bar"></span>
       </button>
 
-       <nav class="topnav" id="primary-nav">
+      <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="search.html" class="nav-link nav-active aria-current="page">Search</a>
+        <a href="search.html" class="nav-link nav-active" aria-current="page">Search</a>
         <a href="duplicate-check.html" class="nav-link">Compare</a>
         <a href="how-it-works.html" class="nav-link">How It Works</a>
       </nav>
-    </div>
-  </header>
     </div>
   </header>
 
@@ -53,10 +51,11 @@
     <section class="section">
       <div class="tvb-container">
         <div class="card" style="margin-top:16px;">
-          <h1 class="grad-text">Find the best ticket without the tab chaos</h1>
+          <h1 class="grad-text">Search smarter and compare ticket listings faster</h1>
 
           <p class="muted" style="margin-top:8px;">
-            Search resale sites, save ticket options, and instantly see which one is cheapest.
+            Search across major ticket marketplaces, save the listings you want to review,
+            and keep everything in one place while you compare your options.
           </p>
         </div>
       </div>
@@ -67,7 +66,7 @@
       <div class="tvb-container">
         <div class="card search-card">
 
-          <h2>Search tickets</h2>
+          <h2>Search ticket marketplaces</h2>
 
           <form id="tixSearch" class="ms-form" novalidate>
 
@@ -112,9 +111,11 @@
       <div class="tvb-container">
         <div class="card">
 
-          <h2>Save a ticket</h2>
+          <h2>Save a listing</h2>
 
-          <p class="muted">Save ticket details so you can compare them in one place.</p>
+          <p class="muted">
+            Save ticket details so you can review and compare listings more clearly in one place.
+          </p>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
 
@@ -144,7 +145,7 @@
             </div>
 
             <div class="tti-row">
-              <button type="submit" class="btn primary">Save</button>
+              <button type="submit" class="btn primary">Save listing</button>
             </div>
 
             <p id="tti-status" class="muted"></p>
@@ -156,63 +157,62 @@
     </section>
 
     <!-- COMPARE -->
-    <!-- COMPARE -->
-<section class="section">
-  <div class="tvb-container">
-    <div class="card">
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card">
 
-      <h2>Your ticket options</h2>
+          <h2>Your saved ticket options</h2>
 
-      <div class="tti-compare-toolbar">
-        <label class="tti-sort-wrap">
-          <span class="muted">Events:</span>
-          <select id="tti-event-sort" class="tti-sort-select">
-            <option value="lowest-price">Lowest price</option>
-            <option value="lowest-total">Lowest total</option>
-            <option value="event-name">Event name</option>
-            <option value="most-recent">Most recent</option>
-          </select>
-        </label>
+          <div class="tti-compare-toolbar">
+            <label class="tti-sort-wrap">
+              <span class="muted">Events:</span>
+              <select id="tti-event-sort" class="tti-sort-select">
+                <option value="lowest-price">Lowest price</option>
+                <option value="lowest-total">Lowest total</option>
+                <option value="event-name">Event name</option>
+                <option value="most-recent">Most recent</option>
+              </select>
+            </label>
 
-        <label class="tti-sort-wrap">
-          <span class="muted">Listings:</span>
-          <select id="tti-sort" class="tti-sort-select">
-            <option value="price-asc">Lowest price</option>
-            <option value="allin-asc">Lowest total</option>
-            <option value="newest">Newest</option>
-            <option value="marketplace">Marketplace</option>
-          </select>
-        </label>
+            <label class="tti-sort-wrap">
+              <span class="muted">Listings:</span>
+              <select id="tti-sort" class="tti-sort-select">
+                <option value="price-asc">Lowest price</option>
+                <option value="allin-asc">Lowest total</option>
+                <option value="newest">Newest</option>
+                <option value="marketplace">Marketplace</option>
+              </select>
+            </label>
 
-        <div class="tti-toolbar-actions">
-          <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
-          <button type="button" class="btn btn-ghost" id="tti-collapse-all">Collapse all</button>
+            <div class="tti-toolbar-actions">
+              <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
+              <button type="button" class="btn btn-ghost" id="tti-collapse-all">Collapse all</button>
+            </div>
+          </div>
+
+          <div class="tti-table-wrap">
+            <div id="tti-snapshots-body" class="tti-snapshots-list">
+              <div class="muted">No saved tickets yet.</div>
+            </div>
+          </div>
+
         </div>
       </div>
-
-      <div class="tti-table-wrap">
-        <div id="tti-snapshots-body" class="tti-snapshots-list">
-          <div class="muted">No saved tickets yet.</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
+    </section>
 
     <!-- SEAT CHECK -->
     <section class="section">
       <div class="tvb-container">
         <div class="card">
 
-          <h2>Check seats (optional)</h2>
+          <h2>Check for possible duplicate seats</h2>
 
           <p class="muted">
-            See if listings might be the same seats before you choose.
+            Run a quick check to see whether listings may refer to the same seats before you decide which option to trust.
           </p>
 
           <a href="duplicate-check.html" class="btn primary">
-            Check seats
+            Check listings
           </a>
 
         </div>
@@ -226,8 +226,8 @@
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
     </div>
   </footer>
+
   <script src="./js/config.js"></script>
   <script src="./js/main.js" defer></script>
-</script>
 </body>
 </html>
