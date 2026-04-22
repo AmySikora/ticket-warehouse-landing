@@ -16,7 +16,7 @@
 
   <meta
     name="description"
-    content="Search ticket marketplaces, save listings, compare your options, and check for possible duplicate seats."
+    content="Search ticket sites, save listings, compare your options, and check for possible duplicate seats."
   />
 
   <link rel="icon" href="./favicon_logo.png" type="image/png"/>
@@ -51,11 +51,11 @@
     <section class="section">
       <div class="tvb-container">
         <div class="card" style="margin-top:16px;">
-          <h1 class="grad-text">Search smarter and compare ticket listings faster</h1>
+          <h1 class="grad-text">Search, save, and compare ticket listings faster</h1>
 
           <p class="muted" style="margin-top:8px;">
-            Search across major ticket marketplaces, save the listings you want to review,
-            and keep everything in one place while you compare your options.
+            Start with an event, open searches across major ticket sites, save the listings you want to track,
+            and compare everything in one place.
           </p>
         </div>
       </div>
@@ -66,7 +66,11 @@
       <div class="tvb-container">
         <div class="card search-card">
 
-          <h2>Search ticket marketplaces</h2>
+          <h2>Search ticket sites</h2>
+
+          <p class="muted" style="margin-top:8px; margin-bottom:14px;">
+            Enter an artist, team, or event, then choose the sites you want to search.
+          </p>
 
           <form id="tixSearch" class="ms-form" novalidate>
 
@@ -76,7 +80,7 @@
                 <input
                   type="text"
                   id="tms-query"
-                  placeholder="chappell roan seattle, trail blazers portland..."
+                  placeholder="Taylor Swift Miami, Dodgers Los Angeles, Knicks New York..."
                   required
                   class="ms-input"
                 />
@@ -93,9 +97,9 @@
             </div>
 
             <div class="ms-actions">
-              <button type="submit" class="btn primary" id="tms-search">Search tickets</button>
-              <button type="button" id="tms-copy" class="btn">Copy links</button>
-              <button type="button" id="tms-reset" class="btn btn-ghost">Reset</button>
+              <button type="submit" class="btn primary" id="tms-search">Search Sites</button>
+              <button type="button" id="tms-copy" class="btn">Copy Search Links</button>
+              <button type="button" id="tms-reset" class="btn btn-ghost">Clear</button>
             </div>
 
           </form>
@@ -111,26 +115,26 @@
       <div class="tvb-container">
         <div class="card">
 
-          <h2>Save a listing</h2>
+          <h2>Save a ticket listing</h2>
 
           <p class="muted">
-            Save ticket details so you can review and compare listings more clearly in one place.
+            Save the ticket details you care about so you can compare prices, seats, and links later.
           </p>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
 
             <div class="tti-grid">
 
-              <input id="tti-event-name" placeholder="Event name" required class="tti-input"/>
+              <input id="tti-event-name" placeholder="Event or artist" required class="tti-input"/>
               <input id="tti-event-location" placeholder="Venue" class="tti-input"/>
-              <input id="tti-event-dates" placeholder="Date" class="tti-input"/>
+              <input id="tti-event-dates" placeholder="Date or show time" class="tti-input"/>
 
               <input id="tti-section" placeholder="Section" class="tti-input"/>
               <input id="tti-row" placeholder="Row" class="tti-input"/>
-              <input id="tti-seat" placeholder="Seat (ex: 2-4)" class="tti-input"/>
+              <input id="tti-seat" placeholder="Seat or seat range (ex: 2-4)" class="tti-input"/>
 
               <select id="tti-marketplace" required class="tti-input">
-                <option value="" disabled selected>Site</option>
+                <option value="" disabled selected>Ticket site</option>
                 <option value="stubhub">StubHub</option>
                 <option value="seatgeek">SeatGeek</option>
                 <option value="vivid">Vivid</option>
@@ -138,14 +142,14 @@
                 <option value="tickpick">TickPick</option>
               </select>
 
-              <input id="tti-price" type="number" placeholder="Price" required class="tti-input"/>
-              <input id="tti-fees" type="number" placeholder="All-in (optional)" class="tti-input"/>
-              <input id="tti-url" type="url" placeholder="Ticket link" required class="tti-input"/>
+              <input id="tti-price" type="number" placeholder="List price" required class="tti-input"/>
+              <input id="tti-fees" type="number" placeholder="Total with fees (optional)" class="tti-input"/>
+              <input id="tti-url" type="url" placeholder="Listing link" required class="tti-input"/>
 
             </div>
 
             <div class="tti-row">
-              <button type="submit" class="btn primary">Save listing</button>
+              <button type="submit" class="btn primary">Save to Compare</button>
             </div>
 
             <p id="tti-status" class="muted"></p>
@@ -161,11 +165,11 @@
       <div class="tvb-container">
         <div class="card">
 
-          <h2>Your saved ticket options</h2>
+          <h2>Your saved listings</h2>
 
           <div class="tti-compare-toolbar">
             <label class="tti-sort-wrap">
-              <span class="muted">Events:</span>
+              <span class="muted">Sort events:</span>
               <select id="tti-event-sort" class="tti-sort-select">
                 <option value="lowest-price">Lowest price</option>
                 <option value="lowest-total">Lowest total</option>
@@ -175,7 +179,7 @@
             </label>
 
             <label class="tti-sort-wrap">
-              <span class="muted">Listings:</span>
+              <span class="muted">Sort listings:</span>
               <select id="tti-sort" class="tti-sort-select">
                 <option value="price-asc">Lowest price</option>
                 <option value="allin-asc">Lowest total</option>
@@ -192,7 +196,7 @@
 
           <div class="tti-table-wrap">
             <div id="tti-snapshots-body" class="tti-snapshots-list">
-              <div class="muted">No saved tickets yet.</div>
+              <div class="muted">No saved listings yet. Save a few ticket options to compare them here.</div>
             </div>
           </div>
 
@@ -205,29 +209,3 @@
       <div class="tvb-container">
         <div class="card">
 
-          <h2>Check for possible duplicate seats</h2>
-
-          <p class="muted">
-            Run a quick check to see whether listings may refer to the same seats before you decide which option to trust.
-          </p>
-
-          <a href="duplicate-check.html" class="btn primary">
-            Check listings
-          </a>
-
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="container footer-bar">
-      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
-    </div>
-  </footer>
-
-  <script src="./js/config.js"></script>
-  <script src="./js/main.js" defer></script>
-</body>
-</html>

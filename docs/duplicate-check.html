@@ -16,7 +16,7 @@
 
   <meta
     name="description"
-    content="Check saved ticket listings for possible duplicate seats so you can compare options with more confidence."
+    content="Check saved ticket listings for possible duplicate seats so you can compare options more clearly before you buy."
   />
 
   <link rel="icon" href="./favicon_logo.png"/>
@@ -46,27 +46,27 @@
 
       <!-- HERO -->
       <section class="tvb-card">
-        <h1>Check saved listings for possible duplicates</h1>
+        <h1>Check saved listings for possible duplicate seats</h1>
 
         <p class="muted" style="margin-top:8px;">
-          Run a quick check to spot listings that may refer to the same seats across marketplaces,
-          so you don’t accidentally compare the same ticket twice.
+          Run a quick check to flag listings that may point to the same seats across ticket sites,
+          so you can compare with more confidence.
         </p>
 
         <div id="tvg-current-context" class="tvb-note" style="margin-top:12px;">
-          Using saved tickets from this browser.
+          Using saved listings from this browser.
         </div>
       </section>
 
       <!-- ACTIONS -->
       <section class="tvb-card">
 
-        <h2 style="margin-bottom:12px;">Run a listing check</h2>
+        <h2 style="margin-bottom:12px;">Run a duplicate check</h2>
 
         <div class="tvg-upload-row">
 
           <button type="button" id="tvg-run-snapshots-btn" class="btn primary">
-            Check saved tickets
+            Check Saved Listings
           </button>
 
           <label class="btn btn-ghost tvg-file-label">
@@ -75,11 +75,11 @@
           </label>
 
           <button type="button" id="tvg-analyze-btn" class="btn btn-ghost" disabled>
-            Check file
+            Check Uploaded File
           </button>
 
           <button type="button" id="tvg-sample-btn" class="btn btn-ghost">
-            Try sample
+            Try Sample Data
           </button>
 
           <div id="tvg-file-label" class="tvb-note tvg-file-name">
@@ -89,7 +89,7 @@
         </div>
 
         <div class="tvg-microcopy">
-          Everything runs locally in your browser. Nothing is uploaded.
+          Everything runs in your browser. Your saved data stays local.
         </div>
 
         <div id="tvg-summary" class="tvg-summary-strip"></div>
@@ -102,7 +102,7 @@
 
           <select id="tvg-filter-decision" class="btn btn-ghost">
             <option value="all">All results</option>
-            <option value="Approved">Looks fine</option>
+            <option value="Approved">Looks clear</option>
             <option value="Blocked">Possible duplicate</option>
           </select>
 
@@ -117,7 +117,7 @@
           <div class="tvg-filter-spacer"></div>
 
           <button id="tvg-download-clean" class="btn btn-ghost" disabled>
-            Download
+            Download Results
           </button>
 
         </div>
@@ -129,8 +129,8 @@
         <h3 style="margin-bottom:6px;">Results</h3>
 
         <p class="tvb-note">
-          “Possible duplicate” means listings may refer to the same ticket.
-          This is a signal to double-check, not a guarantee.
+          “Possible duplicate” means two listings may refer to the same seats.
+          It’s a helpful flag, not a guarantee.
         </p>
 
         <div class="tvg-table-wrap">
@@ -150,7 +150,7 @@
             <tbody>
               <tr class="tvg-empty-row">
                 <td colspan="8">
-                  Run a check to see your results.
+                  Run a duplicate check to see your results here.
                 </td>
               </tr>
             </tbody>
@@ -162,7 +162,7 @@
       <!-- CTA BACK -->
       <section class="tvb-card" style="text-align:center;">
         <a href="search.html" class="btn primary">
-          Back to Search
+          Back to Search & Save
         </a>
       </section>
 
@@ -171,10 +171,4 @@
 
   <footer>
     <div class="container footer-bar">
-      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
-    </div>
-  </footer>
-
-  <script src="./js/main.js" defer></script>
-</body>
-</html>
+ 
