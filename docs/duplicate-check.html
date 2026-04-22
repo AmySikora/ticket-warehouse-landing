@@ -12,11 +12,11 @@
 
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Ticket VeriGuard — Seat Check</title>
+  <title>Ticket VeriGuard — Check for Duplicate Listings</title>
 
   <meta
     name="description"
-    content="Check if ticket listings may be the same seats so you can compare options with confidence."
+    content="Check saved ticket listings for possible duplicate seats so you can compare options with more confidence."
   />
 
   <link rel="icon" href="./favicon_logo.png"/>
@@ -26,17 +26,16 @@
 
 <body class="verify-page">
 
-  <!-- NAV (matches your other pages now) -->
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
         <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-       <nav class="topnav" id="primary-nav">
+      <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
         <a href="search.html" class="nav-link">Search</a>
-        <a href="duplicate-check.html" class="nav-link nav-active aria-current="page">Compare</a>
+        <a href="duplicate-check.html" class="nav-link nav-active" aria-current="page">Compare</a>
         <a href="how-it-works.html" class="nav-link">How It Works</a>
       </nav>
     </div>
@@ -47,10 +46,11 @@
 
       <!-- HERO -->
       <section class="tvb-card">
-        <h1>Check if tickets might be the same seats</h1>
+        <h1>Check saved listings for possible duplicates</h1>
 
         <p class="muted" style="margin-top:8px;">
-          Run a quick check to spot listings that may overlap so you don’t accidentally compare the same ticket twice.
+          Run a quick check to spot listings that may refer to the same seats across marketplaces,
+          so you don’t accidentally compare the same ticket twice.
         </p>
 
         <div id="tvg-current-context" class="tvb-note" style="margin-top:12px;">
@@ -61,7 +61,7 @@
       <!-- ACTIONS -->
       <section class="tvb-card">
 
-        <h2 style="margin-bottom:12px;">Check tickets</h2>
+        <h2 style="margin-bottom:12px;">Run a listing check</h2>
 
         <div class="tvg-upload-row">
 
@@ -89,7 +89,7 @@
         </div>
 
         <div class="tvg-microcopy">
-          Everything runs locally. Nothing is uploaded.
+          Everything runs locally in your browser. Nothing is uploaded.
         </div>
 
         <div id="tvg-summary" class="tvg-summary-strip"></div>
@@ -103,7 +103,7 @@
           <select id="tvg-filter-decision" class="btn btn-ghost">
             <option value="all">All results</option>
             <option value="Approved">Looks fine</option>
-            <option value="Blocked">Possible same seat</option>
+            <option value="Blocked">Possible duplicate</option>
           </select>
 
           <select id="tvg-filter-marketplace" class="btn btn-ghost">
@@ -129,7 +129,8 @@
         <h3 style="margin-bottom:6px;">Results</h3>
 
         <p class="tvb-note">
-          “Possible same seat” means listings may refer to the same ticket.
+          “Possible duplicate” means listings may refer to the same ticket.
+          This is a signal to double-check, not a guarantee.
         </p>
 
         <div class="tvg-table-wrap">
@@ -161,7 +162,7 @@
       <!-- CTA BACK -->
       <section class="tvb-card" style="text-align:center;">
         <a href="search.html" class="btn primary">
-          Back to tickets
+          Back to Search
         </a>
       </section>
 
