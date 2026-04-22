@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G4R61ZH08K');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ticket VeriGuard — Saved Listings</title>
+
+  <meta
+    name="description"
+    content="Review and manage your saved ticket listings in one place."
+  />
+
+  <link rel="icon" href="./favicon_logo.png" />
+  <link rel="stylesheet" href="./styles-v2.css" />
+</head>
+<body class="page-saved">
+
+  <header class="nav">
+    <div class="nav--brand">
+      <a href="index.html" class="logo-bay">
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img" />
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <nav class="topnav" id="primary-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="search.html" class="nav-link">Search</a>
+        <a href="saved.html" class="nav-link nav-active" aria-current="page">Saved</a>
+        <a href="compare.html" class="nav-link">Compare</a>
+        <a href="how-it-works.html" class="nav-link">How It Works</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card" style="margin-top:16px;">
+          <h1 class="grad-text">Saved listings</h1>
+          <p class="muted" style="margin-top:8px;">
+            Keep your ticket options in one place so you can review them without losing track of details.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card">
+          <div style="display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap; align-items:center;">
+            <div>
+              <h2 style="margin-bottom:6px;">Your saved options</h2>
+              <p class="muted">Filter, review, and prepare listings for comparison.</p>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button type="button" class="btn btn-ghost">Filter by event</button>
+              <button type="button" class="btn btn-ghost">Filter by marketplace</button>
+              <button type="button" class="btn btn-ghost">Sort by price</button>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;" id="saved-listings-area">
+            <div class="card item" style="margin-bottom:14px;">
+              <h3>Sample listing</h3>
+              <p class="muted" style="margin-bottom:10px;">
+                Event name • Venue • Date
+              </p>
+
+              <div class="grid-3">
+                <div class="item">
+                  <strong>Section / Row / Seat</strong>
+                  <p class="muted">A • 12 • 3-4</p>
+                </div>
+                <div class="item">
+                  <strong>Price</strong>
+                  <p class="muted">$185</p>
+                </div>
+                <div class="item">
+                  <strong>Marketplace</strong>
+                  <p class="muted">StubHub</p>
+                </div>
+              </div>
+
+              <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn primary">Select for compare</button>
+                <button class="btn btn-ghost">Check for duplicates</button>
+                <button class="btn btn-ghost">Remove</button>
+              </div>
+            </div>
+
+            <p class="muted">
+              Replace this sample block with your localStorage-rendered saved listings.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card" style="text-align:center;">
+          <h2>Ready to compare?</h2>
+          <p class="muted" style="max-width:700px; margin:10px auto 0;">
+            Once you have a few listings worth reviewing, move to Compare to see them side by side.
+          </p>
+
+          <div style="margin-top:20px;">
+            <a href="compare.html" class="btn primary">Go to Compare</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-bar">
+      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
+    </div>
+  </footer>
+
+  <script src="./js/main.js" defer></script>
+</body>
+</html>
