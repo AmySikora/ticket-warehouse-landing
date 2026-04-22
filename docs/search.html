@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -10,67 +10,74 @@
     gtag('config', 'G-G4R61ZH08K');
   </script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ticket VeriGuard — Search Ticket Listings</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Ticket VeriGuard — Compare Tickets Faster</title>
 
   <meta
     name="description"
-    content="Search across ticket marketplaces, save listings, and send your best options to compare."
+    content="Search resale ticket sites, save listings, and instantly see which tickets are the best deal."
   />
 
-  <link rel="icon" href="./favicon_logo.png" />
-  <link rel="stylesheet" href="./styles-v2.css" />
+  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="stylesheet" href="./styles-v2.css"/>
 </head>
-<body class="page-search">
 
+<body class="page-search">
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
-        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img" />
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="nav-toggle" id="navToggle">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
 
-      <nav class="topnav" id="primary-nav">
+       <nav class="topnav" id="primary-nav">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="search.html" class="nav-link nav-active" aria-current="page">Search</a>
-        <a href="saved.html" class="nav-link">Saved</a>
-        <a href="compare.html" class="nav-link">Compare</a>
+        <a href="search.html" class="nav-link nav-active aria-current="page">Search</a>
+        <a href="duplicate-check.html" class="nav-link">Compare</a>
         <a href="how-it-works.html" class="nav-link">How It Works</a>
       </nav>
     </div>
   </header>
+    </div>
+  </header>
 
   <main>
+
+    <!-- HERO -->
     <section class="section">
       <div class="tvb-container">
         <div class="card" style="margin-top:16px;">
-          <h1 class="grad-text">Search ticket marketplaces faster</h1>
+          <h1 class="grad-text">Find the best ticket without the tab chaos</h1>
+
           <p class="muted" style="margin-top:8px;">
-            Start with an artist, team, or event, then open searches across the sites you want to check.
+            Search resale sites, save ticket options, and instantly see which one is cheapest.
           </p>
         </div>
       </div>
     </section>
 
+    <!-- SEARCH -->
     <section class="section">
       <div class="tvb-container">
         <div class="card search-card">
-          <h2>Search for tickets</h2>
+
+          <h2>Search tickets</h2>
 
           <form id="tixSearch" class="ms-form" novalidate>
+
             <label class="ms-label">
               <div class="ms-input-wrap">
                 <span>🔍</span>
                 <input
                   type="text"
                   id="tms-query"
-                  placeholder="Taylor Swift Seattle, Lakers Los Angeles, Chappell Roan Portland..."
+                  placeholder="chappell roan seattle, trail blazers portland..."
                   required
                   class="ms-input"
                 />
@@ -80,7 +87,7 @@
             <div class="ms-site-grid">
               <label class="pill-check"><input type="checkbox" id="site-google" checked><span>Google</span></label>
               <label class="pill-check"><input type="checkbox" id="site-seatgeek" checked><span>SeatGeek</span></label>
-              <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid Seats</span></label>
+              <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid</span></label>
               <label class="pill-check"><input type="checkbox" id="site-stubhub" checked><span>StubHub</span></label>
               <label class="pill-check"><input type="checkbox" id="site-ticketmaster" checked><span>Ticketmaster</span></label>
               <label class="pill-check"><input type="checkbox" id="site-tickpick" checked><span>TickPick</span></label>
@@ -91,69 +98,127 @@
               <button type="button" id="tms-copy" class="btn">Copy links</button>
               <button type="button" id="tms-reset" class="btn btn-ghost">Reset</button>
             </div>
+
           </form>
 
           <div id="tms-links" class="ms-links" style="margin-top:16px;"></div>
+
         </div>
       </div>
     </section>
 
+    <!-- SAVE -->
     <section class="section">
       <div class="tvb-container">
         <div class="card">
-          <h2>Save a listing</h2>
-          <p class="muted">Save ticket details so you can review and compare them later.</p>
+
+          <h2>Save a ticket</h2>
+
+          <p class="muted">Save ticket details so you can compare them in one place.</p>
 
           <form id="tti-snapshot-form" class="tti-form" novalidate>
-            <div class="tti-grid">
-              <input id="tti-event-name" placeholder="Event name" required class="tti-input" />
-              <input id="tti-event-location" placeholder="Venue" class="tti-input" />
-              <input id="tti-event-dates" placeholder="Date" class="tti-input" />
 
-              <input id="tti-section" placeholder="Section" class="tti-input" />
-              <input id="tti-row" placeholder="Row" class="tti-input" />
-              <input id="tti-seat" placeholder="Seat (ex: 12-14)" class="tti-input" />
+            <div class="tti-grid">
+
+              <input id="tti-event-name" placeholder="Event name" required class="tti-input"/>
+              <input id="tti-event-location" placeholder="Venue" class="tti-input"/>
+              <input id="tti-event-dates" placeholder="Date" class="tti-input"/>
+
+              <input id="tti-section" placeholder="Section" class="tti-input"/>
+              <input id="tti-row" placeholder="Row" class="tti-input"/>
+              <input id="tti-seat" placeholder="Seat (ex: 2-4)" class="tti-input"/>
 
               <select id="tti-marketplace" required class="tti-input">
-                <option value="" disabled selected>Marketplace</option>
+                <option value="" disabled selected>Site</option>
                 <option value="stubhub">StubHub</option>
                 <option value="seatgeek">SeatGeek</option>
-                <option value="vivid">Vivid Seats</option>
+                <option value="vivid">Vivid</option>
                 <option value="ticketmaster">Ticketmaster</option>
                 <option value="tickpick">TickPick</option>
               </select>
 
-              <input id="tti-price" type="number" placeholder="Price" required class="tti-input" />
-              <input id="tti-fees" type="number" placeholder="All-in total (optional)" class="tti-input" />
-              <input id="tti-url" type="url" placeholder="Ticket link" required class="tti-input" />
+              <input id="tti-price" type="number" placeholder="Price" required class="tti-input"/>
+              <input id="tti-fees" type="number" placeholder="All-in (optional)" class="tti-input"/>
+              <input id="tti-url" type="url" placeholder="Ticket link" required class="tti-input"/>
+
             </div>
 
             <div class="tti-row">
-              <button type="submit" class="btn primary">Save listing</button>
-              <a href="saved.html" class="btn btn-ghost">View saved</a>
+              <button type="submit" class="btn primary">Save</button>
             </div>
 
             <p id="tti-status" class="muted"></p>
+
           </form>
+
         </div>
       </div>
     </section>
 
+    <!-- COMPARE -->
+    <!-- COMPARE -->
+<section class="section">
+  <div class="tvb-container">
+    <div class="card">
+
+      <h2>Your ticket options</h2>
+
+      <div class="tti-compare-toolbar">
+        <label class="tti-sort-wrap">
+          <span class="muted">Events:</span>
+          <select id="tti-event-sort" class="tti-sort-select">
+            <option value="lowest-price">Lowest price</option>
+            <option value="lowest-total">Lowest total</option>
+            <option value="event-name">Event name</option>
+            <option value="most-recent">Most recent</option>
+          </select>
+        </label>
+
+        <label class="tti-sort-wrap">
+          <span class="muted">Listings:</span>
+          <select id="tti-sort" class="tti-sort-select">
+            <option value="price-asc">Lowest price</option>
+            <option value="allin-asc">Lowest total</option>
+            <option value="newest">Newest</option>
+            <option value="marketplace">Marketplace</option>
+          </select>
+        </label>
+
+        <div class="tti-toolbar-actions">
+          <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
+          <button type="button" class="btn btn-ghost" id="tti-collapse-all">Collapse all</button>
+        </div>
+      </div>
+
+      <div class="tti-table-wrap">
+        <div id="tti-snapshots-body" class="tti-snapshots-list">
+          <div class="muted">No saved tickets yet.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+    <!-- SEAT CHECK -->
     <section class="section">
       <div class="tvb-container">
-        <div class="card" style="text-align:center;">
-          <h2>Next step: review what you saved</h2>
-          <p class="muted" style="max-width:700px; margin:10px auto 0;">
-            Once you have a few good options, head to Saved to organize them or Compare to review them side by side.
+        <div class="card">
+
+          <h2>Check seats (optional)</h2>
+
+          <p class="muted">
+            See if listings might be the same seats before you choose.
           </p>
 
-          <div style="margin-top:20px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-            <a href="saved.html" class="btn primary">Go to Saved</a>
-            <a href="compare.html" class="btn btn-ghost">Go to Compare</a>
-          </div>
+          <a href="duplicate-check.html" class="btn primary">
+            Check seats
+          </a>
+
         </div>
       </div>
     </section>
+
   </main>
 
   <footer>
@@ -161,7 +226,8 @@
       <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
     </div>
   </footer>
-
+  <script src="./js/config.js"></script>
   <script src="./js/main.js" defer></script>
+</script>
 </body>
 </html>

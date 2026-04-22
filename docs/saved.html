@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -10,24 +10,24 @@
     gtag('config', 'G-G4R61ZH08K');
   </script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ticket VeriGuard — Saved Listings</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Ticket VeriGuard — Saved Tickets</title>
 
   <meta
     name="description"
-    content="Review and manage your saved ticket listings in one place."
+    content="Review your saved ticket listings in one place."
   />
 
-  <link rel="icon" href="./favicon_logo.png" />
-  <link rel="stylesheet" href="./styles-v2.css" />
+  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="stylesheet" href="./styles-v2.css"/>
 </head>
-<body class="page-saved">
 
+<body class="page-search">
   <header class="nav">
     <div class="nav--brand">
       <a href="index.html" class="logo-bay">
-        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img" />
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
       <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,9 +50,9 @@
     <section class="section">
       <div class="tvb-container">
         <div class="card" style="margin-top:16px;">
-          <h1 class="grad-text">Saved listings</h1>
+          <h1 class="grad-text">Saved tickets</h1>
           <p class="muted" style="margin-top:8px;">
-            Keep your ticket options in one place so you can review them without losing track of details.
+            Review the listings you saved, grouped by event, with the same layout you already liked.
           </p>
         </div>
       </div>
@@ -61,67 +61,44 @@
     <section class="section">
       <div class="tvb-container">
         <div class="card">
-          <div style="display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap; align-items:center;">
-            <div>
-              <h2 style="margin-bottom:6px;">Your saved options</h2>
-              <p class="muted">Filter, review, and prepare listings for comparison.</p>
-            </div>
 
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button type="button" class="btn btn-ghost">Filter by event</button>
-              <button type="button" class="btn btn-ghost">Filter by marketplace</button>
-              <button type="button" class="btn btn-ghost">Sort by price</button>
+          <h2>Your ticket options</h2>
+
+          <div class="tti-compare-toolbar">
+            <label class="tti-sort-wrap">
+              <span class="muted">Events:</span>
+              <select id="tti-event-sort" class="tti-sort-select">
+                <option value="lowest-price">Lowest price</option>
+                <option value="lowest-total">Lowest total</option>
+                <option value="event-name">Event name</option>
+                <option value="most-recent">Most recent</option>
+              </select>
+            </label>
+
+            <label class="tti-sort-wrap">
+              <span class="muted">Listings:</span>
+              <select id="tti-sort" class="tti-sort-select">
+                <option value="price-asc">Lowest price</option>
+                <option value="allin-asc">Lowest total</option>
+                <option value="newest">Newest</option>
+                <option value="marketplace">Marketplace</option>
+              </select>
+            </label>
+
+            <div class="tti-toolbar-actions">
+              <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
+              <button type="button" class="btn btn-ghost" id="tti-collapse-all">Collapse all</button>
+              <button type="button" class="btn btn-ghost" id="tti-clear-session">Clear all</button>
             </div>
           </div>
 
-          <div style="margin-top:20px;" id="saved-listings-area">
-            <div class="card item" style="margin-bottom:14px;">
-              <h3>Sample listing</h3>
-              <p class="muted" style="margin-bottom:10px;">
-                Event name • Venue • Date
-              </p>
-
-              <div class="grid-3">
-                <div class="item">
-                  <strong>Section / Row / Seat</strong>
-                  <p class="muted">A • 12 • 3-4</p>
-                </div>
-                <div class="item">
-                  <strong>Price</strong>
-                  <p class="muted">$185</p>
-                </div>
-                <div class="item">
-                  <strong>Marketplace</strong>
-                  <p class="muted">StubHub</p>
-                </div>
-              </div>
-
-              <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="btn primary">Select for compare</button>
-                <button class="btn btn-ghost">Check for duplicates</button>
-                <button class="btn btn-ghost">Remove</button>
-              </div>
+          <div class="tti-table-wrap">
+            <div id="tti-snapshots-body" class="tti-snapshots-list">
+              <div class="muted">No saved tickets yet.</div>
             </div>
-
-            <p class="muted">
-              Replace this sample block with your localStorage-rendered saved listings.
-            </p>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="tvb-container">
-        <div class="card" style="text-align:center;">
-          <h2>Ready to compare?</h2>
-          <p class="muted" style="max-width:700px; margin:10px auto 0;">
-            Once you have a few listings worth reviewing, move to Compare to see them side by side.
-          </p>
-
-          <div style="margin-top:20px;">
-            <a href="compare.html" class="btn primary">Go to Compare</a>
-          </div>
+          <p id="tti-status" class="muted" style="margin-top:14px;"></p>
         </div>
       </div>
     </section>

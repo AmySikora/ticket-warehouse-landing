@@ -1877,6 +1877,53 @@ function groupSnapshotsByEvent(items) {
     });
   }
 
+      function normalizeQuery(value) {
+    return String(value || "").trim().replace(/\s+/g, " ");
+  }
+
+  function buildMarketplaceSearchUrl(marketplace) {
+    const query = normalizeQuery(queryEl?.value);
+    if (!query || !marketplace) return "";
+
+    const site = searchSites.find((item) => item.id === `site-${marketplace}`);
+    if (!site) return "";
+
+    return `https://www.google.com/search?q=${encodeURIComponent(`${query} site:${site.domain}`)}`;
+  }
+
+  function autofillUrlFromMarketplace() {
+    if (!marketplaceEl || !urlEl) return;
+
+    const marketplace = safeText(marketplaceEl.value);
+    if (!marketplace) return;
+
+    const generatedUrl = buildMarketplaceSearchUrl(marketplace);
+    if (!generatedUrl) return;
+
+    const currentValue = safeText(urlEl.value);
+
+    // Replace empty field or previously generated Google marketplace search links
+    const shouldReplace =
+      !currentValue ||
+      currentValue.includes("google.com/search?q=");
+
+    if (shouldReplace) {
+      urlEl.value = generatedUrl;
+    }
+  }
+
+  if (marketplaceEl) {
+    marketplaceEl.addEventListener("change", autofillUrlFromMarketplace);
+  }
+
+  if (queryEl) {
+    queryEl.addEventListener("input", () => {
+      if (safeText(urlEl?.value).includes("google.com/search?q=")) {
+        autofillUrlFromMarketplace();
+      }
+    });
+  }
+
   if (snapshotBody) {
     snapshotBody.addEventListener("click", (event) => {
       const toggleBtn = event.target.closest("[data-toggle-event]");
@@ -1981,4 +2028,300 @@ function groupSnapshotsByEvent(items) {
   setEditingVisualState(false);
 });
 
-  
+  tvgSafe("saved-page-render", () => {
+  const snapshotBody = document.getElementById("tti-snapshots-body");
+  if (!snapshotBody) return;
+
+  const STORAGE_KEY = "tti_snapshots_v0";
+  const eventSortEl = document.getElementById("tti-event-sort");
+  const snapshotSortEl = document.getElementById("tti-sort");
+  const expandAllBtn = document.getElementById("tti-expand-all");
+  const collapseAllBtn = document.getElementById("tti-collapse-all");
+  const clearBtn = document.getElementById("tti-clear-session");
+  const statusEl = document.getElementById("tti-status");
+
+  const collapsedEventKeys = new Set();
+
+  function formatMoney(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return "—";
+    return num.toFixed(2);
+  }
+
+  function loadSnapshots() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.error("Could not load snapshots:", error);
+      return [];
+    }
+  }
+
+  function saveSnapshots(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+
+  function setStatus(message) {
+    if (statusEl) statusEl.textContent = message || "";
+  }
+
+  function formatSavedDate(value) {
+    if (!value) return "—";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return value;
+    return d.toLocaleDateString();
+  }
+
+  function groupSnapshots(items) {
+    const map = new Map();
+
+    items.forEach((item) => {
+      const key = [
+        safeText(item.event_name),
+        safeText(item.event_location),
+        safeText(item.event_dates)
+      ].join("||");
+
+      if (!map.has(key)) {
+        map.set(key, {
+          key,
+          event_name: safeText(item.event_name, "Untitled event"),
+          event_location: safeText(item.event_location),
+          event_dates: safeText(item.event_dates),
+          items: []
+        });
+      }
+
+      map.get(key).items.push(item);
+    });
+
+    return Array.from(map.values());
+  }
+
+  function sortSnapshots(items, mode) {
+    const list = items.slice();
+
+    if (mode === "price-asc") {
+      list.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+    } else if (mode === "allin-asc") {
+      list.sort((a, b) => {
+        const aTotal = Number(a.fees ?? a.price ?? 0);
+        const bTotal = Number(b.fees ?? b.price ?? 0);
+        return aTotal - bTotal;
+      });
+    } else if (mode === "marketplace") {
+      list.sort((a, b) => safeText(a.marketplace).localeCompare(safeText(b.marketplace)));
+    } else {
+      list.sort((a, b) => new Date(b.captured_at) - new Date(a.captured_at));
+    }
+
+    return list;
+  }
+
+  function sortGroups(groups, mode) {
+    const list = groups.slice();
+
+    if (mode === "event-name") {
+      list.sort((a, b) => a.event_name.localeCompare(b.event_name));
+      return list;
+    }
+
+    if (mode === "most-recent") {
+      list.sort((a, b) => {
+        const aDate = Math.max(...a.items.map((item) => new Date(item.captured_at).getTime() || 0));
+        const bDate = Math.max(...b.items.map((item) => new Date(item.captured_at).getTime() || 0));
+        return bDate - aDate;
+      });
+      return list;
+    }
+
+    if (mode === "lowest-total") {
+      list.sort((a, b) => {
+        const aMin = Math.min(...a.items.map((item) => Number(item.fees ?? item.price ?? Infinity)));
+        const bMin = Math.min(...b.items.map((item) => Number(item.fees ?? item.price ?? Infinity)));
+        return aMin - bMin;
+      });
+      return list;
+    }
+
+    list.sort((a, b) => {
+      const aMin = Math.min(...a.items.map((item) => Number(item.price ?? Infinity)));
+      const bMin = Math.min(...b.items.map((item) => Number(item.price ?? Infinity)));
+      return aMin - bMin;
+    });
+
+    return list;
+  }
+
+  function removeSnapshot(id) {
+    const items = loadSnapshots().filter((item) => item.id !== id);
+    saveSnapshots(items);
+    renderSnapshots();
+    setStatus("Listing removed.");
+  }
+
+  function clearAllSnapshots() {
+    localStorage.removeItem(STORAGE_KEY);
+    renderSnapshots();
+    setStatus("All saved tickets cleared.");
+  }
+
+  function renderSnapshots() {
+    const items = loadSnapshots();
+
+    if (!items.length) {
+      snapshotBody.innerHTML = `<div class="muted">No saved tickets yet.</div>`;
+      return;
+    }
+
+    const grouped = sortGroups(
+      groupSnapshots(items),
+      eventSortEl?.value || "lowest-price"
+    );
+
+    snapshotBody.innerHTML = "";
+
+    grouped.forEach((group) => {
+      const isCollapsed = collapsedEventKeys.has(group.key);
+      const sortedItems = sortSnapshots(
+        group.items,
+        snapshotSortEl?.value || "price-asc"
+      );
+
+      const lowestPrice = Math.min(...sortedItems.map((item) => Number(item.price ?? Infinity)));
+      const lowestAllIn = Math.min(...sortedItems.map((item) => Number(item.fees ?? item.price ?? Infinity)));
+      const eventMeta = [group.event_location, group.event_dates].filter(Boolean).join(" • ");
+
+      const rowsHtml = sortedItems.map((snapshot) => {
+        const snapshotPrice = Number(snapshot.price ?? 0);
+        const snapshotTotal = Number(snapshot.fees ?? snapshot.price ?? 0);
+        const isLowestPrice = snapshotPrice === lowestPrice;
+        const isLowestAllIn = snapshotTotal === lowestAllIn;
+
+        const urlCell = snapshot.url
+          ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">Open link</a>`
+          : "—";
+
+        return `
+          <tr>
+            <td>${escapeHTML(formatSavedDate(snapshot.captured_at))}</td>
+            <td>${escapeHTML(snapshot.section || "—")}</td>
+            <td>${escapeHTML(snapshot.row || "—")}</td>
+            <td>${escapeHTML(snapshot.seat || "—")}</td>
+            <td>${escapeHTML(snapshot.marketplace || "—")}</td>
+            <td>
+              $${escapeHTML(formatMoney(snapshotPrice))}
+              ${isLowestPrice ? `<span class="tti-price-badge">Lowest price</span>` : ""}
+            </td>
+            <td>
+              $${escapeHTML(formatMoney(snapshotTotal))}
+              ${isLowestAllIn ? `<span class="tti-price-badge tti-price-badge-allin">Lowest total</span>` : ""}
+            </td>
+            <td>${urlCell}</td>
+            <td>
+              <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      const card = document.createElement("div");
+      card.className = "tti-event-card";
+
+      card.innerHTML = `
+        <div class="tti-event-card__header">
+          <div class="tti-event-card__title-wrap">
+            <h3 class="tti-event-card__title">${escapeHTML(group.event_name)}</h3>
+            <p class="tti-event-card__meta">${escapeHTML(eventMeta || "Saved listing group")}</p>
+          </div>
+
+          <div class="tti-event-card__badges">
+            <span class="tti-price-badge">Lowest price: $${escapeHTML(formatMoney(lowestPrice))}</span>
+            <span class="tti-price-badge tti-price-badge-allin">Lowest total: $${escapeHTML(formatMoney(lowestAllIn))}</span>
+            <span class="tti-price-badge">${group.items.length} listing${group.items.length === 1 ? "" : "s"}</span>
+            <button
+              type="button"
+              class="btn btn-ghost tti-mini"
+              data-toggle-event="${escapeHTML(group.key)}"
+            >
+              ${isCollapsed ? "Expand" : "Collapse"}
+            </button>
+          </div>
+        </div>
+
+        ${
+          isCollapsed
+            ? ""
+            : `
+              <div class="tti-event-card__table-wrap">
+                <table class="tti-event-table">
+                  <thead>
+                    <tr>
+                      <th>Saved</th>
+                      <th>Section</th>
+                      <th>Row</th>
+                      <th>Seat</th>
+                      <th>Site</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                      <th>Link</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rowsHtml}
+                  </tbody>
+                </table>
+              </div>
+            `
+        }
+      `;
+
+      snapshotBody.appendChild(card);
+    });
+  }
+
+  snapshotBody.addEventListener("click", (event) => {
+    const delBtn = event.target.closest("[data-del]");
+    if (delBtn) {
+      removeSnapshot(delBtn.getAttribute("data-del"));
+      return;
+    }
+
+    const toggleBtn = event.target.closest("[data-toggle-event]");
+    if (toggleBtn) {
+      const key = toggleBtn.getAttribute("data-toggle-event");
+      if (collapsedEventKeys.has(key)) {
+        collapsedEventKeys.delete(key);
+      } else {
+        collapsedEventKeys.add(key);
+      }
+      renderSnapshots();
+    }
+  });
+
+  if (eventSortEl) eventSortEl.addEventListener("change", renderSnapshots);
+  if (snapshotSortEl) snapshotSortEl.addEventListener("change", renderSnapshots);
+
+  if (expandAllBtn) {
+    expandAllBtn.addEventListener("click", () => {
+      collapsedEventKeys.clear();
+      renderSnapshots();
+    });
+  }
+
+  if (collapseAllBtn) {
+    collapseAllBtn.addEventListener("click", () => {
+      groupSnapshots(loadSnapshots()).forEach((group) => collapsedEventKeys.add(group.key));
+      renderSnapshots();
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", clearAllSnapshots);
+  }
+
+  renderSnapshots();
+});
