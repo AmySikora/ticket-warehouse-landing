@@ -12,11 +12,11 @@
 
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Ticket VeriGuard — Check for Duplicate Listings</title>
+  <title>Ticket VeriGuard — Check Your Tickets</title>
 
   <meta
     name="description"
-    content="Check saved ticket listings for possible duplicate seats so you can compare options more clearly before you buy."
+    content="Check your saved ticket listings for duplicate seats before you buy."
   />
 
   <link rel="icon" href="./favicon_logo.png"/>
@@ -44,29 +44,28 @@
   <main class="tvb-page">
     <div class="tvb-container">
 
-      <!-- HERO -->
+      <!-- INTRO -->
       <section class="tvb-card">
-        <h1>Check saved listings for possible duplicate seats</h1>
+        <h1>Check your tickets before you buy</h1>
 
         <p class="muted" style="margin-top:8px;">
-          Run a quick check to flag listings that may point to the same seats across ticket sites,
-          so you can compare with more confidence.
+          Saved tickets from different sites? Run a quick check to see if the same seat shows up more than once.
         </p>
 
         <div id="tvg-current-context" class="tvb-note" style="margin-top:12px;">
-          Using saved listings from this browser.
+          Using tickets saved in this browser.
         </div>
       </section>
 
       <!-- ACTIONS -->
       <section class="tvb-card">
 
-        <h2 style="margin-bottom:12px;">Run a duplicate check</h2>
+        <h2 style="margin-bottom:12px;">Run a quick check</h2>
 
         <div class="tvg-upload-row">
 
           <button type="button" id="tvg-run-snapshots-btn" class="btn primary">
-            Check Saved Listings
+            Check Saved Tickets
           </button>
 
           <label class="btn btn-ghost tvg-file-label">
@@ -79,7 +78,7 @@
           </button>
 
           <button type="button" id="tvg-sample-btn" class="btn btn-ghost">
-            Try Sample Data
+            Try Sample Tickets
           </button>
 
           <div id="tvg-file-label" class="tvb-note tvg-file-name">
@@ -89,7 +88,7 @@
         </div>
 
         <div class="tvg-microcopy">
-          Everything runs in your browser. Your saved data stays local.
+          This runs in your browser. Your saved ticket info stays on your device.
         </div>
 
         <div id="tvg-summary" class="tvg-summary-strip"></div>
@@ -101,9 +100,9 @@
         <div class="tvg-filter-row">
 
           <select id="tvg-filter-decision" class="btn btn-ghost">
-            <option value="all">All results</option>
-            <option value="Approved">Looks clear</option>
-            <option value="Blocked">Possible duplicate</option>
+            <option value="all">All tickets</option>
+            <option value="Approved">Looks good</option>
+            <option value="Blocked">Check this seat</option>
           </select>
 
           <select id="tvg-filter-marketplace" class="btn btn-ghost">
@@ -111,7 +110,7 @@
           </select>
 
           <button id="tvg-reset-filters" class="btn btn-ghost">
-            Reset
+            Clear filters
           </button>
 
           <div class="tvg-filter-spacer"></div>
@@ -126,31 +125,30 @@
       <!-- RESULTS -->
       <section class="tvb-card">
 
-        <h3 style="margin-bottom:6px;">Results</h3>
+        <h3 style="margin-bottom:6px;">Your ticket check</h3>
 
         <p class="tvb-note">
-          “Possible duplicate” means two listings may refer to the same seats.
-          It’s a helpful flag, not a guarantee.
+          If a seat is flagged, take a closer look before buying. It may be listed more than once.
         </p>
 
         <div class="tvg-table-wrap">
           <table id="tvg-results-table">
             <thead>
               <tr>
-                  <th>ID</th>
-                  <th>Decision</th>
-                  <th>Marketplace</th>
-                  <th>Event</th>
-                  <th>Section</th>
-                  <th>Row</th>
-                  <th>Seat</th>
-                  <th>When</th>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Site</th>
+                <th>Event</th>
+                <th>Section</th>
+                <th>Row</th>
+                <th>Seat</th>
+                <th>When</th>
               </tr>
             </thead>
             <tbody>
               <tr class="tvg-empty-row">
                 <td colspan="8">
-                  Run a duplicate check to see your results here.
+                  Run a check to see your results here.
                 </td>
               </tr>
             </tbody>
