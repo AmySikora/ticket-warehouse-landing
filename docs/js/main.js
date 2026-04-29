@@ -438,17 +438,17 @@ tvgSafe("verify-csv", () => {
 
     summaryStrip.appendChild(strong);
     summaryStrip.appendChild(
-      makePill(`${conflictGroupCount} possible match group${conflictGroupCount === 1 ? "" : "s"}`)
+     makePill(`${conflictGroupCount} conflict group${conflictGroupCount === 1 ? "" : "s"}`)
     );
     summaryStrip.appendChild(
-      makePill(`${riskyCount} possible same-seat listing${riskyCount === 1 ? "" : "s"}`)
+      makePill(`${riskyCount} risky listing${riskyCount === 1 ? "" : "s"}`)
     );
     summaryStrip.appendChild(makePill(`Source: ${source}`));
     summaryStrip.appendChild(
       makePill(
         riskyCount > 0
-          ? "Review the possible same-seat matches below."
-          : "No possible same-seat matches found."
+          ? "These are the seats we’d double-check before buying."
+          : "No risky duplicate seats found."
       )
     );
   }
@@ -619,73 +619,77 @@ tvgSafe("verify-csv", () => {
   }
 
   function renderTable() {
-    if (!tableBody) return;
+  if (!tableBody) return;
 
-    const rows = getFilteredRows().slice();
-    tableBody.innerHTML = "";
+  const rows = getFilteredRows().slice();
+  tableBody.innerHTML = "";
 
-    if (!rows.length) {
-      renderEmpty("No rows to display with the current filters.");
-      return;
-    }
+  if (!rows.length) {
+    renderEmpty("No rows to display with the current filters.");
+    return;
+  }
 
-    if (sortState.key) {
-      rows.sort((a, b) => {
-        const aValue = safeText(a[sortState.key]).toLowerCase();
-        const bValue = safeText(b[sortState.key]).toLowerCase();
+  if (sortState.key) {
+    rows.sort((a, b) => {
+      const aValue = safeText(a[sortState.key]).toLowerCase();
+      const bValue = safeText(b[sortState.key]).toLowerCase();
 
-        if (aValue < bValue) return -1 * sortState.dir;
-        if (aValue > bValue) return 1 * sortState.dir;
-        return 0;
-      });
-    }
-
-    const groupMeta = Object.fromEntries(conflictGroups.map((group) => [group.id, group]));
-    const insertedGroupHeaders = new Set();
-
-    rows.forEach((row) => {
-      const groupId = conflictLookup[row._index];
-
-      if (groupId && !insertedGroupHeaders.has(groupId) && groupMeta[groupId]) {
-        insertedGroupHeaders.add(groupId);
-
-        const group = groupMeta[groupId];
-        const labelRow = document.createElement("tr");
-        labelRow.className = "tvg-group-label-row";
-        labelRow.innerHTML = `
-          <td colspan="8">
-            Possible match group #${group.id} — ${group.size} listings may share the same seat
-            (${escapeHTML(group.event)} • Sec ${escapeHTML(group.section)} • Row ${escapeHTML(group.row)} • Seat ${escapeHTML(group.seat)})
-          </td>
-        `;
-        tableBody.appendChild(labelRow);
-      }
-
-      const isBlocked = row.decision === "Blocked";
-      const tr = document.createElement("tr");
-      tr.className = isBlocked ? "tvg-row tvg-conflict-row" : "tvg-row tvg-clean-row";
-      tr.dataset.decision = isBlocked ? "Blocked" : "Approved";
-
-      tr.innerHTML = `
-        <td>${escapeHTML(row.id)}</td>
-        <td>
-          ${
-            isBlocked
-              ? '<span class="tvg-status-pill tvg-status-risk">Possible same seat</span>'
-              : '<span class="tvg-status-pill tvg-status-ok">Looks fine</span>'
-          }
-        </td>
-        <td>${escapeHTML(row.marketplace || "—")}</td>
-        <td>${escapeHTML(row.event)}</td>
-        <td>${escapeHTML(row.section)}</td>
-        <td>${escapeHTML(row.row)}</td>
-        <td>${escapeHTML(row.seat)}</td>
-        <td>${escapeHTML(row.when)}</td>
-      `;
-
-      tableBody.appendChild(tr);
+      if (aValue < bValue) return -1 * sortState.dir;
+      if (aValue > bValue) return 1 * sortState.dir;
+      return 0;
     });
   }
+
+  const groupMeta = Object.fromEntries(
+    conflictGroups.map((group) => [group.id, group])
+  );
+  const insertedGroupHeaders = new Set();
+
+  rows.forEach((row) => {
+    const groupId = conflictLookup[row._index];
+
+    if (groupId && !insertedGroupHeaders.has(groupId) && groupMeta[groupId]) {
+      insertedGroupHeaders.add(groupId);
+
+      const group = groupMeta[groupId];
+      const labelRow = document.createElement("tr");
+      labelRow.className = "tvg-group-label-row";
+      labelRow.innerHTML = `
+        <td colspan="8">
+          Conflict group #${group.id} — ${group.size} listings share the same seat
+          (${escapeHTML(group.event)} • Sec ${escapeHTML(group.section)} • Row ${escapeHTML(group.row)} • Seat ${escapeHTML(group.seat)})
+        </td>
+      `;
+      tableBody.appendChild(labelRow);
+    }
+
+    const isBlocked = row.decision === "Blocked";
+    const tr = document.createElement("tr");
+    tr.className = isBlocked
+      ? "tvg-row tvg-conflict-row"
+      : "tvg-row tvg-clean-row";
+    tr.dataset.decision = isBlocked ? "Blocked" : "Approved";
+
+    tr.innerHTML = `
+      <td>${escapeHTML(row.id)}</td>
+      <td>
+        ${
+          isBlocked
+            ? '<span class="tvg-status-pill tvg-status-risk">Duplicate seat</span>'
+            : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
+        }
+      </td>
+      <td>${escapeHTML(row.marketplace || "—")}</td>
+      <td>${escapeHTML(row.event)}</td>
+      <td>${escapeHTML(row.section)}</td>
+      <td>${escapeHTML(row.row)}</td>
+      <td>${escapeHTML(row.seat)}</td>
+      <td>${escapeHTML(row.when)}</td>
+    `;
+
+    tableBody.appendChild(tr);
+  });
+}
 
   function runAnalysis(data, sourceLabel) {
     const mappedRows = buildRows(data);
