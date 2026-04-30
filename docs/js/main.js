@@ -1007,11 +1007,16 @@ function buildOutboundUrl(rawUrl, meta = {}) {
   }
 
   const params = new URLSearchParams({
-    url: cleanUrl
+    url: cleanUrl,
   });
 
-  if (meta.source) params.set("source", meta.source);
-                   params.set("event", rawUrl);
+  if (meta.source) {
+    params.set("source", meta.source);
+  }
+
+  if (meta.event) {
+    params.set("event", meta.event);
+  }
 
   return `${base}/out?${params.toString()}`;
 }
@@ -1629,9 +1634,19 @@ function groupSnapshotsByEvent(items) {
             .filter(Boolean)
             .join(" ");
 
-          const urlCell = snapshot.url
-            ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">Open</a>`
+          const marketplaceName =
+            marketplaceLabels[snapshot.marketplace] || snapshot.marketplace || "ticket site";
+
+          const outUrl = snapshot.url
+            ? buildOutboundUrl(snapshot.url, {
+                source: marketplaceName,
+                event: snapshot.event_name,
+              })
             : "";
+
+const urlCell = outUrl
+  ? `<a href="${escapeHTML(outUrl)}" target="_blank" rel="noopener noreferrer" class="btn tti-mini">View on ${escapeHTML(marketplaceName)}</a>`
+  : "—";
 
           return `
             <tr data-snapshot-id="${escapeHTML(snapshot.id)}" class="${rowClasses}">
