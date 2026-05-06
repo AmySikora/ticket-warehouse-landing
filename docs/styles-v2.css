@@ -2463,3 +2463,16 @@ footer {
   transform: none;
 }
 
+.tvg-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--brand-2);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tvg-email-link:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
