@@ -1032,10 +1032,19 @@ function buildOutboundUrl(rawUrl, meta = {}) {
   }
 
   function totalCost(item) {
-    const price = Number(item.price);
-    const fees = Number(item.fees);
-    return price + (Number.isFinite(fees) ? fees : 0);
+  const price = Number(item.price);
+  const totalWithFees = Number(item.fees);
+
+  if (Number.isFinite(totalWithFees)) {
+    return totalWithFees;
   }
+
+  if (Number.isFinite(price)) {
+    return price;
+  }
+
+  return 0;
+}
 
   function loadSnapshots() {
     try {
@@ -2205,7 +2214,7 @@ const urlCell = outUrl
         const isLowestAllIn = snapshotTotal === lowestAllIn;
 
         const urlCell = snapshot.url
-          ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer">Open link</a>`
+         ? `<a href="${escapeHTML(snapshot.url)}" target="_blank" rel="noopener noreferrer" class="btn tti-mini">View</a>`
           : "—";
 
         return `
