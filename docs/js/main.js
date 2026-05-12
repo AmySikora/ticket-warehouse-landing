@@ -1011,7 +1011,7 @@ function buildOutboundUrl(rawUrl, meta = {}) {
   });
 
   if (meta.source) {
-    params.set("source", meta.source);
+    params.set("market", meta.source);
   }
 
   if (meta.event) {
