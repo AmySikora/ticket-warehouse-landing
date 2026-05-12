@@ -1011,7 +1011,7 @@ function buildOutboundUrl(rawUrl, meta = {}) {
   });
 
   if (meta.source) {
-  params.set("market", meta.source);
+  params.set("source", meta.source);
 }
 
   if (meta.event) {
@@ -1350,7 +1350,10 @@ function groupSnapshotsByEvent(items) {
     urls.forEach((item) => {
       const a = document.createElement("a");
       a.className = "ms-link";
-      a.href = buildOutboundUrl(item.href, { source: item.source });
+      a.href = buildOutboundUrl(item.href, {
+      source: item.source,
+      event: normalizeQuery(queryEl?.value),
+      });
       a.target = "_blank";
       a.rel = "noopener noreferrer";
       a.textContent = item.source;
@@ -1396,14 +1399,17 @@ function groupSnapshotsByEvent(items) {
 
     urls.forEach((item) => {
       const popup = window.open(
-        buildOutboundUrl(item.href, { source: item.source }),
+        buildOutboundUrl(item.href, {
+          source: item.source,
+          event: normalizeQuery(queryEl?.value)
+        }),
         "_blank",
         "noopener"
       );
 
-      if (!popup || popup.closed) {
-        blocked = true;
-      }
+if (!popup || popup.closed) {
+  blocked = true;
+}
     });
 
     if (blocked) {
