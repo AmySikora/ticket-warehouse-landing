@@ -767,11 +767,11 @@ button.btn,
    9. SEARCH PAGE / TRACKER
    ===================================================== */
 .page-search .section {
-  padding: 24px 0;
+  padding: 20px 0;
 }
 
 .page-search .section:first-of-type {
-  padding-top: 36px;
+  padding-top: 28px;
 }
 
 .page-search .tti-workflow > h1,
@@ -2039,6 +2039,38 @@ textarea:focus {
     0 0 0 1px rgba(255,255,255,0.08) inset,
     0 0 18px rgba(38, 198, 255, 0.38),
     0 10px 24px rgba(20, 60, 140, 0.42) !important;
+}
+
+/* Search page cleanup */
+
+.page-search .card {
+  margin-bottom: 4px;
+}
+
+.page-search h2 {
+  margin-bottom: 6px;
+}
+
+.page-search .muted {
+  line-height: 1.55;
+}
+
+.search-card {
+  gap: 12px;
+}
+
+.page-search .tti-form,
+.page-search .ms-form {
+  margin-top: 14px;
+}
+
+.page-search .tti-grid {
+  gap: 12px;
+}
+
+.page-search .tti-row,
+.page-search .ms-actions {
+  margin-top: 10px;
 }
 
 /* =====================================================

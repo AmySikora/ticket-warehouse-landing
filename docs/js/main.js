@@ -1190,7 +1190,7 @@ function groupSnapshotsByEvent(items) {
     const normalizedDate =
       normalizeEventDate(item.event_dates) || defaults.date || "";
 
-    const key = [normalizedName, normalizedLocation, normalizedDate].join("|||");
+   const key = [normalizedName, normalizedDate].join("|||");
 
     if (!groups.has(key)) {
       groups.set(key, {
