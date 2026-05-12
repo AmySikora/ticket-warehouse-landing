@@ -361,23 +361,6 @@ tvgSafe("verify-csv", () => {
     }
   }
 
-  function bindSearchInputs() {
-  const fields = [
-    queryEl,
-    document.getElementById("site-google"),
-    document.getElementById("site-seatgeek"),
-    document.getElementById("site-vivid"),
-    document.getElementById("site-stubhub"),
-    document.getElementById("site-ticketmaster"),
-    document.getElementById("site-tickpick")
-  ].filter(Boolean);
-
-  fields.forEach((field) => {
-    field.addEventListener("input", renderPreviewLinks);
-    field.addEventListener("change", renderPreviewLinks);
-  });
-}
-
   function updateCurrentContext() {
     if (!currentContextEl) return;
 
@@ -1900,10 +1883,6 @@ const urlCell = outUrl
       field.addEventListener("input", renderPreviewLinks);
       field.addEventListener("change", renderPreviewLinks);
     });
-  }
-
-      function normalizeQuery(value) {
-    return String(value || "").trim().replace(/\s+/g, " ");
   }
 
   function buildMarketplaceSearchUrl(marketplace) {
