@@ -1175,11 +1175,12 @@ button.btn,
 }
 
 .tti-event-card__table-wrap {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
-}
-
-.tti-event-card__table-wrap {
-  overflow: hidden; /* THIS is what actually clips the corners */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 0.75rem;
   border-radius: 14px;
   border: 1px solid rgba(56, 189, 248, 0.28);
 }
@@ -1187,11 +1188,6 @@ button.btn,
 /* ==========================================
    Compare cards - inner event table styling
    ========================================== */
-
-.tti-event-card__table-wrap {
-  overflow-x: auto;
-  margin-top: 0.75rem;
-}
 
 .tti-event-table thead th:first-child {
   border-top-left-radius: 14px;
@@ -1211,6 +1207,7 @@ button.btn,
 
 .tti-event-table {
   width: 100%;
+  min-width: 760px;
   border-collapse: collapse;
   font-size: 0.95rem;
   border: 1px solid rgba(56, 189, 248, 0.28);
