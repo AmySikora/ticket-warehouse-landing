@@ -2193,6 +2193,11 @@ const urlCell = outUrl
     });
   }
   if (snapshotExportBtn) snapshotExportBtn.addEventListener("click", exportSnapshotsCsv);
+  if (snapshotImportBtn && snapshotImportFile) {
+  snapshotImportBtn.addEventListener("click", () => {
+    snapshotImportFile.click();
+  });
+}
   if (snapshotClearBtn) snapshotClearBtn.addEventListener("click", clearSnapshots);
 
   if (eventSortEl) eventSortEl.addEventListener("change", renderSnapshots);
