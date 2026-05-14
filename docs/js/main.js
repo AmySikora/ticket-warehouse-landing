@@ -924,6 +924,7 @@ tvgSafe("verify-csv", () => {
 
   const collapsedEventKeys = new Set();
   let editingId = null;
+  let editingEventKey = null;
 
   const searchSites = [
     { id: "site-seatgeek", label: "SeatGeek", domain: "seatgeek.com" },
@@ -1614,6 +1615,33 @@ if (!popup || popup.closed) {
       const lowestPrice = Math.min(...group.items.map((item) => Number(item.price)));
       const lowestAllIn = Math.min(...group.items.map((item) => totalCost(item)));
       const eventMeta = [group.event_location, group.event_dates].filter(Boolean).join(" · ");
+      const isEditingEvent = editingEventKey === group.key;
+
+    const eventEditorHtml = isEditingEvent
+      ? `
+        <form class="tti-event-edit-form" data-event-edit-form="${escapeHTML(group.key)}">
+          <label class="tti-field">
+            <span>Event name</span>
+            <input class="tti-input" name="event_name" value="${escapeHTML(group.event_name)}">
+          </label>
+
+          <label class="tti-field">
+            <span>Venue</span>
+            <input class="tti-input" name="event_location" value="${escapeHTML(group.event_location)}">
+          </label>
+
+          <label class="tti-field">
+            <span>Date</span>
+            <input class="tti-input" name="event_dates" value="${escapeHTML(group.event_dates)}">
+          </label>
+
+          <div class="tti-event-edit-actions">
+            <button type="submit" class="btn tti-mini" data-save-event="${escapeHTML(group.key)}">Save event</button>
+            <button type="button" class="btn btn-ghost tti-mini" data-cancel-event>Cancel</button>
+          </div>
+        </form>
+      `
+      : "";
 
       const card = document.createElement("section");
       card.className = "tti-event-card";
@@ -1701,7 +1729,9 @@ const urlCell = outUrl
               ${isCollapsed ? "Expand" : "Collapse"}
             </button>
           </div>
-        </div>
+                </div>
+
+        ${eventEditorHtml}
 
         ${
           isCollapsed
@@ -1946,6 +1976,53 @@ const urlCell = outUrl
     });
   }
 
+      function saveEventEdit(event) {
+    event.preventDefault();
+
+    const formEl = event.target.closest("[data-event-edit-form]");
+    if (!formEl) return;
+
+    const eventKey = formEl.getAttribute("data-event-edit-form");
+    const formData = new FormData(formEl);
+
+    const nextEventName = safeText(formData.get("event_name"));
+    const nextEventLocation = safeText(formData.get("event_location"));
+    const nextEventDates = safeText(formData.get("event_dates"));
+
+    if (!nextEventName) {
+      setSnapshotStatus("Event name cannot be blank.", "error");
+      showToast("Event name required", "error");
+      return;
+    }
+
+    const items = loadSnapshots();
+
+    const updated = items.map((item) => {
+      const currentKey = [
+        normalizeEventText(item.event_name),
+        normalizeEventDate(item.event_dates),
+      ].join("|||");
+
+      if (currentKey !== eventKey) return item;
+
+      return {
+        ...item,
+        event_name: nextEventName,
+        event_location: nextEventLocation,
+        event_dates: nextEventDates,
+      };
+    });
+
+    saveSnapshots(updated);
+
+    collapsedEventKeys.delete(eventKey);
+    editingEventKey = null;
+
+    renderSnapshots();
+    setSnapshotStatus("Updated event details.");
+    showToast("Event updated");
+  }
+
   if (snapshotBody) {
     snapshotBody.addEventListener("click", (event) => {
       const toggleBtn = event.target.closest("[data-toggle-event]");
@@ -1957,55 +2034,16 @@ const urlCell = outUrl
       const editEventBtn = event.target.closest("[data-edit-event]");
 
       if (editEventBtn) {
-        const eventKey = editEventBtn.getAttribute("data-edit-event");
-
-        const items = loadSnapshots();
-
-        const matchingItems = items.filter((item) => {
-          const itemKey = [
-            normalizeEventText(item.event_name),
-            normalizeEventDate(item.event_dates),
-          ].join("|||");
-
-          return itemKey === eventKey;
-        });
-
-        if (!matchingItems.length) return;
-
-        const firstItem = matchingItems[0];
-
-        const newName = window.prompt(
-          "Edit event name:",
-          firstItem.event_name || ""
-        );
-
-        if (newName === null) return;
-
-        const newVenue = window.prompt(
-          "Edit venue:",
-          firstItem.event_location || ""
-        );
-
-        if (newVenue === null) return;
-
-        const newDate = window.prompt(
-          "Edit event date:",
-          firstItem.event_dates || ""
-        );
-
-        if (newDate === null) return;
-
-        matchingItems.forEach((item) => {
-          item.event_name = safeText(newName);
-          item.event_location = safeText(newVenue);
-          item.event_dates = safeText(newDate);
-        });
-
-        saveSnapshots(items);
-
+        editingEventKey = editEventBtn.getAttribute("data-edit-event");
         renderSnapshots();
+        return;
+      }
 
-        showToast("Event updated");
+      const cancelEventBtn = event.target.closest("[data-cancel-event]");
+
+      if (cancelEventBtn) {
+        editingEventKey = null;
+        renderSnapshots();
         return;
       }
 
@@ -2048,7 +2086,7 @@ const urlCell = outUrl
     });
   }
 
-  if (presetsWrap) {
+    if (presetsWrap) {
     presetsWrap.addEventListener("click", (event) => {
       const loadBtn = event.target.closest("[data-load-preset]");
       if (loadBtn) {
@@ -2063,6 +2101,55 @@ const urlCell = outUrl
     });
   }
 
+  if (snapshotBody) {
+    snapshotBody.addEventListener("submit", (event) => {
+      const eventEditForm = event.target.closest("[data-event-edit-form]");
+      if (!eventEditForm) return;
+
+      saveEventEdit(event);
+    });
+  }
+
   form.addEventListener("submit", openAllResults);
 
   if (savePresetBtn) savePresetBtn.addEventListener("click", saveCurrentPreset);
+  if (copyLinksBtn) copyLinksBtn.addEventListener("click", copySearchLinks);
+  if (copyTemplateBtn) copyTemplateBtn.addEventListener("click", copySnapshotTemplate);
+  if (resetBtn) resetBtn.addEventListener("click", resetSearchForm);
+  if (infoToggle) infoToggle.addEventListener("click", toggleExplainer);
+  if (openDuplicateCheckBtn) {
+    openDuplicateCheckBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      openDuplicateCheckFromSnapshots();
+    });
+  }
+
+  if (snapshotForm) snapshotForm.addEventListener("submit", saveSnapshot);
+  if (snapshotSaveBtn) snapshotSaveBtn.addEventListener("click", saveSnapshot);
+  if (cancelEditBtn) {
+    cancelEditBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      cancelEdit();
+    });
+  }
+  if (snapshotExportBtn) snapshotExportBtn.addEventListener("click", exportSnapshotsCsv);
+  if (snapshotClearBtn) snapshotClearBtn.addEventListener("click", clearSnapshots);
+
+  if (eventSortEl) eventSortEl.addEventListener("change", renderSnapshots);
+  if (snapshotSortEl) snapshotSortEl.addEventListener("change", renderSnapshots);
+  if (expandAllBtn) expandAllBtn.addEventListener("click", expandAllEvents);
+  if (collapseAllBtn) collapseAllBtn.addEventListener("click", collapseAllEvents);
+
+  [eventNameEl, eventLocationEl, eventDatesEl]
+    .filter(Boolean)
+    .forEach((el) => el.addEventListener("input", updateEventSummary));
+
+  bindSearchInputs();
+  renderPreviewLinks();
+  renderPresets();
+  renderSnapshots();
+  updateEventSummary();
+  setEditingVisualState(false);
+});
+
+  
