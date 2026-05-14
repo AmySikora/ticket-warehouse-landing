@@ -1961,12 +1961,47 @@ const urlCell = outUrl
         }
 
         const existing = loadSnapshots();
-        saveSnapshots([...existing, ...imported]);
+
+        const existingKeys = new Set(
+          existing.map((item) =>
+            [
+              normalizeEventText(item.event_name),
+              normalizeEventDate(item.event_dates),
+              safeText(item.section),
+              safeText(item.row),
+              safeText(item.seat),
+              safeText(item.marketplace),
+              Number(item.price),
+            ].join("|||")
+          )
+        );
+
+        const uniqueImports = imported.filter((item) => {
+          const key = [
+            normalizeEventText(item.event_name),
+            normalizeEventDate(item.event_dates),
+            safeText(item.section),
+            safeText(item.row),
+            safeText(item.seat),
+            safeText(item.marketplace),
+            Number(item.price),
+          ].join("|||");
+
+          return !existingKeys.has(key);
+        });
+
+        saveSnapshots([...existing, ...uniqueImports]);
 
         renderSnapshots();
         updateEventSummary();
 
-        setSnapshotStatus(`Imported ${imported.length} listing${imported.length === 1 ? "" : "s"}.`);
+        const skippedCount = imported.length - uniqueImports.length;
+
+      setSnapshotStatus(
+        `Imported ${uniqueImports.length} listing${uniqueImports.length === 1 ? "" : "s"}${
+          skippedCount ? ` • Skipped ${skippedCount} duplicate${skippedCount === 1 ? "" : "s"}` : ""
+        }.`
+      );
         showToast("CSV imported");
 
         event.target.value = "";
