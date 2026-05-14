@@ -1062,10 +1062,20 @@ function buildOutboundUrl(rawUrl, meta = {}) {
   }
 
   function setSnapshotStatus(message, type = "success") {
-    if (!snapshotStatus) return;
-    snapshotStatus.textContent = message || "";
-    snapshotStatus.dataset.state = type;
+  if (!snapshotStatus) return;
+
+  snapshotStatus.textContent = message || "";
+  snapshotStatus.dataset.state = type;
+
+  clearTimeout(setSnapshotStatus._timer);
+
+  if (message) {
+    setSnapshotStatus._timer = setTimeout(() => {
+      snapshotStatus.textContent = "";
+      snapshotStatus.dataset.state = "";
+    }, 4000);
   }
+}
 
   function setEditingVisualState(isEditing) {
     if (snapshotSaveBtn) {
