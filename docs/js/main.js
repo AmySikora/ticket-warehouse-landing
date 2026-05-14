@@ -663,12 +663,12 @@ tvgSafe("verify-csv", () => {
         }
       </td>
       <td>
-      <span class="tti-market-badge tti-market-${escapeHTML(
-        (item.marketplace || "").toLowerCase()
-      )}">
-        ${escapeHTML(item.marketplace || "—")}
-      </span>
-    </td>
+        <span class="tti-market-badge tti-market-${escapeHTML(
+          (row.marketplace || "").toLowerCase()
+        )}">
+          ${escapeHTML(row.marketplace || "—")}
+        </span>
+      </td>
       <td>${escapeHTML(row.event)}</td>
       <td>${escapeHTML(row.section)}</td>
       <td>${escapeHTML(row.row)}</td>
