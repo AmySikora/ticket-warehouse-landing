@@ -1698,9 +1698,13 @@ const urlCell = outUrl
               <td>${escapeHTML(snapshot.section || "")}</td>
               <td>${escapeHTML(snapshot.row || "")}</td>
               <td>${escapeHTML(snapshot.seat || "")}</td>
-              <td>${escapeHTML(
-                marketplaceLabels[snapshot.marketplace] || snapshot.marketplace || ""
-              )}</td>
+              <td>
+                <span class="tti-market-badge tti-market-${escapeHTML(
+                  (snapshot.marketplace || "").toLowerCase()
+                )}">
+                  ${escapeHTML(marketplaceLabels[snapshot.marketplace] || snapshot.marketplace || "—")}
+                </span>
+              </td>
               <td>
                 $${escapeHTML(formatMoney(snapshot.price))}
                 ${isLowestPrice ? `<span class="tti-price-badge">Lowest price</span>` : ""}
