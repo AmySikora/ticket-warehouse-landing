@@ -1095,6 +1095,12 @@ button.btn,
   padding-top: 4px;
 }
 
+.tti-empty-state {
+  width: 100%;
+  display: block;
+  margin-top: 1.5rem;
+}
+
 .tti-table {
   width: 100%;
   border-collapse: collapse;
@@ -1352,12 +1358,6 @@ button.btn,
 
 #tti-event-summary {
   display: none !important;
-}
-
-.tti-empty-state {
-  width: 100%;
-  display: block;
-  margin-top: 1.5rem;
 }
 
 .tms-preset-list {
