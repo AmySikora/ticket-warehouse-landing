@@ -1791,6 +1791,14 @@ const urlCell = outUrl
             <button
               type="button"
               class="btn btn-ghost tti-mini"
+              data-open-event-links="${escapeHTML(group.key)}"
+            >
+              Open all links
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-ghost tti-mini"
               data-remove-event="${escapeHTML(group.key)}"
             >
               Remove event
@@ -2212,6 +2220,45 @@ const urlCell = outUrl
         renderSnapshots();
         return;
       }
+
+      const openEventLinksBtn = event.target.closest("[data-open-event-links]");
+
+if (openEventLinksBtn) {
+  const eventKey = openEventLinksBtn.getAttribute("data-open-event-links");
+  const items = loadSnapshots();
+
+  const matchingItems = items.filter((item) => {
+    const itemKey = [
+      normalizeEventText(item.event_name),
+      normalizeEventDate(item.event_dates),
+    ].join("|||");
+
+    return itemKey === eventKey && item.url;
+  });
+
+  if (!matchingItems.length) {
+    setSnapshotStatus("No listing links found for this event.", "error");
+    return;
+  }
+
+  matchingItems.forEach((item) => {
+    const marketplaceName =
+      marketplaceLabels[item.marketplace] || item.marketplace || "ticket site";
+
+    const outUrl = buildOutboundUrl(item.url, {
+      source: marketplaceName,
+      event: item.event_name,
+    });
+
+    if (outUrl) {
+      window.open(outUrl, "_blank", "noopener");
+    }
+  });
+
+      setSnapshotStatus("Opened saved listing links for this event.");
+      showToast("Opened event links");
+      return;
+    }
 
       const removeEventBtn = event.target.closest("[data-remove-event]");
 
