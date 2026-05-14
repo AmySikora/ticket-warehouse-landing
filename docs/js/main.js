@@ -2214,6 +2214,49 @@ const urlCell = outUrl
     });
   }
 
+    if (snapshotBody) {
+  snapshotBody.addEventListener("submit", (event) => {
+    const eventForm = event.target.closest("[data-event-edit-form]");
+    if (!eventForm) return;
+
+    event.preventDefault();
+
+    const eventKey = eventForm.getAttribute("data-event-edit-form");
+    const formData = new FormData(eventForm);
+
+    const newName = safeText(formData.get("event_name"));
+    const newVenue = safeText(formData.get("event_location"));
+    const newDate = safeText(formData.get("event_dates"));
+
+    if (!newName) {
+      setSnapshotStatus("Event name is required.", "error");
+      return;
+    }
+
+    const items = loadSnapshots();
+
+    items.forEach((item) => {
+      const itemKey = [
+        normalizeEventText(item.event_name),
+        normalizeEventDate(item.event_dates),
+      ].join("|||");
+
+      if (itemKey === eventKey) {
+        item.event_name = newName;
+        item.event_location = newVenue;
+        item.event_dates = newDate;
+      }
+    });
+
+    saveSnapshots(items);
+    editingEventKey = null;
+    renderSnapshots();
+
+    setSnapshotStatus("Event updated.");
+    showToast("Event updated");
+  });
+}
+
     if (presetsWrap) {
     presetsWrap.addEventListener("click", (event) => {
       const loadBtn = event.target.closest("[data-load-preset]");
