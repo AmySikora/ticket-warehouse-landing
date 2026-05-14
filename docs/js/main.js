@@ -904,6 +904,8 @@ tvgSafe("verify-csv", () => {
   const snapshotBody = document.getElementById("tti-snapshots-body");
   const snapshotStatus = document.getElementById("tti-status");
   const snapshotExportBtn = document.getElementById("tti-export-csv");
+  const snapshotImportBtn = document.getElementById("tti-import-csv");
+  const snapshotImportFile = document.getElementById("tti-import-file");
   const snapshotClearBtn = document.getElementById("tti-clear-session");
   const snapshotSaveBtn = document.getElementById("tti-save-snapshot");
   const cancelEditBtn = document.getElementById("tti-cancel-edit");
@@ -1914,6 +1916,70 @@ const urlCell = outUrl
     setSnapshotStatus("Exported CSV.");
   }
 
+    function importSnapshotsCsv(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!window.Papa) {
+      setSnapshotStatus("CSV importer is not available.", "error");
+      showToast("CSV importer missing", "error");
+      return;
+    }
+
+    window.Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete(results) {
+        const rows = Array.isArray(results.data) ? results.data : [];
+
+        const imported = rows
+          .filter((row) => safeText(row.event_name) && safeText(row.marketplace))
+          .map((row) => ({
+            id: window.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            captured_at: safeText(row.captured_at) || new Date().toISOString(),
+            event_name: safeText(row.event_name),
+            event_location: safeText(row.event_location),
+            event_dates: safeText(row.event_dates),
+            section: safeText(row.section),
+            row: safeText(row.row),
+            seat: safeText(row.seat),
+            search_query: safeText(row.search_query),
+            marketplace: safeText(row.marketplace),
+            price: Number(row.price),
+            fees: safeText(row.fees) === "" ? null : Number(row.fees),
+            currency: safeText(row.currency, "USD"),
+            url: safeText(row.url),
+            notes: safeText(row.notes),
+          }))
+          .filter((item) => Number.isFinite(item.price));
+
+        if (!imported.length) {
+          setSnapshotStatus("No valid listings found in that CSV.", "error");
+          showToast("No valid listings imported", "error");
+          event.target.value = "";
+          return;
+        }
+
+        const existing = loadSnapshots();
+        saveSnapshots([...existing, ...imported]);
+
+        renderSnapshots();
+        updateEventSummary();
+
+        setSnapshotStatus(`Imported ${imported.length} listing${imported.length === 1 ? "" : "s"}.`);
+        showToast("CSV imported");
+
+        event.target.value = "";
+      },
+      error(error) {
+        console.error("CSV import failed:", error);
+        setSnapshotStatus("Could not import that CSV.", "error");
+        showToast("Import failed", "error");
+        event.target.value = "";
+      },
+    });
+  }
+
   function clearSnapshots(event) {
     if (event) event.preventDefault();
 
@@ -2197,6 +2263,8 @@ const urlCell = outUrl
   snapshotImportBtn.addEventListener("click", () => {
     snapshotImportFile.click();
   });
+
+  snapshotImportFile.addEventListener("change", importSnapshotsCsv);
 }
   if (snapshotClearBtn) snapshotClearBtn.addEventListener("click", clearSnapshots);
 
