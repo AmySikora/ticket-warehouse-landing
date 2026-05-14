@@ -662,7 +662,13 @@ tvgSafe("verify-csv", () => {
             : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
         }
       </td>
-      <td>${escapeHTML(row.marketplace || "—")}</td>
+      <td>
+      <span class="tti-market-badge tti-market-${escapeHTML(
+        (item.marketplace || "").toLowerCase()
+      )}">
+        ${escapeHTML(item.marketplace || "—")}
+      </span>
+    </td>
       <td>${escapeHTML(row.event)}</td>
       <td>${escapeHTML(row.section)}</td>
       <td>${escapeHTML(row.row)}</td>
