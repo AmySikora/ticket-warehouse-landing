@@ -779,6 +779,24 @@ button.btn,
   max-width: 58rem;
 }
 
+.page-search .tti-table-wrap {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+  flex-basis: 100%;
+}
+
+.page-search .tti-snapshots-list {
+  display: block;
+  width: 100%;
+}
+
+.page-search .tti-empty-state,
+.page-search #tti-snapshots-body > .muted {
+  display: block;
+  width: 100%;
+}
+
 .search-card {
   display: grid;
   gap: 16px;
