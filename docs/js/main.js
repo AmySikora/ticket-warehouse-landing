@@ -1684,6 +1684,7 @@ const urlCell = outUrl
             <span class="tti-price-badge">Lowest price: $${escapeHTML(formatMoney(lowestPrice))}</span>
             <span class="tti-price-badge tti-price-badge-allin">Lowest total: $${escapeHTML(formatMoney(lowestAllIn))}</span>
             <span class="tti-price-badge">${listingCount} listing${listingCount === 1 ? "" : "s"}</span>
+            
             <button
               type="button"
               class="btn tti-mini"
