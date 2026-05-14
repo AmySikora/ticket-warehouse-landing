@@ -1724,6 +1724,14 @@ const urlCell = outUrl
             <button
               type="button"
               class="btn btn-ghost tti-mini"
+              data-remove-event="${escapeHTML(group.key)}"
+            >
+              Remove event
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-ghost tti-mini"
               data-toggle-event="${escapeHTML(group.key)}"
             >
               ${isCollapsed ? "Expand" : "Collapse"}
@@ -1976,7 +1984,7 @@ const urlCell = outUrl
     });
   }
 
-      function saveEventEdit(event) {
+  function saveEventEdit(event) {
     event.preventDefault();
 
     const formEl = event.target.closest("[data-event-edit-form]");
@@ -2036,6 +2044,15 @@ const urlCell = outUrl
       if (editEventBtn) {
         editingEventKey = editEventBtn.getAttribute("data-edit-event");
         renderSnapshots();
+        return;
+      }
+
+      const removeEventBtn = event.target.closest("[data-remove-event]");
+
+      if (removeEventBtn) {
+        removeEventGroup(
+          removeEventBtn.getAttribute("data-remove-event")
+        );
         return;
       }
 
@@ -2108,6 +2125,39 @@ const urlCell = outUrl
 
       saveEventEdit(event);
     });
+  }
+
+      function removeEventGroup(eventKey) {
+    if (!eventKey) return;
+
+    const confirmed = window.confirm(
+      "Remove all saved listings for this event?"
+    );
+
+    if (!confirmed) return;
+
+    const next = loadSnapshots().filter((item) => {
+      const currentKey = [
+        normalizeEventText(item.event_name),
+        normalizeEventDate(item.event_dates),
+      ].join("|||");
+
+      return currentKey !== eventKey;
+    });
+
+    saveSnapshots(next);
+
+    collapsedEventKeys.delete(eventKey);
+
+    if (editingEventKey === eventKey) {
+      editingEventKey = null;
+    }
+
+    renderSnapshots();
+    updateEventSummary();
+
+    setSnapshotStatus("Removed event and associated listings.");
+    showToast("Event removed");
   }
 
   form.addEventListener("submit", openAllResults);
