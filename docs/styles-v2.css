@@ -1354,6 +1354,12 @@ button.btn,
   display: none !important;
 }
 
+.tti-empty-state {
+  width: 100%;
+  display: block;
+  margin-top: 1.5rem;
+}
+
 .tms-preset-list {
   display: grid;
   gap: 12px;
