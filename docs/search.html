@@ -68,148 +68,1174 @@
       <div class="tvb-container">
         <div class="card search-card">
 
-          <h2>Search ticket sites</h2>
+          Search page: marketplace search + snapshot capture
+// =====================================================
+  tvgSafe("search-workflow", () => {
+  const form = document.getElementById("tixSearch");
+  if (!form) return;
 
-         <p class="muted" style="margin-top:8px; margin-bottom:14px;">
-          Search across major ticket marketplaces and open your event on the sites you want to compare.
-        </p>
+  const PRESETS_KEY = "tvg_search_presets_v1";
+  const STORAGE_KEY = "tti_snapshots_v0";
+  const DUPLICATE_AUTO_RUN_KEY = "tti_duplicate_autorun_v1";
 
-          <form id="tixSearch" class="ms-form" novalidate>
+  const queryEl = document.getElementById("tms-query");
+  const linksWrap = document.getElementById("tms-links");
+  const savePresetBtn = document.getElementById("tms-save-preset");
+  const presetsWrap = document.getElementById("tms-presets");
+  const copyLinksBtn = document.getElementById("tms-copy");
+  const copyTemplateBtn = document.getElementById("tms-copy-template");
+  const resetBtn = document.getElementById("tms-reset");
+  const infoToggle = document.getElementById("tms-info-toggle");
+  const explainer = document.getElementById("tms-explainer");
+  const openDuplicateCheckBtn = document.getElementById("tti-open-duplicate-check");
 
-            <label class="ms-label">
-              <div class="ms-input-wrap">
-                <span>🔍</span>
-                <input
-                  type="text"
-                  id="tms-query"
-                  placeholder="Taylor Swift Miami, Dodgers Los Angeles, Knicks New York..."
-                  required
-                  class="ms-input"
-                />
+  const eventSortEl = document.getElementById("tti-event-sort");
+  const snapshotSortEl = document.getElementById("tti-sort");
+  const expandAllBtn = document.getElementById("tti-expand-all");
+  const collapseAllBtn = document.getElementById("tti-collapse-all");
+
+  const snapshotForm = document.getElementById("tti-snapshot-form");
+  const snapshotBody = document.getElementById("tti-snapshots-body");
+  const snapshotStatus = document.getElementById("tti-status");
+  const snapshotExportBtn = document.getElementById("tti-export-csv");
+  const snapshotClearBtn = document.getElementById("tti-clear-session");
+  const snapshotSaveBtn = document.getElementById("tti-save-snapshot");
+  const cancelEditBtn = document.getElementById("tti-cancel-edit");
+  const eventSummaryEl = document.getElementById("tti-event-summary");
+  const editBannerEl = document.getElementById("tti-edit-banner");
+
+  const marketplaceEl = document.getElementById("tti-marketplace");
+  const priceEl = document.getElementById("tti-price");
+  const feesEl = document.getElementById("tti-fees");
+  const urlEl = document.getElementById("tti-url");
+  const notesEl = document.getElementById("tti-notes");
+  const eventNameEl = document.getElementById("tti-event-name");
+  const eventLocationEl = document.getElementById("tti-event-location");
+  const eventDatesEl = document.getElementById("tti-event-dates");
+  const sectionEl = document.getElementById("tti-section");
+  const rowEl = document.getElementById("tti-row");
+  const seatEl = document.getElementById("tti-seat");
+
+  const collapsedEventKeys = new Set();
+  let editingId = null;
+
+  const searchSites = [
+    { id: "site-seatgeek", label: "SeatGeek", domain: "seatgeek.com" },
+    { id: "site-vivid", label: "Vivid Seats", domain: "vividseats.com" },
+    { id: "site-stubhub", label: "StubHub", domain: "stubhub.com" },
+    { id: "site-etix", label: "Etix", domain: "etix.com" },
+    { id: "site-ticketmaster", label: "Ticketmaster", domain: "ticketmaster.com" },
+    { id: "site-tickpick", label: "TickPick", domain: "tickpick.com" },
+    { id: "site-viagogo", label: "Viagogo", domain: "viagogo.com" },
+  ];
+
+  const googleCheckboxId = "site-google";
+
+  const marketplaceLabels = {
+    stubhub: "StubHub",
+    seatgeek: "SeatGeek",
+    vivid: "Vivid Seats",
+    etix: "Etix",
+    ticketmaster: "Ticketmaster",
+    tickpick: "TickPick",
+    viagogo: "Viagogo",
+  };
+
+  function canUseBackendLogging() {
+  const config = window.APP_CONFIG || {};
+  const backendBase = String(config.backendBase || "").trim();
+  return Boolean(config.enableOutboundLogging && backendBase);
+}
+
+function extractRealUrl(rawUrl) {
+  try {
+    const url = new URL(rawUrl);
+
+    // Handle Google ad redirect links
+    if (url.hostname.includes("google.com")) {
+      // Case 1: adurl param
+      if (url.searchParams.has("adurl")) {
+        return url.searchParams.get("adurl");
+      }
+
+      // Case 2: fallback to data-pcu style URLs if you ever capture them
+      if (url.searchParams.has("url")) {
+        return url.searchParams.get("url");
+      }
+    }
+
+    return rawUrl;
+  } catch (e) {
+    return rawUrl;
+  }
+}
+
+function buildOutboundUrl(rawUrl, meta = {}) {
+  const cleanUrl = extractRealUrl(rawUrl);
+  const config = window.APP_CONFIG || {};
+  const base = String(config.backendBase || "").replace(/\/$/, "");
+
+  if (!cleanUrl) {
+    return "";
+  }
+
+  if (!canUseBackendLogging()) {
+    return cleanUrl;
+  }
+
+  const params = new URLSearchParams({
+    url: cleanUrl,
+  });
+
+  if (meta.source) {
+  params.set("source", meta.source);
+}
+
+  if (meta.event) {
+    params.set("event", meta.event);
+  }
+
+  return `${base}/out?${params.toString()}`;
+}
+
+  function normalizeQuery(value) {
+    return safeText(value).replace(/\s+/g, " ");
+  }
+
+  function formatMoney(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return "";
+    return num.toFixed(2);
+  }
+
+  function formatTime(value) {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleString([], {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+
+  function escapeCsv(value) {
+    const str = String(value ?? "");
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+
+  function totalCost(item) {
+  const price = Number(item.price);
+  const totalWithFees = Number(item.fees);
+
+  if (Number.isFinite(totalWithFees)) {
+    return totalWithFees;
+  }
+
+  if (Number.isFinite(price)) {
+    return price;
+  }
+
+  return 0;
+}
+
+  function loadSnapshots() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveSnapshots(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+
+  function setSnapshotStatus(message, type = "success") {
+    if (!snapshotStatus) return;
+    snapshotStatus.textContent = message || "";
+    snapshotStatus.dataset.state = type;
+  }
+
+  function setEditingVisualState(isEditing) {
+    if (snapshotSaveBtn) {
+      snapshotSaveBtn.textContent = isEditing ? "Update ticket" : "Save ticket";
+    }
+
+    if (cancelEditBtn) {
+      cancelEditBtn.hidden = !isEditing;
+    }
+
+    if (editBannerEl) {
+      editBannerEl.hidden = !isEditing;
+    }
+  }
+
+  function clearSnapshotForm() {
+    editingId = null;
+
+    if (snapshotForm) snapshotForm.reset();
+    if (marketplaceEl) marketplaceEl.selectedIndex = 0;
+
+    setEditingVisualState(false);
+  }
+
+  function cancelEdit() {
+    clearSnapshotForm();
+    setSnapshotStatus("Edit canceled.");
+    renderSnapshots();
+  }
+
+  function fillFormFromSnapshot(item) {
+    if (!item) return;
+
+    if (eventNameEl) eventNameEl.value = item.event_name || "";
+    if (eventLocationEl) eventLocationEl.value = item.event_location || "";
+    if (eventDatesEl) eventDatesEl.value = item.event_dates || "";
+    if (sectionEl) sectionEl.value = item.section || "";
+    if (rowEl) rowEl.value = item.row || "";
+    if (seatEl) seatEl.value = item.seat || "";
+    if (marketplaceEl) marketplaceEl.value = item.marketplace || "";
+    if (priceEl) priceEl.value = item.price ?? "";
+    if (feesEl) feesEl.value = item.fees ?? "";
+    if (urlEl) urlEl.value = item.url || "";
+    if (notesEl) notesEl.value = item.notes || "";
+
+    editingId = item.id;
+    setEditingVisualState(true);
+    setSnapshotStatus("Editing saved ticket.");
+  }
+
+  function normalizeEventText(value) {
+  return safeText(value)
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[’'`]/g, "")
+    .replace(/[.,/#!$%^*;:{}=\-_~()]/g, " ")
+    .replace(/\bst\b/g, "street")
+    .replace(/\bave\b/g, "avenue")
+    .replace(/\bblvd\b/g, "boulevard")
+    .replace(/\brd\b/g, "road")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeEventDate(value) {
+  const raw = safeText(value).trim();
+  if (!raw) return "";
+
+  const match = raw.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2}|\d{4})$/);
+
+  if (match) {
+    let [, month, day, year] = match;
+    month = month.padStart(2, "0");
+    day = day.padStart(2, "0");
+
+    if (year.length === 2) {
+      year = `20${year}`;
+    }
+
+    return `${year}-${month}-${day}`;
+  }
+
+  return raw.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function groupSnapshotsByEvent(items) {
+  const groups = new Map();
+
+  const eventDefaults = new Map();
+
+  items.forEach((item) => {
+    const normalizedName = normalizeEventText(item.event_name);
+    const normalizedLocation = normalizeEventText(item.event_location);
+    const normalizedDate = normalizeEventDate(item.event_dates);
+
+    if (!normalizedName) return;
+
+    if (!eventDefaults.has(normalizedName)) {
+      eventDefaults.set(normalizedName, {
+        location: normalizedLocation,
+        date: normalizedDate,
+        rawLocation: safeText(item.event_location),
+        rawDate: safeText(item.event_dates),
+      });
+      return;
+    }
+
+    const current = eventDefaults.get(normalizedName);
+
+    if (!current.location && normalizedLocation) {
+      current.location = normalizedLocation;
+      current.rawLocation = safeText(item.event_location);
+    }
+
+    if (!current.date && normalizedDate) {
+      current.date = normalizedDate;
+      current.rawDate = safeText(item.event_dates);
+    }
+  });
+
+  items.forEach((item) => {
+    const normalizedName = normalizeEventText(item.event_name);
+    if (!normalizedName) return;
+
+    const defaults = eventDefaults.get(normalizedName) || {};
+
+    const normalizedLocation =
+      normalizeEventText(item.event_location) || defaults.location || "";
+
+    const normalizedDate =
+      normalizeEventDate(item.event_dates) || defaults.date || "";
+
+   const key = [normalizedName, normalizedDate].join("|||");
+
+    if (!groups.has(key)) {
+      groups.set(key, {
+        key,
+        event_name: safeText(item.event_name, "Untitled event"),
+        event_location: safeText(item.event_location) || defaults.rawLocation || "",
+        event_dates: safeText(item.event_dates) || defaults.rawDate || "",
+        items: [],
+      });
+    }
+
+    groups.get(key).items.push(item);
+  });
+
+  return Array.from(groups.values());
+}
+  function sortSnapshotsForView(items, sortValue) {
+    const list = items.slice();
+
+    switch (sortValue) {
+      case "allin-asc":
+        list.sort((a, b) => totalCost(a) - totalCost(b));
+        break;
+      case "marketplace":
+        list.sort((a, b) => {
+          const aLabel = marketplaceLabels[a.marketplace] || a.marketplace || "";
+          const bLabel = marketplaceLabels[b.marketplace] || b.marketplace || "";
+          return aLabel.localeCompare(bLabel);
+        });
+        break;
+      case "newest":
+        list.sort((a, b) => new Date(b.captured_at) - new Date(a.captured_at));
+        break;
+      case "price-asc":
+      default:
+        list.sort((a, b) => Number(a.price) - Number(b.price));
+        break;
+    }
+
+    return list;
+  }
+
+  function sortEventGroups(groups, sortValue) {
+    const list = groups.slice();
+
+    function groupLowestPrice(group) {
+      return Math.min(...group.items.map((item) => Number(item.price)));
+    }
+
+    function groupLowestTotal(group) {
+      return Math.min(...group.items.map((item) => totalCost(item)));
+    }
+
+    function groupMostRecent(group) {
+      return Math.max(...group.items.map((item) => new Date(item.captured_at).getTime() || 0));
+    }
+
+    switch (sortValue) {
+      case "lowest-total":
+        list.sort((a, b) => groupLowestTotal(a) - groupLowestTotal(b));
+        break;
+      case "event-name":
+        list.sort((a, b) => a.event_name.localeCompare(b.event_name));
+        break;
+      case "most-recent":
+        list.sort((a, b) => groupMostRecent(b) - groupMostRecent(a));
+        break;
+      case "lowest-price":
+      default:
+        list.sort((a, b) => groupLowestPrice(a) - groupLowestPrice(b));
+        break;
+    }
+
+    return list;
+  }
+
+  function toggleEventCollapsed(eventKey) {
+    if (!eventKey) return;
+    if (collapsedEventKeys.has(eventKey)) {
+      collapsedEventKeys.delete(eventKey);
+    } else {
+      collapsedEventKeys.add(eventKey);
+    }
+    renderSnapshots();
+  }
+
+  function expandAllEvents() {
+    collapsedEventKeys.clear();
+    renderSnapshots();
+  }
+
+  function collapseAllEvents() {
+    const groups = groupSnapshotsByEvent(loadSnapshots());
+    collapsedEventKeys.clear();
+    groups.forEach((group) => collapsedEventKeys.add(group.key));
+    renderSnapshots();
+  }
+
+  function getSelectedSearchUrls() {
+    const raw = normalizeQuery(queryEl?.value);
+    if (!raw) return [];
+
+    const urls = [];
+    const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
+
+    if (googleChecked) {
+      urls.push({
+        source: "google",
+        href: `https://www.google.com/search?q=${encodeURIComponent(raw + " tickets")}`,
+      });
+    }
+
+    searchSites.forEach((site) => {
+      const checked = document.getElementById(site.id)?.checked;
+      if (!checked) return;
+
+      urls.push({
+        source: site.label,
+        href: `https://www.google.com/search?q=${encodeURIComponent(raw + " site:" + site.domain)}`,
+      });
+    });
+
+    return urls;
+  }
+
+  function renderPreviewLinks() {
+    if (!linksWrap) return;
+
+    const urls = getSelectedSearchUrls();
+    linksWrap.innerHTML = "";
+
+    if (!urls.length) {
+      linksWrap.innerHTML = `<p class="muted" style="margin:0;">Choose sites to preview search links.</p>`;
+      return;
+    }
+
+    const list = document.createElement("div");
+    list.className = "ms-link-list";
+
+    urls.forEach((item) => {
+      const a = document.createElement("a");
+      a.className = "ms-link";
+      a.href = buildOutboundUrl(item.href, {
+      source: item.source,
+      event: normalizeQuery(queryEl?.value),
+      });
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = item.source;
+      list.appendChild(a);
+    });
+
+    linksWrap.appendChild(list);
+  }
+
+  function clearOpenAllNote() {
+    const note = $(".tvg-open-note", linksWrap);
+    if (note) note.remove();
+  }
+
+  function showOpenAllNote(message) {
+    if (!linksWrap) return;
+    clearOpenAllNote();
+
+    const note = document.createElement("div");
+    note.className = "muted tvg-open-note";
+    note.style.marginTop = "8px";
+    note.textContent = message;
+    linksWrap.appendChild(note);
+  }
+
+  function openAllResults(event) {
+    event.preventDefault();
+    clearOpenAllNote();
+
+    if (!queryEl?.value.trim()) {
+      queryEl?.focus();
+      showToast("Enter a search first.", "error");
+      return;
+    }
+
+    const urls = getSelectedSearchUrls();
+    if (!urls.length) {
+      showToast("Select at least one marketplace.", "error");
+      return;
+    }
+
+    let blocked = false;
+
+    urls.forEach((item) => {
+      const popup = window.open(
+        buildOutboundUrl(item.href, {
+          source: item.source,
+          event: normalizeQuery(queryEl?.value)
+        }),
+        "_blank",
+        "noopener"
+      );
+
+if (!popup || popup.closed) {
+  blocked = true;
+}
+    });
+
+    if (blocked) {
+      showOpenAllNote(
+        "If only one tab opened, allow pop-ups for this site so all selected markets can open."
+      );
+    }
+  }
+
+  function getSelectedSiteIds() {
+    return searchSites
+      .filter((site) => document.getElementById(site.id)?.checked)
+      .map((site) => site.id);
+  }
+
+  function getSelectedSiteLabels(siteIds) {
+    return searchSites
+      .filter((site) => siteIds.includes(site.id))
+      .map((site) => site.label);
+  }
+
+  function loadPresets() {
+    try {
+      const raw = localStorage.getItem(PRESETS_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function savePresets(items) {
+    localStorage.setItem(PRESETS_KEY, JSON.stringify(items));
+  }
+
+  function renderPresets() {
+    if (!presetsWrap) return;
+
+    const presets = loadPresets();
+    presetsWrap.innerHTML = "";
+
+    if (!presets.length) {
+      presetsWrap.innerHTML = `<p class="muted" style="margin:0;">No saved searches yet.</p>`;
+      return;
+    }
+
+    const list = document.createElement("div");
+    list.className = "tms-preset-list";
+
+    presets.forEach((preset) => {
+      const selectedLabels = getSelectedSiteLabels(preset.siteIds || []);
+      const card = document.createElement("div");
+      card.className = "tms-preset-card";
+
+      card.innerHTML = `
+        <div class="tms-preset-meta">
+          <div class="tms-preset-name">${escapeHTML(preset.name)}</div>
+          <div class="tms-preset-details">
+            ${escapeHTML(
+              [
+                preset.query || "No query",
+                selectedLabels.length
+                  ? `Markets: ${selectedLabels.join(", ")}`
+                  : "No markets selected",
+              ].join(" · ")
+            )}
+          </div>
+        </div>
+        <div class="tms-preset-actions">
+          <button type="button" class="btn" data-load-preset="${escapeHTML(preset.id)}">Load</button>
+          <button type="button" class="btn btn-ghost" data-delete-preset="${escapeHTML(preset.id)}">Delete</button>
+        </div>
+      `;
+
+      list.appendChild(card);
+    });
+
+    presetsWrap.appendChild(list);
+  }
+
+  function saveCurrentPreset() {
+    const query = normalizeQuery(queryEl?.value);
+    const siteIds = getSelectedSiteIds();
+    const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
+
+    if (!query) {
+      showToast("Enter a search before saving a preset.", "error");
+      return;
+    }
+
+    const name = window.prompt("Name this saved search:", query);
+    if (!name) return;
+
+    const presets = loadPresets();
+    presets.push({
+      id: window.crypto?.randomUUID?.() ?? `${Date.now()}`,
+      name: safeText(name),
+      query,
+      siteIds,
+      googleChecked,
+    });
+
+    savePresets(presets);
+    renderPresets();
+    showToast("Preset saved");
+  }
+
+  function loadPresetIntoForm(id) {
+    const preset = loadPresets().find((item) => item.id === id);
+    if (!preset) return;
+
+    if (queryEl) queryEl.value = preset.query || "";
+
+    searchSites.forEach((site) => {
+      const checkbox = document.getElementById(site.id);
+      if (checkbox) checkbox.checked = (preset.siteIds || []).includes(site.id);
+    });
+
+    const googleBox = document.getElementById(googleCheckboxId);
+    if (googleBox) googleBox.checked = Boolean(preset.googleChecked);
+
+    renderPreviewLinks();
+    showToast("Preset loaded");
+  }
+
+  function deletePreset(id) {
+    const next = loadPresets().filter((item) => item.id !== id);
+    savePresets(next);
+    renderPresets();
+    showToast("Preset deleted");
+  }
+
+  function copySearchLinks() {
+    const urls = getSelectedSearchUrls();
+    if (!urls.length) {
+      showToast("No links to copy.", "error");
+      return;
+    }
+
+    const text = urls.map((item) => item.href).join("\n");
+
+    copyToClipboard(text)
+      .then(() => showToast("Search links copied"))
+      .catch(() => showToast("Could not copy links", "error"));
+  }
+
+  function copySnapshotTemplate() {
+    const template = [
+      `Event: ${safeText(eventNameEl?.value)}`,
+      `Venue: ${safeText(eventLocationEl?.value)}`,
+      `Date: ${safeText(eventDatesEl?.value)}`,
+      `Section: ${safeText(sectionEl?.value)}`,
+      `Row: ${safeText(rowEl?.value)}`,
+      `Seat: ${safeText(seatEl?.value)}`,
+      `Price: ${safeText(priceEl?.value)}`,
+      `Fees: ${safeText(feesEl?.value)}`,
+      `URL: ${safeText(urlEl?.value)}`,
+      `Notes: ${safeText(notesEl?.value)}`,
+    ].join("\n");
+
+    copyToClipboard(template)
+      .then(() => showToast("Ticket template copied"))
+      .catch(() => showToast("Could not copy template", "error"));
+  }
+
+  function resetSearchForm() {
+    form.reset();
+    renderPreviewLinks();
+    clearOpenAllNote();
+  }
+
+  function toggleExplainer(event) {
+    event.preventDefault();
+    if (!explainer) return;
+    explainer.hidden = !explainer.hidden;
+  }
+
+  function updateEventSummary() {
+    if (!eventSummaryEl) return;
+    const grouped = groupSnapshotsByEvent(loadSnapshots());
+    eventSummaryEl.textContent = `${grouped.length} event${grouped.length === 1 ? "" : "s"}`;
+  }
+
+  function renderSnapshots() {
+    if (!snapshotBody) return;
+
+    const items = loadSnapshots();
+    snapshotBody.innerHTML = "";
+
+    if (!items.length) {
+      snapshotBody.innerHTML = `<div class="muted">No saved tickets yet.</div>`;
+      updateEventSummary();
+      return;
+    }
+
+    const eventSortValue = eventSortEl?.value || "lowest-price";
+    const listingSortValue = snapshotSortEl?.value || "price-asc";
+
+    const grouped = sortEventGroups(
+      groupSnapshotsByEvent(items).map((group) => ({
+        ...group,
+        items: sortSnapshotsForView(group.items, listingSortValue),
+      })),
+      eventSortValue
+    );
+
+    grouped.forEach((group) => {
+      const isCollapsed = collapsedEventKeys.has(group.key);
+      const listingCount = group.items.length;
+      const lowestPrice = Math.min(...group.items.map((item) => Number(item.price)));
+      const lowestAllIn = Math.min(...group.items.map((item) => totalCost(item)));
+      const eventMeta = [group.event_location, group.event_dates].filter(Boolean).join(" · ");
+
+      const card = document.createElement("section");
+      card.className = "tti-event-card";
+      card.dataset.eventKey = group.key;
+
+      const rowsHtml = group.items
+        .map((snapshot) => {
+          const snapshotTotal = totalCost(snapshot);
+          const isLowestPrice = Number(snapshot.price) === lowestPrice;
+          const isLowestAllIn = snapshotTotal === lowestAllIn;
+          const rowClasses = [
+            editingId === snapshot.id ? "is-editing-row" : "",
+            isLowestPrice ? "is-lowest-price-row" : "",
+            isLowestAllIn ? "is-lowest-allin-row" : "",
+          ]
+            .filter(Boolean)
+            .join(" ");
+
+          const marketplaceName =
+            marketplaceLabels[snapshot.marketplace] || snapshot.marketplace || "ticket site";
+
+          const outUrl = snapshot.url
+            ? buildOutboundUrl(snapshot.url, {
+                source: marketplaceName,
+                event: snapshot.event_name,
+              })
+            : "";
+
+const urlCell = outUrl
+  ? `<a href="${escapeHTML(outUrl)}" target="_blank" rel="noopener noreferrer" class="btn tti-mini">View on ${escapeHTML(marketplaceName)}</a>`
+  : "—";
+
+          return `
+            <tr data-snapshot-id="${escapeHTML(snapshot.id)}" class="${rowClasses}">
+              <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
+              <td>${escapeHTML(snapshot.section || "")}</td>
+              <td>${escapeHTML(snapshot.row || "")}</td>
+              <td>${escapeHTML(snapshot.seat || "")}</td>
+              <td>${escapeHTML(
+                marketplaceLabels[snapshot.marketplace] || snapshot.marketplace || ""
+              )}</td>
+              <td>
+                $${escapeHTML(formatMoney(snapshot.price))}
+                ${isLowestPrice ? `<span class="tti-price-badge">Lowest price</span>` : ""}
+              </td>
+              <td>
+                $${escapeHTML(formatMoney(snapshotTotal))}
+                ${isLowestAllIn ? `<span class="tti-price-badge tti-price-badge-allin">Lowest total</span>` : ""}
+              </td>
+              <td>${urlCell}</td>
+              <td>
+                <button type="button" class="btn tti-mini" data-edit="${escapeHTML(snapshot.id)}">Edit</button>
+                <button type="button" class="btn tti-mini btn-ghost" data-del="${escapeHTML(snapshot.id)}">Remove</button>
+              </td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      card.innerHTML = `
+        <div class="tti-event-card__header">
+          <div class="tti-event-card__title-wrap">
+            <h3 class="tti-event-card__title">${escapeHTML(group.event_name)}</h3>
+            <p class="tti-event-card__meta">${escapeHTML(eventMeta)}</p>
+          </div>
+
+          <div class="tti-event-card__badges">
+            <span class="tti-price-badge">Lowest price: $${escapeHTML(formatMoney(lowestPrice))}</span>
+            <span class="tti-price-badge tti-price-badge-allin">Lowest total: $${escapeHTML(formatMoney(lowestAllIn))}</span>
+            <span class="tti-price-badge">${listingCount} listing${listingCount === 1 ? "" : "s"}</span>
+            <button
+              type="button"
+              class="btn btn-ghost tti-mini"
+              data-toggle-event="${escapeHTML(group.key)}"
+            >
+              ${isCollapsed ? "Expand" : "Collapse"}
+            </button>
+          </div>
+        </div>
+
+        ${
+          isCollapsed
+            ? ""
+            : `
+              <div class="tti-event-card__table-wrap">
+                <table class="tti-event-table">
+                  <thead>
+                    <tr>
+                      <th>Saved</th>
+                      <th>Section</th>
+                      <th>Row</th>
+                      <th>Seat</th>
+                      <th>Site</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                      <th>Link</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rowsHtml}
+                  </tbody>
+                </table>
               </div>
-            </label>
+            `
+        }
+      `;
 
-            <div class="ms-site-grid">
-              <label class="pill-check"><input type="checkbox" id="site-google" checked><span>Google</span></label>
-              <label class="pill-check"><input type="checkbox" id="site-seatgeek" checked><span>SeatGeek</span></label>
-              <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid</span></label>
-              <label class="pill-check"><input type="checkbox" id="site-stubhub" checked><span>StubHub</span></label>
-              <label class="pill-check"><input type="checkbox" id="site-ticketmaster" checked><span>Ticketmaster</span></label>
-              <label class="pill-check"><input type="checkbox" id="site-tickpick" checked><span>TickPick</span></label>
-            </div>
+      snapshotBody.appendChild(card);
+    });
 
-            <div class="ms-actions">
-              <button type="submit" class="btn primary" id="tms-search">Search Sites</button>
-              <button type="button" id="tms-copy" class="btn">Copy Search Links</button>
-              <button type="button" id="tms-reset" class="btn btn-ghost">Clear</button>
-            </div>
+    updateEventSummary();
+  }
 
-          </form>
+  function saveSnapshot(event) {
+    event.preventDefault();
 
-          <div id="tms-links" class="ms-links" style="margin-top:16px;"></div>
+    const eventName = safeText(eventNameEl?.value);
+    const eventLocation = safeText(eventLocationEl?.value);
+    const eventDates = safeText(eventDatesEl?.value);
+    const section = safeText(sectionEl?.value);
+    const row = safeText(rowEl?.value);
+    const seat = safeText(seatEl?.value);
+    const marketplace = safeText(marketplaceEl?.value);
+    const price = priceEl?.value ?? "";
+    const fees = feesEl?.value ?? "";
+    const url = safeText(urlEl?.value);
+    const notes = safeText(notesEl?.value);
 
-          <p class="muted" style="margin-top:14px; font-size:.95rem;">
-            Ticket VeriGuard does not sell tickets directly. Search links open on Google or the selected ticket marketplace.
-          </p>
+    if (!eventName) return setSnapshotStatus("Enter the event name.", "error");
+    if (!marketplace) return setSnapshotStatus("Pick a marketplace.", "error");
+    if (price === "" || !Number.isFinite(Number(price))) {
+      return setSnapshotStatus("Enter a valid price.", "error");
+    }
+    if (!url) return setSnapshotStatus("Paste the URL you used.", "error");
 
-        </div>
-      </div>
-    </section>
+    const items = loadSnapshots();
 
-    <!-- SAVE -->
-    <section class="section">
-      <div class="tvb-container">
-        <div class="card">
+    if (editingId) {
+      const index = items.findIndex((item) => item.id === editingId);
 
-          <h2>Save a ticket listing</h2>
+      if (index !== -1) {
+        items[index] = {
+          ...items[index],
+          event_name: eventName,
+          event_location: eventLocation,
+          event_dates: eventDates,
+          search_query: normalizeQuery(queryEl?.value),
+          marketplace,
+          price: Number(price),
+          fees: fees === "" ? null : Number(fees),
+          currency: "USD",
+          url,
+          notes,
+          section,
+          row,
+          seat,
+        };
 
-          <p class="muted">
-            Found a listing worth comparing? Save the event, price, seat details, marketplace, and link here.
-          </p>
+        saveSnapshots(items);
+        clearSnapshotForm();
+        renderSnapshots();
+        setSnapshotStatus("Updated snapshot.");
+        showToast("Snapshot updated");
+        return;
+      }
 
-          <form id="tti-snapshot-form" class="tti-form" novalidate>
+      editingId = null;
+    }
 
-            <div class="tti-grid">
+    items.push({
+      id: window.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      captured_at: new Date().toISOString(),
+      event_name: eventName,
+      event_location: eventLocation,
+      event_dates: eventDates,
+      search_query: normalizeQuery(queryEl?.value),
+      marketplace,
+      price: Number(price),
+      fees: fees === "" ? null : Number(fees),
+      currency: "USD",
+      url,
+      notes,
+      section,
+      row,
+      seat,
+    });
 
-              <input id="tti-event-name" placeholder="Event or artist" required class="tti-input"/>
-              <input id="tti-event-location" placeholder="Venue" class="tti-input"/>
-              <input id="tti-event-dates" placeholder="Date or show time" class="tti-input"/>
+    saveSnapshots(items);
+    renderSnapshots();
 
-              <input id="tti-section" placeholder="Section" class="tti-input"/>
-              <input id="tti-row" placeholder="Row" class="tti-input"/>
-              <input id="tti-seat" placeholder="Seat or seat range (ex: 2-4)" class="tti-input"/>
+    if (priceEl) priceEl.value = "";
+    if (feesEl) feesEl.value = "";
+    if (notesEl) notesEl.value = "";
 
-              <select id="tti-marketplace" required class="tti-input">
-                <option value="" disabled selected>Ticket site</option>
-                <option value="stubhub">StubHub</option>
-                <option value="seatgeek">SeatGeek</option>
-                <option value="vivid">Vivid</option>
-                <option value="ticketmaster">Ticketmaster</option>
-                <option value="tickpick">TickPick</option>
-              </select>
+    setSnapshotStatus("Saved ticket.");
+    showToast("Snapshot saved");
+  }
 
-              <input id="tti-price" type="number" placeholder="List price" required class="tti-input"/>
-              <input id="tti-fees" type="number" placeholder="Total price with fees" class="tti-input"/>
-              <input id="tti-url" type="url" placeholder="Listing link" required class="tti-input"/>
+  function exportSnapshotsCsv(event) {
+    if (event) event.preventDefault();
 
-            </div>
+    const items = loadSnapshots();
+    if (!items.length) {
+      setSnapshotStatus("No snapshots to export yet.", "error");
+      return;
+    }
 
-            <div class="tti-row">
-              <button type="submit" class="btn primary">Save to Compare</button>
-            </div>
+    const headers = [
+      "captured_at",
+      "event_name",
+      "event_location",
+      "event_dates",
+      "section",
+      "row",
+      "seat",
+      "search_query",
+      "marketplace",
+      "price",
+      "fees",
+      "currency",
+      "url",
+      "notes",
+    ];
 
-            <p id="tti-status" class="muted"></p>
+    const rows = [
+      headers.join(","),
+      ...items
+        .slice()
+        .sort((a, b) => new Date(a.captured_at) - new Date(b.captured_at))
+        .map((item) => headers.map((header) => escapeCsv(item[header])).join(",")),
+    ];
 
-          </form>
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    downloadTextFile(
+      `tti-snapshots-${stamp}.csv`,
+      rows.join("\n"),
+      "text/csv;charset=utf-8;"
+    );
 
-        </div>
-      </div>
-    </section>
+    setSnapshotStatus("Exported CSV.");
+  }
 
-    <!-- COMPARE -->
-    <section class="section">
-      <div class="tvb-container">
-        <div class="card">
+  function clearSnapshots(event) {
+    if (event) event.preventDefault();
 
-          <h2>Saved listings to compare</h2>
+    localStorage.removeItem(STORAGE_KEY);
+    clearSnapshotForm();
+    collapsedEventKeys.clear();
+    renderSnapshots();
+    setSnapshotStatus("Cleared saved snapshots from this browser.");
+    showToast("Snapshots cleared");
+  }
 
-          <div class="tti-compare-toolbar">
-            <label class="tti-sort-wrap">
-              <span class="muted">Sort events:</span>
-              <select id="tti-event-sort" class="tti-sort-select">
-                <option value="lowest-price">Lowest price</option>
-                <option value="lowest-total">Lowest total</option>
-                <option value="event-name">Event name</option>
-                <option value="most-recent">Most recent</option>
-              </select>
-            </label>
+  function openDuplicateCheckFromSnapshots() {
+    const items = loadSnapshots();
 
-            <label class="tti-sort-wrap">
-              <span class="muted">Sort listings:</span>
-              <select id="tti-sort" class="tti-sort-select">
-                <option value="price-asc">Lowest price</option>
-                <option value="allin-asc">Lowest total</option>
-                <option value="newest">Newest</option>
-                <option value="marketplace">Marketplace</option>
-              </select>
-            </label>
+    if (!items.length) {
+      setSnapshotStatus("Save at least one snapshot before running duplicate check.", "error");
+      showToast("No saved snapshots yet", "error");
+      return;
+    }
 
-            <div class="tti-toolbar-actions">
-              <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
-              <button type="button" class="btn btn-ghost" id="tti-collapse-all">Collapse all</button>
-            </div>
-          </div>
+    sessionStorage.setItem(DUPLICATE_AUTO_RUN_KEY, "snapshots");
+    window.location.href = "duplicate-check.html";
+  }
 
-          <div class="tti-table-wrap">
-            <div id="tti-snapshots-body" class="tti-snapshots-list">
-              <div class="muted">No saved listings yet. Save a few ticket options to compare them here.</div>
-            </div>
-          </div>
+  function bindSearchInputs() {
+    const fields = [
+      queryEl,
+      ...searchSites.map((site) => document.getElementById(site.id)),
+      document.getElementById(googleCheckboxId),
+    ].filter(Boolean);
 
-        </div>
-      </div>
-    </section>
+    fields.forEach((field) => {
+      field.addEventListener("input", renderPreviewLinks);
+      field.addEventListener("change", renderPreviewLinks);
+    });
+  }
 
+  function buildMarketplaceSearchUrl(marketplace) {
+    const query = normalizeQuery(queryEl?.value);
+    if (!query || !marketplace) return "";
+
+    const site = searchSites.find((item) => item.id === `site-${marketplace}`);
+    if (!site) return "";
+
+    return `https://www.google.com/search?q=${encodeURIComponent(`${query} site:${site.domain}`)}`;
+  }
+
+  function autofillUrlFromMarketplace() {
+    if (!marketplaceEl || !urlEl) return;
+
+    const marketplace = safeText(marketplaceEl.value);
+    if (!marketplace) return;
+
+    const generatedUrl = buildMarketplaceSearchUrl(marketplace);
+    if (!generatedUrl) return;
+
+    const currentValue = safeText(urlEl.value);
+
+    // Replace empty field or previously generated Google marketplace search links
+    const shouldReplace =
+      !currentValue ||
+      currentValue.includes("google.com/search?q=");
+
+    if (shouldReplace) {
+      urlEl.value = generatedUrl;
+    }
+  }
+
+  if (marketplaceEl) {
+    marketplaceEl.addEventListener("change", autofillUrlFromMarketplace);
+  }
+
+  if (queryEl) {
+    queryEl.addEventListener("input", () => {
+      if (safeText(urlEl?.value).includes("google.com/search?q=")) {
+        autofillUrlFromMarketplace();
+      }
+    });
+  }
+
+  if (snapshotBody) {
+    snapshotBody.addEventListener("click", (event) => {
+      const toggleBtn = event.target.closest("[data-toggle-event]");
+      if (toggleBtn) {
+        toggleEventCollapsed(toggleBtn.getAttribute("data-toggle-event"));
+        return;
+      }
+
+      const editBtn = event.target.closest("[data-edit]");
+        if (editBtn) {
+          const id = editBtn.getAttribute("data-edit");
+          const item = loadSnapshots().find((snapshot) => snapshot.id === id);
+
+          fillFormFromSnapshot(item);
+          renderSnapshots();
+
+          // 👇 scroll to the form
+          const formEl = document.getElementById("tti-snapshot-form");
+          if (formEl) {
+          
+          const y = formEl.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: y, behavior: "smooth" });
+
+          if (eventNameEl) {
+              eventNameEl.focus();
+            }
+}
+          return;
+        }
+
+      const deleteBtn = event.target.closest("[data-del]");
+      if (deleteBtn) {
+        const id = deleteBtn.getAttribute("data-del");
+        const next = loadSnapshots().filter((snapshot) => snapshot.id !== id);
+        saveSnapshots(next);
+
+        if (editingId === id) {
+          clearSnapshotForm();
+        }
+
+        renderSnapshots();
+        setSnapshotStatus("Removed snapshot.");
+        showToast("Snapshot removed");
+      }
+    });
+  }
+
+  if (presetsWrap) {
+    presetsWrap.addEventListener("click", (event) => {
+      const loadBtn = event.target.closest("[data-load-preset]");
+      if (loadBtn) {
+        loadPresetIntoForm(loadBtn.getAttribute("data-load-preset"));
+        return;
+      }
+
+      const deleteBtn = event.target.closest("[data-delete-preset]");
+      if (deleteBtn) {
+        deletePreset(deleteBtn.getAttribute("data-delete-preset"));
+      }
+    });
+  }
+
+  form.addEventListener("submit", openAllResults);
+
+  if (savePresetBtn) savePresetBtn.addEventListener("click", saveCurrentPreset);
+  if (copyLinksBtn) copyLinksBtn.addEventListener("click", copySearchLinks);
+  if (copyTemplateBtn) copyTemplateBtn.addEventListener("click", copySnapshotTemplate);
+  if (resetBtn) resetBtn.addEventListener("click", resetSearchForm);
+  if (infoToggle) infoToggle.addEventListener("click", toggleExplainer);
+  if (openDuplicateCheckBtn) {
+    openDuplicateCheckBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      openDuplicateCheckFromSnapshots();
+    });
+  }
+
+  if (snapshotForm) snapshotForm.addEventListener("submit", saveSnapshot);
+  if (snapshotSaveBtn) snapshotSaveBtn.addEventListener("click", saveSnapshot);
+  if (cancelEditBtn) {
+    cancelEditBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      cancelEdit();
+    });
+  }
+  if (snapshotExportBtn) snapshotExportBtn.addEventListener("click", exportSnapshotsCsv);
+  if (snapshotClearBtn) snapshotClearBtn.addEventListener("click", clearSnapshots);
+
+  if (eventSortEl) eventSortEl.addEventListener("change", renderSnapshots);
+  if (snapshotSortEl) snapshotSortEl.addEventListener("change", renderSnapshots);
+  if (expandAllBtn) expandAllBtn.addEventListener("click", expandAllEvents);
+  if (collapseAllBtn) collapseAllBtn.addEventListener("click", collapseAllEvents);
+
+  [eventNameEl, eventLocationEl, eventDatesEl]
+    .filter(Boolean)
+    .forEach((el) => el.addEventListener("input", updateEventSummary));
+
+  bindSearchInputs();
+  renderPreviewLinks();
+  renderPresets();
+  renderSnapshots();
+  updateEventSummary();
+  setEditingVisualState(false);
+});
+
+  
     <!-- SEAT CHECK -->
     <section class="section">
       <div class="tvb-container">

@@ -1686,6 +1686,14 @@ const urlCell = outUrl
             <span class="tti-price-badge">${listingCount} listing${listingCount === 1 ? "" : "s"}</span>
             <button
               type="button"
+              class="btn tti-mini"
+              data-edit-event="${escapeHTML(group.key)}"
+            >
+              Edit event
+            </button>
+
+            <button
+              type="button"
               class="btn btn-ghost tti-mini"
               data-toggle-event="${escapeHTML(group.key)}"
             >
@@ -1942,6 +1950,61 @@ const urlCell = outUrl
       const toggleBtn = event.target.closest("[data-toggle-event]");
       if (toggleBtn) {
         toggleEventCollapsed(toggleBtn.getAttribute("data-toggle-event"));
+        return;
+      }
+
+      const editEventBtn = event.target.closest("[data-edit-event]");
+
+      if (editEventBtn) {
+        const eventKey = editEventBtn.getAttribute("data-edit-event");
+
+        const items = loadSnapshots();
+
+        const matchingItems = items.filter((item) => {
+          const itemKey = [
+            normalizeEventText(item.event_name),
+            normalizeEventDate(item.event_dates),
+          ].join("|||");
+
+          return itemKey === eventKey;
+        });
+
+        if (!matchingItems.length) return;
+
+        const firstItem = matchingItems[0];
+
+        const newName = window.prompt(
+          "Edit event name:",
+          firstItem.event_name || ""
+        );
+
+        if (newName === null) return;
+
+        const newVenue = window.prompt(
+          "Edit venue:",
+          firstItem.event_location || ""
+        );
+
+        if (newVenue === null) return;
+
+        const newDate = window.prompt(
+          "Edit event date:",
+          firstItem.event_dates || ""
+        );
+
+        if (newDate === null) return;
+
+        matchingItems.forEach((item) => {
+          item.event_name = safeText(newName);
+          item.event_location = safeText(newVenue);
+          item.event_dates = safeText(newDate);
+        });
+
+        saveSnapshots(items);
+
+        renderSnapshots();
+
+        showToast("Event updated");
         return;
       }
 

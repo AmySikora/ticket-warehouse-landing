@@ -1152,9 +1152,12 @@ button.btn,
 .tti-event-card__header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.22);
 }
 
 .tti-event-card__title {
@@ -1174,6 +1177,13 @@ button.btn,
   align-items: flex-start;
 }
 
+.tti-event-card__badges .pill,
+.tti-event-card__badges .badge {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(56, 189, 248, 0.28);
+  color: #dbeafe;
+}
+
 .tti-event-card__table-wrap {
   width: 100%;
   max-width: 100%;
@@ -1184,6 +1194,12 @@ button.btn,
   border-radius: 14px;
   border: 1px solid rgba(56, 189, 248, 0.28);
 }
+
+.tti-event-card + .tti-event-card {
+  margin-top: 1rem;
+}
+
+
 
 /* ==========================================
    Compare cards - inner event table styling
@@ -1228,16 +1244,17 @@ button.btn,
 }
 
 .tti-event-table tbody td {
-  padding: 12px 12px;
+  padding: 14px 12px;
   text-align: left;
-  vertical-align: top;
-  border: 1px solid rgba(56, 189, 248, 0.28);
+  vertical-align: middle;
+  border-right: 1px solid rgba(56, 189, 248, 0.16);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.12);
   background: transparent;
 }
 
 .tti-event-table thead th {
-  background: rgba(79, 70, 229, 0.28); /* slightly stronger */
-  border-bottom: 2px solid rgba(56, 189, 248, 0.5);
+  background: rgba(79, 70, 229, 0.16);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.22);
 }
 
 .tti-event-table tbody tr.is-editing-row td {
@@ -1260,6 +1277,12 @@ button.btn,
   color: var(--brand-2);
   font-weight: 600;
   text-decoration: none;
+}
+
+.tti-mini {
+  min-width: 82px;
+  font-size: 0.82rem;
+  padding: 7px 10px;
 }
 
 /* Keep labels readable */
