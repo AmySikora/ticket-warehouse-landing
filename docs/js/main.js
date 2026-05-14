@@ -1055,6 +1055,39 @@ function buildOutboundUrl(rawUrl, meta = {}) {
   return 0;
 }
 
+  function findDuplicateSnapshotIds(items) {
+  const seen = new Map();
+  const duplicateIds = new Set();
+
+  items.forEach((item) => {
+    const parsedSeats = parseSeatTokens(item.seat);
+    const seats = parsedSeats.seats.length
+      ? parsedSeats.seats
+      : [safeText(item.seat)];
+
+    seats.forEach((seat) => {
+      const key = [
+        normalizeEventText(item.event_name),
+        normalizeEventDate(item.event_dates),
+        normalizeEventText(item.section),
+        normalizeEventText(item.row),
+        safeText(seat).toLowerCase(),
+      ].join("|||");
+
+      if (!key.trim()) return;
+
+      if (seen.has(key)) {
+        duplicateIds.add(seen.get(key));
+        duplicateIds.add(item.id);
+      } else {
+        seen.set(key, item.id);
+      }
+    });
+  });
+
+  return duplicateIds;
+}
+
   function loadSnapshots() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -1610,6 +1643,8 @@ if (!popup || popup.closed) {
     const items = loadSnapshots();
     snapshotBody.innerHTML = "";
 
+    const duplicateSnapshotIds = findDuplicateSnapshotIds(items);
+
     if (!items.length) {
       snapshotBody.innerHTML = `<div class="muted">No saved tickets yet.</div>`;
       updateEventSummary();
@@ -1670,10 +1705,13 @@ if (!popup || popup.closed) {
           const snapshotTotal = totalCost(snapshot);
           const isLowestPrice = Number(snapshot.price) === lowestPrice;
           const isLowestAllIn = snapshotTotal === lowestAllIn;
+          const isPossibleDuplicate = duplicateSnapshotIds.has(snapshot.id);
+
           const rowClasses = [
             editingId === snapshot.id ? "is-editing-row" : "",
             isLowestPrice ? "is-lowest-price-row" : "",
             isLowestAllIn ? "is-lowest-allin-row" : "",
+            isPossibleDuplicate ? "is-possible-duplicate-row" : "",
           ]
             .filter(Boolean)
             .join(" ");
@@ -1697,7 +1735,14 @@ const urlCell = outUrl
               <td>${escapeHTML(formatTime(snapshot.captured_at))}</td>
               <td>${escapeHTML(snapshot.section || "")}</td>
               <td>${escapeHTML(snapshot.row || "")}</td>
-              <td>${escapeHTML(snapshot.seat || "")}</td>
+              <td>
+                ${escapeHTML(snapshot.seat || "")}
+                ${
+                  isPossibleDuplicate
+                    ? `<span class="tti-dupe-badge">Possible duplicate</span>`
+                    : ""
+                }
+              </td>
               <td>
                 <span class="tti-market-badge tti-market-${escapeHTML(
                   (snapshot.marketplace || "").toLowerCase()
@@ -1990,387 +2035,4 @@ const urlCell = outUrl
           const key = [
             normalizeEventText(item.event_name),
             normalizeEventDate(item.event_dates),
-            safeText(item.section),
-            safeText(item.row),
-            safeText(item.seat),
-            safeText(item.marketplace),
-            Number(item.price),
-          ].join("|||");
-
-          return !existingKeys.has(key);
-        });
-
-        saveSnapshots([...existing, ...uniqueImports]);
-
-        renderSnapshots();
-        updateEventSummary();
-
-        const skippedCount = imported.length - uniqueImports.length;
-
-      setSnapshotStatus(
-        `Imported ${uniqueImports.length} listing${uniqueImports.length === 1 ? "" : "s"}${
-          skippedCount ? ` • Skipped ${skippedCount} duplicate${skippedCount === 1 ? "" : "s"}` : ""
-        }.`
-      );
-        showToast("CSV imported");
-
-        event.target.value = "";
-      },
-      error(error) {
-        console.error("CSV import failed:", error);
-        setSnapshotStatus("Could not import that CSV.", "error");
-        showToast("Import failed", "error");
-        event.target.value = "";
-      },
-    });
-  }
-
-  function clearSnapshots(event) {
-    if (event) event.preventDefault();
-
-    localStorage.removeItem(STORAGE_KEY);
-    clearSnapshotForm();
-    collapsedEventKeys.clear();
-    renderSnapshots();
-    setSnapshotStatus("Cleared saved snapshots from this browser.");
-    showToast("Snapshots cleared");
-  }
-
-  function openDuplicateCheckFromSnapshots() {
-    const items = loadSnapshots();
-
-    if (!items.length) {
-      setSnapshotStatus("Save at least one snapshot before running duplicate check.", "error");
-      showToast("No saved snapshots yet", "error");
-      return;
-    }
-
-    sessionStorage.setItem(DUPLICATE_AUTO_RUN_KEY, "snapshots");
-    window.location.href = "duplicate-check.html";
-  }
-
-  function bindSearchInputs() {
-    const fields = [
-      queryEl,
-      ...searchSites.map((site) => document.getElementById(site.id)),
-      document.getElementById(googleCheckboxId),
-    ].filter(Boolean);
-
-    fields.forEach((field) => {
-      field.addEventListener("input", renderPreviewLinks);
-      field.addEventListener("change", renderPreviewLinks);
-    });
-  }
-
-  function buildMarketplaceSearchUrl(marketplace) {
-    const query = normalizeQuery(queryEl?.value);
-    if (!query || !marketplace) return "";
-
-    const site = searchSites.find((item) => item.id === `site-${marketplace}`);
-    if (!site) return "";
-
-    return `https://www.google.com/search?q=${encodeURIComponent(`${query} site:${site.domain}`)}`;
-  }
-
-  function autofillUrlFromMarketplace() {
-    if (!marketplaceEl || !urlEl) return;
-
-    const marketplace = safeText(marketplaceEl.value);
-    if (!marketplace) return;
-
-    const generatedUrl = buildMarketplaceSearchUrl(marketplace);
-    if (!generatedUrl) return;
-
-    const currentValue = safeText(urlEl.value);
-
-    // Replace empty field or previously generated Google marketplace search links
-    const shouldReplace =
-      !currentValue ||
-      currentValue.includes("google.com/search?q=");
-
-    if (shouldReplace) {
-      urlEl.value = generatedUrl;
-    }
-  }
-
-  if (marketplaceEl) {
-    marketplaceEl.addEventListener("change", autofillUrlFromMarketplace);
-  }
-
-  if (queryEl) {
-    queryEl.addEventListener("input", () => {
-      if (safeText(urlEl?.value).includes("google.com/search?q=")) {
-        autofillUrlFromMarketplace();
-      }
-    });
-  }
-
-  function saveEventEdit(event) {
-    event.preventDefault();
-
-    const formEl = event.target.closest("[data-event-edit-form]");
-    if (!formEl) return;
-
-    const eventKey = formEl.getAttribute("data-event-edit-form");
-    const formData = new FormData(formEl);
-
-    const nextEventName = safeText(formData.get("event_name"));
-    const nextEventLocation = safeText(formData.get("event_location"));
-    const nextEventDates = safeText(formData.get("event_dates"));
-
-    if (!nextEventName) {
-      setSnapshotStatus("Event name cannot be blank.", "error");
-      showToast("Event name required", "error");
-      return;
-    }
-
-    const items = loadSnapshots();
-
-    const updated = items.map((item) => {
-      const currentKey = [
-        normalizeEventText(item.event_name),
-        normalizeEventDate(item.event_dates),
-      ].join("|||");
-
-      if (currentKey !== eventKey) return item;
-
-      return {
-        ...item,
-        event_name: nextEventName,
-        event_location: nextEventLocation,
-        event_dates: nextEventDates,
-      };
-    });
-
-    saveSnapshots(updated);
-
-    collapsedEventKeys.delete(eventKey);
-    editingEventKey = null;
-
-    renderSnapshots();
-    setSnapshotStatus("Updated event details.");
-    showToast("Event updated");
-  }
-
-  if (snapshotBody) {
-    snapshotBody.addEventListener("click", (event) => {
-      const toggleBtn = event.target.closest("[data-toggle-event]");
-      if (toggleBtn) {
-        toggleEventCollapsed(toggleBtn.getAttribute("data-toggle-event"));
-        return;
-      }
-
-      const editEventBtn = event.target.closest("[data-edit-event]");
-
-      if (editEventBtn) {
-        editingEventKey = editEventBtn.getAttribute("data-edit-event");
-        renderSnapshots();
-        return;
-      }
-
-      const removeEventBtn = event.target.closest("[data-remove-event]");
-
-      if (removeEventBtn) {
-        removeEventGroup(
-          removeEventBtn.getAttribute("data-remove-event")
-        );
-        return;
-      }
-
-      const cancelEventBtn = event.target.closest("[data-cancel-event]");
-
-      if (cancelEventBtn) {
-        editingEventKey = null;
-        renderSnapshots();
-        return;
-      }
-
-      const editBtn = event.target.closest("[data-edit]");
-        if (editBtn) {
-          const id = editBtn.getAttribute("data-edit");
-          const item = loadSnapshots().find((snapshot) => snapshot.id === id);
-
-          fillFormFromSnapshot(item);
-          renderSnapshots();
-
-          // 👇 scroll to the form
-          const formEl = document.getElementById("tti-snapshot-form");
-          if (formEl) {
-          
-          const y = formEl.getBoundingClientRect().top + window.scrollY - 80;
-          window.scrollTo({ top: y, behavior: "smooth" });
-
-          if (eventNameEl) {
-              eventNameEl.focus();
-            }
-}
-          return;
-        }
-
-      const deleteBtn = event.target.closest("[data-del]");
-      if (deleteBtn) {
-        const id = deleteBtn.getAttribute("data-del");
-        const next = loadSnapshots().filter((snapshot) => snapshot.id !== id);
-        saveSnapshots(next);
-
-        if (editingId === id) {
-          clearSnapshotForm();
-        }
-
-        renderSnapshots();
-        setSnapshotStatus("Removed snapshot.");
-        showToast("Snapshot removed");
-      }
-    });
-  }
-
-    if (snapshotBody) {
-  snapshotBody.addEventListener("submit", (event) => {
-    const eventForm = event.target.closest("[data-event-edit-form]");
-    if (!eventForm) return;
-
-    event.preventDefault();
-
-    const eventKey = eventForm.getAttribute("data-event-edit-form");
-    const formData = new FormData(eventForm);
-
-    const newName = safeText(formData.get("event_name"));
-    const newVenue = safeText(formData.get("event_location"));
-    const newDate = safeText(formData.get("event_dates"));
-
-    if (!newName) {
-      setSnapshotStatus("Event name is required.", "error");
-      return;
-    }
-
-    const items = loadSnapshots();
-
-    items.forEach((item) => {
-      const itemKey = [
-        normalizeEventText(item.event_name),
-        normalizeEventDate(item.event_dates),
-      ].join("|||");
-
-      if (itemKey === eventKey) {
-        item.event_name = newName;
-        item.event_location = newVenue;
-        item.event_dates = newDate;
-      }
-    });
-
-    saveSnapshots(items);
-    editingEventKey = null;
-    renderSnapshots();
-
-    setSnapshotStatus("Event updated.");
-    showToast("Event updated");
-  });
-}
-
-    if (presetsWrap) {
-    presetsWrap.addEventListener("click", (event) => {
-      const loadBtn = event.target.closest("[data-load-preset]");
-      if (loadBtn) {
-        loadPresetIntoForm(loadBtn.getAttribute("data-load-preset"));
-        return;
-      }
-
-      const deleteBtn = event.target.closest("[data-delete-preset]");
-      if (deleteBtn) {
-        deletePreset(deleteBtn.getAttribute("data-delete-preset"));
-      }
-    });
-  }
-
-  if (snapshotBody) {
-    snapshotBody.addEventListener("submit", (event) => {
-      const eventEditForm = event.target.closest("[data-event-edit-form]");
-      if (!eventEditForm) return;
-
-      saveEventEdit(event);
-    });
-  }
-
-      function removeEventGroup(eventKey) {
-    if (!eventKey) return;
-
-    const confirmed = window.confirm(
-      "Remove all saved listings for this event?"
-    );
-
-    if (!confirmed) return;
-
-    const next = loadSnapshots().filter((item) => {
-      const currentKey = [
-        normalizeEventText(item.event_name),
-        normalizeEventDate(item.event_dates),
-      ].join("|||");
-
-      return currentKey !== eventKey;
-    });
-
-    saveSnapshots(next);
-
-    collapsedEventKeys.delete(eventKey);
-
-    if (editingEventKey === eventKey) {
-      editingEventKey = null;
-    }
-
-    renderSnapshots();
-    updateEventSummary();
-
-    setSnapshotStatus("Removed event and associated listings.");
-    showToast("Event removed");
-  }
-
-  form.addEventListener("submit", openAllResults);
-
-  if (savePresetBtn) savePresetBtn.addEventListener("click", saveCurrentPreset);
-  if (copyLinksBtn) copyLinksBtn.addEventListener("click", copySearchLinks);
-  if (copyTemplateBtn) copyTemplateBtn.addEventListener("click", copySnapshotTemplate);
-  if (resetBtn) resetBtn.addEventListener("click", resetSearchForm);
-  if (infoToggle) infoToggle.addEventListener("click", toggleExplainer);
-  if (openDuplicateCheckBtn) {
-    openDuplicateCheckBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      openDuplicateCheckFromSnapshots();
-    });
-  }
-
-  if (snapshotForm) snapshotForm.addEventListener("submit", saveSnapshot);
-  if (snapshotSaveBtn) snapshotSaveBtn.addEventListener("click", saveSnapshot);
-  if (cancelEditBtn) {
-    cancelEditBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      cancelEdit();
-    });
-  }
-  if (snapshotExportBtn) snapshotExportBtn.addEventListener("click", exportSnapshotsCsv);
-  if (snapshotImportBtn && snapshotImportFile) {
-  snapshotImportBtn.addEventListener("click", () => {
-    snapshotImportFile.click();
-  });
-
-  snapshotImportFile.addEventListener("change", importSnapshotsCsv);
-}
-  if (snapshotClearBtn) snapshotClearBtn.addEventListener("click", clearSnapshots);
-
-  if (eventSortEl) eventSortEl.addEventListener("change", renderSnapshots);
-  if (snapshotSortEl) snapshotSortEl.addEventListener("change", renderSnapshots);
-  if (expandAllBtn) expandAllBtn.addEventListener("click", expandAllEvents);
-  if (collapseAllBtn) collapseAllBtn.addEventListener("click", collapseAllEvents);
-
-  [eventNameEl, eventLocationEl, eventDatesEl]
-    .filter(Boolean)
-    .forEach((el) => el.addEventListener("input", updateEventSummary));
-
-  bindSearchInputs();
-  renderPreviewLinks();
-  renderPresets();
-  renderSnapshots();
-  updateEventSummary();
-  setEditingVisualState(false);
-});
-
-  
+            safeText(it
