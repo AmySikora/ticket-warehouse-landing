@@ -2113,18 +2113,38 @@ const urlCell = outUrl
       field.addEventListener("input", renderPreviewLinks);
       field.addEventListener("change", renderPreviewLinks);
     });
-  }
-
-  function buildMarketplaceSearchUrl(marketplace) {
-    const query = normalizeQuery(queryEl?.value);
+  }  
+    
+  function buildMarketplaceSearchUrl(marketplace, customQuery = "") {
+    const query = normalizeQuery(customQuery || queryEl?.value);
     if (!query || !marketplace) return "";
 
-    const site = searchSites.find((item) => item.id === `site-${marketplace}`);
-    if (!site) return "";
+    const encoded = encodeURIComponent(query);
 
-    return `https://www.google.com/search?q=${encodeURIComponent(`${query} site:${site.domain}`)}`;
+    switch (marketplace) {
+      case "stubhub":
+        return `https://www.stubhub.com/find/s/?q=${encoded}`;
+
+      case "seatgeek":
+        return `https://seatgeek.com/search?q=${encoded}`;
+
+      case "vivid":
+        return `https://www.vividseats.com/search?searchTerm=${encoded}`;
+
+      case "ticketmaster":
+        return `https://www.ticketmaster.com/search?q=${encoded}`;
+
+      case "tickpick":
+        return `https://www.tickpick.com/search?q=${encoded}`;
+
+      case "google":
+        return `https://www.google.com/search?q=${encoded}+tickets`;
+
+      default:
+        return "";
+    }
   }
-
+  
   function autofillUrlFromMarketplace() {
     if (!marketplaceEl || !urlEl) return;
 
