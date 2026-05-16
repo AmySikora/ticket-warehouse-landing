@@ -1084,23 +1084,31 @@ function buildOutboundUrl(rawUrl, meta = {}) {
       : [safeText(item.seat)];
 
     seats.forEach((seat) => {
-      const key = [
-        normalizeEventText(item.event_name),
-        normalizeEventDate(item.event_dates),
-        normalizeEventText(item.section),
-        normalizeEventText(item.row),
-        safeText(seat).toLowerCase(),
-      ].join("|||");
+  const normalizedSection = normalizeEventText(item.section);
+  const normalizedRow = normalizeEventText(item.row);
+  const normalizedSeat = safeText(seat).toLowerCase();
 
-      if (!key.trim()) return;
+  // Do not flag general admission or listings with no real seat data.
+  // Duplicate checking only runs when section, row, and seat are all present.
+  if (!normalizedSection || !normalizedRow || !normalizedSeat) {
+    return;
+  }
 
-      if (seen.has(key)) {
-        duplicateIds.add(seen.get(key));
-        duplicateIds.add(item.id);
-      } else {
-        seen.set(key, item.id);
-      }
-    });
+  const key = [
+    normalizeEventText(item.event_name),
+    normalizeEventDate(item.event_dates),
+    normalizedSection,
+    normalizedRow,
+    normalizedSeat,
+  ].join("|||");
+
+  if (seen.has(key)) {
+    duplicateIds.add(seen.get(key));
+    duplicateIds.add(item.id);
+  } else {
+    seen.set(key, item.id);
+  }
+});
   });
 
   return duplicateIds;
