@@ -2172,29 +2172,29 @@ function syncSearchToSnapshotForm() {
   if (!query || !marketplace) return "";
 
   const encoded = encodeURIComponent(query);
-  const googleEncoded = encodeURIComponent(`${query} tickets`);
 
   switch (marketplace) {
-  case "stubhub":
-    return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets StubHub`)}`;
+    case "stubhub":
+      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets StubHub`)}`;
 
-  case "seatgeek":
-    return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets SeatGeek`)}`;
+    case "seatgeek":
+      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets SeatGeek`)}`;
 
-  case "vivid":
-    return `https://www.vividseats.com/search?searchTerm=${encoded}`;
+    case "vivid":
+      return `https://www.vividseats.com/search?searchTerm=${encoded}`;
 
-  case "ticketmaster":
-    return `https://www.ticketmaster.com/search?q=${encoded}`;
+    case "ticketmaster":
+      return `https://www.ticketmaster.com/search?q=${encoded}`;
 
-  case "tickpick":
-    return `https://www.tickpick.com/search?q=${encoded}`;
+    case "tickpick":
+      return `https://www.tickpick.com/search?q=${encoded}`;
 
-  case "google":
-    return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets`)}`;
+    case "google":
+      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets`)}`;
 
-  default:
-    return "";
+    default:
+      return "";
+  }
 }
   
   function autofillUrlFromMarketplace() {
@@ -2559,8 +2559,4 @@ if (searchEventSitesBtn) {
   renderSnapshots();
   updateEventSummary();
   setEditingVisualState(false);
-}});
-
-
-
-  
+});
