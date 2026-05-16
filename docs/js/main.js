@@ -2340,7 +2340,7 @@ if (searchEventSitesBtn) {
     firstItem.event_location,
   ].filter(Boolean).join(" ");
 
-  const sites = ["google", "seatgeek", "vivid", "stubhub", "etix", "ticketmaster", "tickpick"];
+  const sites = ["google", "seatgeek", "vivid", "stubhub", "ticketmaster", "etix", "tickpick"];
 
   sites.forEach((site) => {
     const url = buildMarketplaceSearchUrl(site, query);
