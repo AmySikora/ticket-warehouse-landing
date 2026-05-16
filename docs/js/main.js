@@ -890,7 +890,25 @@ tvgSafe("verify-csv", () => {
   const STORAGE_KEY = "tti_snapshots_v0";
   const DUPLICATE_AUTO_RUN_KEY = "tti_duplicate_autorun_v1";
 
-  const queryEl = document.getElementById("tms-query");
+  const eventEl = document.getElementById("tms-event");
+  const locationEl = document.getElementById("tms-location");
+  const dateEl = document.getElementById("tms-date");
+  const searchSectionEl = document.getElementById("tms-section");
+
+function getStructuredSearchQuery() {
+  return normalizeQuery(
+    [
+      eventEl?.value,
+      locationEl?.value,
+      dateEl?.value,
+      searchSectionEl?.value,
+    ]
+      .map((value) => safeText(value))
+      .filter(Boolean)
+      .join(" ")
+  );
+}
+
   const linksWrap = document.getElementById("tms-links");
   const savePresetBtn = document.getElementById("tms-save-preset");
   const presetsWrap = document.getElementById("tms-presets");
@@ -1351,7 +1369,7 @@ function groupSnapshotsByEvent(items) {
   }
 
   function getSelectedSearchUrls() {
-  const raw = normalizeQuery(queryEl?.value);
+  const raw = getStructuredSearchQuery();
   if (!raw) return [];
 
   const urls = [];
@@ -1430,9 +1448,9 @@ function groupSnapshotsByEvent(items) {
     event.preventDefault();
     clearOpenAllNote();
 
-    if (!queryEl?.value.trim()) {
-      queryEl?.focus();
-      showToast("Enter a search first.", "error");
+    if (!getStructuredSearchQuery()) {
+      eventEl?.focus();
+      showToast("Enter an event, artist, or team first.", "error");
       return;
     }
 
@@ -1448,7 +1466,7 @@ function groupSnapshotsByEvent(items) {
       const popup = window.open(
         buildOutboundUrl(item.href, {
           source: item.source,
-          event: normalizeQuery(queryEl?.value)
+          event: getStructuredSearchQuery()
         }),
         "_blank",
         "noopener"
@@ -2107,7 +2125,10 @@ const urlCell = outUrl
 
   function bindSearchInputs() {
     const fields = [
-      queryEl,
+      eventEl,
+      locationEl,
+      dateEl,
+      searchSectionEl,
       ...searchSites.map((site) => document.getElementById(site.id)),
       document.getElementById(googleCheckboxId),
     ].filter(Boolean);
@@ -2116,11 +2137,11 @@ const urlCell = outUrl
       field.addEventListener("input", renderPreviewLinks);
       field.addEventListener("change", renderPreviewLinks);
     });
-  }  
+  }
     
   function buildMarketplaceSearchUrl(marketplace, customQuery = "") {
-    const query = normalizeQuery(customQuery || queryEl?.value);
-    if (!query || !marketplace) return "";
+    const query = normalizeQuery(customQuery || getStructuredSearchQuery());;
+      if (!query || !marketplace) return "";
 
     const encoded = encodeURIComponent(query);
 
@@ -2177,22 +2198,24 @@ const urlCell = outUrl
     marketplaceEl.addEventListener("change", autofillUrlFromMarketplace);
   }
 
-  if (queryEl) {
-    queryEl.addEventListener("input", () => {
+  [eventEl, locationEl, dateEl, searchSectionEl]
+  .filter(Boolean)
+  .forEach((field) => {
+    field.addEventListener("input", () => {
       const currentUrl = safeText(urlEl?.value);
 
-    if (
-      currentUrl.includes("google.com/search?q=") ||
-      currentUrl.includes("stubhub.com/find/s/") ||
-      currentUrl.includes("seatgeek.com/search") ||
-      currentUrl.includes("vividseats.com/search") ||
-      currentUrl.includes("ticketmaster.com/search") ||
-      currentUrl.includes("tickpick.com/search")
-    ) {
-      autofillUrlFromMarketplace();
-    }
+      if (
+        currentUrl.includes("google.com/search?q=") ||
+        currentUrl.includes("stubhub.com/find/s/") ||
+        currentUrl.includes("seatgeek.com/search") ||
+        currentUrl.includes("vividseats.com/search") ||
+        currentUrl.includes("ticketmaster.com/search") ||
+        currentUrl.includes("tickpick.com/search")
+      ) {
+        autofillUrlFromMarketplace();
+      }
     });
-  }
+  });
 
   function saveEventEdit(event) {
     event.preventDefault();
