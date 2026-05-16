@@ -958,7 +958,6 @@ function getStructuredSearchQuery() {
   { id: "site-stubhub", label: "StubHub via Google", domain: "stubhub.com" },
   { id: "site-ticketmaster", label: "Ticketmaster", domain: "ticketmaster.com" },
   { id: "site-tickpick", label: "TickPick", domain: "tickpick.com" },
-  { id: "site-viagogo", label: "Viagogo", domain: "viagogo.com" },
 ];
 
   const googleCheckboxId = "site-google";
@@ -967,10 +966,8 @@ function getStructuredSearchQuery() {
     stubhub: "StubHub",
     seatgeek: "SeatGeek",
     vivid: "Vivid Seats",
-    etix: "Etix",
     ticketmaster: "Ticketmaster",
     tickpick: "TickPick",
-    viagogo: "Viagogo",
   };
 
   function canUseBackendLogging() {
