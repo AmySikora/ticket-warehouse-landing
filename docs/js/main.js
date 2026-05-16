@@ -1417,7 +1417,7 @@ function groupSnapshotsByEvent(items) {
       a.className = "ms-link";
       a.href = buildOutboundUrl(item.href, {
       source: item.source,
-      event: normalizeQuery(queryEl?.value),
+      event: getStructuredSearchQuery(),
       });
       a.target = "_blank";
       a.rel = "noopener noreferrer";
@@ -1556,10 +1556,10 @@ if (!popup || popup.closed) {
   }
 
   function saveCurrentPreset() {
-    const query = normalizeQuery(queryEl?.value);
+    
     const siteIds = getSelectedSiteIds();
     const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
-
+    const query = getStructuredSearchQuery();
     if (!query) {
       showToast("Enter a search before saving a preset.", "error");
       return;
@@ -1586,7 +1586,10 @@ if (!popup || popup.closed) {
     const preset = loadPresets().find((item) => item.id === id);
     if (!preset) return;
 
-    if (queryEl) queryEl.value = preset.query || "";
+    if (eventEl) eventEl.value = preset.query || "";
+    if (locationEl) locationEl.value = "";
+    if (dateEl) dateEl.value = "";
+    if (searchSectionEl) searchSectionEl.value = "";
 
     searchSites.forEach((site) => {
       const checkbox = document.getElementById(site.id);
