@@ -2159,10 +2159,14 @@ const urlCell = outUrl
     // Replace empty field or previously generated Google marketplace search links
     const shouldReplace =
       !currentValue ||
-      currentValue.includes("google.com/search?q=");
-
-    if (shouldReplace) {
-      urlEl.value = generatedUrl;
+      currentValue.includes("google.com/search?q=") ||
+      currentValue.includes("stubhub.com/find/s/") ||
+      currentValue.includes("seatgeek.com/search") ||
+      currentValue.includes("vividseats.com/search") ||
+      currentValue.includes("ticketmaster.com/search") ||
+      currentValue.includes("tickpick.com/search");
+        if (shouldReplace) {
+          urlEl.value = generatedUrl;
     }
   }
 
@@ -2172,9 +2176,18 @@ const urlCell = outUrl
 
   if (queryEl) {
     queryEl.addEventListener("input", () => {
-      if (safeText(urlEl?.value).includes("google.com/search?q=")) {
-        autofillUrlFromMarketplace();
-      }
+      const currentUrl = safeText(urlEl?.value);
+
+    if (
+      currentUrl.includes("google.com/search?q=") ||
+      currentUrl.includes("stubhub.com/find/s/") ||
+      currentUrl.includes("seatgeek.com/search") ||
+      currentUrl.includes("vividseats.com/search") ||
+      currentUrl.includes("ticketmaster.com/search") ||
+      currentUrl.includes("tickpick.com/search")
+    ) {
+      autofillUrlFromMarketplace();
+    }
     });
   }
 
