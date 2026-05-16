@@ -849,6 +849,54 @@ button.btn,
   outline: none;
 }
 
+/* Structured search fields */
+.ms-input-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.ms-search-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.ms-search-fields .ms-input:first-child {
+  grid-column: 1 / -1;
+}
+
+.ms-input {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  background: #0e1420;
+  color: var(--text);
+}
+
+.ms-input::placeholder {
+  color: #94a3b8;
+}
+
+.ms-input-wrap {
+  align-items: center;
+}
+
+.ms-input-wrap > span {
+  align-self: start;
+  padding-top: 14px;
+}
+
+
+.ms-input:focus {
+  outline: none;
+  border-color: var(--brand-2);
+  box-shadow: 0 0 0 3px rgba(34,211,238,.18);
+}
+
 .ms-sites {
   margin: 2px 0 0;
   padding: 0;
@@ -865,6 +913,24 @@ button.btn,
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .ms-search-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .ms-search-fields .ms-input:first-child {
+    grid-column: auto;
+  }
+
+  .ms-input-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .ms-input-wrap > span {
+    display: none;
+  }
 }
 
 .pill-check {
@@ -934,6 +1000,10 @@ button.btn,
   border: 1px solid rgba(255,255,255,.08);
   border-radius: 14px;
   background: rgba(14,20,32,.65);
+}
+
+#tms-section {
+  max-width: 260px;
 }
 
 .ms-links {

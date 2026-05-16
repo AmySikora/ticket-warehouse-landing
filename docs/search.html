@@ -77,15 +77,15 @@
           <form id="tixSearch" class="ms-form" novalidate>
 
             <label class="ms-label">
-              <div class="ms-input-wrap">
-                <span>🔍</span>
-                <input
-                  type="text"
-                  id="tms-query"
-                  placeholder="Taylor Swift Miami, Dodgers Los Angeles, Knicks New York..."
-                  required
-                  class="ms-input"
-                />
+             <div class="ms-input-wrap">
+               <span>🔍</span>
+
+                <div class="ms-search-fields">
+                  <input type="text" id="tms-event" placeholder="Artist, team, or event" required class="ms-input" />
+                  <input type="text" id="tms-location" placeholder="Venue or city" class="ms-input" />
+                  <input type="text" id="tms-date" placeholder="Date" class="ms-input" />
+                  <input type="text" id="tms-section" placeholder="Optional section" class="ms-input" />
+                </div>
               </div>
             </label>
 
