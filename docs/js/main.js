@@ -1084,35 +1084,35 @@ function buildOutboundUrl(rawUrl, meta = {}) {
       : [safeText(item.seat)];
 
     seats.forEach((seat) => {
-  const normalizedSection = normalizeEventText(item.section);
-  const normalizedRow = normalizeEventText(item.row);
-  const normalizedSeat = safeText(seat).toLowerCase();
+      const normalizedSection = normalizeEventText(item.section);
+      const normalizedRow = normalizeEventText(item.row);
+      const normalizedSeat = safeText(seat).toLowerCase();
 
-  // Do not flag general admission or listings with no real seat data.
-  // Duplicate checking only runs when section, row, and seat are all present.
-  if (!normalizedSection || !normalizedRow || !normalizedSeat) {
-    return;
-  }
+      // Do not flag general admission or listings with no real seat data.
+      // Duplicate checking only runs when section, row, and seat are all present.
+      if (!normalizedSection || !normalizedRow || !normalizedSeat) {
+        return;
+      }
 
-  const key = [
-    normalizeEventText(item.event_name),
-    normalizeEventDate(item.event_dates),
-    normalizedSection,
-    normalizedRow,
-    normalizedSeat,
-  ].join("|||");
+      const key = [
+        normalizeEventText(item.event_name),
+        normalizeEventDate(item.event_dates),
+        normalizedSection,
+        normalizedRow,
+        normalizedSeat,
+      ].join("|||");
 
-  if (seen.has(key)) {
-    duplicateIds.add(seen.get(key));
-    duplicateIds.add(item.id);
-  } else {
-    seen.set(key, item.id);
-  }
-});
-  });
+      if (seen.has(key)) {
+        duplicateIds.add(seen.get(key));
+        duplicateIds.add(item.id);
+      } else {
+        seen.set(key, item.id);
+      }
+    });
+      });
 
-  return duplicateIds;
-}
+      return duplicateIds;
+    }
 
   function loadSnapshots() {
     try {
