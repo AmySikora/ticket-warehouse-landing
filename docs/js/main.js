@@ -2141,6 +2141,24 @@ const urlCell = outUrl
       field.addEventListener("change", renderPreviewLinks);
     });
   }
+
+  [eventEl, locationEl, dateEl].forEach((field) => {
+  field?.addEventListener("input", syncSearchToSnapshotForm);
+});
+
+function syncSearchToSnapshotForm() {
+  if (eventNameEl && !eventNameEl.value.trim()) {
+    eventNameEl.value = safeText(eventEl?.value);
+  }
+
+  if (eventLocationEl && !eventLocationEl.value.trim()) {
+    eventLocationEl.value = safeText(locationEl?.value);
+  }
+
+  if (eventDatesEl && !eventDatesEl.value.trim()) {
+    eventDatesEl.value = safeText(dateEl?.value);
+  }
+}
     
   function buildMarketplaceSearchUrl(marketplace, customQuery = "") {
     const query = normalizeQuery(customQuery || getStructuredSearchQuery());;
