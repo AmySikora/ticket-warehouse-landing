@@ -896,14 +896,21 @@ tvgSafe("verify-csv", () => {
   const searchSectionEl = document.getElementById("tms-section");
 
 function getStructuredSearchQuery() {
+  const event = safeText(eventEl?.value);
+  const location = safeText(locationEl?.value);
+  const date = safeText(dateEl?.value);
+  const section = safeText(searchSectionEl?.value);
+
+  const cleanedDate = date.replaceAll("/", "-");
+
   return normalizeQuery(
     [
-      eventEl?.value,
-      locationEl?.value,
-      dateEl?.value,
-      searchSectionEl?.value,
+      event,
+      location,
+      cleanedDate,
+      section,
+      "tickets",
     ]
-      .map((value) => safeText(value))
       .filter(Boolean)
       .join(" ")
   );
@@ -1377,19 +1384,19 @@ function groupSnapshotsByEvent(items) {
   }
 
   function getSelectedSearchUrls() {
-  const raw = getStructuredSearchQuery();
-  if (!raw) return [];
+    const raw = getStructuredSearchQuery();
+    if (!raw) return [];
 
-  const urls = [];
+    const urls = [];
 
-  const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
+    const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
 
-  if (googleChecked) {
-    urls.push({
-      source: "Google",
-      href: buildMarketplaceSearchUrl("google", raw),
-    });
-  }
+    if (googleChecked) {
+      urls.push({
+        source: "Google",
+        href: buildMarketplaceSearchUrl("google", raw),
+      });
+    }
 
   searchSites.forEach((site) => {
     const checked = document.getElementById(site.id)?.checked;
