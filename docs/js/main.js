@@ -953,12 +953,14 @@ function getStructuredSearchQuery() {
   let editingEventKey = null;
 
   const searchSites = [
-  { id: "site-seatgeek", label: "SeatGeek via Google", domain: "seatgeek.com" },
-  { id: "site-vivid", label: "Vivid Seats", domain: "vividseats.com" },
-  { id: "site-stubhub", label: "StubHub via Google", domain: "stubhub.com" },
-  { id: "site-ticketmaster", label: "Ticketmaster", domain: "ticketmaster.com" },
-  { id: "site-tickpick", label: "TickPick", domain: "tickpick.com" },
-];
+    { id: "site-seatgeek", label: "SeatGeek", domain: "seatgeek.com" },
+    { id: "site-vivid", label: "Vivid Seats", domain: "vividseats.com" },
+    { id: "site-stubhub", label: "StubHub", domain: "stubhub.com" },
+    { id: "site-etix", label: "Etix", domain: "etix.com" },
+    { id: "site-ticketmaster", label: "Ticketmaster", domain: "ticketmaster.com" },
+    { id: "site-tickpick", label: "TickPick", domain: "tickpick.com" },
+    { id: "site-viagogo", label: "Viagogo", domain: "viagogo.com" },
+  ];
 
   const googleCheckboxId = "site-google";
 
@@ -966,8 +968,10 @@ function getStructuredSearchQuery() {
     stubhub: "StubHub",
     seatgeek: "SeatGeek",
     vivid: "Vivid Seats",
+    etix: "Etix",
     ticketmaster: "Ticketmaster",
     tickpick: "TickPick",
+    viagogo: "Viagogo",
   };
 
   function canUseBackendLogging() {
@@ -1373,19 +1377,19 @@ function groupSnapshotsByEvent(items) {
   }
 
   function getSelectedSearchUrls() {
-    const raw = getStructuredSearchQuery();
-    if (!raw) return [];
+  const raw = getStructuredSearchQuery();
+  if (!raw) return [];
 
-    const urls = [];
+  const urls = [];
 
-    const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
+  const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
 
-    if (googleChecked) {
-      urls.push({
-        source: "Google",
-        href: buildMarketplaceSearchUrl("google", raw),
-      });
-    }
+  if (googleChecked) {
+    urls.push({
+      source: "Google",
+      href: buildMarketplaceSearchUrl("google", raw),
+    });
+  }
 
   searchSites.forEach((site) => {
     const checked = document.getElementById(site.id)?.checked;
@@ -2165,34 +2169,34 @@ function syncSearchToSnapshotForm() {
 }
     
   function buildMarketplaceSearchUrl(marketplace, customQuery = "") {
-  const query = normalizeQuery(customQuery || getStructuredSearchQuery());
-  if (!query || !marketplace) return "";
+    const query = normalizeQuery(customQuery || getStructuredSearchQuery());;
+      if (!query || !marketplace) return "";
 
-  const encoded = encodeURIComponent(query);
+    const encoded = encodeURIComponent(query);
 
-  switch (marketplace) {
-    case "stubhub":
-      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets StubHub`)}`;
+    switch (marketplace) {
+      case "stubhub":
+        return `https://www.stubhub.com/find/s/?q=${encoded}`;
 
-    case "seatgeek":
-      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets SeatGeek`)}`;
+      case "seatgeek":
+        return `https://seatgeek.com/search?q=${encoded}`;
 
-    case "vivid":
-      return `https://www.vividseats.com/search?searchTerm=${encoded}`;
+      case "vivid":
+        return `https://www.vividseats.com/search?searchTerm=${encoded}`;
 
-    case "ticketmaster":
-      return `https://www.ticketmaster.com/search?q=${encoded}`;
+      case "ticketmaster":
+        return `https://www.ticketmaster.com/search?q=${encoded}`;
 
-    case "tickpick":
-      return `https://www.tickpick.com/search?q=${encoded}`;
+      case "tickpick":
+        return `https://www.tickpick.com/search?q=${encoded}`;
 
-    case "google":
-      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets`)}`;
+      case "google":
+        return `https://www.google.com/search?q=${encoded}+tickets`;
 
-    default:
-      return "";
+      default:
+        return "";
+    }
   }
-}
   
   function autofillUrlFromMarketplace() {
     if (!marketplaceEl || !urlEl) return;
@@ -2332,7 +2336,7 @@ if (searchEventSitesBtn) {
     firstItem.event_location,
   ].filter(Boolean).join(" ");
 
- const sites = ["google", "seatgeek", "vivid", "stubhub", "ticketmaster", "tickpick"];
+  const sites = ["google", "seatgeek", "vivid", "stubhub", "ticketmaster", "tickpick"];
 
   sites.forEach((site) => {
     const url = buildMarketplaceSearchUrl(site, query);
@@ -2557,3 +2561,5 @@ if (searchEventSitesBtn) {
   updateEventSummary();
   setEditingVisualState(false);
 });
+
+  
