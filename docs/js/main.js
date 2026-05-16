@@ -956,7 +956,6 @@ function getStructuredSearchQuery() {
   { id: "site-seatgeek", label: "SeatGeek via Google", domain: "seatgeek.com" },
   { id: "site-vivid", label: "Vivid Seats", domain: "vividseats.com" },
   { id: "site-stubhub", label: "StubHub via Google", domain: "stubhub.com" },
-  { id: "site-etix", label: "Etix", domain: "etix.com" },
   { id: "site-ticketmaster", label: "Ticketmaster", domain: "ticketmaster.com" },
   { id: "site-tickpick", label: "TickPick", domain: "tickpick.com" },
   { id: "site-viagogo", label: "Viagogo", domain: "viagogo.com" },
@@ -2176,30 +2175,26 @@ function syncSearchToSnapshotForm() {
   const googleEncoded = encodeURIComponent(`${query} tickets`);
 
   switch (marketplace) {
-    case "stubhub":
-      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets StubHub`)}`;
+  case "stubhub":
+    return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets StubHub`)}`;
 
-    case "seatgeek":
-      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets SeatGeek`)}`;
+  case "seatgeek":
+    return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets SeatGeek`)}`;
 
-    case "vivid":
-      return `https://www.vividseats.com/search?searchTerm=${encoded}`;
+  case "vivid":
+    return `https://www.vividseats.com/search?searchTerm=${encoded}`;
 
-    case "etix":
-      return `https://www.etix.com/ticket/search?q=${encoded}`;
+  case "ticketmaster":
+    return `https://www.ticketmaster.com/search?q=${encoded}`;
 
-    case "ticketmaster":
-      return `https://www.ticketmaster.com/search?q=${encoded}`;
+  case "tickpick":
+    return `https://www.tickpick.com/search?q=${encoded}`;
 
-    case "tickpick":
-      return `https://www.tickpick.com/search?q=${encoded}`;
+  case "google":
+    return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets`)}`;
 
-    case "google":
-      return `https://www.google.com/search?q=${googleEncoded}`;
-
-    default:
-      return "";
-  }
+  default:
+    return "";
 }
   
   function autofillUrlFromMarketplace() {
@@ -2340,7 +2335,7 @@ if (searchEventSitesBtn) {
     firstItem.event_location,
   ].filter(Boolean).join(" ");
 
-  const sites = ["google", "seatgeek", "vivid", "stubhub", "ticketmaster", "etix", "tickpick"];
+ const sites = ["google", "seatgeek", "vivid", "stubhub", "ticketmaster", "tickpick"];
 
   sites.forEach((site) => {
     const url = buildMarketplaceSearchUrl(site, query);
@@ -2564,6 +2559,8 @@ if (searchEventSitesBtn) {
   renderSnapshots();
   updateEventSummary();
   setEditingVisualState(false);
-});
+}});
+
+
 
   
