@@ -896,21 +896,14 @@ tvgSafe("verify-csv", () => {
   const searchSectionEl = document.getElementById("tms-section");
 
 function getStructuredSearchQuery() {
-  const event = safeText(eventEl?.value);
-  const location = safeText(locationEl?.value);
-  const date = safeText(dateEl?.value);
-  const section = safeText(searchSectionEl?.value);
-
-  const cleanedDate = date.replaceAll("/", "-");
-
   return normalizeQuery(
     [
-      event,
-      location,
-      cleanedDate,
-      section,
-      "tickets",
+      eventEl?.value,
+      locationEl?.value,
+      dateEl?.value,
+      searchSectionEl?.value,
     ]
+      .map((value) => safeText(value))
       .filter(Boolean)
       .join(" ")
   );
@@ -2176,34 +2169,35 @@ function syncSearchToSnapshotForm() {
 }
     
   function buildMarketplaceSearchUrl(marketplace, customQuery = "") {
-    const query = normalizeQuery(customQuery || getStructuredSearchQuery());;
-      if (!query || !marketplace) return "";
+  const query = normalizeQuery(customQuery || getStructuredSearchQuery());
+  if (!query || !marketplace) return "";
 
-    const encoded = encodeURIComponent(query);
+  const encoded = encodeURIComponent(query);
+  const googleEncoded = encodeURIComponent(`${query} tickets`);
 
-    switch (marketplace) {
-      case "stubhub":
-        return `https://www.google.com/search?q=${encoded}+site%3Astubhub.com`;
+  switch (marketplace) {
+    case "stubhub":
+      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets StubHub`)}`;
 
-      case "seatgeek":
-        return `https://www.google.com/search?q=${encoded}+site%3Aseatgeek.com`;
+    case "seatgeek":
+      return `https://www.google.com/search?q=${encodeURIComponent(`${query} tickets SeatGeek`)}`;
 
-      case "vivid":
-        return `https://www.vividseats.com/search?searchTerm=${encoded}`;
+    case "vivid":
+      return `https://www.vividseats.com/search?searchTerm=${encoded}`;
 
-      case "ticketmaster":
-        return `https://www.ticketmaster.com/search?q=${encoded}`;
+    case "ticketmaster":
+      return `https://www.ticketmaster.com/search?q=${encoded}`;
 
-      case "tickpick":
-        return `https://www.tickpick.com/search?q=${encoded}`;
+    case "tickpick":
+      return `https://www.tickpick.com/search?q=${encoded}`;
 
-      case "google":
-        return `https://www.google.com/search?q=${encoded}+tickets`;
+    case "google":
+      return `https://www.google.com/search?q=${googleEncoded}`;
 
-      default:
-        return "";
-    }
+    default:
+      return "";
   }
+}
   
   function autofillUrlFromMarketplace() {
     if (!marketplaceEl || !urlEl) return;
