@@ -2185,6 +2185,9 @@ function syncSearchToSnapshotForm() {
     case "vivid":
       return `https://www.vividseats.com/search?searchTerm=${encoded}`;
 
+    case "etix":
+      return `https://www.etix.com/ticket/search?q=${encoded}`;
+
     case "ticketmaster":
       return `https://www.ticketmaster.com/search?q=${encoded}`;
 
@@ -2337,7 +2340,7 @@ if (searchEventSitesBtn) {
     firstItem.event_location,
   ].filter(Boolean).join(" ");
 
-  const sites = ["google", "seatgeek", "vivid", "stubhub", "ticketmaster", "tickpick"];
+  const sites = ["google", "seatgeek", "vivid", "stubhub", "etix", "ticketmaster", "tickpick"];
 
   sites.forEach((site) => {
     const url = buildMarketplaceSearchUrl(site, query);

@@ -1127,6 +1127,11 @@ button.btn,
   color: #f9a8d4;
 }
 
+.tti-market-etix {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+}
+
 .tti-market-ticketmaster {
   background: rgba(59, 130, 246, 0.16);
   color: #bfdbfe;
