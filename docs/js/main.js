@@ -1794,9 +1794,9 @@ const urlCell = outUrl
             <button
               type="button"
               class="btn btn-ghost tti-mini"
-              data-open-event-links="${escapeHTML(group.key)}"
+              data-search-event-sites="${escapeHTML(group.key)}"
             >
-              Open all links
+              Search all sites
             </button>
 
             <button
