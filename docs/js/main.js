@@ -2176,10 +2176,10 @@ function syncSearchToSnapshotForm() {
 
     switch (marketplace) {
       case "stubhub":
-        return `https://www.stubhub.com/find/s/?q=${encoded}`;
+        return `https://www.google.com/search?q=${encoded}+site%3Astubhub.com`;
 
       case "seatgeek":
-        return `https://seatgeek.com/search?q=${encoded}`;
+        return `https://www.google.com/search?q=${encoded}+site%3Aseatgeek.com`;
 
       case "vivid":
         return `https://www.vividseats.com/search?searchTerm=${encoded}`;
