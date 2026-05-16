@@ -2683,4 +2683,70 @@ footer {
 }
 
 /* =====================================================
-   TRUST PAGE
+   TRUST PAGES
+   ===================================================== */
+
+.trust-page-card {
+  max-width: 840px;
+  margin: 20px auto 0;
+}
+
+.trust-page-card p {
+  font-size: 1rem;
+}
+
+.trust-page-card .btn + .btn {
+  margin-left: 10px;
+}
+
+@media (max-width: 640px) {
+  .trust-page-card .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .trust-page-card .btn + .btn {
+    margin-left: 0;
+  }
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+footer {
+  padding: 28px 0 40px;
+}
+
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 18px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.footer-links a:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .footer-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
