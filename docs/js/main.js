@@ -1351,31 +1351,34 @@ function groupSnapshotsByEvent(items) {
   }
 
   function getSelectedSearchUrls() {
-    const raw = normalizeQuery(queryEl?.value);
-    if (!raw) return [];
+  const raw = normalizeQuery(queryEl?.value);
+  if (!raw) return [];
 
-    const urls = [];
-    const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
+  const urls = [];
 
-    if (googleChecked) {
-      urls.push({
-        source: "google",
-        href: `https://www.google.com/search?q=${encodeURIComponent(raw + " tickets")}`,
-      });
-    }
+  const googleChecked = Boolean(document.getElementById(googleCheckboxId)?.checked);
 
-    searchSites.forEach((site) => {
-      const checked = document.getElementById(site.id)?.checked;
-      if (!checked) return;
-
-      urls.push({
-        source: site.label,
-        href: `https://www.google.com/search?q=${encodeURIComponent(raw + " site:" + site.domain)}`,
-      });
+  if (googleChecked) {
+    urls.push({
+      source: "Google",
+      href: buildMarketplaceSearchUrl("google", raw),
     });
-
-    return urls;
   }
+
+  searchSites.forEach((site) => {
+    const checked = document.getElementById(site.id)?.checked;
+    if (!checked) return;
+
+    const marketplace = site.id.replace("site-", "");
+
+    urls.push({
+      source: site.label,
+      href: buildMarketplaceSearchUrl(marketplace, raw),
+    });
+  });
+
+  return urls.filter((item) => item.href);
+}
 
   function renderPreviewLinks() {
     if (!linksWrap) return;
