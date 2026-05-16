@@ -2257,10 +2257,10 @@ const urlCell = outUrl
         return;
       }
 
-      const openEventLinksBtn = event.target.closest("[data-open-event-links]");
+      const searchEventSitesBtn = event.target.closest("[data-search-event-sites]");
 
-if (openEventLinksBtn) {
-  const eventKey = openEventLinksBtn.getAttribute("data-open-event-links");
+if (searchEventSitesBtn) {
+  const eventKey = searchEventSitesBtn.getAttribute("data-search-event-sites");
   const items = loadSnapshots();
 
   const matchingItems = items.filter((item) => {
@@ -2269,33 +2269,42 @@ if (openEventLinksBtn) {
       normalizeEventDate(item.event_dates),
     ].join("|||");
 
-    return itemKey === eventKey && item.url;
+    return itemKey === eventKey;
   });
 
   if (!matchingItems.length) {
-    setSnapshotStatus("No listing links found for this event.", "error");
+    setSnapshotStatus("No event data found.", "error");
     return;
   }
 
-  matchingItems.forEach((item) => {
-    const marketplaceName =
-      marketplaceLabels[item.marketplace] || item.marketplace || "ticket site";
+  const firstItem = matchingItems[0];
 
-    const outUrl = buildOutboundUrl(item.url, {
-      source: marketplaceName,
-      event: item.event_name,
-    });
+  const query = [
+    firstItem.event_name,
+    firstItem.event_location,
+  ].filter(Boolean).join(" ");
 
-    if (outUrl) {
-      window.open(outUrl, "_blank", "noopener");
+  const sites = ["google", "seatgeek", "vivid", "stubhub", "ticketmaster", "tickpick"];
+
+  sites.forEach((site) => {
+    const url = buildMarketplaceSearchUrl(site, query);
+
+    if (url) {
+      window.open(
+        buildOutboundUrl(url, {
+          source: marketplaceLabels[site] || site,
+          event: query,
+        }),
+        "_blank",
+        "noopener"
+      );
     }
   });
 
-      setSnapshotStatus("Opened saved listing links for this event.");
-      showToast("Opened event links");
-      return;
-    }
-
+  setSnapshotStatus("Opened marketplace searches for this event.");
+  showToast("Opened marketplace searches");
+  return;
+}
       const removeEventBtn = event.target.closest("[data-remove-event]");
 
       if (removeEventBtn) {
