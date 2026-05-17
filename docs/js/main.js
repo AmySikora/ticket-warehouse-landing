@@ -560,6 +560,34 @@ function hasCompleteAssignedSeat(row) {
   );
 }
 
+ function isGeneralAdmissionValue(value) {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+
+  return (
+    normalized === "ga" ||
+    normalized === "general admission" ||
+    normalized === "general-admission" ||
+    normalized === "gen admission"
+  );
+}
+
+function hasCompleteAssignedSeat(row) {
+  const section = String(row.section || "").trim();
+  const rowValue = String(row.row || "").trim();
+  const seat = String(row.seat || "").trim();
+
+  if (!section || !rowValue || !seat) return false;
+
+  return !(
+    isGeneralAdmissionValue(section) ||
+    isGeneralAdmissionValue(rowValue) ||
+    isGeneralAdmissionValue(seat)
+  );
+}
+
 function assignConflicts(rows) {
   const byKey = {};
   const groups = [];
