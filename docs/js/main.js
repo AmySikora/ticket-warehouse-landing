@@ -645,6 +645,30 @@ function assignConflicts(rows) {
   return { groups, lookup, riskyCount };
 }
 
+function populateMarketplaceFilter() {
+  if (!filterMarketplace) return;
+
+  const marketplaces = Array.from(
+    new Set(
+      allRows
+        .map((row) => row.marketplace)
+        .filter(Boolean)
+    )
+  ).sort();
+
+  filterMarketplace.innerHTML =
+    `<option value="all">All marketplaces</option>`;
+
+  marketplaces.forEach((marketplace) => {
+    const option = document.createElement("option");
+
+    option.value = marketplace;
+    option.textContent = marketplace;
+
+    filterMarketplace.appendChild(option);
+  });
+}
+
   function getFilteredRows() {
     const decisionValue = filterDecision ? filterDecision.value : "all";
     const marketplaceValue = filterMarketplace ? filterMarketplace.value : "all";
