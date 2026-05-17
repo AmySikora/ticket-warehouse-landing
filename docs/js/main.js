@@ -532,63 +532,90 @@ tvgSafe("verify-csv", () => {
     return Boolean(sample.event || sample.section || sample.row || sample.seat);
   }
 
-  function assignConflicts(rows) {
-    const byKey = {};
-    const groups = [];
-    const lookup = {};
-    let riskyCount = 0;
-    let groupId = 1;
+  function isGeneralAdmissionValue(value) {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 
-    rows.forEach((row) => {
-      if (!row._key || row._key === "|||") return;
-      if (!byKey[row._key]) byKey[row._key] = [];
-      byKey[row._key].push(row);
+  return (
+    normalized === "ga" ||
+    normalized === "general admission" ||
+    normalized === "general-admission" ||
+    normalized === "gen admission"
+  );
+}
+
+function hasCompleteAssignedSeat(row) {
+  const section = String(row.section || "").trim();
+  const rowValue = String(row.row || "").trim();
+  const seat = String(row.seat || "").trim();
+
+  if (!section || !rowValue || !seat) return false;
+
+  return !(
+    isGeneralAdmissionValue(section) ||
+    isGeneralAdmissionValue(rowValue) ||
+    isGeneralAdmissionValue(seat)
+  );
+}
+
+function assignConflicts(rows) {
+  const byKey = {};
+  const groups = [];
+  const lookup = {};
+  let riskyCount = 0;
+  let groupId = 1;
+
+  rows.forEach((row) => {
+    if (!hasCompleteAssignedSeat(row)) return;
+
+    const key = [
+      row.event,
+      row.section,
+      row.row,
+      row.seat,
+    ]
+      .map((value) =>
+        String(value || "")
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, " ")
+      )
+      .join("|");
+
+    if (!byKey[key]) byKey[key] = [];
+    byKey[key].push(row);
+  });
+
+  Object.entries(byKey).forEach(([key, matches]) => {
+    if (matches.length <= 1) return;
+
+    const [event, section, rowValue, seat] = key.split("|");
+
+    groups.push({
+      id: groupId,
+      event,
+      section,
+      row: rowValue,
+      seat,
+      size: matches.length,
     });
 
-    Object.entries(byKey).forEach(([key, matches]) => {
-      if (matches.length <= 1) return;
+    matches.forEach((row, index) => {
+      if (index > 0) {
+        row.decision = "Blocked";
+        riskyCount += 1;
+      }
 
-      const [event, section, rowValue, seat] = key.split("|");
-
-      groups.push({
-        id: groupId,
-        event,
-        section,
-        row: rowValue,
-        seat,
-        size: matches.length,
-      });
-
-      matches.forEach((row, index) => {
-        if (index > 0) {
-          row.decision = "Blocked";
-          riskyCount += 1;
-        }
-        lookup[row._index] = groupId;
-      });
-
-      groupId += 1;
+      lookup[row._index] = groupId;
     });
 
-    return { groups, lookup, riskyCount };
-  }
+    groupId += 1;
+  });
 
-  function populateMarketplaceFilter() {
-    if (!filterMarketplace) return;
-
-    const marketplaces = Array.from(
-      new Set(allRows.map((row) => row.marketplace).filter(Boolean))
-    ).sort();
-
-    filterMarketplace.innerHTML = `<option value="all">All marketplaces</option>`;
-
-    marketplaces.forEach((marketplace) => {
-      const option = document.createElement("option");
-      option.value = marketplace;
-      option.textContent = marketplace;
-      filterMarketplace.appendChild(option);
-    });
-  }
+  return { groups, lookup, riskyCount };
+}
 
   function getFilteredRows() {
     const decisionValue = filterDecision ? filterDecision.value : "all";
