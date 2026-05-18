@@ -542,7 +542,10 @@ tvgSafe("verify-csv", () => {
     normalized === "ga" ||
     normalized === "general admission" ||
     normalized === "general-admission" ||
-    normalized === "gen admission"
+    normalized === "gen admission" ||
+    normalized === "lawn" ||
+    normalized === "general admission lawn" ||
+    normalized === "ga lawn"
   );
 }
 
