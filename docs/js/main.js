@@ -2271,7 +2271,7 @@ function syncSearchToSnapshotForm() {
 }
     
   function buildMarketplaceSearchUrl(marketplace, customQuery = "") {
-    const query = normalizeQuery(customQuery || getStructuredSearchQuery());;
+    const query = normalizeQuery(customQuery || getStructuredSearchQuery());
       if (!query || !marketplace) return "";
 
     const encoded = encodeURIComponent(query);
@@ -2433,10 +2433,11 @@ if (searchEventSitesBtn) {
 
   const firstItem = matchingItems[0];
 
-  const query = [
-    firstItem.event_name,
-    firstItem.event_location,
-  ].filter(Boolean).join(" ");
+const query = [
+  firstItem.event_name,
+  firstItem.event_location,
+  firstItem.event_dates,
+].filter(Boolean).join(" ");
 
   const sites = ["google", "seatgeek", "vivid", "stubhub", "ticketmaster", "tickpick"];
 
