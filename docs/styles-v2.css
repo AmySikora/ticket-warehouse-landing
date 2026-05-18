@@ -1335,7 +1335,68 @@ button.btn,
   margin-top: 1rem;
 }
 
+/* =====================================================
+   Saved listings table improvements
+   ===================================================== */
 
+.tti-table-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34,211,238,.45) rgba(255,255,255,.06);
+}
+
+.tti-table-wrap::-webkit-scrollbar {
+  height: 10px;
+}
+
+.tti-table-wrap::-webkit-scrollbar-track {
+  background: rgba(255,255,255,.05);
+  border-radius: 999px;
+}
+
+.tti-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(34,211,238,.35);
+  border-radius: 999px;
+}
+
+.tti-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(34,211,238,.55);
+}
+
+/* Keep table readable */
+.tti-snapshots-table,
+.tti-snapshots-list table {
+  min-width: 1100px;
+  border-collapse: collapse;
+}
+
+/* Prevent action buttons from collapsing */
+.tti-snapshots-table td:last-child,
+.tti-snapshots-list td:last-child {
+  min-width: 180px;
+  white-space: nowrap;
+}
+
+/* Marketplace buttons */
+.tti-snapshots-table .btn,
+.tti-snapshots-list .btn {
+  white-space: nowrap;
+}
+
+/* Duplicate rows */
+.tti-snapshot-row--duplicate,
+tr[data-duplicate="true"] {
+  background: rgba(239,68,68,.08);
+}
+
+/* Duplicate badge spacing */
+.tti-duplicate-badge {
+  display: inline-flex;
+  margin-top: 6px;
+}
 
 /* ==========================================
    Compare cards - inner event table styling
