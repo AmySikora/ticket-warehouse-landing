@@ -2687,6 +2687,26 @@ footer {
   white-space: normal;
 }
 
+/* Duplicate check table readability */
+#tvg-results-table th:first-child,
+#tvg-results-table td:first-child {
+  max-width: 110px;
+  width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#tvg-results-table {
+  min-width: 980px;
+}
+
+.tvg-table-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+}
+
 .tvg-status-pill {
   display: inline-flex;
   align-items: center;
