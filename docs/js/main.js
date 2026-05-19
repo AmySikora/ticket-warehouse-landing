@@ -2661,4 +2661,11 @@ const query = [
     .forEach((el) => el.addEventListener("input", updateEventSummary));
 
   bindSearchInputs();
-  renderPreviewLink
+  renderPreviewLinks();
+  renderPresets();
+  renderSnapshots();
+  updateEventSummary();
+  setEditingVisualState(false);
+});
+
+  
