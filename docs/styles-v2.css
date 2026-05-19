@@ -2986,3 +2986,19 @@ footer {
 .verify-page #tvg-results-table td:nth-child(7) {
   min-width: 130px;
 }
+
+.tvg-event-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tvg-event-name {
+  font-weight: 600;
+  color: #fff;
+}
+
+.tvg-event-venue {
+  font-size: 0.82rem;
+  color: var(--muted);
+}

@@ -394,6 +394,7 @@ tvgSafe("verify-csv", () => {
     return items.map((item, index) => ({
       id: item.id || String(index + 1),
       event: item.event_name || "",
+      venue: item.event_location || "",
       section: item.section || "",
       row: item.row || "",
       seat: item.seat || "",
@@ -488,6 +489,7 @@ tvgSafe("verify-csv", () => {
       };
 
       const event = pick("event", "event name", "event_name");
+      const venue = pick("venue", "location", "event_location");
       const section = pick("section", "sec");
       const rowValue = pick("row");
       const seatRaw = pick("seat", "seat number", "seat_no", "seat #");
@@ -717,7 +719,23 @@ function populateMarketplaceFilter() {
     tr.dataset.decision = isBlocked ? "Blocked" : "Approved";
 
     tr.innerHTML = `
-      <td>${escapeHTML(row.event || "—")}</td>
+      <td>
+  <div class="tvg-event-cell">
+    <div class="tvg-event-name">
+      ${escapeHTML(row.event || "—")}
+    </div>
+
+    ${
+      row.venue
+        ? `
+          <div class="tvg-event-venue">
+            ${escapeHTML(row.venue)}
+          </div>
+        `
+        : ""
+    }
+  </div>
+</td>
       <td>
         ${
           isBlocked
@@ -2648,4 +2666,4 @@ const query = [
   setEditingVisualState(false);
 });
 
-  
+                                                                                                                                                                                                                                                                                             
