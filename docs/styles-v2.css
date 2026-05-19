@@ -2940,3 +2940,49 @@ footer {
   background: rgba(34, 211, 238, 0.55);
   border-radius: 999px;
 }
+
+/* Compare table layout after removing ID column */
+.verify-page #tvg-results-table {
+  width: 100%;
+  min-width: 760px;
+  table-layout: auto;
+}
+
+.verify-page #tvg-results-table th,
+.verify-page #tvg-results-table td {
+  padding: 14px 12px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.verify-page #tvg-results-table th:nth-child(1),
+.verify-page #tvg-results-table td:nth-child(1) {
+  min-width: 180px;
+}
+
+.verify-page #tvg-results-table th:nth-child(2),
+.verify-page #tvg-results-table td:nth-child(2) {
+  width: 130px;
+}
+
+.verify-page #tvg-results-table th:nth-child(3),
+.verify-page #tvg-results-table td:nth-child(3) {
+  min-width: 110px;
+}
+
+.verify-page #tvg-results-table th:nth-child(4),
+.verify-page #tvg-results-table td:nth-child(4) {
+  min-width: 120px;
+}
+
+.verify-page #tvg-results-table th:nth-child(5),
+.verify-page #tvg-results-table td:nth-child(5),
+.verify-page #tvg-results-table th:nth-child(6),
+.verify-page #tvg-results-table td:nth-child(6) {
+  width: 80px;
+}
+
+.verify-page #tvg-results-table th:nth-child(7),
+.verify-page #tvg-results-table td:nth-child(7) {
+  min-width: 130px;
+}
