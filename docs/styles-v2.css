@@ -2836,3 +2836,107 @@ footer {
     align-items: flex-start;
   }
 }
+
+/* =====================================================
+   Compare page table cleanup - final override
+   ===================================================== */
+
+.verify-page .tvg-table-wrap {
+  width: 100%;
+  max-height: none;
+  overflow-x: auto;
+  overflow-y: visible;
+  border-radius: 14px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  background: rgba(2, 8, 23, 0.9);
+  padding-bottom: 6px;
+}
+
+.verify-page #tvg-results-table {
+  width: 100%;
+  min-width: 960px;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+.verify-page #tvg-results-table th,
+.verify-page #tvg-results-table td {
+  padding: 14px 12px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Make ugly UUID IDs readable instead of enormous */
+.verify-page #tvg-results-table th:nth-child(1),
+.verify-page #tvg-results-table td:nth-child(1) {
+  width: 90px;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Status */
+.verify-page #tvg-results-table th:nth-child(2),
+.verify-page #tvg-results-table td:nth-child(2) {
+  width: 90px;
+}
+
+/* Site */
+.verify-page #tvg-results-table th:nth-child(3),
+.verify-page #tvg-results-table td:nth-child(3) {
+  width: 140px;
+}
+
+/* Event */
+.verify-page #tvg-results-table th:nth-child(4),
+.verify-page #tvg-results-table td:nth-child(4) {
+  min-width: 190px;
+}
+
+/* Section / Row / Seat */
+.verify-page #tvg-results-table th:nth-child(5),
+.verify-page #tvg-results-table td:nth-child(5) {
+  width: 130px;
+}
+
+.verify-page #tvg-results-table th:nth-child(6),
+.verify-page #tvg-results-table td:nth-child(6),
+.verify-page #tvg-results-table th:nth-child(7),
+.verify-page #tvg-results-table td:nth-child(7) {
+  width: 80px;
+}
+
+/* When */
+.verify-page #tvg-results-table th:nth-child(8),
+.verify-page #tvg-results-table td:nth-child(8) {
+  width: 150px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Make OK / risk rows subtle, not radioactive */
+.verify-page #tvg-results-table tbody tr.tvg-clean-row,
+.verify-page #tvg-results-table tbody tr[data-decision="Approved"] {
+  background: rgba(2, 8, 23, 0.86);
+}
+
+.verify-page #tvg-results-table tbody tr.tvg-conflict-row,
+.verify-page #tvg-results-table tbody tr[data-decision="Blocked"] {
+  background: rgba(127, 29, 29, 0.18);
+}
+
+/* Better scrollbar, matching saved listings */
+.verify-page .tvg-table-wrap::-webkit-scrollbar {
+  height: 10px;
+}
+
+.verify-page .tvg-table-wrap::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.verify-page .tvg-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.55);
+  border-radius: 999px;
+}
