@@ -345,7 +345,7 @@ tvgSafe("verify-csv", () => {
     if (!tableBody) return;
     tableBody.innerHTML = `
       <tr class="tvg-empty-row">
-        <td colspan="8">${escapeHTML(message)}</td>
+        <td colspan="7">${escapeHTML(message)}</td>
       </tr>
     `;
   }
@@ -398,7 +398,7 @@ tvgSafe("verify-csv", () => {
       seat: item.seat || "",
       marketplace: item.marketplace || "",
       created_at: item.captured_at || "",
-      when: item.captured_at || "",
+      when: item.event_dates || "",
     }));
   }
 
@@ -492,7 +492,7 @@ tvgSafe("verify-csv", () => {
       const seatRaw = pick("seat", "seat number", "seat_no", "seat #");
       const marketplace = pick("marketplace", "source", "channel", "site");
       const id = pick("id", "listing_id", "external_id") || String(index + 1);
-      const when = pick("when", "timestamp", "time", "created_at");
+      const when = pick("event date", "event_date", "date", "show date", "show_date", "when", "timestamp", "time", "created_at");
 
       const parsedSeats = parseSeatTokens(seatRaw);
       const seats = parsedSeats.seats.length
@@ -720,7 +720,7 @@ function populateMarketplaceFilter() {
       const labelRow = document.createElement("tr");
       labelRow.className = "tvg-group-label-row";
       labelRow.innerHTML = `
-        <td colspan="8">
+        <td colspan="7">
           Conflict group #${group.id} — ${group.size} listings share the same seat
           (${escapeHTML(group.event)} • Sec ${escapeHTML(group.section)} • Row ${escapeHTML(group.row)} • Seat ${escapeHTML(group.seat)})
         </td>
@@ -736,29 +736,26 @@ function populateMarketplaceFilter() {
     tr.dataset.decision = isBlocked ? "Blocked" : "Approved";
 
     tr.innerHTML = `
-      <td>${escapeHTML(row.id)}</td>
-      <td>
-        ${
-          isBlocked
-            ? '<span class="tvg-status-pill tvg-status-risk">Duplicate seat</span>'
-            : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
-        }
-      </td>
-      <td>
-        <span class="tti-market-badge tti-market-${escapeHTML(
-          (row.marketplace || "").toLowerCase()
-        )}">
-          ${escapeHTML(row.marketplace || "—")}
-        </span>
-      </td>
-      <td>${escapeHTML(row.event)}</td>
-      <td>${escapeHTML(row.section)}</td>
-      <td>${escapeHTML(row.row)}</td>
-      <td>${escapeHTML(row.seat)}</td>
-      <td>${escapeHTML(row.when)}</td>
-    `;
-
-    tableBody.appendChild(tr);
+  <td>${escapeHTML(row.event || "—")}</td>
+  <td>
+    ${
+      isBlocked
+        ? '<span class="tvg-status-pill tvg-status-risk">Duplicate seat</span>'
+        : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
+    }
+  </td>
+  <td>${escapeHTML(row.when || "—")}</td>
+  <td>${escapeHTML(row.section || "—")}</td>
+  <td>${escapeHTML(row.row || "—")}</td>
+  <td>${escapeHTML(row.seat || "—")}</td>
+  <td>
+    <span class="tti-market-badge tti-market-${escapeHTML(
+      (row.marketplace || "").toLowerCase()
+    )}">
+      ${escapeHTML(row.marketplace || "—")}
+    </span>
+  </td>
+`;
   });
 }
 
