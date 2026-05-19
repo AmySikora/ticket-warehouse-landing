@@ -342,13 +342,14 @@ tvgSafe("verify-csv", () => {
   }
 
   function renderEmpty(message) {
-    if (!tableBody) return;
-    tableBody.innerHTML = `
-      <tr class="tvg-empty-row">
-        <td colspan="7">${escapeHTML(message)}</td>
-      </tr>
-    `;
-  }
+  if (!tableBody) return;
+
+  tableBody.innerHTML = `
+    <tr class="tvg-empty-row">
+      <td colspan="7">${escapeHTML(message)}</td>
+    </tr>
+  `;
+}
 
   function loadSavedSnapshots() {
     try {
@@ -705,57 +706,39 @@ function populateMarketplaceFilter() {
     });
   }
 
-  const groupMeta = Object.fromEntries(
-    conflictGroups.map((group) => [group.id, group])
-  );
-  const insertedGroupHeaders = new Set();
-
   rows.forEach((row) => {
-    const groupId = conflictLookup[row._index];
-
-    if (groupId && !insertedGroupHeaders.has(groupId) && groupMeta[groupId]) {
-      insertedGroupHeaders.add(groupId);
-
-      const group = groupMeta[groupId];
-      const labelRow = document.createElement("tr");
-      labelRow.className = "tvg-group-label-row";
-      labelRow.innerHTML = `
-        <td colspan="7">
-          Conflict group #${group.id} — ${group.size} listings share the same seat
-          (${escapeHTML(group.event)} • Sec ${escapeHTML(group.section)} • Row ${escapeHTML(group.row)} • Seat ${escapeHTML(group.seat)})
-        </td>
-      `;
-      tableBody.appendChild(labelRow);
-    }
-
     const isBlocked = row.decision === "Blocked";
     const tr = document.createElement("tr");
+
     tr.className = isBlocked
       ? "tvg-row tvg-conflict-row"
       : "tvg-row tvg-clean-row";
+
     tr.dataset.decision = isBlocked ? "Blocked" : "Approved";
 
     tr.innerHTML = `
-  <td>${escapeHTML(row.event || "—")}</td>
-  <td>
-    ${
-      isBlocked
-        ? '<span class="tvg-status-pill tvg-status-risk">Duplicate seat</span>'
-        : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
-    }
-  </td>
-  <td>${escapeHTML(row.when || "—")}</td>
-  <td>${escapeHTML(row.section || "—")}</td>
-  <td>${escapeHTML(row.row || "—")}</td>
-  <td>${escapeHTML(row.seat || "—")}</td>
-  <td>
-    <span class="tti-market-badge tti-market-${escapeHTML(
-      (row.marketplace || "").toLowerCase()
-    )}">
-      ${escapeHTML(row.marketplace || "—")}
-    </span>
-  </td>
-`;
+      <td>${escapeHTML(row.event || "—")}</td>
+      <td>
+        ${
+          isBlocked
+            ? '<span class="tvg-status-pill tvg-status-risk">Duplicate seat</span>'
+            : '<span class="tvg-status-pill tvg-status-ok">OK</span>'
+        }
+      </td>
+      <td>${escapeHTML(row.when || "—")}</td>
+      <td>${escapeHTML(row.section || "—")}</td>
+      <td>${escapeHTML(row.row || "—")}</td>
+      <td>${escapeHTML(row.seat || "—")}</td>
+      <td>
+        <span class="tti-market-badge tti-market-${escapeHTML(
+          (row.marketplace || "").toLowerCase()
+        )}">
+          ${escapeHTML(row.marketplace || "—")}
+        </span>
+      </td>
+    `;
+
+    tableBody.appendChild(tr);
   });
 }
 
