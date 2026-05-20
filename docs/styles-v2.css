@@ -3002,3 +3002,78 @@ footer {
   font-size: 0.82rem;
   color: var(--muted);
 }
+
+/* =====================================================
+   Compare page polish
+   ===================================================== */
+
+.verify-page .tvg-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.verify-page .tvg-filter-row select,
+.verify-page .tvg-filter-row button {
+  min-height: 42px;
+}
+
+.verify-page .tvg-filter-spacer {
+  flex: 1 1 auto;
+}
+
+.verify-page .tvg-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  border-radius: 14px;
+  border: 1px solid rgba(34, 211, 238, 0.28);
+}
+
+.verify-page #tvg-results-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.verify-page #tvg-results-table th,
+.verify-page #tvg-results-table td {
+  padding: 14px 12px;
+  vertical-align: middle;
+}
+
+.verify-page #tvg-results-table th {
+  color: #c7d2fe;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.verify-page #tvg-results-table td {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.verify-page .tvg-empty-row td {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px 12px;
+}
+
+.verify-page .tvg-status-pill {
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .verify-page .tvg-filter-row {
+    align-items: stretch;
+  }
+
+  .verify-page .tvg-filter-row select,
+  .verify-page .tvg-filter-row button {
+    width: 100%;
+  }
+
+  .verify-page .tvg-filter-spacer {
+    display: none;
+  }
+}
