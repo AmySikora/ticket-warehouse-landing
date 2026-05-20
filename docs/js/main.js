@@ -783,6 +783,8 @@ function populateMarketplaceFilter() {
   });
 }
 
+  const sortResults = document.getElementById("tvg-sort-results");
+
   function runAnalysis(data, sourceLabel) {
     const mappedRows = buildRows(data);
 
