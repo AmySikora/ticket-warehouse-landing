@@ -320,7 +320,6 @@ tvgSafe("verify-csv", () => {
   const runSnapshotsBtn = document.getElementById("tvg-run-snapshots-btn");
   const currentContextEl = document.getElementById("tvg-current-context");
   const sortResults = document.getElementById("tvg-sort-results");
-  const resetFiltersBtn = document.getElementById("tvg-reset-filters");
 
   if (!fileInput || !analyzeBtn || !sampleBtn || !table) return;
 
