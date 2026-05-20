@@ -319,6 +319,8 @@ tvgSafe("verify-csv", () => {
   const feedbackLabel = document.getElementById("tvg-feedback-label");
   const runSnapshotsBtn = document.getElementById("tvg-run-snapshots-btn");
   const currentContextEl = document.getElementById("tvg-current-context");
+  const sortResults = document.getElementById("tvg-sort-results");
+  const resetFiltersBtn = document.getElementById("tvg-reset-filters");
 
   if (!fileInput || !analyzeBtn || !sampleBtn || !table) return;
 
@@ -678,12 +680,24 @@ function populateMarketplaceFilter() {
   function getFilteredRows() {
     const decisionValue = filterDecision ? filterDecision.value : "all";
     const marketplaceValue = filterMarketplace ? filterMarketplace.value : "all";
+    const sortValue = sortResults ? sortResults.value : "event";
 
-    return allRows.filter((row) => {
+    const rows = allRows.filter((row) => {
       if (decisionValue !== "all" && row.decision !== decisionValue) return false;
       if (marketplaceValue !== "all" && row.marketplace !== marketplaceValue) return false;
       return true;
     });
+
+    rows.sort((a, b) => {
+      const aValue = safeText(a[sortValue]).toLowerCase();
+      const bValue = safeText(b[sortValue]).toLowerCase();
+
+      if (aValue < bValue) return -1;
+      if (aValue > bValue) return 1;
+      return 0;
+    });
+
+    return rows;
   }
 
   function renderTable() {
@@ -782,8 +796,6 @@ function populateMarketplaceFilter() {
     filterMarketplace.appendChild(option);
   });
 }
-
-  const sortResults = document.getElementById("tvg-sort-results");
 
   function runAnalysis(data, sourceLabel) {
     const mappedRows = buildRows(data);
@@ -924,6 +936,8 @@ function populateMarketplaceFilter() {
   function resetFilters() {
     if (filterDecision) filterDecision.value = "all";
     if (filterMarketplace) filterMarketplace.value = "all";
+    if (sortResults) sortResults.value = "event";
+
     renderTable();
   }
 
@@ -966,6 +980,7 @@ function populateMarketplaceFilter() {
   $("thead", table)?.addEventListener("click", onHeaderClick);
 
   if (filterDecision) filterDecision.addEventListener("change", renderTable);
+  if (sortResults) sortResults.addEventListener("change", renderTable);
   if (filterMarketplace) filterMarketplace.addEventListener("change", renderTable);
   if (resetFiltersBtn) resetFiltersBtn.addEventListener("click", resetFilters);
   if (downloadBtn) downloadBtn.addEventListener("click", downloadFilteredCsv);
