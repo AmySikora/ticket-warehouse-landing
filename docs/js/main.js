@@ -1522,6 +1522,7 @@ function groupSnapshotsByEvent(items) {
 
   function openAllResults(event) {
     event.preventDefault();
+    syncSearchToSnapshotForm();
     clearOpenAllNote();
 
     if (!getStructuredSearchQuery()) {
@@ -2218,23 +2219,19 @@ const urlCell = outUrl
     });
   }
 
-  [eventEl, locationEl, dateEl].forEach((field) => {
-  field?.addEventListener("input", syncSearchToSnapshotForm);
-});
+  function syncSearchToSnapshotForm() {
+    if (eventNameEl && !eventNameEl.value.trim()) {
+      eventNameEl.value = safeText(eventEl?.value);
+    }
 
-function syncSearchToSnapshotForm() {
-  if (eventNameEl && !eventNameEl.value.trim()) {
-    eventNameEl.value = safeText(eventEl?.value);
-  }
+    if (eventLocationEl && !eventLocationEl.value.trim()) {
+      eventLocationEl.value = safeText(locationEl?.value);
+    }
 
-  if (eventLocationEl && !eventLocationEl.value.trim()) {
-    eventLocationEl.value = safeText(locationEl?.value);
+    if (eventDatesEl && !eventDatesEl.value.trim()) {
+      eventDatesEl.value = safeText(dateEl?.value);
+    }
   }
-
-  if (eventDatesEl && !eventDatesEl.value.trim()) {
-    eventDatesEl.value = safeText(dateEl?.value);
-  }
-}
     
   function buildMarketplaceSearchUrl(marketplace, customQuery = "") {
     const query = normalizeQuery(customQuery || getStructuredSearchQuery());
