@@ -127,17 +127,17 @@
             Found a listing worth comparing? Save the event, price, seat details, marketplace, and link here.
           </p>
 
-          <form id="tti-snapshot-form" class="tti-form" novalidate>
+          <form id="tti-snapshot-form" class="tti-form" novalidate autocomplete="off">
 
             <div class="tti-grid">
 
-              <input id="tti-event-name" placeholder="Event or artist" required class="tti-input"/>
-              <input id="tti-event-location" placeholder="Venue" class="tti-input"/>
-              <input id="tti-event-dates" placeholder="Date or show time" class="tti-input"/>
+              <input id="tti-event-name" name="tvg-event-name" placeholder="Event or artist" required class="tti-input" autocomplete="off"/>
+              <input id="tti-event-location" name="tvg-event-location" placeholder="Venue" class="tti-input" autocomplete="off"/>
+              <input id="tti-event-dates" name="tvg-event-date" placeholder="Date or show time" class="tti-input" autocomplete="off"/>
 
-              <input id="tti-section" placeholder="Section" class="tti-input"/>
-              <input id="tti-row" placeholder="Row" class="tti-input"/>
-              <input id="tti-seat" placeholder="Seat or seat range (ex: 2-4)" class="tti-input"/>
+              <input id="tti-section" name="tvg-ticket-section" placeholder="Section" class="tti-input" autocomplete="off"/>
+              <input id="tti-row" name="tvg-ticket-row" placeholder="Row" class="tti-input" autocomplete="off"/>
+              <input id="tti-seat" name="tvg-ticket-seat" placeholder="Seat or seat range (ex: 2-4)" class="tti-input" autocomplete="off"/>
 
               <select id="tti-marketplace" required class="tti-input">
                 <option value="" disabled selected>Ticket site</option>
