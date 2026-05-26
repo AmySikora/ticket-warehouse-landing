@@ -2329,6 +2329,10 @@ const urlCell = outUrl
     marketplaceEl.addEventListener("change", autofillUrlFromMarketplace);
   }
 
+  if (customMarketplaceSearchBtn) {
+  customMarketplaceSearchBtn.addEventListener("click", searchCustomMarketplace);
+}
+
   [eventEl, locationEl, dateEl, searchSectionEl]
   .filter(Boolean)
   .forEach((field) => {
@@ -2454,9 +2458,6 @@ const query = [
         "noopener"
       );
     }
-    if (customMarketplaceSearchBtn) {
-  customMarketplaceSearchBtn.addEventListener("click", searchCustomMarketplace);
-}
   });
 
   setSnapshotStatus("Opened marketplace searches for this event.");
