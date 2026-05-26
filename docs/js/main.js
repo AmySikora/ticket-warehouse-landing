@@ -1042,6 +1042,43 @@ function getStructuredSearchQuery() {
     viagogo: "Viagogo",
   };
 
+  const customMarketplaceUrlEl = document.getElementById("custom-marketplace-url");
+  const customMarketplaceSearchBtn = document.getElementById("custom-marketplace-search");
+
+  function searchCustomMarketplace() {
+  const customUrl = customMarketplaceUrlEl?.value.trim();
+
+  if (!customUrl) {
+    showToast("Enter a ticket site URL first.", "error");
+    return;
+  }
+
+  let siteUrl;
+
+  try {
+    siteUrl = new URL(customUrl);
+  } catch {
+    showToast("Enter a valid website URL, like https://example.com.", "error");
+    return;
+  }
+
+  const query = getStructuredSearchQuery();
+
+  if (!query) {
+    eventEl?.focus();
+    showToast("Enter an event, artist, or team first.", "error");
+    return;
+  }
+
+  const domain = siteUrl.hostname.replace(/^www\./, "");
+
+  const googleSearchUrl =
+    "https://www.google.com/search?q=" +
+    encodeURIComponent(`site:${domain} ${query} tickets`);
+
+  window.open(googleSearchUrl, "_blank", "noopener");
+}
+
   function canUseBackendLogging() {
   const config = window.APP_CONFIG || {};
   const backendBase = String(config.backendBase || "").trim();
@@ -2417,6 +2454,9 @@ const query = [
         "noopener"
       );
     }
+    if (customMarketplaceSearchBtn) {
+  customMarketplaceSearchBtn.addEventListener("click", searchCustomMarketplace);
+}
   });
 
   setSnapshotStatus("Opened marketplace searches for this event.");
