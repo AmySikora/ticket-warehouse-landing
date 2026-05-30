@@ -190,7 +190,12 @@ Compare Ticket Prices Across Major Marketplaces | Ticket VeriGuard
             </div>
 
             <div class="tti-row">
-              <button type="submit" class="btn primary">Save to Compare</button>
+              <button
+              id="tti-save-snapshot"
+              type="submit"
+              class="btn primary">
+              Save to Compare
+            </button>
             </div>
 
             <p id="tti-status" class="muted"></p>
@@ -228,6 +233,7 @@ Compare Ticket Prices Across Major Marketplaces | Ticket VeriGuard
                 <option value="marketplace">Marketplace</option>
               </select>
             </label>
+          </div>
 
             <div class="tti-toolbar-actions">
   <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
@@ -248,6 +254,7 @@ Compare Ticket Prices Across Major Marketplaces | Ticket VeriGuard
     accept=".csv"
     hidden
   />
+
 </div>
 
           <div class="tti-table-wrap">
@@ -257,8 +264,7 @@ Compare Ticket Prices Across Major Marketplaces | Ticket VeriGuard
               </div>
             </div>
           </div>
-
-    </section>
+          </section>
 
     <!-- SEAT CHECK -->
     <section class="section">
