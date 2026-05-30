@@ -1052,15 +1052,6 @@ function getStructuredSearchQuery() {
       .join(" ")
   );
 }
-  function loadRecentSearches() {
-  try {
-    return JSON.parse(
-      localStorage.getItem(RECENT_SEARCHES_KEY) || "[]"
-    );
-  } catch {
-    return [];
-  }
-}
 
   const linksWrap = document.getElementById("tms-links");
   const savePresetBtn = document.getElementById("tms-save-preset");
@@ -1688,12 +1679,6 @@ if (!popup || popup.closed) {
         "If only one tab opened, allow pop-ups for this site so all selected markets can open."
       );
     }
-    saveRecentSearch({
-      event: getSearchFieldValue("tms-event"),
-      location: getSearchFieldValue("tms-location"),
-      date: getSearchFieldValue("tms-date"),
-      section: getSearchFieldValue("tms-section")
-    });
   }
 
   function getSelectedSiteIds() {
@@ -2733,7 +2718,6 @@ const query = [
   }
 
   if (snapshotForm) snapshotForm.addEventListener("submit", saveSnapshot);
-  if (snapshotSaveBtn) snapshotSaveBtn.addEventListener("click", saveSnapshot);
   if (cancelEditBtn) {
     cancelEditBtn.addEventListener("click", (event) => {
       event.preventDefault();
