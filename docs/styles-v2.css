@@ -3133,3 +3133,33 @@ footer {
 .recent-search-btn {
   cursor: pointer;
 }
+
+.recent-searches-wrap {
+  margin-top: 1rem;
+}
+
+.recent-searches-title {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.recent-searches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.recent-search-btn {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.recent-search-btn:hover,
+.recent-search-btn:focus {
+  background: rgba(255, 255, 255, 0.16);
+}
