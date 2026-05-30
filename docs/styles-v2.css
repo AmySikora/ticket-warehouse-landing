@@ -3115,3 +3115,21 @@ footer {
   flex-wrap: wrap;
   margin: 1.5rem 0;
 }
+
+.recent-searches {
+  margin-top: 1rem;
+}
+
+.recent-searches h3 {
+  margin-bottom: 0.75rem;
+}
+
+.recent-search-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.recent-search-btn {
+  cursor: pointer;
+}
