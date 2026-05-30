@@ -958,6 +958,9 @@ function populateMarketplaceFilter() {
   const STORAGE_KEY = "tti_snapshots_v0";
   const DUPLICATE_AUTO_RUN_KEY = "tti_duplicate_autorun_v1";
 
+  const RECENT_SEARCHES_KEY = "tvg_recent_searches";
+  const recentSearchesEl = document.getElementById("tvg-recent-searches");
+
   const eventEl = document.getElementById("tms-event");
   const locationEl = document.getElementById("tms-location");
   const dateEl = document.getElementById("tms-date");
@@ -975,6 +978,33 @@ function getStructuredSearchQuery() {
       .filter(Boolean)
       .join(" ")
   );
+}
+  function loadRecentSearches() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(RECENT_SEARCHES_KEY) || "[]"
+    );
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentSearch(search) {
+  const searches = loadRecentSearches();
+
+  const filtered = searches.filter(
+    item =>
+      JSON.stringify(item) !== JSON.stringify(search)
+  );
+
+  filtered.unshift(search);
+
+  localStorage.setItem(
+    RECENT_SEARCHES_KEY,
+    JSON.stringify(filtered.slice(0, 5))
+  );
+
+  renderRecentSearches();
 }
 
   const linksWrap = document.getElementById("tms-links");
