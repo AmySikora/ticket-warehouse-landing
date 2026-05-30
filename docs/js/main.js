@@ -958,13 +958,86 @@ function populateMarketplaceFilter() {
   const STORAGE_KEY = "tti_snapshots_v0";
   const DUPLICATE_AUTO_RUN_KEY = "tti_duplicate_autorun_v1";
 
-  const RECENT_SEARCHES_KEY = "tvg_recent_searches";
-  const recentSearchesEl = document.getElementById("tvg-recent-searches");
-
   const eventEl = document.getElementById("tms-event");
   const locationEl = document.getElementById("tms-location");
   const dateEl = document.getElementById("tms-date");
   const searchSectionEl = document.getElementById("tms-section");
+
+  const RECENT_SEARCHES_KEY = "tvg_recent_searches_v1";
+  const MAX_RECENT_SEARCHES = 5;
+
+  const recentSearchesEl = document.getElementById("tvg-recent-searches");
+
+function getSearchFieldValue(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : "";
+}
+
+function buildRecentSearchLabel(search) {
+  return [search.event, search.location, search.date, search.section]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+function loadRecentSearches() {
+  try {
+    const saved = localStorage.getItem(RECENT_SEARCHES_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveRecentSearch(search) {
+  if (!search.event) return;
+
+  const searches = loadRecentSearches();
+
+  const newLabel = buildRecentSearchLabel(search).toLowerCase();
+
+  const filtered = searches.filter((item) => {
+    return buildRecentSearchLabel(item).toLowerCase() !== newLabel;
+  });
+
+  const updated = [search, ...filtered].slice(0, MAX_RECENT_SEARCHES);
+
+  localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+  renderRecentSearches();
+}
+
+function renderRecentSearches() {
+  if (!recentSearchesEl) return;
+
+  const searches = loadRecentSearches();
+
+  recentSearchesEl.innerHTML = "";
+
+  if (!searches.length) {
+    recentSearchesEl.innerHTML = `<p class="recent-searches-empty">No recent searches yet.</p>`;
+    return;
+  }
+
+  searches.forEach((search) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "recent-search-btn";
+    button.textContent = buildRecentSearchLabel(search);
+
+    button.addEventListener("click", () => {
+      const eventEl = document.getElementById("tms-event");
+      const locationEl = document.getElementById("tms-location");
+      const dateEl = document.getElementById("tms-date");
+      const sectionEl = document.getElementById("tms-section");
+
+      if (eventEl) eventEl.value = search.event || "";
+      if (locationEl) locationEl.value = search.location || "";
+      if (dateEl) dateEl.value = search.date || "";
+      if (sectionEl) sectionEl.value = search.section || "";
+    });
+
+    recentSearchesEl.appendChild(button);
+  });
+}
 
 function getStructuredSearchQuery() {
   return normalizeQuery(
@@ -988,72 +1061,6 @@ function getStructuredSearchQuery() {
     return [];
   }
 }
-
-function saveRecentSearch(search) {
-  const searches = loadRecentSearches();
-
-  const filtered = searches.filter(
-    item =>
-      JSON.stringify(item) !== JSON.stringify(search)
-  );
-
-  filtered.unshift(search);
-
-  localStorage.setItem(
-    RECENT_SEARCHES_KEY,
-    JSON.stringify(filtered.slice(0, 5))
-  );
-
-  renderRecentSearches();
-}
-
-saveRecentSearch({
-  event: eventEl.value.trim(),
-  location: locationEl.value.trim(),
-  date: dateEl.value.trim(),
-  section: sectionEl.value.trim()
-});
-
-function renderRecentSearches() {
-  if (!recentSearchesEl) return;
-
-  const searches = loadRecentSearches();
-
-  if (!searches.length) {
-    recentSearchesEl.innerHTML = "";
-    return;
-  }
-
-  recentSearchesEl.innerHTML = `
-    <h3>Recent Searches</h3>
-    <div class="recent-search-list">
-      ${searches.map((search, index) => `
-        <button
-          type="button"
-          class="btn btn-ghost recent-search-btn"
-          data-index="${index}"
-        >
-          ${search.event}
-          ${search.location ? ` • ${search.location}` : ""}
-        </button>
-      `).join("")}
-    </div>
-  `;
-
-  recentSearchesEl
-    .querySelectorAll(".recent-search-btn")
-    .forEach(btn => {
-      btn.addEventListener("click", () => {
-        const search = searches[btn.dataset.index];
-
-        eventEl.value = search.event || "";
-        locationEl.value = search.location || "";
-        dateEl.value = search.date || "";
-        sectionEl.value = search.section || "";
-      });
-    });
-}
-
 
   const linksWrap = document.getElementById("tms-links");
   const savePresetBtn = document.getElementById("tms-save-preset");
@@ -1646,6 +1653,13 @@ function groupSnapshotsByEvent(items) {
       return;
     }
 
+    saveRecentSearch({
+      event: getSearchFieldValue("tms-event"),
+      location: getSearchFieldValue("tms-location"),
+      date: getSearchFieldValue("tms-date"),
+      section: getSearchFieldValue("tms-section")
+    });
+
     const urls = getSelectedSearchUrls();
     if (!urls.length) {
       showToast("Select at least one marketplace.", "error");
@@ -1674,6 +1688,12 @@ if (!popup || popup.closed) {
         "If only one tab opened, allow pop-ups for this site so all selected markets can open."
       );
     }
+    saveRecentSearch({
+      event: getSearchFieldValue("tms-event"),
+      location: getSearchFieldValue("tms-location"),
+      date: getSearchFieldValue("tms-date"),
+      section: getSearchFieldValue("tms-section")
+    });
   }
 
   function getSelectedSiteIds() {
@@ -2745,6 +2765,10 @@ const query = [
   renderSnapshots();
   updateEventSummary();
   setEditingVisualState(false);
+  renderPreviewLinks();
+  renderPresets();
+  renderSnapshots();
+  renderRecentSearches();
 });
 
   
