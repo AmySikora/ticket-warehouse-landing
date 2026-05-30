@@ -1007,6 +1007,54 @@ function saveRecentSearch(search) {
   renderRecentSearches();
 }
 
+saveRecentSearch({
+  event: eventEl.value.trim(),
+  location: locationEl.value.trim(),
+  date: dateEl.value.trim(),
+  section: sectionEl.value.trim()
+});
+
+function renderRecentSearches() {
+  if (!recentSearchesEl) return;
+
+  const searches = loadRecentSearches();
+
+  if (!searches.length) {
+    recentSearchesEl.innerHTML = "";
+    return;
+  }
+
+  recentSearchesEl.innerHTML = `
+    <h3>Recent Searches</h3>
+    <div class="recent-search-list">
+      ${searches.map((search, index) => `
+        <button
+          type="button"
+          class="btn btn-ghost recent-search-btn"
+          data-index="${index}"
+        >
+          ${search.event}
+          ${search.location ? ` • ${search.location}` : ""}
+        </button>
+      `).join("")}
+    </div>
+  `;
+
+  recentSearchesEl
+    .querySelectorAll(".recent-search-btn")
+    .forEach(btn => {
+      btn.addEventListener("click", () => {
+        const search = searches[btn.dataset.index];
+
+        eventEl.value = search.event || "";
+        locationEl.value = search.location || "";
+        dateEl.value = search.date || "";
+        sectionEl.value = search.section || "";
+      });
+    });
+}
+
+
   const linksWrap = document.getElementById("tms-links");
   const savePresetBtn = document.getElementById("tms-save-preset");
   const presetsWrap = document.getElementById("tms-presets");
