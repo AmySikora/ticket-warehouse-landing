@@ -1,933 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      window.dataLayer.push(arguments);
-    }
-
-    gtag("js", new Date());
-    gtag("config", "G-G4R61ZH08K");
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G4R61ZH08K');
   </script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>
+Compare Ticket Prices Across Major Marketplaces | Ticket VeriGuard
+</title>
 
-  <title>Compare Resale Ticket Listings | Ticket VeriGuard</title>
+<meta
+  name="description"
+  content="Compare ticket listings across major marketplaces, save listings, and check for possible duplicate seats before you buy."
+/>
 
-  <meta
-    name="description"
-    content="Search major ticket marketplaces, save resale ticket listings, compare prices and seat details, and check saved tickets for possible duplicate seats."
-  />
+<link
+  rel="canonical"
+  href="https://ticketveriguard.com/search.html"
+/>
 
-  <link
-    rel="canonical"
-    href="https://ticketveriguard.com/search.html"
-  />
-
-  <meta
-    property="og:title"
-    content="Compare Resale Ticket Listings | Ticket VeriGuard"
-  />
-
-  <meta
-    property="og:description"
-    content="Search ticket marketplaces, save listings, compare your options, and check saved tickets for possible duplicate seats."
-  />
-
-  <meta
-    property="og:url"
-    content="https://ticketveriguard.com/search.html"
-  />
-
-  <meta property="og:type" content="website" />
-
-  <link rel="icon" href="./favicon_logo.png" />
-  <link rel="stylesheet" href="./styles-v2.css" />
+  <link rel="icon" href="./favicon_logo.png" type="image/png"/>
+  <link rel="stylesheet" href="./styles-v2.css"/>
 </head>
 
 <body class="page-search">
-
-  <!-- NAVIGATION -->
   <header class="nav">
     <div class="nav--brand">
-
       <a href="index.html" class="logo-bay">
-        <img
-          src="./favicon_logo.png"
-          alt="Ticket VeriGuard"
-          class="logo-img"
-        />
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button
-        class="nav-toggle"
-        id="navToggle"
-        type="button"
-        aria-expanded="false"
-        aria-controls="primary-nav"
-        aria-label="Toggle navigation"
-      >
+      <button class="nav-toggle" id="navToggle">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
 
       <nav class="topnav" id="primary-nav">
-
-        <a
-          href="index.html"
-          class="nav-link"
-        >
-          Check Tickets
-        </a>
-
-        <a
-          href="how-it-works.html"
-          class="nav-link"
-        >
-          How It Works
-        </a>
-
-        <a
-          href="search.html"
-          class="nav-link nav-active"
-          aria-current="page"
-        >
-          Compare Tickets
-        </a>
-
-        <a
-          href="guides.html"
-          class="nav-link"
-        >
-          Guides
-        </a>
-
+        <a href="index.html" class="nav-link">How It Works</a>
+        <a href="search.html" class="nav-link nav-active">Search &amp; Save</a>
+        <a href="duplicate-check.html" class="nav-link">Check Seats</a>
       </nav>
-
     </div>
   </header>
 
+  <main>
 
-  <main class="tvb-page">
-    <div class="tvb-container">
-
-      <!-- HERO -->
-      <section class="tvb-card">
-
-        <p class="how-eyebrow">
-          Ticket Comparison Tool
-        </p>
-
-        <h1>
+    <!-- HERO -->
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card" style="margin-top:16px;">
+         <h1 class="grad-text">
           Compare ticket listings before you buy
         </h1>
 
-        <p
-          class="muted"
-          style="
-            margin-top:10px;
-            max-width:760px;
-          "
-        >
-          Still shopping for tickets? Search ticket marketplaces from
-          one place, save the listings you're considering, and compare
-          prices, fees, and assigned-seat information.
+        <p class="muted" style="margin-top:8px;">
+          Search major ticket marketplaces, save listings you want to track,
+          compare prices and seat details, and check for possible duplicate seats before checkout.
+        </p>
+                </div>
+              </div>
+            </section>
+
+    <!-- SEARCH -->
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card search-card">
+
+          <h2>Search ticket sites</h2>
+
+         <p class="muted" style="margin-top:8px; margin-bottom:14px;">
+          Search across major ticket marketplaces and open your event on the sites you want to compare.
         </p>
 
-        <p
-          class="muted"
-          style="
-            margin-top:10px;
-            max-width:760px;
-          "
-        >
-          When you're ready, send your saved listings to Ticket
-          VeriGuard's duplicate checker to look for overlapping
-          assigned seats.
-        </p>
+          <form id="tixSearch" class="ms-form" novalidate>
 
-        <div style="margin-top:18px;">
-          <a
-            href="duplicate-check.html"
-            class="btn btn-ghost"
-          >
-            Go to Duplicate Checker
-          </a>
-        </div>
+            <label class="ms-label">
+             <div class="ms-input-wrap">
+               <span>🔍</span>
 
-      </section>
-
-
-      <!-- SEARCH -->
-      <section class="tvb-card">
-
-        <h2>
-          Search ticket marketplaces
-        </h2>
-
-        <p
-          class="tvb-note"
-          style="margin-top:6px;"
-        >
-          Enter your event details and choose the ticket sites you want
-          to search. Results open on the selected marketplaces or through
-          Google.
-        </p>
-
-        <form
-          id="tixSearch"
-          class="ms-form"
-          style="margin-top:18px;"
-        >
-
-          <!-- EVENT -->
-          <div class="field">
-            <label for="tms-event">
-              Artist, team, or event
+                <div class="ms-search-fields">
+                  <input type="text" id="tms-event" placeholder="Artist, team, or event" required class="ms-input" />
+                  <input type="text" id="tms-location" placeholder="Venue or city" class="ms-input" />
+                  <input type="text" id="tms-date" placeholder="Date" class="ms-input" />
+                  <input type="text" id="tms-section" placeholder="Optional section" class="ms-input" />
+                </div>
+              </div>
             </label>
 
-            <input
-              id="tms-event"
-              name="event"
-              type="text"
-              placeholder="Example: Chicago Cubs vs Cardinals"
-              autocomplete="off"
-              required
-            />
-          </div>
+            <div class="ms-site-grid">
+  <label class="pill-check"><input type="checkbox" id="site-google" checked><span>Google</span></label>
+  <label class="pill-check"><input type="checkbox" id="site-seatgeek" checked><span>SeatGeek</span></label>
+  <label class="pill-check"><input type="checkbox" id="site-vivid" checked><span>Vivid</span></label>
+  <label class="pill-check"><input type="checkbox" id="site-stubhub" checked><span>StubHub</span></label>
+  <label class="pill-check"><input type="checkbox" id="site-ticketmaster" checked><span>Ticketmaster</span></label>
+  <label class="pill-check"><input type="checkbox" id="site-tickpick" checked><span>TickPick</span></label>
+</div>
 
+            <div class="custom-marketplace-section">
 
-          <!-- LOCATION -->
-          <div class="field">
-            <label for="tms-location">
-              Venue or city
-            </label>
-
-            <input
-              id="tms-location"
-              name="location"
-              type="text"
-              placeholder="Example: Wrigley Field"
-              autocomplete="off"
-            />
-          </div>
-
-
-          <!-- DATE -->
-          <div class="field">
-            <label for="tms-date">
-              Date
-            </label>
-
-            <input
-              id="tms-date"
-              name="date"
-              type="date"
-            />
-          </div>
-
-
-          <!-- SECTION -->
-          <div class="field">
-            <label for="tms-section">
-              Section
-              <span class="muted">(optional)</span>
-            </label>
-
-            <input
-              id="tms-section"
-              name="section"
-              type="text"
-              placeholder="Example: 112"
-              autocomplete="off"
-            />
-          </div>
-
-
-          <!-- MARKETPLACES -->
-          <div style="margin-top:18px;">
-
-            <h3>
-              Choose ticket sites
-            </h3>
-
-            <p
-              class="muted"
-              style="margin-top:6px;"
-            >
-              Ticket VeriGuard does not sell tickets. These options help
-              you open searches on the sites you want to compare.
-            </p>
-
-            <div
-              class="ms-sites"
-              style="margin-top:12px;"
-            >
-
-              <label>
-                <input
-                  type="checkbox"
-                  id="site-google"
-                  checked
-                />
-                Google
+              <label for="custom-marketplace-url" class="ms-custom-label">
+                Search another ticket site
               </label>
-
-              <label>
-                <input
-                  type="checkbox"
-                  id="site-seatgeek"
-                  checked
-                />
-                SeatGeek
-              </label>
-
-              <label>
-                <input
-                  type="checkbox"
-                  id="site-vivid"
-                  checked
-                />
-                Vivid Seats
-              </label>
-
-              <label>
-                <input
-                  type="checkbox"
-                  id="site-stubhub"
-                  checked
-                />
-                StubHub
-              </label>
-
-              <label>
-                <input
-                  type="checkbox"
-                  id="site-ticketmaster"
-                  checked
-                />
-                Ticketmaster
-              </label>
-
-              <label>
-                <input
-                  type="checkbox"
-                  id="site-tickpick"
-                  checked
-                />
-                TickPick
-              </label>
-
-            </div>
-
-          </div>
-
-
-          <!-- CUSTOM MARKETPLACE -->
-          <div style="margin-top:20px;">
-
-            <h3>
-              Search another ticket site
-            </h3>
-
-            <p
-              class="muted"
-              style="margin-top:6px;"
-            >
-              Paste the website address of another ticket marketplace
-              and Ticket VeriGuard will create a Google site search using
-              your event details.
-            </p>
-
-            <div
-              class="tvg-upload-row"
-              style="margin-top:10px;"
-            >
 
               <input
-                id="custom-marketplace-url"
                 type="url"
-                placeholder="https://example.com"
-                aria-label="Custom ticket marketplace URL"
+                id="custom-marketplace-url"
+                class="ms-input"
+                placeholder="https://exampleticketsite.com"
               />
 
               <button
                 type="button"
                 id="custom-marketplace-search"
-                class="btn btn-ghost"
+                class="btn"
               >
-                Search This Site
+                Search Custom Site
               </button>
 
             </div>
 
-          </div>
-
-
-          <!-- RECENT SEARCHES -->
-          <div style="margin-top:22px;">
-
-            <h3>
-              Recent searches
-            </h3>
-
-            <div
-              id="tvg-recent-searches"
-              style="margin-top:10px;"
-            >
-              <p class="recent-searches-empty">
-                No recent searches yet.
-              </p>
+            <div class="recent-searches-wrap" aria-live="polite">
+              <h3 class="recent-searches-title">Recent Searches</h3>
+              <div id="tvg-recent-searches" class="recent-searches"></div>
             </div>
 
-          </div>
+            <div class="ms-actions">
+              <button type="submit" class="btn primary" id="tms-search">Search Sites</button>
+              <button type="button" id="tms-copy" class="btn">Copy Search Links</button>
+              <button type="button" id="tms-reset" class="btn btn-ghost">Clear</button>
+            </div>
 
+          </form>
 
-          <!-- SEARCH ACTIONS -->
-          <div
-            style="
-              margin-top:22px;
-              display:flex;
-              gap:10px;
-              flex-wrap:wrap;
-            "
-          >
+          <div id="tms-links" class="ms-links" style="margin-top:16px;"></div>
 
-            <button
-              type="submit"
-              class="btn primary"
-            >
-              Search Ticket Sites
-            </button>
-
-            <button
-              type="button"
-              id="tms-copy"
-              class="btn btn-ghost"
-            >
-              Copy Search Links
-            </button>
-
-            <button
-              type="button"
-              id="tms-reset"
-              class="btn btn-ghost"
-            >
-              Clear Search
-            </button>
-
-          </div>
-
-
-          <!-- GENERATED SEARCH LINKS -->
-          <div
-            id="tms-links"
-            style="margin-top:18px;"
-          ></div>
-
-        </form>
-
-      </section>
-
-
-      <!-- SAVE LISTING -->
-      <section class="tvb-card">
-
-        <h2>
-          Save a ticket listing
-        </h2>
-
-        <p
-          class="tvb-note"
-          style="margin-top:6px;"
-        >
-          Found tickets you're considering? Save the important details
-          here so you can compare the listings and check their assigned
-          seats for possible duplicates.
-        </p>
-
-        <form
-          id="tti-snapshot-form"
-          style="margin-top:18px;"
-        >
-
-          <div
-            id="tti-edit-banner"
-            class="tvb-note"
-            hidden
-            style="margin-bottom:14px;"
-          >
-            Editing saved ticket
-          </div>
-
-
-          <!-- EVENT -->
-          <div class="field">
-            <label for="tti-event-name">
-              Event
-            </label>
-
-            <input
-              id="tti-event-name"
-              type="text"
-              placeholder="Example: Chicago Cubs vs Cardinals"
-              required
-            />
-          </div>
-
-
-          <!-- VENUE -->
-          <div class="field">
-            <label for="tti-event-location">
-              Venue
-            </label>
-
-            <input
-              id="tti-event-location"
-              type="text"
-              placeholder="Example: Wrigley Field"
-            />
-          </div>
-
-
-          <!-- DATE -->
-          <div class="field">
-            <label for="tti-event-dates">
-              Event date
-            </label>
-
-            <input
-              id="tti-event-dates"
-              type="date"
-            />
-          </div>
-
-
-          <!-- SECTION -->
-          <div class="field">
-            <label for="tti-section">
-              Section
-            </label>
-
-            <input
-              id="tti-section"
-              type="text"
-              placeholder="Example: 112"
-            />
-          </div>
-
-
-          <!-- ROW -->
-          <div class="field">
-            <label for="tti-row">
-              Row
-            </label>
-
-            <input
-              id="tti-row"
-              type="text"
-              placeholder="Example: 8"
-            />
-          </div>
-
-
-          <!-- SEAT -->
-          <div class="field">
-            <label for="tti-seat">
-              Seat or seat range
-            </label>
-
-            <input
-              id="tti-seat"
-              type="text"
-              placeholder="Example: 14-15"
-            />
-
-            <p
-              class="muted"
-              style="
-                margin-top:5px;
-                font-size:.9rem;
-              "
-            >
-              Assigned-seat information helps Ticket VeriGuard identify
-              possible duplicate listings.
-            </p>
-          </div>
-
-
-          <!-- MARKETPLACE -->
-          <div class="field">
-            <label for="tti-marketplace">
-              Marketplace
-            </label>
-
-            <select id="tti-marketplace">
-              <option value="">
-                Choose a marketplace
-              </option>
-
-              <option value="stubhub">
-                StubHub
-              </option>
-
-              <option value="seatgeek">
-                SeatGeek
-              </option>
-
-              <option value="vivid">
-                Vivid Seats
-              </option>
-
-              <option value="ticketmaster">
-                Ticketmaster
-              </option>
-
-              <option value="tickpick">
-                TickPick
-              </option>
-            </select>
-          </div>
-
-
-          <!-- LIST PRICE -->
-          <div class="field">
-            <label for="tti-price">
-              Listed price
-            </label>
-
-            <input
-              id="tti-price"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder="0.00"
-            />
-          </div>
-
-
-          <!-- TOTAL -->
-          <div class="field">
-            <label for="tti-fees">
-              Total with fees
-            </label>
-
-            <input
-              id="tti-fees"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder="0.00"
-            />
-          </div>
-
-
-          <!-- URL -->
-          <div class="field">
-            <label for="tti-url">
-              Listing URL
-            </label>
-
-            <input
-              id="tti-url"
-              type="url"
-              placeholder="https://..."
-            />
-          </div>
-
-
-          <!-- NOTES -->
-          <div class="field">
-            <label for="tti-notes">
-              Notes
-              <span class="muted">(optional)</span>
-            </label>
-
-            <textarea
-              id="tti-notes"
-              rows="3"
-              placeholder="Anything you want to remember about this listing"
-            ></textarea>
-          </div>
-
-
-          <!-- SAVE ACTIONS -->
-          <div
-            style="
-              margin-top:18px;
-              display:flex;
-              gap:10px;
-              flex-wrap:wrap;
-            "
-          >
-
-            <button
-              type="submit"
-              id="tti-save-snapshot"
-              class="btn primary"
-            >
-              Save Ticket
-            </button>
-
-            <button
-              type="button"
-              id="tti-cancel-edit"
-              class="btn btn-ghost"
-              hidden
-            >
-              Cancel Edit
-            </button>
-
-          </div>
-
-          <div
-            id="tti-status"
-            class="tvb-note"
-            style="margin-top:10px;"
-            aria-live="polite"
-          ></div>
-
-        </form>
-
-      </section>
-
-
-      <!-- SAVED LISTINGS -->
-      <section class="tvb-card">
-
-        <h2>
-          Saved ticket listings
-        </h2>
-
-        <p
-          class="tvb-note"
-          style="margin-top:6px;"
-        >
-          Compare the tickets you're considering, then run a duplicate
-          check when you're ready.
-        </p>
-
-
-        <!-- SORTING -->
-        <div
-          class="tvg-filter-row"
-          style="margin-top:18px;"
-        >
-
-          <select
-            id="tti-event-sort"
-            class="btn btn-ghost"
-            aria-label="Sort events"
-          >
-            <option value="lowest-price">
-              Events by lowest price
-            </option>
-
-            <option value="lowest-total">
-              Events by lowest total
-            </option>
-
-            <option value="event-name">
-              Events by name
-            </option>
-
-            <option value="most-recent">
-              Most recently saved
-            </option>
-          </select>
-
-
-          <select
-            id="tti-sort"
-            class="btn btn-ghost"
-            aria-label="Sort ticket listings"
-          >
-            <option value="price-asc">
-              Listings by lowest price
-            </option>
-
-            <option value="allin-asc">
-              Listings by lowest total
-            </option>
-
-            <option value="newest">
-              Listings by newest
-            </option>
-
-            <option value="marketplace">
-              Listings by marketplace
-            </option>
-          </select>
-
-        </div>
-
-
-        <!-- TOOLBAR -->
-        <div
-          class="tvg-filter-row"
-          style="margin-top:12px;"
-        >
-
-          <button
-            type="button"
-            id="tti-expand-all"
-            class="btn btn-ghost"
-          >
-            Expand All
-          </button>
-
-          <button
-            type="button"
-            id="tti-collapse-all"
-            class="btn btn-ghost"
-          >
-            Collapse All
-          </button>
-
-          <button
-            type="button"
-            id="tti-export-csv"
-            class="btn btn-ghost"
-          >
-            Export CSV
-          </button>
-
-          <button
-            type="button"
-            id="tti-import-csv"
-            class="btn btn-ghost"
-          >
-            Import CSV
-          </button>
-
-          <input
-            id="tti-import-file"
-            type="file"
-            accept=".csv"
-            hidden
-          />
-
-        </div>
-
-
-        <!-- EVENT SUMMARY -->
-        <div
-          id="tti-event-summary"
-          style="margin-top:16px;"
-        ></div>
-
-
-        <!-- SAVED LISTINGS -->
-        <div
-          id="tti-snapshots-body"
-          style="margin-top:16px;"
-        >
-          <p class="muted">
-            No saved listings yet. Save a few ticket options to compare
-            them here.
+          <p class="muted" style="margin-top:14px; font-size:.95rem;">
+            Ticket VeriGuard does not sell tickets directly. Search links open on Google or the selected ticket marketplace.
           </p>
-        </div>
-
-      </section>
-
-
-      <!-- DUPLICATE CHECK CTA -->
-      <section
-        class="tvb-card"
-        style="text-align:center;"
-      >
-
-        <p class="how-eyebrow">
-          Ready to check?
-        </p>
-
-        <h2>
-          Check your saved listings for duplicate seats
-        </h2>
-
-        <p
-          class="muted"
-          style="
-            max-width:720px;
-            margin:10px auto 0;
-          "
-        >
-          Ticket VeriGuard can compare the event and assigned-seat
-          information in your saved listings and flag seats that appear
-          more than once.
-        </p>
-
-        <p
-          class="muted"
-          style="
-            max-width:720px;
-            margin:8px auto 0;
-          "
-        >
-          A duplicate flag is a reason to take a closer look. It does
-          not automatically mean a ticket is fake or invalid.
-        </p>
-
-        <div style="margin-top:20px;">
-
-          <a
-            href="duplicate-check.html"
-            id="tti-open-duplicate-check"
-            class="btn primary"
-          >
-            Check Saved Tickets
-          </a>
 
         </div>
+      </div>
+    </section>
 
-      </section>
+    <!-- SAVE -->
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card">
 
-    </div>
+          <h2>Save a ticket listing</h2>
+
+          <p class="muted">
+            Found a listing worth comparing? Save the event, price, seat details, marketplace, and link here.
+          </p>
+
+          <form id="tti-snapshot-form" class="tti-form" novalidate autocomplete="off">
+
+            <div class="tti-grid">
+
+              <input id="tti-event-name" name="tvg-event-name" placeholder="Event or artist" required class="tti-input" autocomplete="off"/>
+              <input id="tti-event-location" name="tvg-event-location" placeholder="Venue" class="tti-input" autocomplete="off"/>
+              <input id="tti-event-dates" name="tvg-event-date" placeholder="Date or show time" class="tti-input" autocomplete="off"/>
+
+              <input id="tti-section" name="tvg-ticket-section" placeholder="Section" class="tti-input" autocomplete="off"/>
+              <input id="tti-row" name="tvg-ticket-row" placeholder="Row" class="tti-input" autocomplete="off"/>
+              <input id="tti-seat" name="tvg-ticket-seat" placeholder="Seat or seat range (ex: 2-4)" class="tti-input" autocomplete="off"/>
+
+              <select id="tti-marketplace" required class="tti-input">
+                <option value="" disabled selected>Ticket site</option>
+                <option value="stubhub">StubHub</option>
+                <option value="seatgeek">SeatGeek</option>
+                <option value="vivid">Vivid</option>
+                <option value="ticketmaster">Ticketmaster</option>
+                <option value="tickpick">TickPick</option>
+              </select>
+
+              <input id="tti-price" type="number" placeholder="List price" required class="tti-input"/>
+              <input id="tti-fees" type="number" placeholder="Total price with fees" class="tti-input"/>
+              <input id="tti-url" type="url" placeholder="Listing link" required class="tti-input"/>
+
+            </div>
+
+            <div class="tti-row">
+              <button
+              id="tti-save-snapshot"
+              type="submit"
+              class="btn primary">
+              Save to Compare
+            </button>
+            </div>
+
+            <p id="tti-status" class="muted"></p>
+
+          </form>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARE -->
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card">
+
+          <h2>Saved listings to compare</h2>
+
+          <div class="tti-compare-toolbar">
+            <label class="tti-sort-wrap">
+              <span class="muted">Sort events:</span>
+              <select id="tti-event-sort" class="tti-sort-select">
+                <option value="lowest-price">Lowest price</option>
+                <option value="lowest-total">Lowest total</option>
+                <option value="event-name">Event name</option>
+                <option value="most-recent">Most recent</option>
+              </select>
+            </label>
+
+            <label class="tti-sort-wrap">
+              <span class="muted">Sort listings:</span>
+              <select id="tti-sort" class="tti-sort-select">
+                <option value="price-asc">Lowest price</option>
+                <option value="allin-asc">Lowest total</option>
+                <option value="newest">Newest</option>
+                <option value="marketplace">Marketplace</option>
+              </select>
+            </label>
+          </div>
+
+            <div class="tti-toolbar-actions">
+  <button type="button" class="btn btn-ghost" id="tti-expand-all">Expand all</button>
+
+  <button type="button" class="btn btn-ghost" id="tti-collapse-all">Collapse all</button>
+
+  <button type="button" class="btn btn-ghost" id="tti-export-csv">
+    Export CSV
+  </button>
+
+  <button type="button" class="btn btn-ghost" id="tti-import-csv">
+    Import CSV
+  </button>
+
+  <input
+    type="file"
+    id="tti-import-file"
+    accept=".csv"
+    hidden
+  />
+
+</div>
+
+          <div class="tti-table-wrap">
+            <div id="tti-snapshots-body" class="tti-snapshots-list">
+              <div class="tti-empty-state muted">
+                No saved listings yet. Save a few ticket options to compare them here.
+              </div>
+            </div>
+          </div>
+          </section>
+
+    <!-- SEAT CHECK -->
+    <section class="section">
+      <div class="tvb-container">
+        <div class="card">
+
+          <h2>Check for duplicate seats</h2>
+
+            <p class="muted">
+              Before you buy, scan your saved listings to see if the same seat may be showing up on more than one ticket site.
+            </p>
+
+            <a href="duplicate-check.html" class="btn primary">
+              Check My Saved Tickets
+            </a>
+            
+        </div>
+      </div>
+    </section>
+
   </main>
 
-
-  <!-- FOOTER -->
-  <footer>
+   <footer>
     <div class="container footer-bar">
+      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
 
-      <div class="muted">
-        © <span id="y"></span> Ticket VeriGuard
-      </div>
-
-      <div
-        style="
-          display:flex;
-          gap:14px;
-          flex-wrap:wrap;
-        "
-      >
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy</a>
-        <a href="affiliate-disclosure.html">
-          Affiliate Disclosure
-        </a>
+        <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
         <a href="guides.html">Guides</a>
         <a href="contact.html">Contact</a>
       </div>
-
     </div>
   </footer>
-
-
-  <!-- DEPENDENCIES -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
-    defer
-  ></script>
-
-  <script src="./js/config.js" defer></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="./js/config.js"></script>
   <script src="./js/main.js" defer></script>
-
 </body>
 </html>
