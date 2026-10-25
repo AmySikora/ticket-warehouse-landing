@@ -5,590 +5,217 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4R61ZH08K"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      window.dataLayer.push(arguments);
-    }
-
-    gtag("js", new Date());
-    gtag("config", "G-G4R61ZH08K");
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G4R61ZH08K');
   </script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>
+Duplicate Ticket Seat Checker | Ticket VeriGuard
+</title>
 
-  <title>Duplicate Ticket Checker | Ticket VeriGuard</title>
+<meta
+  name="description"
+  content="Check ticket listings for possible duplicate seats across marketplaces before purchasing resale tickets."
+/>
 
-  <meta
-    name="description"
-    content="Check resale ticket listings for possible duplicate assigned seats. Compare saved tickets or upload a CSV to identify overlapping seat listings before you buy."
-  />
+<link
+  rel="canonical"
+  href="https://ticketveriguard.com/duplicate-check.html"
+/>
 
-  <link
-    rel="canonical"
-    href="https://ticketveriguard.com/duplicate-check.html"
-  />
+<meta
+  property="og:title"
+  content="Duplicate Ticket Seat Checker | Ticket VeriGuard"
+/>
 
-  <meta
-    property="og:title"
-    content="Duplicate Ticket Checker | Ticket VeriGuard"
-  />
+<meta
+  property="og:description"
+  content="Identify possible duplicate ticket seat listings before you buy resale tickets."
+/>
 
-  <meta
-    property="og:description"
-    content="Check resale ticket listings for possible duplicate assigned seats before you buy."
-  />
+<meta
+  property="og:url"
+  content="https://ticketveriguard.com/duplicate-check.html"
+/>
 
-  <meta
-    property="og:url"
-    content="https://ticketveriguard.com/duplicate-check.html"
-  />
+<meta property="og:type" content="website" />
 
-  <meta property="og:type" content="website" />
-
-  <link rel="icon" href="./favicon_logo.png" />
-  <link rel="stylesheet" href="./styles-v2.css" />
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
-    defer
-  ></script>
+  <link rel="icon" href="./favicon_logo.png"/>
+  <link rel="stylesheet" href="./styles-v2.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
 </head>
 
 <body class="verify-page">
 
-  <!-- NAVIGATION -->
   <header class="nav">
     <div class="nav--brand">
-
       <a href="index.html" class="logo-bay">
-        <img
-          src="./favicon_logo.png"
-          alt="Ticket VeriGuard"
-          class="logo-img"
-        />
+        <img src="./favicon_logo.png" alt="Ticket VeriGuard" class="logo-img">
       </a>
 
-      <button
-        class="nav-toggle"
-        id="navToggle"
-        type="button"
-        aria-expanded="false"
-        aria-controls="primary-nav"
-        aria-label="Toggle navigation"
-      >
+    
+      <nav class="topnav" id="primary-nav">
+        <a href="index.html" class="nav-link">How It Works</a>
+        <a href="search.html" class="nav-link">Search &amp; Save</a>
+        <a href="duplicate-check.html" class="nav-link nav-active" aria-current="page">Check Seats</a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Toggle navigation">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
 
-      <nav class="topnav" id="primary-nav">
-
-        <a
-          href="index.html"
-          class="nav-link"
-        >
-          Check Tickets
-        </a>
-
-        <a
-          href="how-it-works.html"
-          class="nav-link"
-        >
-          How It Works
-        </a>
-
-        <a
-          href="search.html"
-          class="nav-link"
-        >
-          Compare Tickets
-        </a>
-
-        <a
-          href="guides.html"
-          class="nav-link"
-        >
-          Guides
-        </a>
-
-      </nav>
-
     </div>
   </header>
-
 
   <main class="tvb-page">
     <div class="tvb-container">
 
-      <!-- HERO / INTRO -->
+      <!-- INTRO -->
       <section class="tvb-card">
+        <h1>Check your tickets before you buy</h1>
 
-        <p class="how-eyebrow">
-          Duplicate Ticket Checker
+        <p class="muted" style="margin-top:8px;">
+          Saved tickets from different sites? Run a quick check to see if the same seat shows up more than once.
         </p>
 
-        <h1>
-          Check your ticket listings for duplicate seats
-        </h1>
-
-        <p
-          class="muted"
-          style="
-            margin-top:10px;
-            max-width:760px;
-          "
-        >
-          Compare ticket listings you've saved or upload a CSV to see
-          whether the same assigned seats appear more than once.
-        </p>
-
-        <p
-          class="muted"
-          style="
-            margin-top:10px;
-            max-width:760px;
-          "
-        >
-          A match does not automatically mean a ticket is fake or invalid.
-          It means the same assigned-seat information appears in more than
-          one listing and may be worth checking before you buy.
-        </p>
-
-        <div
-          id="tvg-current-context"
-          class="tvb-note"
-          style="margin-top:16px;"
-        >
-          Checking for saved ticket listings in this browser.
+        <div id="tvg-current-context" class="tvb-note" style="margin-top:12px;">
+          Using tickets saved in this browser.
         </div>
-
       </section>
 
-
-      <!-- CHECK OPTIONS -->
+      <!-- ACTIONS -->
       <section class="tvb-card">
 
-        <h2>
-          Choose how you want to check
-        </h2>
+        <h2 style="margin-bottom:12px;">Run a quick check</h2>
 
-        <p
-          class="tvb-note"
-          style="margin-top:6px;"
-        >
-          Use tickets you've already saved in Ticket VeriGuard or upload
-          a CSV containing your ticket listings.
-        </p>
+        <div class="tvg-upload-row">
 
+          <button type="button" id="tvg-run-snapshots-btn" class="btn primary">
+            Check Saved Tickets
+          </button>
 
-        <!-- SAVED LISTINGS -->
-        <div style="margin-top:20px;">
+          <label class="btn btn-ghost tvg-file-label">
+            <input id="tvg-file-input" type="file" accept=".csv">
+            Upload CSV
+          </label>
 
-          <h3>
-            Check saved tickets
-          </h3>
+          <button type="button" id="tvg-analyze-btn" class="btn btn-ghost" disabled>
+            Check Uploaded File
+          </button>
 
-          <p
-            class="muted"
-            style="margin-top:6px;"
-          >
-            Already used Compare Tickets? Scan the listings saved in
-            this browser for matching assigned seats.
-          </p>
+          <button type="button" id="tvg-sample-btn" class="btn btn-ghost">
+            Try Sample Tickets
+          </button>
 
-          <div style="margin-top:12px;">
-
-            <button
-              type="button"
-              id="tvg-run-snapshots-btn"
-              class="btn primary"
-            >
-              Check Saved Tickets
-            </button>
-
+          <div id="tvg-file-label" class="tvb-note tvg-file-name">
+            No file selected
           </div>
 
         </div>
 
-
-        <!-- CSV -->
-        <div style="margin-top:28px;">
-
-          <h3>
-            Upload ticket listings
-          </h3>
-
-          <p
-            class="muted"
-            style="margin-top:6px;"
-          >
-            Have your ticket information in a spreadsheet or CSV?
-            Upload it and Ticket VeriGuard will compare the assigned-seat
-            information for possible duplicates.
-          </p>
-
-          <div
-            class="tvg-upload-row"
-            style="margin-top:12px;"
-          >
-
-            <label class="btn btn-ghost tvg-file-label">
-              <input
-                id="tvg-file-input"
-                type="file"
-                accept=".csv"
-              />
-              Choose CSV
-            </label>
-
-            <button
-              type="button"
-              id="tvg-analyze-btn"
-              class="btn btn-ghost"
-              disabled
-            >
-              Check Uploaded File
-            </button>
-
-            <button
-              type="button"
-              id="tvg-sample-btn"
-              class="btn btn-ghost"
-            >
-              Try Sample Tickets
-            </button>
-
-            <div
-              id="tvg-file-label"
-              class="tvb-note tvg-file-name"
-            >
-              No file selected.
-            </div>
-
-          </div>
-
+        <div class="tvg-microcopy">
+          This runs in your browser. Your saved ticket info stays on your device.
         </div>
 
-
-        <!-- PRIVACY -->
-        <div
-          class="tvg-microcopy"
-          style="margin-top:18px;"
-        >
-          Duplicate checking runs in your browser. Your saved ticket
-          information stays on your device.
-        </div>
-
-        <div
-          id="tvg-summary"
-          class="tvg-summary-strip"
-        ></div>
+        <div id="tvg-summary" class="tvg-summary-strip"></div>
 
       </section>
-
-
-      <!-- WHAT WE CHECK -->
-      <section class="tvb-card">
-
-        <h2>
-          What Ticket VeriGuard checks
-        </h2>
-
-        <p
-          class="muted"
-          style="margin-top:8px;"
-        >
-          For assigned-seat tickets, Ticket VeriGuard compares identifying
-          seat information in the listings you provide and looks for
-          matching seats.
-        </p>
-
-        <ul
-          class="feature-list"
-          style="margin-top:14px;"
-        >
-          <li>Event</li>
-          <li>Section</li>
-          <li>Row</li>
-          <li>Assigned seat or seat range</li>
-        </ul>
-
-        <p
-          class="tvb-note"
-          style="margin-top:14px;"
-        >
-          General admission, lawn tickets, and listings without complete
-          section, row, and seat information are not flagged as duplicate
-          assigned seats.
-        </p>
-
-      </section>
-
 
       <!-- FILTERS -->
       <section class="tvb-card">
-
-        <h2 style="margin-bottom:12px;">
-          Filter results
-        </h2>
-
         <div class="tvg-filter-row">
 
-          <select
-            id="tvg-filter-decision"
-            class="btn btn-ghost"
-            aria-label="Filter by duplicate status"
-          >
-            <option value="all">
-              All tickets
-            </option>
-
-            <option value="Approved">
-              No duplicate flagged
-            </option>
-
-            <option value="Blocked">
-              Possible duplicate
-            </option>
+          <select id="tvg-filter-decision" class="btn btn-ghost">
+            <option value="all">All tickets</option>
+            <option value="Approved">Looks good</option>
+            <option value="Blocked">Check this seat</option>
           </select>
 
-
-          <select
-            id="tvg-filter-marketplace"
-            class="btn btn-ghost"
-            aria-label="Filter by marketplace"
-          >
-            <option value="all">
-              All marketplaces
-            </option>
+          <select id="tvg-filter-marketplace" class="btn btn-ghost">
+            <option value="all">All sites</option>
           </select>
 
-
-          <select
-            id="tvg-sort-results"
-            class="btn btn-ghost"
-            aria-label="Sort results"
-          >
-            <option value="event">
-              Sort by event
-            </option>
-
-            <option value="when">
-              Sort by date
-            </option>
-
-            <option value="section">
-              Sort by section
-            </option>
-
-            <option value="row">
-              Sort by row
-            </option>
-
-            <option value="seat">
-              Sort by seat
-            </option>
-
-            <option value="marketplace">
-              Sort by marketplace
-            </option>
+          <select id="tvg-sort-results" class="btn btn-ghost">
+            <option value="event">Sort by event</option>
+            <option value="when">Sort by date</option>
+            <option value="section">Sort by section</option>
+            <option value="row">Sort by row</option>
+            <option value="seat">Sort by seat</option>
+            <option value="marketplace">Sort by site</option>
           </select>
 
-
-          <button
-            type="button"
-            id="tvg-reset-filters"
-            class="btn btn-ghost"
-          >
-            Clear Filters
+          <button id="tvg-reset-filters" class="btn btn-ghost">
+            Clear filters
           </button>
-
 
           <div class="tvg-filter-spacer"></div>
 
-
-          <button
-            type="button"
-            id="tvg-download-clean"
-            class="btn btn-ghost"
-            disabled
-          >
+          <button id="tvg-download-clean" class="btn btn-ghost" disabled>
             Download Results
           </button>
 
         </div>
-
       </section>
-
 
       <!-- RESULTS -->
       <section class="tvb-card">
 
-        <h2>
-          Duplicate check results
-        </h2>
+        <h3 style="margin-bottom:6px;">Your ticket check</h3>
 
-        <p
-          class="tvb-note"
-          style="margin-top:6px;"
-        >
-          Possible duplicates are listings that contain matching
-          assigned-seat information. Review flagged listings carefully
-          before purchasing.
+        <p class="tvb-note">
+          If a seat is flagged, take a closer look before buying. It may be listed more than once.
+        </p>
+        <p class="tvb-note">
+          General admission, lawn, and listings without complete section, row, and seat details are not flagged as duplicates.
         </p>
 
+       <div class="tvg-table-wrap">
+        <table id="tvg-results-table">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Status</th>
+              <th>When</th>
+              <th>Section</th>
+              <th>Row</th>
+              <th>Seat</th>
+              <th>Site</th>
+            </tr>
+          </thead>
 
-        <div
-          class="tvg-table-wrap"
-          style="margin-top:16px;"
-        >
-
-          <table id="tvg-results-table">
-
-            <thead>
-              <tr>
-                <th>Event</th>
-                <th>Status</th>
-                <th>When</th>
-                <th>Section</th>
-                <th>Row</th>
-                <th>Seat</th>
-                <th>Marketplace</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr class="tvg-empty-row">
-                <td colspan="7">
-                  Run a duplicate check to see your results here.
-                </td>
-              </tr>
-            </tbody>
-
-          </table>
-
-        </div>
-
+          <tbody></tbody>
+        </table>
+      </div>
       </section>
 
-
-      <!-- IMPORTANT EXPLANATION -->
-      <section class="tvb-card">
-
-        <h2>
-          What a duplicate flag means
-        </h2>
-
-        <p
-          class="muted"
-          style="margin-top:8px;"
-        >
-          The same ticket inventory can legitimately appear on more than
-          one resale marketplace. A duplicate flag does not prove fraud,
-          counterfeiting, or that a ticket has already been sold.
-        </p>
-
-        <p
-          class="muted"
-          style="margin-top:10px;"
-        >
-          Think of a duplicate as a signal to slow down and review the
-          listings. Check the marketplace, seller information, seat
-          details, price, and purchase protections before buying.
-        </p>
-
-        <p
-          class="muted"
-          style="margin-top:10px;"
-        >
-          Likewise, if Ticket VeriGuard does not find a duplicate, that
-          does not guarantee that a ticket is authentic, valid, or still
-          available.
-        </p>
-
-        <div style="margin-top:18px;">
-
-          <a
-            href="how-it-works.html"
-            class="btn btn-ghost"
-          >
-            Learn How Duplicate Checking Works
-          </a>
-
-        </div>
-
-      </section>
-
-
-      <!-- COMPARE CTA -->
-      <section
-        class="tvb-card"
-        style="text-align:center;"
-      >
-
-        <h2>
-          Need to find or compare tickets first?
-        </h2>
-
-        <p
-          class="muted"
-          style="
-            max-width:700px;
-            margin:10px auto 0;
-          "
-        >
-          Search ticket marketplaces, save listings you're considering,
-          compare prices and seat details, then bring your saved listings
-          back here for a duplicate check.
-        </p>
-
-        <div style="margin-top:18px;">
-
-          <a
-            href="search.html"
-            class="btn btn-ghost"
-          >
-            Compare Ticket Listings
-          </a>
-
-        </div>
-
+      <!-- CTA BACK -->
+      <section class="tvb-card" style="text-align:center;">
+        <a href="search.html" class="btn primary">
+          Back to Search & Save
+        </a>
       </section>
 
     </div>
   </main>
-
-
-  <!-- FOOTER -->
-  <footer>
+ <footer>
     <div class="container footer-bar">
+      <div class="muted">© <span id="y"></span> Ticket VeriGuard</div>
 
-      <div class="muted">
-        © <span id="y"></span> Ticket VeriGuard
-      </div>
-
-      <div
-        style="
-          display:flex;
-          gap:14px;
-          flex-wrap:wrap;
-        "
-      >
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy</a>
-        <a href="affiliate-disclosure.html">
-          Affiliate Disclosure
-        </a>
+        <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
         <a href="guides.html">Guides</a>
         <a href="contact.html">Contact</a>
       </div>
-
     </div>
   </footer>
 
-
   <script src="./js/main.js" defer></script>
-
 </body>
 </html>
